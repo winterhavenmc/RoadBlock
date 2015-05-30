@@ -1,0 +1,35 @@
+# This is the config file for RoadBlock v1.0
+
+# localized language support
+language: en-US
+
+# data store type ( sqlite | yaml )
+storage-type: sqlite
+
+# Note: use only one enabled/disabled list, and comment out or remove the other
+# enabled worlds list (use this list for a default-deny world policy)
+
+#enabled-worlds:
+#  - enabled_world1
+#  - enabled_world2
+
+# disabled worlds list (use this list for a default-allow world policy)
+
+disabled-worlds:
+  - disabled_world1
+  - disabled_world2
+
+# prevent mobs from targeting players farther than this distance when on roads
+target-distance: 5
+
+# RoadBlock tool material
+tool-material: GOLD_PICKAXE
+
+# materials to be considered when setting road blocks. Set item data using a colon, example: STEP:3
+# invalid item data may be reset, so use only valid item data values for a given material
+materials:
+  - STEP:5
+  - DOUBLE_STEP:5
+  - COBBLESTONE
+  - COBBLESTONE_STAIRS
+  - SMOOTH_BRICK

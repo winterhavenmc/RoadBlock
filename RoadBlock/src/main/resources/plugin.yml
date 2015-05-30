@@ -1,0 +1,50 @@
+name: ${project.name}
+main: com.winterhaven_mc.roadblock.PluginMain
+author: ${project.author}
+version: ${project.version}
+
+commands:
+  roadblock:
+    aliases: rb
+    description: This is the RoadBlock command.
+    usage: /<command> [command]
+
+permissions:
+  roadblock.help:
+    description: Display help for RoadBlock commands.
+    default: true
+
+  roadblock.status:
+    description: Allows display of config settings.
+    default: op
+
+  roadblock.reload:
+    description: Allows reloading the config file.
+    default: op
+
+  roadblock.destroy:
+    description: Allows destroying RoadBlock protected blocks.
+    default: op
+
+  roadblock.set:
+    description: Allows setting RoadBlock protection on blocks.
+    default: op
+
+  roadblock.tool:
+    description: Allows creating a RoadBlock tool in inventory.
+    default: op
+
+  roadblock.unset:
+    description: Allows removing RoadBlock protection on blocks.
+    default: op
+
+  roadblock.admin:
+    description: Allows all admin commands
+    default: op
+    children:
+      roadblock.destroy: true
+      roadblock.reload: true
+      roadblock.set: true
+      roadblock.status: true
+      roadblock.tool: true
+      roadblock.unset: true
