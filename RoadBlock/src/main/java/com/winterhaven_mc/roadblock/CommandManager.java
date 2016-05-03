@@ -3,61 +3,57 @@ package com.winterhaven_mc.roadblock;
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class CommandManager implements CommandExecutor {
 	
 	private PluginMain plugin;
-	private final String pluginName;
 
 	public CommandManager(PluginMain plugin) {
 		
 		this.plugin = plugin;		
 		plugin.getCommand("roadblock").setExecutor(this);
-		pluginName = "[" + this.plugin.getName() + "] ";
 	}
 
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command, 
+			final String label, final String[] args) {
 
 
 		int maxArgs = 1;
 
 		if (args.length > maxArgs) {
-			sender.sendMessage(ChatColor.RED + pluginName + "Too many arguments.");
+			plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_ARGS_COUNT_OVER");
 			return false;
 		}
 		
-		String subcmd = "";
+		String subcommand = "status";
 		
-		// if no arguments passed, set subcmd to status
-		if (args.length < 1) {	
-			subcmd = "status";
-		}
-		else {
-			subcmd = args[0];
+		if (args.length > 0) {
+			subcommand = args[0];
 		}
 		
 		// status command
-		if (subcmd.equalsIgnoreCase("status")) {			
+		if (subcommand.equalsIgnoreCase("status")) {			
 			return statusCommand(sender);
 		}
 		
 		// reload command
-		if (subcmd.equalsIgnoreCase("reload")) {
+		if (subcommand.equalsIgnoreCase("reload")) {
 			return reloadCommand(sender);
 		}
 		
 		// tool command
-		if (subcmd.equalsIgnoreCase("tool")) {
+		if (subcommand.equalsIgnoreCase("tool")) {
 			return toolCommand(sender);
 		}
+		
+		plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_INVALID_COMMAND");
+		plugin.messageManager.playerSound(sender, "COMMAND_FAIL");
 		return false;
 	}
 	
@@ -67,17 +63,21 @@ public class CommandManager implements CommandExecutor {
 	 * @param sender
 	 * @return
 	 */
-	boolean statusCommand(CommandSender sender) {
+	boolean statusCommand(final CommandSender sender) {
 		
 		String versionString = this.plugin.getDescription().getVersion();
-		sender.sendMessage(ChatColor.DARK_AQUA + pluginName + ChatColor.AQUA + "Version: " 
-				+ ChatColor.RESET + versionString);
+		sender.sendMessage(ChatColor.DARK_GRAY + "[" 
+				+ ChatColor.YELLOW + plugin.getName() + ChatColor.DARK_GRAY + "] " 
+				+ ChatColor.AQUA + "Version: " + ChatColor.RESET + versionString);
+		
 		if (plugin.debug) {
 			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: true");
 		}
+		
 		if (plugin.profile) {
 			sender.sendMessage(ChatColor.DARK_RED + "PROFILE: true");
 		}
+		
 		sender.sendMessage(ChatColor.GREEN + "Mob targeting distance: " 
 				+ ChatColor.RESET + plugin.getConfig().getInt("target-distance") + " blocks");
 		sender.sendMessage(ChatColor.GREEN + "Enabled Worlds: " 
@@ -91,7 +91,7 @@ public class CommandManager implements CommandExecutor {
 	 * @param sender
 	 * @return
 	 */
-	boolean reloadCommand(CommandSender sender) {
+	boolean reloadCommand(final CommandSender sender) {
 		
 		// reload config file
 		plugin.reloadConfig();
@@ -111,51 +111,50 @@ public class CommandManager implements CommandExecutor {
 		// reload messages
 		plugin.messageManager.reload();
 		
+		// reload enabled worlds
+		plugin.blockManager.updateEnabledWorlds();
+		
 		// reload datastore
 		DataStoreFactory.reload();
 		
-		sender.sendMessage(ChatColor.DARK_AQUA + pluginName 
-				+ ChatColor.AQUA + "Configuration reloaded.");
+		// send player success message
+		plugin.messageManager.sendPlayerMessage(sender, "COMMAND_SUCCESS_RELOAD");
 		return true;
 	}
 	
 	
-	boolean toolCommand(CommandSender sender) {
+	boolean toolCommand(final CommandSender sender) {
 		
 		// sender must be player
 		if (!(sender instanceof Player)) {
-			plugin.messageManager.sendPlayerMessage(sender,"command-fail-console");
+			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_CONSOLE");
 			return true;
 		}
 		
+		// get player from sender
 		Player player = (Player) sender;
 		
 		// check player permissions
 		if (!player.hasPermission("roadblock.tool")) {
-			plugin.messageManager.sendPlayerMessage(sender,"permission-denied-tool");
+			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_TOOL_PERMISSION");
 			return true;
 		}
 		
-		// create itemStack for tool
-		ItemStack rbTool = new ItemStack(Material.GOLD_PICKAXE);
+		// create road block tool itemStack
+		ItemStack rbTool = RoadBlockTool.create();
 		
-		// set tool display name and lore
-		ItemMeta metaData = rbTool.getItemMeta();
-		metaData.setDisplayName(plugin.messageManager.getToolName());
-		metaData.setLore(plugin.messageManager.getToolLore());
-		rbTool.setItemMeta(metaData);
-
 		// put tool in player's inventory
 		HashMap<Integer,ItemStack> noFit = player.getInventory().addItem(rbTool);
 		
 		if (!noFit.isEmpty()) {
-			plugin.messageManager.sendPlayerMessage(sender,"command-fail-tool-inventory-full");
-			player.playSound(player.getLocation(), Sound.VILLAGER_NO, 1, 1);
+			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_TOOL_INVENTORY_FULL");
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
 			return true;
 		}
-		// if sound effects enabled, play item_break sound to player
+		
+		// if sound effects enabled, play sound for player
 		if (plugin.getConfig().getBoolean("sound-effects")) {
-			player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1, 1);
+			player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
 		}
 		return true;
 	}

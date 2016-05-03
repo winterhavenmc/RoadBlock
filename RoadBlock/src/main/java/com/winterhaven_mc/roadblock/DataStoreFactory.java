@@ -2,14 +2,15 @@ package com.winterhaven_mc.roadblock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.Location;
 
 
 public class DataStoreFactory {
 
-	static PluginMain plugin = PluginMain.instance;
+	private final static PluginMain plugin = PluginMain.instance;
 
 
 	/**
@@ -22,7 +23,7 @@ public class DataStoreFactory {
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
 		if (dataStoreType == null) {
-			dataStoreType = DataStoreType.SQLITE;
+			dataStoreType = DataStoreType.getDefaultType();
 		}
 		return create(dataStoreType, null);
 	}
@@ -33,7 +34,7 @@ public class DataStoreFactory {
 	 * @param dataStoreType
 	 * @return
 	 */
-	static DataStore create(DataStoreType dataStoreType) {
+	static DataStore create(final DataStoreType dataStoreType) {
 		return create(dataStoreType, null);
 	}
 	
@@ -44,12 +45,21 @@ public class DataStoreFactory {
 	 * @param oldDataStore
 	 * @return
 	 */
-	static DataStore create(DataStoreType dataStoreType, DataStore oldDataStore) {
+	static DataStore create(final DataStoreType dataStoreType, final DataStore oldDataStore) {
 	
-		DataStore newDataStore = null;
+		// get new data store of specified type
+		DataStore newDataStore = dataStoreType.create();
 		
-		// get initialized sqlite data store
-		newDataStore = createSqlite();
+		// initialize new data store
+		try {
+			newDataStore.initialize();
+		} catch (Exception e) {
+			plugin.getLogger().severe("Could not initialize " + newDataStore.toString() + " datastore!");
+			if (plugin.debug) {
+				e.printStackTrace();
+			}
+			return null;
+		}
 		
 		// if old data store was passed, convert to new data store
 		if (oldDataStore != null) {
@@ -64,33 +74,11 @@ public class DataStoreFactory {
 	
 
 	/**
-	 * try to create new sqlite data store; disable plugin on failure
-	 * @return
-	 */
-	static DataStore createSqlite() {
-
-		// create new sqlite datastore object
-		DataStore newDataStore = new DataStoreSQLite(plugin);
-
-		try {
-			newDataStore.initialize();
-		}
-		catch (Exception e) {
-			// error initializing sqlite datastore, so try yaml as fallback
-			plugin.getLogger().warning("An error occurred while trying to initialize the sqlite datastore.");
-			plugin.getLogger().warning(e.getLocalizedMessage());
-			plugin.getLogger().warning("Disabling plugin...");
-			plugin.getPluginLoader().disablePlugin(plugin);
-		}
-		return newDataStore;
-	}
-
-	/**
 	 * convert old data store to new data store
 	 * @param oldDataStore
 	 * @param newDataStore
 	 */
-	static void convertDataStore(DataStore oldDataStore, DataStore newDataStore) {
+	static void convertDataStore(final DataStore oldDataStore, final DataStore newDataStore) {
 
 		// if datastores are same type, do not convert
 		if (oldDataStore.getType().equals(newDataStore.getType())) {
@@ -100,8 +88,8 @@ public class DataStoreFactory {
 		// if old datastore file exists, attempt to read all records
 		if (oldDataStore.exists()) {
 			
-			plugin.getLogger().info("Converting existing " + oldDataStore.getName() + " datastore to "
-					+ newDataStore.getName() + " datastore...");
+			plugin.getLogger().info("Converting existing " + oldDataStore.toString() + " datastore to "
+					+ newDataStore.toString() + " datastore...");
 			
 			// initialize old datastore if necessary
 			if (!oldDataStore.isInitialized()) {
@@ -109,22 +97,21 @@ public class DataStoreFactory {
 					oldDataStore.initialize();
 				} catch (Exception e) {
 					plugin.getLogger().warning("Could not initialize " 
-							+ oldDataStore.getName() + " datastore for conversion.");
+							+ oldDataStore.toString() + " datastore for conversion.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 					return;
 				}
 			}
-			
-			List<Location> allRecords = new ArrayList<Location>();
-			
-			allRecords = oldDataStore.getAllRecords();
+
+			// get set of all location records in old datastore
+			Set<Location> allRecords = new HashSet<Location>(oldDataStore.getAllRecords());
 			
 			int count = 0;
 			for (Location record : allRecords) {
 				newDataStore.insertRecord(record);
 				count++;
 			}
-			plugin.getLogger().info(count + " records converted to " + newDataStore.getName() + " datastore.");
+			plugin.getLogger().info(count + " records converted to " + newDataStore.toString() + " datastore.");
 			
 			newDataStore.sync();
 			
@@ -138,7 +125,7 @@ public class DataStoreFactory {
 	 * convert all existing data stores to new data store
 	 * @param newDataStore
 	 */
-	static void convertAll(DataStore newDataStore) {
+	static void convertAll(final DataStore newDataStore) {
 		
 		// get array list of all data store types
 		ArrayList<DataStoreType> dataStores = new ArrayList<DataStoreType>(Arrays.asList(DataStoreType.values()));
@@ -164,7 +151,7 @@ public class DataStoreFactory {
 	}
 	
 	
-	static void reload() {
+	public static void reload() {
 		
 		// get current datastore type
 		DataStoreType currentType = plugin.dataStore.getType();

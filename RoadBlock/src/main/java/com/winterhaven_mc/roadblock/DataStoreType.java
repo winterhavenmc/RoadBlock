@@ -1,35 +1,63 @@
 package com.winterhaven_mc.roadblock;
 
+
 public enum DataStoreType {
 
-	SQLITE("sqlite"),
-	MYSQL("mysql");
+	SQLITE("SQLite") {
+		
+		public DataStore create() {
+		
+			// create new sqlite datastore object
+			return new DataStoreSQLite(plugin);
+		}
+	};
 
-	private String name;
+	// static reference to main class
+	private final static PluginMain plugin = PluginMain.instance;
+	
+	// datastore type formatted display name
+	private String displayName;
+
+	// default datastore type
+	private final static DataStoreType defaultType = DataStoreType.SQLITE;
+
 
 	/**
 	 * Class constructor
 	 * @param name
 	 */
-	private DataStoreType(String name) {
-		this.setName(name);
+	private DataStoreType(final String displayName) {
+		this.displayName = displayName;
 	}
 	
-	public String getName() {
-		return name;
+
+	/**
+	 * Create instance of a DataStore
+	 * @return instance of a DataStore
+	 */
+	public abstract DataStore create();
+	
+	@Override
+	public String toString() {
+		return displayName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public static DataStoreType getDefaultType() {
+		return defaultType;
 	}
 	
-	public static DataStoreType match(String name) {
+	/**
+	 * Match datastore type from passed name
+	 * @param name
+	 * @return matching DataStoreType or default type if no match
+	 */
+	public static DataStoreType match(final String name) {
 		for (DataStoreType type : DataStoreType.values()) {
-			if (type.getName().equalsIgnoreCase(name)) {
+			if (type.toString().equalsIgnoreCase(name)) {
 				return type;
 			}
 		}
 		// no match; return default type
-		return DataStoreType.SQLITE;
+		return defaultType;
 	}
 }

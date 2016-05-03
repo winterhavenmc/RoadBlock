@@ -3,33 +3,32 @@
 # localized language support
 language: en-US
 
-# data store type ( sqlite | yaml )
-storage-type: sqlite
-
-# Note: use only one enabled/disabled list, and comment out or remove the other
-# enabled worlds list (use this list for a default-deny world policy)
-
-#enabled-worlds:
+# If this list is empty, all worlds will be added to the enabled worlds list
+enabled-worlds:
 #  - enabled_world1
 #  - enabled_world2
 
-# disabled worlds list (use this list for a default-allow world policy)
-
+# These worlds will be removed from the enabled worlds list
 disabled-worlds:
   - disabled_world1
   - disabled_world2
 
-# prevent mobs from targeting players farther than this distance when on roads
-target-distance: 5
-
 # RoadBlock tool material
 tool-material: GOLD_PICKAXE
 
-# materials to be considered when setting road blocks. Set item data using a colon, example: STEP:3
-# invalid item data may be reset, so use only valid item data values for a given material
+# How far to search for adjacent road blocks from clicked location
+spread-distance: 100
+
+# prevent mobs from targeting players farther than this distance when on roads
+target-distance: 5
+
+# materials to be considered road blocks
 materials:
-  - STEP:5
-  - DOUBLE_STEP:5
+  - STEP
+  - DOUBLE_STEP
   - COBBLESTONE
   - COBBLESTONE_STAIRS
+  - MOSSY_COBBLESTONE
   - SMOOTH_BRICK
+  - SMOOTH_STAIRS
+  - GRASS_PATH

@@ -11,9 +11,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import com.onarandombox.MultiverseCore.MultiverseCore;
 
 
 /**
@@ -25,17 +28,28 @@ import org.bukkit.entity.Player;
  */
 class MessageManager {
 
-	private final PluginMain plugin; // reference to main class
+	// reference to main class
+	private final PluginMain plugin;
+	
+	// custom message file handler
 	private ConfigAccessor messages;
+	
+	// cooldown hash amp
 	private ConcurrentHashMap<UUID, ConcurrentHashMap<String, Long>> messageCooldownMap;
+	
+	// currently selected language
 	private String language;
+
+	MultiverseCore mvCore;
+	Boolean mvEnabled = false;
+
 
 	/**
 	 * Constructor method for class
 	 * 
 	 * @param plugin
 	 */
-	MessageManager(PluginMain plugin) {
+	MessageManager(final PluginMain plugin) {
 		
 		// create pointer to main class
 		this.plugin = plugin;
@@ -51,10 +65,26 @@ class MessageManager {
 
 		// initialize messageCooldownMap
 		this.messageCooldownMap = new ConcurrentHashMap<UUID,ConcurrentHashMap<String,Long>>();
+		
+		// get reference to Multiverse-Core if installed
+		mvCore = (MultiverseCore) plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
+		if (mvCore != null && mvCore.isEnabled()) {
+			plugin.getLogger().info("Multiverse-Core detected.");
+			this.mvEnabled = true;
+		}
+
     }
 
-    void sendPlayerMessage(CommandSender sender, String messageId) {
-    	sendPlayerMessage(sender, messageId, 1);
+    void sendPlayerMessage(final CommandSender sender, final String messageId) {
+    	sendPlayerMessage(sender, messageId, 1, null);
+    }
+    
+    void sendPlayerMessage(final CommandSender sender, final String messageId, final int quantity) {
+    	sendPlayerMessage(sender, messageId, quantity, null);
+    }
+    
+    void sendPlayerMessage(final CommandSender sender, final String messageId, final Material material) {
+    	sendPlayerMessage(sender, messageId, 1, material);
     }
     
 
@@ -65,19 +95,22 @@ class MessageManager {
 	 * @param messageId			message identifier in messages file
 	 * @param quantity			quantity
 	 */
-    void sendPlayerMessage(CommandSender sender, String messageId, Integer quantity) {
+    void sendPlayerMessage(final CommandSender sender, final String messageId, 
+    		final Integer quantity, final Material material) {
     	
 		// if message is not enabled in messages file, do nothing and return
-		if (!messages.getConfig().getBoolean("messages." + messageId + ".enabled")) {
+		if (!messages.getConfig().getBoolean(messageId + ".enabled")) {
 			return;
 		}
 
 		// set substitution variable defaults			
 		String playerName = sender.getName();
-		String playerNickname = sender.getName();
-		String playerDisplayName = sender.getName();
 		String worldName = plugin.getServer().getWorlds().get(0).getName();
-		Long remainingTime = 0L;
+		String materialName = "unknown";
+		
+		if (material != null) {
+			materialName = material.toString();
+		};
 
 		// if sender is a player...
 		if (sender instanceof Player) {
@@ -88,7 +121,7 @@ class MessageManager {
 			Long lastDisplayed = getMessageCooldown(player,messageId);
 
 			// get message repeat delay
-			int messageRepeatDelay = messages.getConfig().getInt("messages." + messageId + ".repeat-delay");
+			int messageRepeatDelay = messages.getConfig().getInt(messageId + ".repeat-delay");
 
 			// if message has repeat delay value and was displayed to player more recently, do nothing and return
 			if (lastDisplayed > System.currentTimeMillis() - messageRepeatDelay * 1000) {
@@ -102,56 +135,33 @@ class MessageManager {
 
 			// assign player dependent variables
 			playerName = player.getName();
-			playerNickname = player.getPlayerListName();
-			playerDisplayName = player.getDisplayName();
 			worldName = player.getWorld().getName();
 		}
 
 		// get message from file
-		String message = messages.getConfig().getString("messages." + messageId + ".string");
+		String message = messages.getConfig().getString(messageId + ".text");
+		
+		if (message == null || message.isEmpty()) {
+			message = messageId;
+		}
 
-//		// if Multiverse is installed, use Multiverse world alias for world name
-//		if (plugin.mvEnabled && plugin.mvCore.getMVWorldManager().getMVWorld(worldName) != null) {
-//
-//			// if Multiverse alias is not blank, set world name to alias
-//			if (!plugin.mvCore.getMVWorldManager().getMVWorld(worldName).getAlias().isEmpty()) {
-//				worldName = plugin.mvCore.getMVWorldManager().getMVWorld(worldName).getAlias();
-//			}
-//		}
-//
-//		// if quantity is greater than one, use plural item name
-//		if (quantity > 1) {
-//			// get plural item name
-//			itemName = getItemNamePlural();
-//		}
+		// if Multiverse is installed, use Multiverse world alias for world name
+		if (mvEnabled && this.mvCore.getMVWorldManager().getMVWorld(worldName) != null) {
+
+			// if Multiverse alias is not blank, set world name to alias
+			if (!this.mvCore.getMVWorldManager().getMVWorld(worldName).getAlias().isEmpty()) {
+				worldName = this.mvCore.getMVWorldManager().getMVWorld(worldName).getAlias();
+			}
+		}
 
 		// do variable substitutions
-//		message = message.replace("%itemname%", itemName);
-		message = message.replace("%plugin%", plugin.getName());
-		message = message.replace("%playername%", playerName);
-		message = message.replace("%playerdisplayname%", playerDisplayName);
-		message = message.replace("%playernickname%", playerNickname);
-		message = message.replace("%worldname%", worldName);
-		message = message.replace("%timeremaining%", remainingTime.toString());
-		message = message.replace("%quantity%", quantity.toString());
-
-		// do variable substitutions, stripping color codes from all caps variables
-		message = message.replace("%PLUGIN%",
-				ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',plugin.getName())));
-//		message = message.replace("%ITEMNAME%", 
-//				ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',itemName)));
-		message = message.replace("%PLAYERNAME%", 
-				ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',playerName)));
-		message = message.replace("%PLAYERNICKNAME%", 
-				ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',playerNickname)));
-		message = message.replace("%WORLDNAME%", 
-				ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',worldName)));
-
-		// no stripping of color codes necessary, but do variable substitutions anyhow
-		// in case all caps variables were used
-		message = message.replace("%PLAYERDISPLAYNAME%", playerDisplayName);
-		message = message.replace("%TIMEREMAINING%", remainingTime.toString());
-		message = message.replace("%QUANTITY%", quantity.toString());
+		if (message.contains("%")) {
+			message = StringUtil.replace(message,"%PLAYER_NAME%",playerName);
+			message = StringUtil.replace(message,"%WORLD_NAME%", ChatColor.stripColor(worldName));
+			message = StringUtil.replace(message,"%TOOL_NAME%",ChatColor.stripColor(getToolName()));
+			message = StringUtil.replace(message,"%QUANTITY%", quantity.toString());
+			message = StringUtil.replace(message,"%MATERIAL%", materialName);
+		}
 
 		// send message to player
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&',message));
@@ -163,8 +173,9 @@ class MessageManager {
      * @param sender
      * @param soundId
      */
-	void playerSound(CommandSender sender, String soundId) {
+	void playerSound(final CommandSender sender, final String soundId) {
 	
+		// if command sender is in game, play sound effect
 		if (sender instanceof Player) {
 			playerSound((Player)sender,soundId);
 		}
@@ -176,19 +187,16 @@ class MessageManager {
 	 * @param player
 	 * @param soundId
 	 */
-	void playerSound(Player player, String soundId) {
+	void playerSound(final Player player, final String soundId) {
 		
 		// if sound effects are disabled in config, do nothing and return
 		if (!plugin.getConfig().getBoolean("sound-effects")) {
 			return;
 		}
 		
-		// if sound is set to enabled in messages file
+		// if sound is set to enabled in config file
 		if (plugin.getConfig().getBoolean("sounds." + soundId + ".enabled")) {
 			
-			// get player only setting from config file
-			boolean playerOnly = plugin.getConfig().getBoolean("sounds." + soundId + ".player-only");
-	
 			// get sound name from config file
 			String soundName = plugin.getConfig().getString("sounds." + soundId + ".sound");
 	
@@ -198,13 +206,21 @@ class MessageManager {
 			// get sound pitch from config file
 			float pitch = (float) plugin.getConfig().getDouble("sounds." + soundId + ".pitch");
 	
-			// if sound is set player only, use player.playSound()
-			if (playerOnly) {
-				player.playSound(player.getLocation(), Sound.valueOf(soundName), volume, pitch);
-			}
-			// else use world.playSound() so other players in vicinity can hear
-			else {
-				player.getWorld().playSound(player.getLocation(), Sound.valueOf(soundName), volume, pitch);
+			// get player only setting from config file
+			boolean playerOnly = plugin.getConfig().getBoolean("sounds." + soundId + ".player-only");
+	
+			try {
+				// if sound is set player only, use player.playSound()
+				if (playerOnly) {
+					player.playSound(player.getLocation(), Sound.valueOf(soundName), volume, pitch);
+				}
+				// else use world.playSound() so other players in vicinity can hear
+				else {
+					player.getWorld().playSound(player.getLocation(), Sound.valueOf(soundName), volume, pitch);
+				}
+			} catch (IllegalArgumentException e) {
+				plugin.getLogger().warning("An error occured while trying to play the sound '" + soundName 
+						+ "'. You probably need to update the sound name in your config.yml file.");
 			}
 		}
 	}
@@ -215,7 +231,7 @@ class MessageManager {
 	 * @param player
 	 * @param messageId
 	 */
-	private void putMessageCooldown(Player player, String messageId) {
+	private void putMessageCooldown(final Player player, final String messageId) {
 		
     	ConcurrentHashMap<String, Long> tempMap = new ConcurrentHashMap<String, Long>();
     	tempMap.put(messageId, System.currentTimeMillis());
@@ -229,7 +245,7 @@ class MessageManager {
 	 * @param messageId
 	 * @return cooldown expire time
 	 */
-	private long getMessageCooldown(Player player, String messageId) {
+	private long getMessageCooldown(final Player player, final String messageId) {
 		
 		// check if player is in message cooldown hashmap
 		if (messageCooldownMap.containsKey(player.getUniqueId())) {
@@ -246,14 +262,8 @@ class MessageManager {
 	
 	
 	/**
-	 * Remove player from message cooldown map
-	 * @param player
+	 * Reload custom messages file
 	 */
-	void removePlayerCooldown(Player player) {
-		messageCooldownMap.remove(player.getUniqueId());
-	}
-
-	
 	void reload() {
 		
 		// reinstall message files if necessary
@@ -314,7 +324,12 @@ class MessageManager {
 	}
 
 
-	private String languageFileExists(String language) {
+	/**
+	 * Determine if a language file exists
+	 * @param language
+	 * @return
+	 */
+	private String languageFileExists(final String language) {
 		
 		// check if localization file for configured language exists, if not then fallback to en-US
 		File languageFile = new File(plugin.getDataFolder() 
@@ -329,13 +344,21 @@ class MessageManager {
 	}
 
 
+	/**
+	 * Get custom tool name from language file
+	 * @return
+	 */
 	String getToolName() {
-		return ChatColor.translateAlternateColorCodes('&',messages.getConfig().getString("tool-name"));
+		return ChatColor.translateAlternateColorCodes('&',messages.getConfig().getString("TOOL_NAME"));
 	}
 
-	
+
+	/**
+	 * Get custom tool lore from language file
+	 * @return
+	 */
 	List<String> getToolLore() {
-		List<String> lore = messages.getConfig().getStringList("tool-lore");
+		List<String> lore = messages.getConfig().getStringList("TOOL_LORE");
 		int lineNumber = 0;
 		while (lineNumber < lore.size()) {
 			lore.set(lineNumber, ChatColor.translateAlternateColorCodes('&',lore.get(lineNumber)));
@@ -343,6 +366,5 @@ class MessageManager {
 		}
 		return lore;
 	}
-	
-}
 
+}

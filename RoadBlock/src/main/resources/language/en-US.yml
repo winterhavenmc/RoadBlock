@@ -1,62 +1,113 @@
 # Tool Display Name
-tool-name: '&6RoadBlock Tool'
+TOOL_NAME: '&6RoadBlock Tool'
 
 # Tool Lore
-tool-lore:
+TOOL_LORE:
   - '&eUse to set'
   - '&eRoadBlock protection'
 
 
-# Custom messages for RoadBlock plugin
+# Variable substitutions
+#
+#	%PLAYER_NAME%		name of player
+#	%WORLD_NAME%		name of player's current world
+#	%TOOL_NAME%			name of tool, as defined in this file
+#	%QUANTITY%			a quantity
+#	%MATERIAL%			block material
 
-messages:
-  command-fail-args-count-under:
-    enabled: true
-    string: '&3[LodeStar]&c Too few arguments!'
-  command-fail-args-count-over:
-    enabled: true
-    string: '&3[LodeStar]&c Too many arguments!'
-  command-fail-args-count-over-spaces:
-    enabled: true
-    string: '&3[LodeStar]&c Use underscores in place of spaces for destination name.'
-  command-fail-console:
-    enabled: true
-    string: '&3[LodeStar]&c You must be in game to use this command!'
-  command-fail-tool-inventory-full:
-    enabled: true
-    string: '&3Could give RoadBlock tool because your inventory is full.'
-  command-fail-invalid-command:
-    enabled: true
-    string: '&3[%PLUGIN%]&c That is not a valid command!'
-  command-fail-invalid-item:
-    enabled: true
-    string: '&3[%PLUGIN%]&c The item you are holding is not a %ITEMNAME%!'
-  command-fail-invalid-quantity:
-    enabled: true
-    string: '&3[%PLUGIN%]&c Invalid quantity!'
+# Color codes:
+# &0 black			&4 red			&8 dark grey 		&c salmon
+# &1 dark blue		&5 purple		&9 lavender			&d light purple
+# &2 dark green		&6 gold			&a light green		&e yellow
+# &3 agua			&7 light grey	&b light blue		&f white
 
-  command-success-reload:
-    enabled: true
-    string: '&3[%PLUGIN%]&b configuration reloaded.'
+##################
+# Command Messages
+##################
+COMMAND_FAIL_ARGS_COUNT_UNDER:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &cToo few arguments!'
 
-  permission-denied-help:
-    enabled: true
-    string: '&cYou do not have permission to view %PLUGIN% help!'
-  permission-denied-reload:
-    enabled: true
-    string: '&cYou do not have permission to reload %PLUGIN% configuration!'
-  permission-denied-status:
-    enabled: true
-    string: '&cYou do not have permission to view %PLUGIN% settings!'
-  permission-denied-tool:
-    enabled: true
-    string: '&cYou do not have permission to create a %PLUGIN% tool!'
-  permission-denied-use:
-    enabled: true
-    repeat-delay: 1
-    string: '&cYou do not have permission to use a &b%ITEMNAME%&r&3 in %worldname%.'
+COMMAND_FAIL_ARGS_COUNT_OVER:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &cToo many arguments!'
 
-  usage-shift-click:
-    enabled: true
-    repeat-delay: 5
-    string: '&3You must shift-click to use a %ITEMNAME%.'
+COMMAND_FAIL_CONSOLE:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &cYou must be in game to use this command!'
+
+COMMAND_FAIL_INVALID_COMMAND:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &cThat is not a valid command!'
+
+COMMAND_FAIL_INVALID_QUANTITY:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &cInvalid quantity!'
+
+COMMAND_FAIL_TOOL_INVENTORY_FULL:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &cCould not give %TOOL_NAME% because your inventory is full.'
+
+COMMAND_FAIL_TOOL_PERMISSION:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &cYou do not have permission to create a %TOOL_NAME%!'
+
+COMMAND_SUCCESS_RELOAD:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &7Configuration reloaded.'
+
+COMMAND_FAIL_HELP_PERMISSION:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &cYou do not have permission to view RoadBlock help!'
+
+COMMAND_FAIL_RELOAD_PERMISSION:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &cYou do not have permission to reload RoadBlock configuration!'
+
+COMMAND_FAIL_STATUS_PERMISSION:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &cYou do not have permission to view RoadBlock settings!'
+
+
+###############
+# Tool Messages
+###############
+TOOL_FAIL_WORLD_DISABLED:
+  enabled: true
+  repeat-delay: 1
+  text: '&8[&eRoadBlock&8] &cRoadBlocks are not enabled in world %WORLD_NAME%.'
+
+TOOL_FAIL_USE_PERMISSION:
+  enabled: true
+  repeat-delay: 1
+  text: '&8[&eRoadBlock&8] &cYou do not have permission to use a &b%TOOL_NAME%&r&3 in %WORLD_NAME%.'
+
+TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION:
+  enabled: true
+  repeat-delay: 1
+  text: '&8[&eRoadBlock&8] &cYou do not have permission to break road blocks in %WORLD_NAME%.'
+
+TOOL_FAIL_INVALID_MATERIAL:
+  enabled: true
+  repeat-delay: 1
+  text: '&8[&eRoadBlock&8] &cBlock type %MATERIAL% is not a valid RoadBlock material!'
+
+TOOL_FAIL_USE_SHIFT_CLICK:
+  enabled: true
+  repeat-delay: 5
+  text: '&8[&eRoadBlock&8] &7You must shift-click to use a %TOOL_NAME%.'
+
+TOOL_SUCCESS_PROTECT:
+  enabled: true
+  repeat-delay: 1
+  text: '&8[&eRoadBlock&8] &7Protected %QUANTITY% blocks.'
+
+TOOL_SUCCESS_UNPROTECT:
+  enabled: true
+  repeat-delay: 1
+  text: '&8[&eRoadBlock&8] &7Unprotected %QUANTITY% blocks.'
+
+TOOL_SUCCESS_BREAK_BLOCK:
+  enabled: true
+  repeat-delay: 1
+  text: '&8[&eRoadBlock&8] &7Removed protection from block.'

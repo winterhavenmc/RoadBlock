@@ -7,7 +7,7 @@ public final class PluginMain extends JavaPlugin {
 
 	public static PluginMain instance;
 	DataStore dataStore;
-	BlockManager blockManager;
+	public BlockManager blockManager;
 	MessageManager messageManager;
 	CommandManager commandManager;
 	
@@ -24,7 +24,7 @@ public final class PluginMain extends JavaPlugin {
 		// install default config.yml if not present  
 		saveDefaultConfig();
 		
-		// instantiate mesasge manager
+		// instantiate message manager
 		messageManager = new MessageManager(this);
 
 		// instantiate command manager

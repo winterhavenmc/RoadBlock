@@ -14,7 +14,7 @@ public class ShowHighlight extends BukkitRunnable {
 	private HashSet<Location> locations;
 	private Material material;
 	
-	ShowHighlight(Player player, HashSet<Location> locations, Material material) {
+	ShowHighlight(final Player player, final HashSet<Location> locations, final Material material) {
 		
 		this.player = player;
 		this.locations = locations;

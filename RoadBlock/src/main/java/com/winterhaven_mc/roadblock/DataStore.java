@@ -1,8 +1,9 @@
 package com.winterhaven_mc.roadblock;
 
-import java.util.HashSet;
-import java.util.List;
+import java.util.Collection;
+import java.util.Set;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 
 
@@ -25,39 +26,46 @@ public abstract class DataStore {
 	 * @param testLocation
 	 * @return
 	 */
-	abstract boolean isProtected(Location location);
+	abstract boolean isProtected(final Location location);
 
 	/**
 	 * Store list of records
 	 * @param locations
 	 */
-	abstract void insertRecords(final HashSet<Location> locations);
+	abstract void insertRecords(final Collection<Location> locations);
 
 	/**
 	 * Store record
 	 * @param location
 	 */
-	abstract void insertRecord(Location location);
+	abstract void insertRecord(final Location location);
 
 	/**
 	 * delete list of records
 	 * @param locationSet
 	 */
-	abstract void deleteRecords(HashSet<Location> locationSet);
+	abstract void deleteRecords(final Collection<Location> locationSet);
 
 	/**
 	 * Delete record
 	 * @param block
 	 * @return 
 	 */	
-	abstract void deleteRecord(Location location);
+	abstract void deleteRecord(final Location location);
 
 	/**
 	 * get all records
 	 * @return List of blocks
 	 */
-	abstract List<Location> getAllRecords();
+	abstract Set<Location> getAllRecords();
 
+	/**
+	 * Get block records for locations within a chunk
+	 * @param chunk
+	 * @return
+	 */
+	abstract Set<Location> getBlockLocationsInChunk(Chunk chunk);
+	
 	/**
 	 * Close storage
 	 */
@@ -99,7 +107,7 @@ public abstract class DataStore {
 	 * @return
 	 */
 	String getName() {
-		return this.getType().getName();
+		return this.getType().toString();
 	}
 
 	/**
@@ -114,8 +122,9 @@ public abstract class DataStore {
 	 * Set initialized field
 	 * @param initialized
 	 */
-	void setInitialized(boolean initialized) {
+	void setInitialized(final boolean initialized) {
 		this.initialized = initialized;
 	}
 
+	
 }

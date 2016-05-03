@@ -7,9 +7,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -31,7 +33,10 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	private Connection connection;
 
 	// block cache
-	private ConcurrentHashMap<Location,CacheStatus> blockCache;
+	private Map<Location,CacheStatus> blockCache;
+	
+	// chunk cache
+	private Set<Location> chunkCache;
 
 	
 	/**
@@ -49,8 +54,11 @@ public class DataStoreSQLite extends DataStore implements Listener {
 		// set datastore filename
 		this.filename = "roadblocks.db";
 		
-		// create empty cache
+		// create empty block cache
 		this.blockCache = new ConcurrentHashMap<Location,CacheStatus>();
+		
+		// crate empty chunk location cache
+		this.chunkCache = new HashSet<Location>();
 
 		// register event handlers in this class
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -70,20 +78,6 @@ public class DataStoreSQLite extends DataStore implements Listener {
 			return;
 		}
 
-		// sql statement to create table if it doesn't already exist
-		final String createBlockTable = "CREATE TABLE IF NOT EXISTS blocks ("
-				+ "worldname VARCHAR(255) NOT NULL, "
-				+ "x INT, "
-				+ "y INT, "
-				+ "z INT,"
-				+ "chunk_x INT, "
-				+ "chunk_z INT, "
-				+ "UNIQUE (worldname,x,y,z) )";
-		
-		// sql statement to create chunk_coords index if it doesn't already exist
-		final String createChunkIndex = "CREATE INDEX IF NOT EXISTS chunk_coords "
-				+ "ON blocks (chunk_x,chunk_z)";
-
 		// register the driver 
 		final String jdbcDriverName = "org.sqlite.JDBC";
 
@@ -99,10 +93,10 @@ public class DataStoreSQLite extends DataStore implements Listener {
 		Statement statement = connection.createStatement();
 
 		// execute table creation statement
-		statement.executeUpdate(createBlockTable);
+		statement.executeUpdate(Queries.getQuery("CreateBlockTable"));
 		
 		// execute index creation statement
-		statement.executeUpdate(createChunkIndex);
+		statement.executeUpdate(Queries.getQuery("CreateChunkIndex"));
 
 		// set initialized true
 		setInitialized(true);
@@ -180,51 +174,29 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @return boolean
 	 */
 	@Override
-	boolean isProtected(Location location) {
+	boolean isProtected(final Location location) {
 		
 		// check cache first
+		if (isChunkCached(location)) {
+			if (blockCache.containsKey(location)) {
+				if (blockCache.get(location).equals(CacheStatus.TRUE)
+						|| blockCache.get(location).equals(CacheStatus.PENDING_INSERT)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		// add chunk to cache
+		addCache(location.getChunk());
+		
+		// check cache again
 		if (blockCache.containsKey(location)) {
 			if (blockCache.get(location).equals(CacheStatus.TRUE)
 					|| blockCache.get(location).equals(CacheStatus.PENDING_INSERT)) {
 				return true;
 			}
-			return false;
 		}
-		
-		// sql statement to retrieve record
-		final String sqlSelectBlock = "SELECT * FROM blocks "
-				+ "WHERE worldname = ? AND x = ? AND y = ? AND z = ?";
-	
-		try {
-			PreparedStatement preparedStatement = connection.prepareStatement(sqlSelectBlock);
-	
-			preparedStatement.setString(1, location.getWorld().getName());
-			preparedStatement.setInt(2, location.getBlockX());
-			preparedStatement.setInt(3, location.getBlockY());
-			preparedStatement.setInt(4, location.getBlockZ());
-	
-			// execute sql query
-			ResultSet rs = preparedStatement.executeQuery();
-	
-			// if record exists, insert all block locations in chunk into cache
-			if (rs.next()) {
-				addCache(location.getChunk());
-				return true;
-			}
-		}
-		catch (Exception e) {
-	
-			// output simple error message
-			plugin.getLogger().warning("An error occurred while trying to "
-					+ "fetch a record from the SQLite datastore.");
-			plugin.getLogger().warning(e.getLocalizedMessage());
-	
-			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
-				e.getStackTrace();
-			}
-		}
-		// return false since no record found
 		return false;
 	}
 
@@ -234,18 +206,8 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @param locations HashSet of records to insert
 	 */
 	@Override
-	void insertRecords(final HashSet<Location> locations) {
+	void insertRecords(final Collection<Location> locations) {
 		
-		// sql statement to insert or replace record
-		final String sqlInsertBlock = "INSERT OR IGNORE INTO blocks ("
-				+ "worldname, "
-				+ "x, "
-				+ "y, "
-				+ "z, "
-				+ "chunk_x, "
-				+ "chunk_z) "
-				+ "values(?,?,?,?,?,?)";
-
 		// set cache for all records in list to pending insert
 		int count = 0;
 		for (Location location : locations) {
@@ -290,18 +252,23 @@ public class DataStoreSQLite extends DataStore implements Listener {
 						final String worldName = testWorldName;
 
 						try {
-							// create prepared statement
-							PreparedStatement preparedStatement = connection.prepareStatement(sqlInsertBlock);
+							// synchronize on database connection
+							synchronized(connection) {
 
-							preparedStatement.setString(1, worldName);
-							preparedStatement.setDouble(2, location.getX());
-							preparedStatement.setDouble(3, location.getY());
-							preparedStatement.setDouble(4, location.getZ());
-							preparedStatement.setFloat(5, location.getChunk().getX());
-							preparedStatement.setFloat(6, location.getChunk().getZ());
+								// create prepared statement
+								PreparedStatement preparedStatement = 
+										connection.prepareStatement(Queries.getQuery("InsertOrIgnoreBlock"));
 
-							// execute prepared statement
-							preparedStatement.executeUpdate();
+								preparedStatement.setString(1, worldName);
+								preparedStatement.setDouble(2, location.getX());
+								preparedStatement.setDouble(3, location.getY());
+								preparedStatement.setDouble(4, location.getZ());
+								preparedStatement.setFloat(5, location.getChunk().getX());
+								preparedStatement.setFloat(6, location.getChunk().getZ());
+
+								// execute prepared statement
+								preparedStatement.executeUpdate();
+							}
 						}
 						catch (Exception e) {
 
@@ -351,6 +318,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * Insert a single record into the SQLite datastore
 	 * @param location
 	 */
+	@Override
 	void insertRecord(final Location location) {
 		
 		// if location is null do nothing and return
@@ -373,32 +341,27 @@ public class DataStoreSQLite extends DataStore implements Listener {
 		}
 		final String worldName = testWorldName;
 
-		// sql statement to insert or replace record
-		final String sqlInsertBlock = "INSERT OR REPLACE INTO blocks ("
-				+ "worldname, "
-				+ "x, "
-				+ "y, "
-				+ "z, "
-				+ "chunk_x, "
-				+ "chunk_z) "
-				+ "values(?,?,?,?,?,?)";
-
 		new BukkitRunnable() {
 			@Override
 			public void run() {
 				try {
-					// create prepared statement
-					PreparedStatement preparedStatement = connection.prepareStatement(sqlInsertBlock);
+					// synchronize on database connection
+					synchronized(connection) {
 
-					preparedStatement.setString(1, worldName);
-					preparedStatement.setDouble(2, location.getX());
-					preparedStatement.setDouble(3, location.getY());
-					preparedStatement.setDouble(4, location.getZ());
-					preparedStatement.setFloat(5, location.getChunk().getX());
-					preparedStatement.setFloat(6, location.getChunk().getZ());
+						// create prepared statement
+						PreparedStatement preparedStatement = 
+								connection.prepareStatement(Queries.getQuery("InsertOrReplaceBlock"));
 
-					// execute prepared statement
-					preparedStatement.executeUpdate();
+						preparedStatement.setString(1, worldName);
+						preparedStatement.setDouble(2, location.getX());
+						preparedStatement.setDouble(3, location.getY());
+						preparedStatement.setDouble(4, location.getZ());
+						preparedStatement.setFloat(5, location.getChunk().getX());
+						preparedStatement.setFloat(6, location.getChunk().getZ());
+
+						// execute prepared statement
+						preparedStatement.executeUpdate();
+					}
 				}
 				catch (Exception e) {
 
@@ -423,10 +386,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @param locations HashSet of locations
 	 */
 	@Override
-	void deleteRecords(final HashSet<Location> locations) {
-		
-		final String sqlDeleteBlock = "DELETE FROM blocks "
-				+ "WHERE worldname = ? AND x = ? AND y = ? AND z = ?";
+	void deleteRecords(final Collection<Location> locations) {
 		
 		// set cache for all records in list to pending delete
 		int count = 0;
@@ -464,16 +424,21 @@ public class DataStoreSQLite extends DataStore implements Listener {
 						final int z = location.getBlockZ();
 					
 						try {
-							// create prepared statement
-							PreparedStatement preparedStatement = connection.prepareStatement(sqlDeleteBlock);
-					
-							preparedStatement.setString(1, worldName);
-							preparedStatement.setInt(2, x);
-							preparedStatement.setInt(3, y);
-							preparedStatement.setInt(4, z);
-					
-							// execute prepared statement
-							rowsAffected = preparedStatement.executeUpdate();
+							// synchronize on database connection
+							synchronized(connection) {
+
+								// create prepared statement
+								PreparedStatement preparedStatement = 
+										connection.prepareStatement(Queries.getQuery("DeleteBlock"));
+
+								preparedStatement.setString(1, worldName);
+								preparedStatement.setInt(2, x);
+								preparedStatement.setInt(3, y);
+								preparedStatement.setInt(4, z);
+
+								// execute prepared statement
+								rowsAffected = preparedStatement.executeUpdate();
+							}
 						}
 						catch (Exception e) {
 					
@@ -534,9 +499,6 @@ public class DataStoreSQLite extends DataStore implements Listener {
 		final int y = location.getBlockY();
 		final int z = location.getBlockZ();
 	
-		final String sqlDeleteBlock = "DELETE FROM blocks "
-				+ "WHERE worldname = ? AND x = ? AND y = ? AND z = ?";
-	
 		// set block to pending delete in cache
 		blockCache.put(location,CacheStatus.PENDING_DELETE);
 	
@@ -545,21 +507,26 @@ public class DataStoreSQLite extends DataStore implements Listener {
 			public void run() {
 	
 				try {
-					// create prepared statement
-					PreparedStatement preparedStatement = connection.prepareStatement(sqlDeleteBlock);
-	
-					preparedStatement.setString(1, worldName);
-					preparedStatement.setInt(2, x);
-					preparedStatement.setInt(3, y);
-					preparedStatement.setInt(4, z);
-	
-	
-					// execute prepared statement
-					int rowsAffected = preparedStatement.executeUpdate();
-	
-					// output debugging information
-					if (plugin.debug) {
-						plugin.getLogger().info(rowsAffected + " rows deleted.");
+
+					// synchronize on database connection
+					synchronized(connection) {
+
+						// create prepared statement
+						PreparedStatement preparedStatement = 
+								connection.prepareStatement(Queries.getQuery("DeleteBlock"));
+
+						preparedStatement.setString(1, worldName);
+						preparedStatement.setInt(2, x);
+						preparedStatement.setInt(3, y);
+						preparedStatement.setInt(4, z);
+
+						// execute prepared statement
+						int rowsAffected = preparedStatement.executeUpdate();
+						
+						// output debugging information
+						if (plugin.debug) {
+							plugin.getLogger().info(rowsAffected + " rows deleted.");
+						}
 					}
 				}
 				catch (Exception e) {
@@ -583,19 +550,16 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	/**
 	 * Retrieve all road block locations in chunk from the SQLite datastore
 	 * @param chunk
-	 * @return List of locations
+	 * @return Set of locations
 	 */
-	List<Location> getBlockLocationsInChunk(Chunk chunk) {
+	@Override
+	Set<Location> getBlockLocationsInChunk(final Chunk chunk) {
 
-		List<Location> returnList = new ArrayList<Location>();
+		Set<Location> returnSet = new HashSet<Location>();
 
-		// sql statement to retrieve all display names
-		final String sqlSelectBlocksInChunk = "SELECT * FROM blocks "
-				+ "WHERE worldname = ? AND chunk_x = ? AND chunk_z = ?";
-
-		
 		try {
-			PreparedStatement preparedStatement = connection.prepareStatement(sqlSelectBlocksInChunk);
+			PreparedStatement preparedStatement = 
+					connection.prepareStatement(Queries.getQuery("SelectBlocksInChunk"));
 
 			preparedStatement.setString(1, chunk.getWorld().getName());
 			preparedStatement.setInt(2, chunk.getX());
@@ -627,7 +591,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 				}
 
 				Location location = new Location(world,x,y,z);
-				returnList.add(location);
+				returnSet.add(location);
 				count++;
 			}
 			if (plugin.profile) {
@@ -649,7 +613,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 		}
 
 		// return results
-		return returnList;
+		return Collections.unmodifiableSet(returnSet);
 	}
 
 	
@@ -658,14 +622,13 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @return List of location records
 	 */
 	@Override
-	List<Location> getAllRecords() {
+	Set<Location> getAllRecords() {
 		
-		List<Location> returnList = new ArrayList<Location>();
-	
-		final String sqlSelectAllRecords = "SELECT * FROM blocks";
+		Set<Location> returnSet = new HashSet<Location>();
 	
 		try {
-			PreparedStatement preparedStatement = connection.prepareStatement(sqlSelectAllRecords);
+			PreparedStatement preparedStatement = 
+					connection.prepareStatement(Queries.getQuery("SelectAllBlocks"));
 	
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
@@ -688,7 +651,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 				}
 	
 				Location location = new Location(world,x,y,z);
-				returnList.add(location);
+				returnSet.add(location);
 			}
 		}
 		catch (Exception e) {
@@ -705,7 +668,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 		}
 	
 		// return results
-		return returnList;
+		return Collections.unmodifiableSet(returnSet);
 	}
 
 
@@ -713,16 +676,18 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * Add all road block locations within chunk to cache
 	 * @param chunk
 	 */
-	void addCache(final Chunk chunk) {
+	private void addCache(final Chunk chunk) {
 
-		List<Location> blockList = getBlockLocationsInChunk(chunk);
+		Set<Location> blockSet = getBlockLocationsInChunk(chunk);
 
 		int count = 0;
 		
-		for (Location location : blockList) {
+		for (Location location : blockSet) {
 			blockCache.put(location,CacheStatus.TRUE);
 			count++;
 		}
+		
+		chunkCache.add(chunk.getBlock(0, 0, 0).getLocation());
 		
 		if (plugin.debug) {
 			if (count > 0) {
@@ -737,7 +702,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * called on chunk unload event
 	 * @param chunk
 	 */
-	synchronized void flushCache(final Chunk chunk) {
+	private void flushCache(final Chunk chunk) {
 		
 		int count = 0;
 		Long startTime = System.nanoTime();
@@ -747,6 +712,8 @@ public class DataStoreSQLite extends DataStore implements Listener {
 				count++;
 			}
 		}
+		chunkCache.remove(chunk.getBlock(0, 0, 0).getLocation());
+		
 		Long elapsedTime = (System.nanoTime() - startTime);
 		if (plugin.profile) {
 			if (count > 0) {
@@ -755,14 +722,33 @@ public class DataStoreSQLite extends DataStore implements Listener {
 			}
 		}
 	}
+	
 
-
+	/**
+	 * Check if road block locations for a chunk are loaded in the cache
+	 * @param location
+	 * @return true if chunk is cached, false if not
+	 */
+	private boolean isChunkCached(final Location location) {
+		
+		Location chunkLoc = location.getChunk().getBlock(0, 0, 0).getLocation();
+		
+		if (chunkCache.contains(chunkLoc)) {
+			if (plugin.debug) {
+				plugin.getLogger().info("Chunk is cached.");
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	
 	/**
 	 * Event listener for chunk unload event
 	 * @param event
 	 */
 	@EventHandler
-	void onChunkUnload(ChunkUnloadEvent event) {
+	void onChunkUnload(final ChunkUnloadEvent event) {
 		flushCache(event.getChunk());
 	}
 

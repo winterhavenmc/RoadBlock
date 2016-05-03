@@ -2,6 +2,7 @@ name: ${project.name}
 main: com.winterhaven_mc.roadblock.PluginMain
 author: ${project.author}
 version: ${project.version}
+softdepend: [Multiverse-Core]
 
 commands:
   roadblock:
