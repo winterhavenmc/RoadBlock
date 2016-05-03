@@ -2,12 +2,15 @@ package com.winterhaven_mc.roadblock;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.winterhaven_mc.roadblock.highlights.HighlightManager;
+
 
 public final class PluginMain extends JavaPlugin {
 
 	public static PluginMain instance;
 	DataStore dataStore;
 	public BlockManager blockManager;
+	public HighlightManager highlightManager;
 	MessageManager messageManager;
 	CommandManager commandManager;
 	
@@ -38,6 +41,9 @@ public final class PluginMain extends JavaPlugin {
 
 		// instantiate block manager
 		blockManager = new BlockManager(this);
+		
+		// instantiate highlight manager
+		highlightManager = new HighlightManager(this);
 		
 	}
 	

@@ -553,8 +553,9 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @return Set of locations
 	 */
 	@Override
-	Set<Location> getBlockLocationsInChunk(final Chunk chunk) {
+	Set<Location> selectBlockLocationsInChunk(final Chunk chunk) {
 
+		// create new set for results
 		Set<Location> returnSet = new HashSet<Location>();
 
 		try {
@@ -612,7 +613,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 			}
 		}
 
-		// return results
+		// return results in an unmodifiable set
 		return Collections.unmodifiableSet(returnSet);
 	}
 
@@ -622,7 +623,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @return List of location records
 	 */
 	@Override
-	Set<Location> getAllRecords() {
+	Set<Location> selectAllRecords() {
 		
 		Set<Location> returnSet = new HashSet<Location>();
 	
@@ -667,7 +668,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 			}
 		}
 	
-		// return results
+		// return results in an unmodifiable set
 		return Collections.unmodifiableSet(returnSet);
 	}
 
@@ -678,7 +679,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 */
 	private void addCache(final Chunk chunk) {
 
-		Set<Location> blockSet = getBlockLocationsInChunk(chunk);
+		Set<Location> blockSet = selectBlockLocationsInChunk(chunk);
 
 		int count = 0;
 		

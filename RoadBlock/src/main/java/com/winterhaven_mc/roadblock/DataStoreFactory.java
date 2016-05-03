@@ -54,7 +54,7 @@ public class DataStoreFactory {
 		try {
 			newDataStore.initialize();
 		} catch (Exception e) {
-			plugin.getLogger().severe("Could not initialize " + newDataStore.toString() + " datastore!");
+			plugin.getLogger().severe("Could not initialize " + newDataStore.getName() + " datastore!");
 			if (plugin.debug) {
 				e.printStackTrace();
 			}
@@ -88,8 +88,8 @@ public class DataStoreFactory {
 		// if old datastore file exists, attempt to read all records
 		if (oldDataStore.exists()) {
 			
-			plugin.getLogger().info("Converting existing " + oldDataStore.toString() + " datastore to "
-					+ newDataStore.toString() + " datastore...");
+			plugin.getLogger().info("Converting existing " + oldDataStore.getName() + " datastore to "
+					+ newDataStore.getName() + " datastore...");
 			
 			// initialize old datastore if necessary
 			if (!oldDataStore.isInitialized()) {
@@ -97,21 +97,21 @@ public class DataStoreFactory {
 					oldDataStore.initialize();
 				} catch (Exception e) {
 					plugin.getLogger().warning("Could not initialize " 
-							+ oldDataStore.toString() + " datastore for conversion.");
+							+ oldDataStore.getName() + " datastore for conversion.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 					return;
 				}
 			}
 
 			// get set of all location records in old datastore
-			Set<Location> allRecords = new HashSet<Location>(oldDataStore.getAllRecords());
+			Set<Location> allRecords = new HashSet<Location>(oldDataStore.selectAllRecords());
 			
 			int count = 0;
 			for (Location record : allRecords) {
 				newDataStore.insertRecord(record);
 				count++;
 			}
-			plugin.getLogger().info(count + " records converted to " + newDataStore.toString() + " datastore.");
+			plugin.getLogger().info(count + " records converted to " + newDataStore.getName() + " datastore.");
 			
 			newDataStore.sync();
 			

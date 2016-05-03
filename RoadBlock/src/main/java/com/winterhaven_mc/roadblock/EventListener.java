@@ -133,8 +133,8 @@ class EventListener implements Listener {
 			}
 
 			// if clicked block is highlighted, unhighlight all blocks for player
-			if (plugin.blockManager.isHighlighted(player, clickedBlock.getLocation())) {
-				plugin.blockManager.unHighlightBlocks(player);
+			if (plugin.highlightManager.isHighlighted(player, clickedBlock.getLocation())) {
+				plugin.highlightManager.unHighlightBlocks(player);
 			}
 
 			// get road block locations attached to clicked block
@@ -147,7 +147,7 @@ class EventListener implements Listener {
 			if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR)) {
 
 				// highlight blocks
-				plugin.blockManager.highlightBlocks(player, locationSet, Material.EMERALD_BLOCK);
+				plugin.highlightManager.highlightBlocks(player, locationSet, Material.EMERALD_BLOCK);
 
 				// store blocks
 				plugin.blockManager.storeLocations(locationSet);
@@ -160,7 +160,7 @@ class EventListener implements Listener {
 			else if (action.equals(Action.LEFT_CLICK_BLOCK) || action.equals(Action.LEFT_CLICK_AIR)) {
 
 				// highlight blocks
-				plugin.blockManager.highlightBlocks(player, locationSet, Material.REDSTONE_BLOCK);
+				plugin.highlightManager.highlightBlocks(player, locationSet, Material.REDSTONE_BLOCK);
 
 				// remove blocks from storage
 				plugin.blockManager.removeLocations(locationSet);
@@ -185,8 +185,8 @@ class EventListener implements Listener {
 		ItemStack previousItem = player.getInventory().getItem(event.getPreviousSlot());
 		
 		if (previousItem != null 
-				&& previousItem.getType().equals(Material.GOLD_PICKAXE)) {	
-			plugin.blockManager.unHighlightBlocks(player);
+				&& RoadBlockTool.isTool(previousItem)) {
+			plugin.highlightManager.unHighlightBlocks(player);
 		}
 	}
 
@@ -199,7 +199,7 @@ class EventListener implements Listener {
 	@EventHandler
 	void onPlayerChangeGameMode(final PlayerGameModeChangeEvent event) {
 		
-		plugin.blockManager.unHighlightBlocks(event.getPlayer());
+		plugin.highlightManager.unHighlightBlocks(event.getPlayer());
 	}
 
 
@@ -256,7 +256,7 @@ class EventListener implements Listener {
 	@EventHandler
 	void onPlayerLogout(final PlayerQuitEvent event) {
 		
-		plugin.blockManager.removePlayerHighlightMap(event.getPlayer());	
+		plugin.highlightManager.removePlayerFromMap(event.getPlayer());	
 	}
 
 

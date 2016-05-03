@@ -78,8 +78,12 @@ public class CommandManager implements CommandExecutor {
 			sender.sendMessage(ChatColor.DARK_RED + "PROFILE: true");
 		}
 		
+		sender.sendMessage(ChatColor.GREEN + "Spread distance: " 
+				+ ChatColor.RESET + plugin.getConfig().getInt("spread-distance") + " blocks");
+
 		sender.sendMessage(ChatColor.GREEN + "Mob targeting distance: " 
 				+ ChatColor.RESET + plugin.getConfig().getInt("target-distance") + " blocks");
+
 		sender.sendMessage(ChatColor.GREEN + "Enabled Worlds: " 
 				+ ChatColor.RESET + plugin.blockManager.getEnabledWorlds().toString());
 		return true;

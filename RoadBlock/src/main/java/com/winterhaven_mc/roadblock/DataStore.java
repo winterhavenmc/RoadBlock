@@ -57,14 +57,14 @@ public abstract class DataStore {
 	 * get all records
 	 * @return List of blocks
 	 */
-	abstract Set<Location> getAllRecords();
+	abstract Set<Location> selectAllRecords();
 
 	/**
 	 * Get block records for locations within a chunk
 	 * @param chunk
 	 * @return
 	 */
-	abstract Set<Location> getBlockLocationsInChunk(Chunk chunk);
+	abstract Set<Location> selectBlockLocationsInChunk(Chunk chunk);
 	
 	/**
 	 * Close storage

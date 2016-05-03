@@ -1,15 +1,11 @@
 package com.winterhaven_mc.roadblock;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.UUID;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -21,16 +17,12 @@ public class BlockManager {
 	// reference to main class
 	private final PluginMain plugin;
 
-	// HashMap of highlighted block locations for players
-	private Map<UUID,HashSet<Location>> highlightedLocations = new HashMap<UUID,HashSet<Location>>();
-
 	// list of enabled world names
 	private List<String> enabledWorlds;
 	
 	// set of road block materials
 	private Set<Material> roadBlockMaterials;
-
-	
+		
 	/**
 	 * Class constructor
 	 * @param plugin
@@ -205,29 +197,6 @@ public class BlockManager {
 	}
 	
 	
-	boolean isHighlighted(final Player player, final Location location) {
-		
-		if (highlightedLocations.containsKey(player.getUniqueId())
-				&& highlightedLocations.get(player.getUniqueId()).contains(location)) {
-			return true;
-		}
-		return false;
-	}
-	
-	
-	/**
-	 * Remove player from highlighted blocks map
-	 * @param player
-	 */
-	void removePlayerHighlightMap(final Player player) {
-		
-		if (highlightedLocations.containsKey(player.getUniqueId())) {
-			highlightedLocations.get(player.getUniqueId()).clear();
-			highlightedLocations.remove(player.getUniqueId());
-		}
-	}
-	
-
 	/**
 	 * Put block locations in datastore
 	 * @param locationSet
@@ -247,51 +216,6 @@ public class BlockManager {
 	
 	
 	/**
-	 * Remove highlighting from blocks for player
-	 * @param player
-	 */
-	@SuppressWarnings("deprecation")
-	void unHighlightBlocks(final Player player) {
-		
-		if (highlightedLocations.containsKey(player.getUniqueId())) {
-			HashSet<Location> blockLocations = highlightedLocations.get(player.getUniqueId());
-
-			for (Location location : blockLocations) {
-
-				Block block = location.getBlock();
-				player.sendBlockChange(location, block.getType(), block.getData());
-
-			}
-			removePlayerHighlightMap(player);
-		}
-	}
-
-
-	/**
-	 * Highlight blocks in locationSet for player,
-	 * using blocks of <code>material</code> type as highlight
-	 * @param player
-	 * @param locationSet
-	 * @param material
-	 */
-	void highlightBlocks(final Player player, final HashSet<Location> locationSet, final Material material) {
-		
-		// if player uuid not in hashmap, insert with block list
-		if (!highlightedLocations.containsKey(player.getUniqueId())) {
-			highlightedLocations.put(player.getUniqueId(), locationSet);
-		}
-		// else add blocklist to existing player highlighted blocks in highlight map
-		else {
-			highlightedLocations.get(player.getUniqueId()).addAll(locationSet);
-		}
-
-		// run showHighlight task with small delay
-		new ShowHighlight(player, locationSet, material).runTaskLater(plugin, 5L);
-			
-	}
-
-
-	/**
 	 * get list of enabled worlds
 	 * @return ArrayList of String enabledWorlds
 	 */
@@ -308,6 +232,7 @@ public class BlockManager {
 		
 	}
 
+	
 	/**
 	 * update enabledWorlds ArrayList field from config file settings
 	 */
