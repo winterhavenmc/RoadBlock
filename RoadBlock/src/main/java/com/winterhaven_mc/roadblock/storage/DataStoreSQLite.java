@@ -1,4 +1,4 @@
-package com.winterhaven_mc.roadblock;
+package com.winterhaven_mc.roadblock.storage;
 
 import java.io.File;
 import java.sql.Connection;
@@ -22,6 +22,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import com.winterhaven_mc.roadblock.PluginMain;
 
 
 public class DataStoreSQLite extends DataStore implements Listener {
@@ -107,31 +109,6 @@ public class DataStoreSQLite extends DataStore implements Listener {
 
 	
 	/**
-	 * Close SQLite datastore connection
-	 */
-	@Override
-	void close() {
-	
-		try {
-			connection.close();
-			plugin.getLogger().info("SQLite datastore connection closed.");
-		}
-		catch (Exception e) {
-	
-			// output simple error message
-			plugin.getLogger().warning("An error occured while closing the SQLite datastore.");
-			plugin.getLogger().warning(e.getMessage());
-	
-			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
-				e.getStackTrace();
-			}
-		}
-		setInitialized(false);
-	}
-
-
-	/**
 	 * Sync in memory datastore to disk<br>
 	 * (unused for SQLite datastore)
 	 */
@@ -165,6 +142,31 @@ public class DataStoreSQLite extends DataStore implements Listener {
 		// get path name to data store file
 		File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getFilename());
 		return dataStoreFile.exists();
+	}
+
+
+	/**
+	 * Close SQLite datastore connection
+	 */
+	@Override
+	public void close() {
+	
+		try {
+			connection.close();
+			plugin.getLogger().info("SQLite datastore connection closed.");
+		}
+		catch (Exception e) {
+	
+			// output simple error message
+			plugin.getLogger().warning("An error occured while closing the SQLite datastore.");
+			plugin.getLogger().warning(e.getMessage());
+	
+			// if debugging is enabled, output stack trace
+			if (plugin.debug) {
+				e.getStackTrace();
+			}
+		}
+		setInitialized(false);
 	}
 
 

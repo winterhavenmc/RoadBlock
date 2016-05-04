@@ -22,8 +22,9 @@ public class HighlightManager {
 	// Map of highlighted block locations for players
 	private Map<UUID,HashSet<Location>> highlightMap;
 
-	// Map of last player highlight timestamps
+	// Map of last player pending remove tasks
 	private Map<UUID,BukkitTask> pendingRemoveTask;
+	
 	
 	/**
 	 * Class constructor

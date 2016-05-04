@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,8 +27,9 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+
+import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
 
 
 /**
@@ -84,7 +84,7 @@ class EventListener implements Listener {
 		if (RoadBlockTool.isTool(playerItem) && !action.equals(Action.PHYSICAL)) {
 
 			// if world is not enabled, send message and return
-			if (!plugin.blockManager.worldEnabled(player.getWorld())) {
+			if (!plugin.blockManager.isWorldEnabled(player.getWorld())) {
 				plugin.messageManager.sendPlayerMessage(event.getPlayer(), "TOOL_FAIL_WORLD_DISABLED");
 				return;
 			}
@@ -114,21 +114,24 @@ class EventListener implements Listener {
 			
 			// cancel event to prevent breaking blocks with road block tool
 			event.setCancelled(true);
-			
-			// if tool is in off-hand, do nothing and return
-			if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
-				return;
-			}
+
+			// FOR 1.9 ONLY
+			//			// if tool is in off-hand, do nothing and return
+			//			if (event.getHand().equals(EquipmentSlot.OFF_HAND)) {
+			//				return;
+			//			}
 
 			// if player does not have roadblock.set permission, do nothing and return
 			if (!player.hasPermission("roadblock.set")) {
 				plugin.messageManager.sendPlayerMessage(player, "TOOL_FAIL_USE_PERMISSION");
+				plugin.messageManager.playerSound(player, "TOOL_FAIL_USE_PERMISSION");
 				return;
 			}
 
 			// if block clicked is not in list of road block materials, send message and return
 			if (!plugin.blockManager.getRoadBlockMaterials().contains(clickedBlock.getType())) {
 				plugin.messageManager.sendPlayerMessage(player, "TOOL_FAIL_INVALID_MATERIAL",clickedBlock.getType());
+				plugin.messageManager.playerSound(player, "TOOL_FAIL_INVALID_MATERIAL");
 				return;
 			}
 
@@ -154,6 +157,7 @@ class EventListener implements Listener {
 
 				// send player successful protect message
 				plugin.messageManager.sendPlayerMessage(player, "TOOL_SUCCESS_PROTECT",quantity);
+				plugin.messageManager.playerSound(player, "TOOL_SUCCESS_PROTECT");
 			}
 
 			// if left click, unprotect blocks
@@ -167,6 +171,7 @@ class EventListener implements Listener {
 
 				// send player successful unprotect message
 				plugin.messageManager.sendPlayerMessage(player, "TOOL_SUCCESS_UNPROTECT",quantity);
+				plugin.messageManager.playerSound(player, "TOOL_SUCCESS_UNPROTECT");
 			}
 		}
 	}
@@ -198,7 +203,6 @@ class EventListener implements Listener {
 	 */
 	@EventHandler
 	void onPlayerChangeGameMode(final PlayerGameModeChangeEvent event) {
-		
 		plugin.highlightManager.unHighlightBlocks(event.getPlayer());
 	}
 
@@ -218,32 +222,18 @@ class EventListener implements Listener {
 		// get dropped item
 		ItemStack droppedItem = event.getItemDrop().getItemStack();
 		
-		// get configured tool material
-		Material toolMaterial = Material.matchMaterial(plugin.getConfig().getString("tool-material"));
-		
-		// if configured tool material does not match a material, set to gold pickaxe
-		if (toolMaterial == null) {
-			toolMaterial = Material.GOLD_PICKAXE;
-		}
-		
-		// if dropped item is not tool-material, do nothing and return 
-		if (!droppedItem.getType().equals(toolMaterial)) {
-			return;
-		}
-		
-		// if dropped item does not have configured metadata, do nothing and return
-		if (!droppedItem.hasItemMeta() 
-			|| !droppedItem.getItemMeta().getDisplayName().equals(plugin.messageManager.getToolName())) {
+		// if dropped item is not a road block tool, do nothing and return
+		if (!RoadBlockTool.isTool(droppedItem)) {
 			return;
 		}
 		
 		// remove dropped item
 		event.getItemDrop().remove();
 		
-		// if sound effects enabled, play item_break sound to player
+		// tool drop sound to player
 		if (plugin.getConfig().getBoolean("sound-effects")) {
 			Player player = event.getPlayer();
-			player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+			plugin.messageManager.playerSound(player, "TOOL_DROP");
 		}
 	}
 
@@ -277,7 +267,7 @@ class EventListener implements Listener {
 				plugin.messageManager.sendPlayerMessage(player, "TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION");
 				return;
 			}
-			plugin.dataStore.deleteRecord(block.getLocation());
+			plugin.blockManager.removeLocation(block.getLocation());
 			plugin.messageManager.sendPlayerMessage(player, "TOOL_SUCCESS_BREAK_BLOCK");
 			player.sendMessage("Road block protection removed.");
 		}
@@ -394,7 +384,7 @@ class EventListener implements Listener {
 		// iterate through block list checking for road blocks
 		for (Block block : blocks) {
 			
-			// if block is a death chest, cancel event
+			// if block is a road block, cancel event and break piston
 			if (plugin.blockManager.isRoadBlock(block)) {
 				event.setCancelled(true);
 				
@@ -419,7 +409,7 @@ class EventListener implements Listener {
 		// iterate through block list checking for road blocks
 		for (Block block : blocks) {
 			
-			// if block is a death chest, cancel event
+			// if block is a road block, cancel event and break piston
 			if (plugin.blockManager.isRoadBlock(block)) {
 				event.setCancelled(true);
 				

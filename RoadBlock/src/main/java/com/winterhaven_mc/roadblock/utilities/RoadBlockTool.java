@@ -1,4 +1,4 @@
-package com.winterhaven_mc.roadblock;
+package com.winterhaven_mc.roadblock.utilities;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,6 +10,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.winterhaven_mc.roadblock.PluginMain;
+
 public class RoadBlockTool {
 	
 	private final static PluginMain plugin = PluginMain.instance;
@@ -20,6 +22,7 @@ public class RoadBlockTool {
 					Material.SNOW,
 					Material.LONG_GRASS
 				)));
+	
 	
 	/**
 	 * Create an item stack with configured tool material, name and lore
@@ -81,7 +84,8 @@ public class RoadBlockTool {
 				!itemStack.getItemMeta().getDisplayName().equals(plugin.messageManager.getToolName())) {
 			return false;
 		}
-	
+		
+		// return true
 		return true;
 	}
 

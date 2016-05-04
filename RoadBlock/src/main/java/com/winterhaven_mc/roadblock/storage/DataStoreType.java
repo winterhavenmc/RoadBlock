@@ -1,5 +1,6 @@
-package com.winterhaven_mc.roadblock;
+package com.winterhaven_mc.roadblock.storage;
 
+import com.winterhaven_mc.roadblock.PluginMain;
 
 public enum DataStoreType {
 

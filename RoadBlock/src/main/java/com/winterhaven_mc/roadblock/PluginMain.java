@@ -3,19 +3,23 @@ package com.winterhaven_mc.roadblock;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.winterhaven_mc.roadblock.highlights.HighlightManager;
+import com.winterhaven_mc.roadblock.storage.BlockManager;
+import com.winterhaven_mc.roadblock.storage.DataStore;
+import com.winterhaven_mc.roadblock.storage.DataStoreFactory;
+import com.winterhaven_mc.roadblock.utilities.MessageManager;
 
 
 public final class PluginMain extends JavaPlugin {
 
 	public static PluginMain instance;
-	DataStore dataStore;
 	public BlockManager blockManager;
 	public HighlightManager highlightManager;
-	MessageManager messageManager;
+	public MessageManager messageManager;
 	CommandManager commandManager;
+	public DataStore dataStore;
 	
-	Boolean debug = getConfig().getBoolean("debug");
-	Boolean profile = getConfig().getBoolean("profile");
+	public Boolean debug = getConfig().getBoolean("debug");
+	public Boolean profile = getConfig().getBoolean("profile");
 	
 
 	@Override
@@ -43,8 +47,7 @@ public final class PluginMain extends JavaPlugin {
 		blockManager = new BlockManager(this);
 		
 		// instantiate highlight manager
-		highlightManager = new HighlightManager(this);
-		
+		highlightManager = new HighlightManager(this);	
 	}
 	
 	@Override
@@ -53,5 +56,13 @@ public final class PluginMain extends JavaPlugin {
 		// close datastore
 		dataStore.close();
 	}
+	
+	public DataStore getDataStore() {
+		return this.dataStore;
+	}
 
+	public void setDataStore(DataStore dataStore) {
+		this.dataStore = dataStore;
+	}
+	
 }

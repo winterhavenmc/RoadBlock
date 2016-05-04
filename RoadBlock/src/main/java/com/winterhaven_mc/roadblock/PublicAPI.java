@@ -1,6 +1,7 @@
 package com.winterhaven_mc.roadblock;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 
 public class PublicAPI {
 	
@@ -27,12 +28,13 @@ public class PublicAPI {
 	 * @param maxDepth
 	 * @return
 	 */
-	public static boolean isRoadBelow(final Location location, final int maxDepth) {
-		
-		if (PluginMain.instance.blockManager.isRoadBelow(location, maxDepth)) {
-			return true;
-		}
-		return false;
+	public static boolean isRoadBelow(final Location location, final int maxDepth) {	
+		return PluginMain.instance.blockManager.isRoadBelow(location, maxDepth);
+	}
+	
+	
+	public static boolean isRoadBlockMaterial(final Material material) {
+		return PluginMain.instance.blockManager.isRoadBlockMaterial(material);
 	}
 	
 	

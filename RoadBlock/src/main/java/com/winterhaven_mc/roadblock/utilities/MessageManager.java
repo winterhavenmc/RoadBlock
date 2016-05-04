@@ -1,4 +1,4 @@
-package com.winterhaven_mc.roadblock;
+package com.winterhaven_mc.roadblock.utilities;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +17,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
+import com.winterhaven_mc.roadblock.PluginMain;
 
 
 /**
@@ -26,13 +27,16 @@ import com.onarandombox.MultiverseCore.MultiverseCore;
  * @version		1.0
  *  
  */
-class MessageManager {
+public class MessageManager {
 
 	// reference to main class
 	private final PluginMain plugin;
 	
 	// custom message file handler
 	private ConfigAccessor messages;
+	
+	// custom sound file handler
+	private ConfigAccessor sounds;
 	
 	// cooldown hash amp
 	private ConcurrentHashMap<UUID, ConcurrentHashMap<String, Long>> messageCooldownMap;
@@ -49,7 +53,7 @@ class MessageManager {
 	 * 
 	 * @param plugin
 	 */
-	MessageManager(final PluginMain plugin) {
+	public MessageManager(final PluginMain plugin) {
 		
 		// create pointer to main class
 		this.plugin = plugin;
@@ -62,6 +66,12 @@ class MessageManager {
 
 		// instantiate custom configuration manager for language file
 		this.messages = new ConfigAccessor(plugin, "language" + File.separator + this.language + ".yml");
+		
+		// instantiate custom configuration manager for sound file
+		this.sounds = new ConfigAccessor(plugin, "sounds.yml");
+		
+		// install sound file
+		this.sounds.saveDefaultConfig();
 
 		// initialize messageCooldownMap
 		this.messageCooldownMap = new ConcurrentHashMap<UUID,ConcurrentHashMap<String,Long>>();
@@ -72,18 +82,17 @@ class MessageManager {
 			plugin.getLogger().info("Multiverse-Core detected.");
 			this.mvEnabled = true;
 		}
-
     }
 
-    void sendPlayerMessage(final CommandSender sender, final String messageId) {
+    public void sendPlayerMessage(final CommandSender sender, final String messageId) {
     	sendPlayerMessage(sender, messageId, 1, null);
     }
     
-    void sendPlayerMessage(final CommandSender sender, final String messageId, final int quantity) {
+    public void sendPlayerMessage(final CommandSender sender, final String messageId, final int quantity) {
     	sendPlayerMessage(sender, messageId, quantity, null);
     }
     
-    void sendPlayerMessage(final CommandSender sender, final String messageId, final Material material) {
+    public void sendPlayerMessage(final CommandSender sender, final String messageId, final Material material) {
     	sendPlayerMessage(sender, messageId, 1, material);
     }
     
@@ -95,7 +104,7 @@ class MessageManager {
 	 * @param messageId			message identifier in messages file
 	 * @param quantity			quantity
 	 */
-    void sendPlayerMessage(final CommandSender sender, final String messageId, 
+    public void sendPlayerMessage(final CommandSender sender, final String messageId, 
     		final Integer quantity, final Material material) {
     	
 		// if message is not enabled in messages file, do nothing and return
@@ -173,7 +182,7 @@ class MessageManager {
      * @param sender
      * @param soundId
      */
-	void playerSound(final CommandSender sender, final String soundId) {
+	public void playerSound(final CommandSender sender, final String soundId) {
 	
 		// if command sender is in game, play sound effect
 		if (sender instanceof Player) {
@@ -195,19 +204,19 @@ class MessageManager {
 		}
 		
 		// if sound is set to enabled in config file
-		if (plugin.getConfig().getBoolean("sounds." + soundId + ".enabled")) {
+		if (sounds.getConfig().getBoolean(soundId + ".enabled")) {
 			
 			// get sound name from config file
-			String soundName = plugin.getConfig().getString("sounds." + soundId + ".sound");
+			String soundName = sounds.getConfig().getString(soundId + ".sound");
 	
 			// get sound volume from config file
-			float volume = (float) plugin.getConfig().getDouble("sounds." + soundId + ".volume");
+			float volume = (float) sounds.getConfig().getDouble(soundId + ".volume");
 			
 			// get sound pitch from config file
-			float pitch = (float) plugin.getConfig().getDouble("sounds." + soundId + ".pitch");
+			float pitch = (float) sounds.getConfig().getDouble(soundId + ".pitch");
 	
 			// get player only setting from config file
-			boolean playerOnly = plugin.getConfig().getBoolean("sounds." + soundId + ".player-only");
+			boolean playerOnly = sounds.getConfig().getBoolean(soundId + ".player-only");
 	
 			try {
 				// if sound is set player only, use player.playSound()
@@ -264,7 +273,7 @@ class MessageManager {
 	/**
 	 * Reload custom messages file
 	 */
-	void reload() {
+	public void reload() {
 		
 		// reinstall message files if necessary
 		installLocalizationFiles();
@@ -281,6 +290,9 @@ class MessageManager {
 		
 		// reload language file
 		messages.reloadConfig();
+		
+		// reload sound file
+		sounds.reloadConfig();
 	}
 
 	

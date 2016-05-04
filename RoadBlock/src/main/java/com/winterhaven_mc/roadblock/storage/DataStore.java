@@ -1,4 +1,4 @@
-package com.winterhaven_mc.roadblock;
+package com.winterhaven_mc.roadblock.storage;
 
 import java.util.Collection;
 import java.util.Set;
@@ -69,7 +69,7 @@ public abstract class DataStore {
 	/**
 	 * Close storage
 	 */
-	abstract void close();
+	public abstract void close();
 
 	/**
 	 * Sync datastore to disk if supported

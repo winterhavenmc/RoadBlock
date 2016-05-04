@@ -1,4 +1,4 @@
-package com.winterhaven_mc.roadblock;
+package com.winterhaven_mc.roadblock.storage;
 
 import java.io.IOException;
 import java.io.InputStream;

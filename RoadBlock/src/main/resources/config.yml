@@ -19,8 +19,11 @@ tool-material: GOLD_PICKAXE
 # How far to search for adjacent road blocks from clicked location
 spread-distance: 100
 
-# prevent mobs from targeting players farther than this distance when on roads
+# Prevent mobs from targeting players farther than this distance when on roads
 target-distance: 5
+
+# Enable sound effects
+sound-effects: true
 
 # materials to be considered road blocks
 materials:

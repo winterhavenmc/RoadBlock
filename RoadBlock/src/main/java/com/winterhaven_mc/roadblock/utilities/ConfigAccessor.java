@@ -1,4 +1,4 @@
-package com.winterhaven_mc.roadblock;
+package com.winterhaven_mc.roadblock.utilities;
 
 /*
 * Copyright (C) 2012

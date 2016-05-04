@@ -1,4 +1,4 @@
-package com.winterhaven_mc.roadblock;
+package com.winterhaven_mc.roadblock.storage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.Location;
+
+import com.winterhaven_mc.roadblock.PluginMain;
 
 
 public class DataStoreFactory {
@@ -18,7 +20,7 @@ public class DataStoreFactory {
 	 * No parameter version used when no current datastore exists
 	 * @return new datastore of configured type
 	 */
-	static DataStore create() {
+	public static DataStore create() {
 		
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
@@ -154,7 +156,7 @@ public class DataStoreFactory {
 	public static void reload() {
 		
 		// get current datastore type
-		DataStoreType currentType = plugin.dataStore.getType();
+		DataStoreType currentType = plugin.getDataStore().getType();
 		
 		// get configured datastore type
 		DataStoreType newType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
@@ -163,7 +165,7 @@ public class DataStoreFactory {
 		if (!currentType.equals(newType)) {
 			
 			// create new datastore
-			plugin.dataStore = create(newType,plugin.dataStore);
+			plugin.setDataStore(create(newType,plugin.getDataStore()));
 		}
 		
 	}

@@ -1,4 +1,4 @@
-package com.winterhaven_mc.roadblock;
+package com.winterhaven_mc.roadblock.utilities;
 
 //Copyright 2004-2005 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
