@@ -16,6 +16,12 @@ disabled-worlds:
 # RoadBlock tool material
 tool-material: GOLD_PICKAXE
 
+# Highlight material for protected blocks
+protect-material: EMERALD_BLOCK
+
+# Highlight material for unprotected blocks
+unprotect-material: REDSTONE_BLOCK
+
 # How far to search for adjacent road blocks from clicked location
 spread-distance: 100
 

@@ -26,6 +26,7 @@
 					<include>**/*</include>
 				</includes>
 				<excludes>
+					<exclude>config.yml</exclude>
 					<exclude>plugin.yml</exclude>
 				</excludes>
 			</resource>
@@ -33,6 +34,7 @@
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 				<includes>
+					<include>config.yml</include>
 					<include>plugin.yml</include>
 				</includes>
 			</resource>

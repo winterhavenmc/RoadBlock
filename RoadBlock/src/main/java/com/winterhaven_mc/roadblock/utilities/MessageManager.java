@@ -291,6 +291,9 @@ public class MessageManager {
 		// reload language file
 		messages.reloadConfig();
 		
+		// reinstall sound file if necessary
+		sounds.saveDefaultConfig();
+		
 		// reload sound file
 		sounds.reloadConfig();
 	}

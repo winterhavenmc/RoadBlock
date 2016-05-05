@@ -114,6 +114,9 @@ public class CommandManager implements CommandExecutor {
 			return true;
 		}
 		
+		// re-install config file if necessary
+		plugin.saveDefaultConfig();
+		
 		// reload config file
 		plugin.reloadConfig();
 		
@@ -174,10 +177,8 @@ public class CommandManager implements CommandExecutor {
 			return true;
 		}
 		
-		// if sound effects enabled, play sound for player
-		if (plugin.getConfig().getBoolean("sound-effects")) {
-			plugin.messageManager.playerSound(player, "COMMAND_SUCCESS_TOOL");
-		}
+		// play success sound
+		plugin.messageManager.playerSound(player, "COMMAND_SUCCESS_TOOL");
 		return true;
 	}
 

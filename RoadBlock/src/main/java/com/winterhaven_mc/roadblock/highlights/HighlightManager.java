@@ -50,7 +50,8 @@ public class HighlightManager {
 	 * @param locationSet
 	 * @param material
 	 */
-	public void highlightBlocks(final Player player, final Collection<Location> locationSet, final Material material) {
+	public void highlightBlocks(final Player player, final Collection<Location> locationSet, 
+			final HighlightStyle highlightStyle) {
 		
 		// if player uuid not in hashmap, insert with locationSet
 		if (!highlightMap.containsKey(player.getUniqueId())) {
@@ -62,7 +63,7 @@ public class HighlightManager {
 		}
 
 		// run showHighlight task with small delay
-		new ShowHighlightTask(player,locationSet,material).runTaskLaterAsynchronously(plugin, 5L);
+		new ShowHighlightTask(player,locationSet,highlightStyle.getMaterial()).runTaskLaterAsynchronously(plugin, 5L);
 		
 		// update pending remove highlight
 	}

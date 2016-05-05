@@ -29,6 +29,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.winterhaven_mc.roadblock.highlights.HighlightStyle;
 import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
 
 
@@ -136,9 +137,9 @@ class EventListener implements Listener {
 			}
 
 			// if clicked block is highlighted, unhighlight all blocks for player
-			if (plugin.highlightManager.isHighlighted(player, clickedBlock.getLocation())) {
-				plugin.highlightManager.unHighlightBlocks(player);
-			}
+			//if (plugin.highlightManager.isHighlighted(player, clickedBlock.getLocation())) {
+			//	plugin.highlightManager.unHighlightBlocks(player);
+			//}
 
 			// get road block locations attached to clicked block
 			HashSet<Location> locationSet = 
@@ -150,7 +151,7 @@ class EventListener implements Listener {
 			if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR)) {
 
 				// highlight blocks
-				plugin.highlightManager.highlightBlocks(player, locationSet, Material.EMERALD_BLOCK);
+				plugin.highlightManager.highlightBlocks(player,locationSet,HighlightStyle.PROTECT);
 
 				// store blocks
 				plugin.blockManager.storeLocations(locationSet);
@@ -164,7 +165,7 @@ class EventListener implements Listener {
 			else if (action.equals(Action.LEFT_CLICK_BLOCK) || action.equals(Action.LEFT_CLICK_AIR)) {
 
 				// highlight blocks
-				plugin.highlightManager.highlightBlocks(player, locationSet, Material.REDSTONE_BLOCK);
+				plugin.highlightManager.highlightBlocks(player,locationSet,HighlightStyle.UNPROTECT);
 
 				// remove blocks from storage
 				plugin.blockManager.removeLocations(locationSet);
