@@ -2,7 +2,7 @@ package com.winterhaven_mc.roadblock.storage;
 
 import com.winterhaven_mc.roadblock.PluginMain;
 
-public enum DataStoreType {
+enum DataStoreType {
 
 	SQLITE("SQLite") {
 		
@@ -17,7 +17,7 @@ public enum DataStoreType {
 	private final static PluginMain plugin = PluginMain.instance;
 	
 	// datastore type formatted display name
-	private String displayName;
+	private final String displayName;
 
 	// default datastore type
 	private final static DataStoreType defaultType = DataStoreType.SQLITE;
@@ -25,9 +25,9 @@ public enum DataStoreType {
 
 	/**
 	 * Class constructor
-	 * @param name
+	 * @param displayName the display name of the DataStoreType
 	 */
-	private DataStoreType(final String displayName) {
+	DataStoreType(final String displayName) {
 		this.displayName = displayName;
 	}
 	
@@ -39,7 +39,7 @@ public enum DataStoreType {
 	public abstract DataStore create();
 	
 	@Override
-	public String toString() {
+	public final String toString() {
 		return displayName;
 	}
 
@@ -48,8 +48,8 @@ public enum DataStoreType {
 	}
 	
 	/**
-	 * Match datastore type from passed name
-	 * @param name
+	 * Match datastore type from passed string; ignores case
+	 * @param name A string to match to a DataStoreType
 	 * @return matching DataStoreType or default type if no match
 	 */
 	public static DataStoreType match(final String name) {

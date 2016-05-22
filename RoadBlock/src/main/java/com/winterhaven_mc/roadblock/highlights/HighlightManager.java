@@ -1,29 +1,28 @@
 package com.winterhaven_mc.roadblock.highlights;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
+import com.winterhaven_mc.roadblock.PluginMain;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.winterhaven_mc.roadblock.PluginMain;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class HighlightManager {
+public final class HighlightManager {
 
 	// reference to main class
 	private final PluginMain plugin;
 	
 	// Map of highlighted block locations for players
-	private Map<UUID,HashSet<Location>> highlightMap;
+	private final Map<UUID,HashSet<Location>> highlightMap;
 
 	// Map of last player pending remove tasks
-	private Map<UUID,BukkitTask> pendingRemoveTask;
+	private final Map<UUID,BukkitTask> pendingRemoveTask;
 	
 	
 	/**
@@ -48,9 +47,8 @@ public class HighlightManager {
 	 * using blocks of <code>material</code> type as highlight
 	 * @param player
 	 * @param locationSet
-	 * @param material
 	 */
-	public void highlightBlocks(final Player player, final Collection<Location> locationSet, 
+	public final void highlightBlocks(final Player player, final Collection<Location> locationSet, 
 			final HighlightStyle highlightStyle) {
 		
 		// if player uuid not in hashmap, insert with locationSet
@@ -73,7 +71,7 @@ public class HighlightManager {
 	 * Remove highlighting from blocks for player and remove locations from highlightMap
 	 * @param player
 	 */
-	public void unHighlightBlocks(final Player player, final Collection<Location> locationSet) {
+	public final void unHighlightBlocks(final Player player, final Collection<Location> locationSet) {
 		
 		// remove highlight for player for blocks in locationSet
 		removeHighlight(player,locationSet);
@@ -89,7 +87,7 @@ public class HighlightManager {
 	 * Remove highlighting from all blocks for player
 	 * @param player
 	 */
-	public void unHighlightBlocks(final Player player) {
+	public final void unHighlightBlocks(final Player player) {
 
 		if (highlightMap.containsKey(player.getUniqueId())) {
 			HashSet<Location> locationSet = highlightMap.get(player.getUniqueId());
@@ -108,7 +106,7 @@ public class HighlightManager {
 	 * @param material
 	 */
 	@SuppressWarnings("deprecation")
-	public void showHighlight(final Player player, final Collection<Location> locationSet, final Material material) {
+	public final void showHighlight(final Player player, final Collection<Location> locationSet, final Material material) {
 		
 		// iterate through all location in set
 		for (Location location : locationSet) {
@@ -123,10 +121,9 @@ public class HighlightManager {
 	 * Send block change to player with highlight material
 	 * @param player
 	 * @param locationSet
-	 * @param material
 	 */
 	@SuppressWarnings("deprecation")
-	public void removeHighlight(final Player player, final Collection<Location> locationSet) {
+	public final void removeHighlight(final Player player, final Collection<Location> locationSet) {
 		
 		// iterate through all location in set
 		for (Location location : locationSet) {
@@ -144,7 +141,7 @@ public class HighlightManager {
 	 * Remove player from highlight map
 	 * @param player
 	 */
-	public void removePlayerFromMap(final Player player) {
+	public final void removePlayerFromMap(final Player player) {
 		
 		if (highlightMap.containsKey(player.getUniqueId())) {
 			highlightMap.get(player.getUniqueId()).clear();
@@ -153,7 +150,7 @@ public class HighlightManager {
 	}
 
 	
-	public boolean isHighlighted(final Player player, final Location location) {
+	public final boolean isHighlighted(final Player player, final Location location) {
 		
 		if (highlightMap.containsKey(player.getUniqueId())
 				&& highlightMap.get(player.getUniqueId()).contains(location)) {
@@ -163,16 +160,16 @@ public class HighlightManager {
 	}
 	
 	
-	BukkitTask getPendingRemoveTask(final Player player) {
+	final BukkitTask getPendingRemoveTask(final Player player) {
 		return pendingRemoveTask.get(player.getUniqueId());
 	}
 
-	void setPendingRemoveTask(final Player player, final BukkitTask task) {
+	final void setPendingRemoveTask(final Player player, final BukkitTask task) {
 		pendingRemoveTask.put(player.getUniqueId(), task);
 		
 	}
 	
-	void unsetPendingRemoveTask(final Player player) {
+	final void unsetPendingRemoveTask(final Player player) {
 		pendingRemoveTask.remove(player.getUniqueId());
 	}
 

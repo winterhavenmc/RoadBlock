@@ -10,7 +10,7 @@ import org.bukkit.Location;
 import com.winterhaven_mc.roadblock.PluginMain;
 
 
-public class DataStoreFactory {
+public final class DataStoreFactory {
 
 	private final static PluginMain plugin = PluginMain.instance;
 
@@ -20,7 +20,7 @@ public class DataStoreFactory {
 	 * No parameter version used when no current datastore exists
 	 * @return new datastore of configured type
 	 */
-	public static DataStore create() {
+	public final static DataStore create() {
 		
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
@@ -36,7 +36,7 @@ public class DataStoreFactory {
 	 * @param dataStoreType
 	 * @return
 	 */
-	static DataStore create(final DataStoreType dataStoreType) {
+	final static DataStore create(final DataStoreType dataStoreType) {
 		return create(dataStoreType, null);
 	}
 	
@@ -47,16 +47,16 @@ public class DataStoreFactory {
 	 * @param oldDataStore
 	 * @return
 	 */
-	static DataStore create(final DataStoreType dataStoreType, final DataStore oldDataStore) {
+	final static DataStore create(final DataStoreType dataStoreType, final DataStore oldDataStore) {
 	
 		// get new data store of specified type
-		DataStore newDataStore = dataStoreType.create();
+		final DataStore newDataStore = dataStoreType.create();
 		
 		// initialize new data store
 		try {
 			newDataStore.initialize();
 		} catch (Exception e) {
-			plugin.getLogger().severe("Could not initialize " + newDataStore.getName() + " datastore!");
+			plugin.getLogger().severe("Could not initialize " + newDataStore.getDisplayName() + " datastore!");
 			if (plugin.debug) {
 				e.printStackTrace();
 			}
@@ -80,7 +80,7 @@ public class DataStoreFactory {
 	 * @param oldDataStore
 	 * @param newDataStore
 	 */
-	static void convertDataStore(final DataStore oldDataStore, final DataStore newDataStore) {
+	final static void convertDataStore(final DataStore oldDataStore, final DataStore newDataStore) {
 
 		// if datastores are same type, do not convert
 		if (oldDataStore.getType().equals(newDataStore.getType())) {
@@ -90,8 +90,8 @@ public class DataStoreFactory {
 		// if old datastore file exists, attempt to read all records
 		if (oldDataStore.exists()) {
 			
-			plugin.getLogger().info("Converting existing " + oldDataStore.getName() + " datastore to "
-					+ newDataStore.getName() + " datastore...");
+			plugin.getLogger().info("Converting existing " + oldDataStore.getDisplayName() + " datastore to "
+					+ newDataStore.getDisplayName() + " datastore...");
 			
 			// initialize old datastore if necessary
 			if (!oldDataStore.isInitialized()) {
@@ -99,7 +99,7 @@ public class DataStoreFactory {
 					oldDataStore.initialize();
 				} catch (Exception e) {
 					plugin.getLogger().warning("Could not initialize " 
-							+ oldDataStore.getName() + " datastore for conversion.");
+							+ oldDataStore.getDisplayName() + " datastore for conversion.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 					return;
 				}
@@ -113,7 +113,7 @@ public class DataStoreFactory {
 				newDataStore.insertRecord(record);
 				count++;
 			}
-			plugin.getLogger().info(count + " records converted to " + newDataStore.getName() + " datastore.");
+			plugin.getLogger().info(count + " records converted to " + newDataStore.getDisplayName() + " datastore.");
 			
 			newDataStore.sync();
 			
@@ -127,10 +127,11 @@ public class DataStoreFactory {
 	 * convert all existing data stores to new data store
 	 * @param newDataStore
 	 */
-	static void convertAll(final DataStore newDataStore) {
+	final static void convertAll(final DataStore newDataStore) {
 		
 		// get array list of all data store types
-		ArrayList<DataStoreType> dataStores = new ArrayList<DataStoreType>(Arrays.asList(DataStoreType.values()));
+		final ArrayList<DataStoreType> dataStores = 
+				new ArrayList<DataStoreType>(Arrays.asList(DataStoreType.values()));
 		
 		// remove newDataStore from list of types to convert
 		dataStores.remove(newDataStore);
@@ -153,13 +154,13 @@ public class DataStoreFactory {
 	}
 	
 	
-	public static void reload() {
+	public final static void reload() {
 		
 		// get current datastore type
-		DataStoreType currentType = plugin.getDataStore().getType();
+		final DataStoreType currentType = plugin.getDataStore().getType();
 		
 		// get configured datastore type
-		DataStoreType newType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
+		final DataStoreType newType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
 				
 		// if current datastore type does not match configured datastore type, create new datastore
 		if (!currentType.equals(newType)) {
@@ -167,6 +168,6 @@ public class DataStoreFactory {
 			// create new datastore
 			plugin.setDataStore(create(newType,plugin.getDataStore()));
 		}
-		
 	}
+	
 }

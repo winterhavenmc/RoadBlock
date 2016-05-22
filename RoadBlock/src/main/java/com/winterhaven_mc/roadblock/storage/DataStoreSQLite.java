@@ -26,7 +26,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.winterhaven_mc.roadblock.PluginMain;
 
 
-public class DataStoreSQLite extends DataStore implements Listener {
+public final class DataStoreSQLite extends DataStore implements Listener {
 
 	// reference to main class
 	private final PluginMain plugin;
@@ -35,17 +35,17 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	private Connection connection;
 
 	// block cache
-	private Map<Location,CacheStatus> blockCache;
+	private final Map<Location,CacheStatus> blockCache;
 	
 	// chunk cache
-	private Set<Location> chunkCache;
+	private final Set<Location> chunkCache;
 
 	
 	/**
 	 * Class constructor
 	 * @param plugin
 	 */
-	DataStoreSQLite (PluginMain plugin) {
+	DataStoreSQLite(PluginMain plugin) {
 
 		// reference to main class
 		this.plugin = plugin;
@@ -72,11 +72,11 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * Initialize SQLite datastore
 	 */
 	@Override
-	void initialize() throws SQLException, ClassNotFoundException {
+	final void initialize() throws SQLException, ClassNotFoundException {
 
 		// if data store is already initialized, do nothing and return
 		if (this.isInitialized()) {
-			plugin.getLogger().info(this.getName() + " datastore already initialized.");
+			plugin.getLogger().info(this.getDisplayName() + " datastore already initialized.");
 			return;
 		}
 
@@ -92,7 +92,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 
 		// create a database connection
 		connection = DriverManager.getConnection(dbUrl);
-		Statement statement = connection.createStatement();
+		final Statement statement = connection.createStatement();
 
 		// execute table creation statement
 		statement.executeUpdate(Queries.getQuery("CreateBlockTable"));
@@ -102,9 +102,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 
 		// set initialized true
 		setInitialized(true);
-		if (plugin.debug) {
-			plugin.getLogger().info(this.getName() + " datastore initialized.");
-		}
+		plugin.getLogger().info(getDisplayName() + " datastore initialized.");
 	}
 
 	
@@ -113,7 +111,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * (unused for SQLite datastore)
 	 */
 	@Override
-	void sync() {
+	final void sync() {
 	
 		// no action necessary for this storage type
 	
@@ -124,12 +122,18 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * Delete the SQLite datastore file
 	 */
 	@Override
-	void delete() {
+	final void delete() {
 	
+		// get reference to dataStore file in file system
 		File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getFilename());
+		
+		// if file exists, delete file
 		if (dataStoreFile.exists()) {
 			dataStoreFile.delete();
 		}
+		
+		// release dataStoreFile reference
+		dataStoreFile = null;
 	}
 
 
@@ -137,10 +141,10 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * Check that SQLite datastore file exists on disk
 	 */
 	@Override
-	boolean exists() {
+	final boolean exists() {
 	
 		// get path name to data store file
-		File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getFilename());
+		final File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getFilename());
 		return dataStoreFile.exists();
 	}
 
@@ -149,16 +153,16 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * Close SQLite datastore connection
 	 */
 	@Override
-	public void close() {
+	public final void close() {
 	
 		try {
 			connection.close();
-			plugin.getLogger().info("SQLite datastore connection closed.");
+			plugin.getLogger().info(getDisplayName() + " datastore connection closed.");
 		}
 		catch (Exception e) {
 	
 			// output simple error message
-			plugin.getLogger().warning("An error occured while closing the SQLite datastore.");
+			plugin.getLogger().warning("An error occured while closing the " + getDisplayName() + " datastore.");
 			plugin.getLogger().warning(e.getMessage());
 	
 			// if debugging is enabled, output stack trace
@@ -176,7 +180,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @return boolean
 	 */
 	@Override
-	boolean isProtected(final Location location) {
+	final boolean isProtected(final Location location) {
 		
 		// check cache first
 		if (isChunkCached(location)) {
@@ -208,7 +212,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @param locations HashSet of records to insert
 	 */
 	@Override
-	void insertRecords(final Collection<Location> locations) {
+	final void insertRecords(final Collection<Location> locations) {
 		
 		// set cache for all records in list to pending insert
 		int count = 0;
@@ -247,7 +251,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 							testWorldName = location.getWorld().getName();
 						} catch (Exception e) {
 							plugin.getLogger().warning("An error occured while inserting"
-									+ " a record in the " + getName() + " datastore. World invalid!");
+									+ " a record in the " + getDisplayName() + " datastore. World invalid!");
 							blockCache.remove(location);
 							continue;
 						}
@@ -276,7 +280,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 
 							// output simple error message
 							plugin.getLogger().warning("An error occured while inserting a location "
-									+ "into the " + getName() + " datastore.");
+									+ "into the " + getDisplayName() + " datastore.");
 							plugin.getLogger().warning(e.getLocalizedMessage());
 
 							// if debugging is enabled, output stack trace
@@ -294,7 +298,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 				catch (SQLException e) {
 					// output simple error message
 					plugin.getLogger().warning("An error occurred while attempting to "
-							+ "insert a block in the " + getName() + " datastore.");
+							+ "insert a block in the " + getDisplayName() + " datastore.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 			
 					// if debugging is enabled, output stack trace
@@ -306,7 +310,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 				Long elapsedTime = (System.nanoTime() - startTime);
 				if (plugin.profile) {
 					if (count > 0) {
-						plugin.getLogger().info(count + " blocks inserted into " + getName() + " datastore in " 
+						plugin.getLogger().info(count + " blocks inserted into " + getDisplayName() + " datastore in " 
 						+ TimeUnit.NANOSECONDS.toMillis(elapsedTime) + " milliseconds.");
 					}
 				}
@@ -321,7 +325,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @param location
 	 */
 	@Override
-	void insertRecord(final Location location) {
+	final void insertRecord(final Location location) {
 		
 		// if location is null do nothing and return
 		if (location == null) {
@@ -338,7 +342,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 			testWorldName = location.getWorld().getName();
 		} catch (Exception e) {
 			plugin.getLogger().warning("An error occured while inserting"
-					+ " a record in the " + this.getName() + " datastore. World invalid!");
+					+ " a record in the " + this.getDisplayName() + " datastore. World invalid!");
 			return;
 		}
 		final String worldName = testWorldName;
@@ -388,7 +392,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @param locations HashSet of locations
 	 */
 	@Override
-	void deleteRecords(final Collection<Location> locations) {
+	final void deleteRecords(final Collection<Location> locations) {
 		
 		// set cache for all records in list to pending delete
 		int count = 0;
@@ -446,7 +450,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 					
 							// output simple error message
 							plugin.getLogger().warning("An error occurred while attempting to "
-									+ "delete a block from the " + getName() + " datastore.");
+									+ "delete a block from the " + getDisplayName() + " datastore.");
 							plugin.getLogger().warning(e.getLocalizedMessage());
 					
 							// if debugging is enabled, output stack trace
@@ -463,7 +467,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 				catch (SQLException e) {
 					// output simple error message
 					plugin.getLogger().warning("An error occurred while attempting to "
-							+ "delete a block from the " + getName() + " datastore.");
+							+ "delete a block from the " + getDisplayName() + " datastore.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 			
 					// if debugging is enabled, output stack trace
@@ -475,7 +479,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 				Long elapsedTime = (System.nanoTime() - startTime);
 				if (plugin.profile) {
 					if (count > 0) {
-						plugin.getLogger().info(count + " blocks removed from " + getName() + " datastore in " 
+						plugin.getLogger().info(count + " blocks removed from " + getDisplayName() + " datastore in " 
 						+ TimeUnit.NANOSECONDS.toMillis(elapsedTime) + " milliseconds.");
 					}
 				}
@@ -489,7 +493,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @param location
 	 */
 	@Override
-	void deleteRecord(final Location location) {
+	final void deleteRecord(final Location location) {
 	
 		// if key is null return
 		if (location == null) {
@@ -535,7 +539,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	
 					// output simple error message
 					plugin.getLogger().warning("An error occurred while attempting to "
-							+ "delete a block from the " + getName() + " datastore.");
+							+ "delete a block from the " + getDisplayName() + " datastore.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 	
 					// if debugging is enabled, output stack trace
@@ -555,10 +559,10 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @return Set of locations
 	 */
 	@Override
-	Set<Location> selectBlockLocationsInChunk(final Chunk chunk) {
+	final Set<Location> selectBlockLocationsInChunk(final Chunk chunk) {
 
 		// create new set for results
-		Set<Location> returnSet = new HashSet<Location>();
+		final Set<Location> returnSet = new HashSet<Location>();
 
 		try {
 			PreparedStatement preparedStatement = 
@@ -606,7 +610,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
-					+ "fetch records from the " + getName() + " datastore.");
+					+ "fetch records from the " + getDisplayName() + " datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
@@ -625,9 +629,9 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @return List of location records
 	 */
 	@Override
-	Set<Location> selectAllRecords() {
+	final Set<Location> selectAllRecords() {
 		
-		Set<Location> returnSet = new HashSet<Location>();
+		final Set<Location> returnSet = new HashSet<Location>();
 	
 		try {
 			PreparedStatement preparedStatement = 
@@ -661,7 +665,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
-					+ "fetch all records from the " + getName() + " datastore.");
+					+ "fetch all records from the " + getDisplayName() + " datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 	
 			// if debugging is enabled, output stack trace
@@ -679,9 +683,9 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * Add all road block locations within chunk to cache
 	 * @param chunk
 	 */
-	private void addCache(final Chunk chunk) {
+	private final void addCache(final Chunk chunk) {
 
-		Set<Location> blockSet = selectBlockLocationsInChunk(chunk);
+		final Set<Location> blockSet = selectBlockLocationsInChunk(chunk);
 
 		int count = 0;
 		
@@ -705,7 +709,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * called on chunk unload event
 	 * @param chunk
 	 */
-	private void flushCache(final Chunk chunk) {
+	private final void flushCache(final Chunk chunk) {
 		
 		int count = 0;
 		Long startTime = System.nanoTime();
@@ -732,9 +736,9 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @param location
 	 * @return true if chunk is cached, false if not
 	 */
-	private boolean isChunkCached(final Location location) {
+	private final boolean isChunkCached(final Location location) {
 		
-		Location chunkLoc = location.getChunk().getBlock(0, 0, 0).getLocation();
+		final Location chunkLoc = location.getChunk().getBlock(0, 0, 0).getLocation();
 		
 		if (chunkCache.contains(chunkLoc)) {
 			if (plugin.debug) {
@@ -751,7 +755,7 @@ public class DataStoreSQLite extends DataStore implements Listener {
 	 * @param event
 	 */
 	@EventHandler
-	void onChunkUnload(final ChunkUnloadEvent event) {
+	final void onChunkUnload(final ChunkUnloadEvent event) {
 		flushCache(event.getChunk());
 	}
 

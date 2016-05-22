@@ -40,7 +40,7 @@ import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
  * @version		1.0
  *  
  */
-class EventListener implements Listener {
+final class EventListener implements Listener {
 
 	// reference to main class
 	private final PluginMain plugin;
@@ -68,15 +68,15 @@ class EventListener implements Listener {
 
 
 	@EventHandler
-	void onPlayerInteract(final PlayerInteractEvent event) {
+	final void onPlayerInteract(final PlayerInteractEvent event) {
 		
 		//NOTE: do not check for cancelled event here
 		
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 
-		ItemStack playerItem = event.getItem();
+		final ItemStack playerItem = event.getItem();
 		
-		Action action = event.getAction();
+		final Action action = event.getAction();
 		
 		// get clicked block
 		Block clickedBlock = event.getClickedBlock();
@@ -85,7 +85,7 @@ class EventListener implements Listener {
 		if (RoadBlockTool.isTool(playerItem) && !action.equals(Action.PHYSICAL)) {
 
 			// if world is not enabled, send message and return
-			if (!plugin.blockManager.isWorldEnabled(player.getWorld())) {
+			if (!plugin.worldManager.isEnabled(player.getWorld())) {
 				plugin.messageManager.sendPlayerMessage(event.getPlayer(), "TOOL_FAIL_WORLD_DISABLED");
 				return;
 			}
@@ -136,11 +136,6 @@ class EventListener implements Listener {
 				return;
 			}
 
-			// if clicked block is highlighted, unhighlight all blocks for player
-			//if (plugin.highlightManager.isHighlighted(player, clickedBlock.getLocation())) {
-			//	plugin.highlightManager.unHighlightBlocks(player);
-			//}
-
 			// get road block locations attached to clicked block
 			HashSet<Location> locationSet = 
 					new HashSet<Location>(plugin.blockManager.getFill(clickedBlock.getLocation()));
@@ -184,11 +179,11 @@ class EventListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler
-	void onPlayerChangeItem(final PlayerItemHeldEvent event) {
+	final void onPlayerChangeItem(final PlayerItemHeldEvent event) {
 		
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 		
-		ItemStack previousItem = player.getInventory().getItem(event.getPreviousSlot());
+		final ItemStack previousItem = player.getInventory().getItem(event.getPreviousSlot());
 		
 		if (previousItem != null 
 				&& RoadBlockTool.isTool(previousItem)) {
@@ -203,7 +198,7 @@ class EventListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler
-	void onPlayerChangeGameMode(final PlayerGameModeChangeEvent event) {
+	final void onPlayerChangeGameMode(final PlayerGameModeChangeEvent event) {
 		plugin.highlightManager.unHighlightBlocks(event.getPlayer());
 	}
 
@@ -213,7 +208,7 @@ class EventListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler
-	void onPlayerDropItem(final PlayerDropItemEvent event) {
+	final void onPlayerDropItem(final PlayerDropItemEvent event) {
 		
 		// if event is cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -221,7 +216,7 @@ class EventListener implements Listener {
 		}
 		
 		// get dropped item
-		ItemStack droppedItem = event.getItemDrop().getItemStack();
+		final ItemStack droppedItem = event.getItemDrop().getItemStack();
 		
 		// if dropped item is not a road block tool, do nothing and return
 		if (!RoadBlockTool.isTool(droppedItem)) {
@@ -245,8 +240,9 @@ class EventListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler
-	void onPlayerLogout(final PlayerQuitEvent event) {
+	final void onPlayerQuit(final PlayerQuitEvent event) {
 		
+		// remove player from highlight map
 		plugin.highlightManager.removePlayerFromMap(event.getPlayer());	
 	}
 
@@ -256,10 +252,10 @@ class EventListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler
-	void onBlockBreak(final BlockBreakEvent event) {
+	final void onBlockBreak(final BlockBreakEvent event) {
 		
-		Block block = event.getBlock();
-		Player player = event.getPlayer();
+		final Block block = event.getBlock();
+		final Player player = event.getPlayer();
 		
 		if (plugin.blockManager.isRoadBlock(block)) {
 			
@@ -281,7 +277,7 @@ class EventListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler
-	void onBlockExplode(final BlockExplodeEvent event) {
+	final void onBlockExplode(final BlockExplodeEvent event) {
 		
 		// if event is cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -289,7 +285,7 @@ class EventListener implements Listener {
 		}
 		
 		// get list of exploded blocks
-		List<Block> blocks = new ArrayList<Block>(event.blockList());
+		final List<Block> blocks = new ArrayList<Block>(event.blockList());
 		
 		// remove any road blocks from event block list
 		for (Block block : blocks) {
@@ -306,7 +302,7 @@ class EventListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler
-	void onEntityExplode(final EntityExplodeEvent event) {
+	final void onEntityExplode(final EntityExplodeEvent event) {
 		
 		// if event is cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -314,7 +310,7 @@ class EventListener implements Listener {
 		}
 
 		// get list of exploded blocks
-		List<Block> blocks = new ArrayList<Block>(event.blockList());
+		final List<Block> blocks = new ArrayList<Block>(event.blockList());
 		
 		// remove any road blocks from event block list
 		for (Block block : blocks) {
@@ -330,8 +326,9 @@ class EventListener implements Listener {
 	 * Stop entities from changing road blocks
 	 */
 	@EventHandler
-	void onEntityChangeBlock(final EntityChangeBlockEvent event) {
+	final void onEntityChangeBlock(final EntityChangeBlockEvent event) {
 		
+		// if event block is a RoadBlock, cancel event
 		if (plugin.blockManager.isRoadBlock(event.getBlock())) {
 			event.setCancelled(true);
 		}
@@ -339,13 +336,13 @@ class EventListener implements Listener {
 	
 	
 	@EventHandler
-	void onEntityTargetLivingEntity(final EntityTargetLivingEntityEvent event) {
+	final void onEntityTargetLivingEntity(final EntityTargetLivingEntityEvent event) {
 
 		// check that target is a player
 		if (event.getTarget() != null && event.getTarget() instanceof Player) {
 			
 			// get targeted player
-			Player player = (Player) event.getTarget();
+			final Player player = (Player) event.getTarget();
 			
 			// check that player is above a road block
 			if (plugin.blockManager.isRoadBelowPlayer(player)) {
@@ -360,7 +357,7 @@ class EventListener implements Listener {
 				}
 				
 				// get target reason
-				EntityTargetEvent.TargetReason reason = event.getReason();
+				final EntityTargetEvent.TargetReason reason = event.getReason();
 				
 				// if reason is in cancelReasons list, cancel event
 				if (cancelReasons.contains(reason)) {
@@ -377,10 +374,10 @@ class EventListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler
-	void onPistonExtend(final BlockPistonExtendEvent event) {
+	final void onPistonExtend(final BlockPistonExtendEvent event) {
 
 		// get list of blocks affected by piston 
-		ArrayList<Block> blocks = new ArrayList<Block>(event.getBlocks());
+		final ArrayList<Block> blocks = new ArrayList<Block>(event.getBlocks());
 		
 		// iterate through block list checking for road blocks
 		for (Block block : blocks) {
@@ -402,10 +399,10 @@ class EventListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler
-	void onPistonRetract(final BlockPistonRetractEvent event) {
+	final void onPistonRetract(final BlockPistonRetractEvent event) {
 		
 		// get list of blocks affected by piston 
-		ArrayList<Block> blocks = new ArrayList<Block>(event.getBlocks());
+		final ArrayList<Block> blocks = new ArrayList<Block>(event.getBlocks());
 		
 		// iterate through block list checking for road blocks
 		for (Block block : blocks) {

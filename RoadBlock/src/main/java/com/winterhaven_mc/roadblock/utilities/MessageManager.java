@@ -16,36 +16,34 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.winterhaven_mc.roadblock.PluginMain;
+import com.winterhaven_mc.util.StringUtil;
+import com.winterhaven_mc.util.ConfigAccessor;
 
 
 /**
- * Implements message manager for <code>LodeStar</code>.
+ * Implements message manager for RoadBlock plugin.
  * 
  * @author      Tim Savage
  * @version		1.0
  *  
  */
-public class MessageManager {
+public final class MessageManager {
 
 	// reference to main class
 	private final PluginMain plugin;
-	
+
 	// custom message file handler
 	private ConfigAccessor messages;
-	
+
 	// custom sound file handler
 	private ConfigAccessor sounds;
-	
-	// cooldown hash amp
-	private ConcurrentHashMap<UUID, ConcurrentHashMap<String, Long>> messageCooldownMap;
-	
+
+	// cooldown hash map
+	private final ConcurrentHashMap<UUID, ConcurrentHashMap<String, Long>> messageCooldownMap;
+
 	// currently selected language
 	private String language;
-
-	MultiverseCore mvCore;
-	Boolean mvEnabled = false;
 
 
 	/**
@@ -54,48 +52,44 @@ public class MessageManager {
 	 * @param plugin
 	 */
 	public MessageManager(final PluginMain plugin) {
-		
+
 		// create pointer to main class
 		this.plugin = plugin;
 
 		// install localization files
-        this.installLocalizationFiles();
-		
+		this.installLocalizationFiles();
+
 		// get configured language
 		this.language = languageFileExists(plugin.getConfig().getString("language"));
 
 		// instantiate custom configuration manager for language file
 		this.messages = new ConfigAccessor(plugin, "language" + File.separator + this.language + ".yml");
-		
+
 		// instantiate custom configuration manager for sound file
 		this.sounds = new ConfigAccessor(plugin, "sounds.yml");
-		
+
 		// install sound file
 		this.sounds.saveDefaultConfig();
 
 		// initialize messageCooldownMap
 		this.messageCooldownMap = new ConcurrentHashMap<UUID,ConcurrentHashMap<String,Long>>();
-		
-		// get reference to Multiverse-Core if installed
-		mvCore = (MultiverseCore) plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
-		if (mvCore != null && mvCore.isEnabled()) {
-			plugin.getLogger().info("Multiverse-Core detected.");
-			this.mvEnabled = true;
-		}
-    }
+	}
 
-    public void sendPlayerMessage(final CommandSender sender, final String messageId) {
-    	sendPlayerMessage(sender, messageId, 1, null);
-    }
-    
-    public void sendPlayerMessage(final CommandSender sender, final String messageId, final int quantity) {
-    	sendPlayerMessage(sender, messageId, quantity, null);
-    }
-    
-    public void sendPlayerMessage(final CommandSender sender, final String messageId, final Material material) {
-    	sendPlayerMessage(sender, messageId, 1, material);
-    }
-    
+
+	public final void sendPlayerMessage(final CommandSender sender, final String messageId) {
+		sendPlayerMessage(sender, messageId, 1, null);
+	}
+
+
+	public final void sendPlayerMessage(final CommandSender sender, final String messageId, final int quantity) {
+		sendPlayerMessage(sender, messageId, quantity, null);
+	}
+
+	
+	public final void sendPlayerMessage(final CommandSender sender, final String messageId, final Material material) {
+		sendPlayerMessage(sender, messageId, 1, material);
+	}
+
 
 	/**
 	 *  Send message to player
@@ -104,9 +98,9 @@ public class MessageManager {
 	 * @param messageId			message identifier in messages file
 	 * @param quantity			quantity
 	 */
-    public void sendPlayerMessage(final CommandSender sender, final String messageId, 
-    		final Integer quantity, final Material material) {
-    	
+	public final void sendPlayerMessage(final CommandSender sender, final String messageId, 
+			final Integer quantity, final Material material) {
+
 		// if message is not enabled in messages file, do nothing and return
 		if (!messages.getConfig().getBoolean(messageId + ".enabled")) {
 			return;
@@ -116,7 +110,7 @@ public class MessageManager {
 		String playerName = sender.getName();
 		String worldName = plugin.getServer().getWorlds().get(0).getName();
 		String materialName = "unknown";
-		
+
 		if (material != null) {
 			materialName = material.toString();
 		};
@@ -149,20 +143,14 @@ public class MessageManager {
 
 		// get message from file
 		String message = messages.getConfig().getString(messageId + ".text");
-		
+
 		if (message == null || message.isEmpty()) {
 			message = messageId;
 		}
 
-		// if Multiverse is installed, use Multiverse world alias for world name
-		if (mvEnabled && this.mvCore.getMVWorldManager().getMVWorld(worldName) != null) {
-
-			// if Multiverse alias is not blank, set world name to alias
-			if (!this.mvCore.getMVWorldManager().getMVWorld(worldName).getAlias().isEmpty()) {
-				worldName = this.mvCore.getMVWorldManager().getMVWorld(worldName).getAlias();
-			}
-		}
-
+		// get world name from worldManager
+		worldName = plugin.worldManager.getWorldName(worldName);
+		
 		// do variable substitutions
 		if (message.contains("%")) {
 			message = StringUtil.replace(message,"%PLAYER_NAME%",playerName);
@@ -174,16 +162,16 @@ public class MessageManager {
 
 		// send message to player
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&',message));
-    }
-	
-	
-    /**
-     * Play sound effect for action
-     * @param sender
-     * @param soundId
-     */
-	public void playerSound(final CommandSender sender, final String soundId) {
-	
+	}
+
+
+	/**
+	 * Play sound effect for action
+	 * @param sender
+	 * @param soundId
+	 */
+	public final void playerSound(final CommandSender sender, final String soundId) {
+
 		// if command sender is in game, play sound effect
 		if (sender instanceof Player) {
 			playerSound((Player)sender,soundId);
@@ -196,28 +184,28 @@ public class MessageManager {
 	 * @param player
 	 * @param soundId
 	 */
-	void playerSound(final Player player, final String soundId) {
-		
+	private final void playerSound(final Player player, final String soundId) {
+
 		// if sound effects are disabled in config, do nothing and return
 		if (!plugin.getConfig().getBoolean("sound-effects")) {
 			return;
 		}
-		
+
 		// if sound is set to enabled in config file
 		if (sounds.getConfig().getBoolean(soundId + ".enabled")) {
-			
+
 			// get sound name from config file
 			String soundName = sounds.getConfig().getString(soundId + ".sound");
-	
+
 			// get sound volume from config file
 			float volume = (float) sounds.getConfig().getDouble(soundId + ".volume");
-			
+
 			// get sound pitch from config file
 			float pitch = (float) sounds.getConfig().getDouble(soundId + ".pitch");
-	
+
 			// get player only setting from config file
 			boolean playerOnly = sounds.getConfig().getBoolean(soundId + ".player-only");
-	
+
 			try {
 				// if sound is set player only, use player.playSound()
 				if (playerOnly) {
@@ -234,17 +222,17 @@ public class MessageManager {
 		}
 	}
 
-	
+
 	/**
 	 * Add entry to message cooldown map
 	 * @param player
 	 * @param messageId
 	 */
-	private void putMessageCooldown(final Player player, final String messageId) {
-		
-    	ConcurrentHashMap<String, Long> tempMap = new ConcurrentHashMap<String, Long>();
-    	tempMap.put(messageId, System.currentTimeMillis());
-    	messageCooldownMap.put(player.getUniqueId(), tempMap);
+	private final void putMessageCooldown(final Player player, final String messageId) {
+
+		final ConcurrentHashMap<String, Long> tempMap = new ConcurrentHashMap<String, Long>();
+		tempMap.put(messageId, System.currentTimeMillis());
+		messageCooldownMap.put(player.getUniqueId(), tempMap);
 	}
 
 
@@ -254,61 +242,61 @@ public class MessageManager {
 	 * @param messageId
 	 * @return cooldown expire time
 	 */
-	private long getMessageCooldown(final Player player, final String messageId) {
-		
+	private final long getMessageCooldown(final Player player, final String messageId) {
+
 		// check if player is in message cooldown hashmap
 		if (messageCooldownMap.containsKey(player.getUniqueId())) {
-			
+
 			// check if messageID is in player's cooldown hashmap
 			if (messageCooldownMap.get(player.getUniqueId()).containsKey(messageId)) {
-				
+
 				// return cooldown time
 				return messageCooldownMap.get(player.getUniqueId()).get(messageId);
 			}
 		}
 		return 0L;
 	}
-	
-	
+
+
 	/**
 	 * Reload custom messages file
 	 */
-	public void reload() {
-		
+	public final void reload() {
+
 		// reinstall message files if necessary
 		installLocalizationFiles();
-		
+
 		// get currently configured language
 		String newLanguage = languageFileExists(plugin.getConfig().getString("language"));
-		
+
 		// if configured language has changed, instantiate new messages object
 		if (!newLanguage.equals(this.language)) {
 			this.messages = new ConfigAccessor(plugin, "language" + File.separator + newLanguage + ".yml");
 			this.language = newLanguage;
 			plugin.getLogger().info("New language " + this.language + " enabled.");
 		}
-		
+
 		// reload language file
 		messages.reloadConfig();
-		
+
 		// reinstall sound file if necessary
 		sounds.saveDefaultConfig();
-		
+
 		// reload sound file
 		sounds.reloadConfig();
 	}
 
-	
+
 	/**
 	 * Install localization files from <em>language</em> directory in jar 
 	 */
-	private void installLocalizationFiles() {
-	
+	private final void installLocalizationFiles() {
+
 		List<String> filelist = new ArrayList<String>();
-	
+
 		// get the absolute path to this plugin as URL
 		URL pluginURL = plugin.getServer().getPluginManager().getPlugin(plugin.getName()).getClass().getProtectionDomain().getCodeSource().getLocation();
-	
+
 		// read files contained in jar, adding language/*.yml files to list
 		ZipInputStream zip;
 		try {
@@ -326,7 +314,7 @@ public class MessageManager {
 		} catch (IOException e1) {
 			plugin.getLogger().warning("Could not read language files from jar.");
 		}
-	
+
 		// iterate over list of language files and install from jar if not already present
 		for (String filename : filelist) {
 			// this check prevents a warning message when files are already installed
@@ -344,16 +332,16 @@ public class MessageManager {
 	 * @param language
 	 * @return
 	 */
-	private String languageFileExists(final String language) {
-		
+	private final String languageFileExists(final String language) {
+
 		// check if localization file for configured language exists, if not then fallback to en-US
-		File languageFile = new File(plugin.getDataFolder() 
+		final File languageFile = new File(plugin.getDataFolder() 
 				+ File.separator + "language" 
 				+ File.separator + language + ".yml");
-		
+
 		if (languageFile.exists()) {
 			return language;
-	    }
+		}
 		plugin.getLogger().info("Language file " + language + ".yml does not exist. Defaulting to en-US.");
 		return "en-US";
 	}
@@ -363,7 +351,7 @@ public class MessageManager {
 	 * Get custom tool name from language file
 	 * @return
 	 */
-	String getToolName() {
+	final String getToolName() {
 		return ChatColor.translateAlternateColorCodes('&',messages.getConfig().getString("TOOL_NAME"));
 	}
 
@@ -372,7 +360,7 @@ public class MessageManager {
 	 * Get custom tool lore from language file
 	 * @return
 	 */
-	List<String> getToolLore() {
+	final List<String> getToolLore() {
 		List<String> lore = messages.getConfig().getStringList("TOOL_LORE");
 		int lineNumber = 0;
 		while (lineNumber < lore.size()) {

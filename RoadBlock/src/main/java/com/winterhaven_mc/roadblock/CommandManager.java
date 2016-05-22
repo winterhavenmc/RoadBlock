@@ -13,21 +13,26 @@ import com.winterhaven_mc.roadblock.storage.DataStoreFactory;
 import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
 
 
-public class CommandManager implements CommandExecutor {
+public final class CommandManager implements CommandExecutor {
 	
-	private PluginMain plugin;
+	private final PluginMain plugin;
 
-	public CommandManager(PluginMain plugin) {
+	
+	/**
+	 * Class constructor
+	 * @param plugin
+	 */
+	public CommandManager(final PluginMain plugin) {
 		
 		this.plugin = plugin;		
 		plugin.getCommand("roadblock").setExecutor(this);
 	}
 
 	
-	public boolean onCommand(final CommandSender sender, final Command command, 
+	public final boolean onCommand(final CommandSender sender, final Command command, 
 			final String label, final String[] args) {
 
-		int maxArgs = 1;
+		final int maxArgs = 1;
 
 		if (args.length > maxArgs) {
 			plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_ARGS_COUNT_OVER");
@@ -67,7 +72,7 @@ public class CommandManager implements CommandExecutor {
 	 * @param sender
 	 * @return
 	 */
-	boolean statusCommand(final CommandSender sender) {
+	private final boolean statusCommand(final CommandSender sender) {
 		
 		// check that sender has permission for status command
 		if (!sender.hasPermission("roadblock.status")) {
@@ -95,7 +100,7 @@ public class CommandManager implements CommandExecutor {
 				+ ChatColor.RESET + plugin.getConfig().getInt("target-distance") + " blocks");
 
 		sender.sendMessage(ChatColor.GREEN + "Enabled Worlds: " 
-				+ ChatColor.RESET + plugin.blockManager.getEnabledWorlds().toString());
+				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());
 		return true;
 	}
 	
@@ -105,7 +110,7 @@ public class CommandManager implements CommandExecutor {
 	 * @param sender
 	 * @return
 	 */
-	boolean reloadCommand(final CommandSender sender) {
+	private final boolean reloadCommand(final CommandSender sender) {
 		
 		// check that sender has permission for reload command
 		if (!sender.hasPermission("roadblock.reload")) {
@@ -126,9 +131,6 @@ public class CommandManager implements CommandExecutor {
 		// update profile field
 		plugin.profile = plugin.getConfig().getBoolean("profile");
 		
-		// update enabledWorlds list
-		plugin.blockManager.updateEnabledWorlds();
-		
 		// update road block materials list
 		plugin.blockManager.updateMaterials();
 		
@@ -136,7 +138,7 @@ public class CommandManager implements CommandExecutor {
 		plugin.messageManager.reload();
 		
 		// reload enabled worlds
-		plugin.blockManager.updateEnabledWorlds();
+		plugin.worldManager.reload();
 		
 		// reload datastore
 		DataStoreFactory.reload();
@@ -147,7 +149,7 @@ public class CommandManager implements CommandExecutor {
 	}
 	
 	
-	boolean toolCommand(final CommandSender sender) {
+	private final boolean toolCommand(final CommandSender sender) {
 		
 		// sender must be player
 		if (!(sender instanceof Player)) {
@@ -156,7 +158,7 @@ public class CommandManager implements CommandExecutor {
 		}
 		
 		// get player from sender
-		Player player = (Player) sender;
+		final Player player = (Player) sender;
 		
 		// check player permissions
 		if (!player.hasPermission("roadblock.tool")) {
@@ -166,10 +168,10 @@ public class CommandManager implements CommandExecutor {
 		}
 		
 		// create road block tool itemStack
-		ItemStack rbTool = RoadBlockTool.create();
+		final ItemStack rbTool = RoadBlockTool.create();
 		
 		// put tool in player's inventory
-		HashMap<Integer,ItemStack> noFit = player.getInventory().addItem(rbTool);
+		final HashMap<Integer,ItemStack> noFit = player.getInventory().addItem(rbTool);
 		
 		if (!noFit.isEmpty()) {
 			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_TOOL_INVENTORY_FULL");

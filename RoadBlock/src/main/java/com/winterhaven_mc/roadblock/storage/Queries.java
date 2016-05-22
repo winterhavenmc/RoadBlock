@@ -5,9 +5,9 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class Queries {
+class Queries {
 
-	private static final String propFileName = "queries.properties";
+	private final static String propFileName = "queries.properties";
 	
 	private static Properties properties;
 	
@@ -19,7 +19,7 @@ public class Queries {
 		throw new AssertionError();
 	}
 	
-	public static Properties getQueries() throws SQLException {
+	private static Properties getQueries() throws SQLException {
 		
 		// singleton
 		if (properties == null) {
@@ -41,7 +41,7 @@ public class Queries {
 		return properties;
 	}
 
-	public static String getQuery(final String query) throws SQLException {
+	static String getQuery(final String query) throws SQLException {
 		return getQueries().getProperty(query);
 	}
 	

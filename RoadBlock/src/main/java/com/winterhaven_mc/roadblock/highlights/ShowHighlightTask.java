@@ -11,15 +11,15 @@ import org.bukkit.scheduler.BukkitTask;
 import com.winterhaven_mc.roadblock.PluginMain;
 
 
-public class ShowHighlightTask extends BukkitRunnable {
+public final class ShowHighlightTask extends BukkitRunnable {
 	
 	private final PluginMain plugin = PluginMain.instance;
 	
-	private Player player;
-	private Collection<Location> locationSet;
-	private Material material;
+	private final Player player;
+	private final Collection<Location> locationSet;
+	private final Material material;
 	
-	public ShowHighlightTask(final Player player, final Collection<Location> locationSet, final Material material) {
+	ShowHighlightTask(final Player player, final Collection<Location> locationSet, final Material material) {
 		
 		this.player = player;
 		this.locationSet = locationSet;
@@ -33,10 +33,10 @@ public class ShowHighlightTask extends BukkitRunnable {
 		plugin.highlightManager.showHighlight(player, locationSet, material);
 
 		// create task to unhighlight locationSet in 30 seconds
-		BukkitTask task = new RemoveHighlightTask(player).runTaskLaterAsynchronously(plugin, 30 * 20L);
+		final BukkitTask task = new RemoveHighlightTask(player).runTaskLaterAsynchronously(plugin, 30 * 20L);
 		
 		// if pending remove highlight task exists, cancel and replace with this task
-		BukkitTask previousTask = plugin.highlightManager.getPendingRemoveTask(player);
+		final BukkitTask previousTask = plugin.highlightManager.getPendingRemoveTask(player);
 		
 		if (previousTask != null) {
 			previousTask.cancel();

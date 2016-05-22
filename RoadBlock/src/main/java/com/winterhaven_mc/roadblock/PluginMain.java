@@ -7,6 +7,7 @@ import com.winterhaven_mc.roadblock.storage.BlockManager;
 import com.winterhaven_mc.roadblock.storage.DataStore;
 import com.winterhaven_mc.roadblock.storage.DataStoreFactory;
 import com.winterhaven_mc.roadblock.utilities.MessageManager;
+import com.winterhaven_mc.util.WorldManager;
 
 
 public final class PluginMain extends JavaPlugin {
@@ -15,8 +16,9 @@ public final class PluginMain extends JavaPlugin {
 	public BlockManager blockManager;
 	public HighlightManager highlightManager;
 	public MessageManager messageManager;
-	CommandManager commandManager;
+	public CommandManager commandManager;
 	public DataStore dataStore;
+	public WorldManager worldManager;
 	
 	public Boolean debug = getConfig().getBoolean("debug");
 	public Boolean profile = getConfig().getBoolean("profile");
@@ -31,6 +33,9 @@ public final class PluginMain extends JavaPlugin {
 		// install default config.yml if not present  
 		saveDefaultConfig();
 		
+		// instantiate world manager
+		worldManager = new WorldManager(this);
+		
 		// instantiate message manager
 		messageManager = new MessageManager(this);
 
@@ -40,14 +45,14 @@ public final class PluginMain extends JavaPlugin {
 		// get initialized destination storage object
 		dataStore = DataStoreFactory.create();
 		
-		// instantiate event listener
-		new EventListener(this);
-
 		// instantiate block manager
 		blockManager = new BlockManager(this);
 		
 		// instantiate highlight manager
 		highlightManager = new HighlightManager(this);	
+
+		// instantiate event listener
+		new EventListener(this);
 	}
 	
 	@Override
@@ -57,11 +62,11 @@ public final class PluginMain extends JavaPlugin {
 		dataStore.close();
 	}
 	
-	public DataStore getDataStore() {
+	public final DataStore getDataStore() {
 		return this.dataStore;
 	}
 
-	public void setDataStore(DataStore dataStore) {
+	public final void setDataStore(DataStore dataStore) {
 		this.dataStore = dataStore;
 	}
 	

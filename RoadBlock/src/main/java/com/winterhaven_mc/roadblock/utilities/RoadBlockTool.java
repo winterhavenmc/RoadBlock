@@ -12,11 +12,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.winterhaven_mc.roadblock.PluginMain;
 
-public class RoadBlockTool {
+public final class RoadBlockTool {
 	
 	private final static PluginMain plugin = PluginMain.instance;
 	
-	public static final Set<Material> toolTransparentMaterials = 
+	public final static Set<Material> toolTransparentMaterials = 
 			Collections.unmodifiableSet(new HashSet<Material>(Arrays.asList(
 					Material.AIR,
 					Material.SNOW,
@@ -28,7 +28,7 @@ public class RoadBlockTool {
 	 * Create an item stack with configured tool material, name and lore
 	 * @return RoadBlock tool item stack
 	 */
-	public static ItemStack create() {
+	public final static ItemStack create() {
 		
 		// get configured material
 		Material material = Material.matchMaterial(plugin.getConfig().getString("tool-material"));
@@ -38,10 +38,10 @@ public class RoadBlockTool {
 			material = Material.GOLD_PICKAXE;
 		}
 		// create item stack of configured tool material
-		ItemStack itemStack = new ItemStack(material);
+		final ItemStack itemStack = new ItemStack(material);
 		
 		// get item stack metadata
-		ItemMeta metaData = itemStack.getItemMeta();
+		final ItemMeta metaData = itemStack.getItemMeta();
 		
 		// set display name to configured tool name
 		metaData.setDisplayName(plugin.messageManager.getToolName());
@@ -67,7 +67,7 @@ public class RoadBlockTool {
 	 * @param itemStack
 	 * @return true if item is a RoadBlock tool, false if it is not
 	 */
-	public static boolean isTool(final ItemStack itemStack) {
+	public final static boolean isTool(final ItemStack itemStack) {
 		
 		// if passed item stack is null, return false
 		if (itemStack == null) {

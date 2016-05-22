@@ -1,28 +1,19 @@
 package com.winterhaven_mc.roadblock.storage;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
+import com.winterhaven_mc.roadblock.PluginMain;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import com.winterhaven_mc.roadblock.PluginMain;
+import java.util.*;
 
-public class BlockManager {
+
+public final class BlockManager {
 
 	// reference to main class
 	private final PluginMain plugin;
 
-	// list of enabled world names
-	private List<String> enabledWorlds;
-	
 	// set of road block materials
 	private Set<Material> roadBlockMaterials;
 		
@@ -37,9 +28,6 @@ public class BlockManager {
 	
 		// get road block materials from config file
 		updateMaterials();
-		
-		// get enabled worlds from config file
-		updateEnabledWorlds();	
 	}
 
 	
@@ -48,17 +36,17 @@ public class BlockManager {
 	 * @param startLocation
 	 * @return
 	 */
-	public Set<Location> getFill(final Location startLocation) {
+	public final Set<Location> getFill(final Location startLocation) {
 		
 		if (startLocation == null) {
 			return Collections.emptySet();
 		}
 		
 		// create HashSet for return values
-		Set<Location> returnSet = new HashSet<Location>();
+		final Set<Location> returnSet = new HashSet<Location>();
 		
 		// create queue using linked list implementation
-		Queue<Location> queue = new LinkedList<Location>();
+		final Queue<Location> queue = new LinkedList<Location>();
 		
 		// put start location in queue
 		queue.add(startLocation);
@@ -92,14 +80,14 @@ public class BlockManager {
 	 * @param player
 	 * @return
 	 */
-	public boolean isRoadBelowPlayer(final Player player) {
+	public final boolean isRoadBelowPlayer(final Player player) {
 		
 		if (player == null) {
 			return false;
 		}
 		
 		int depth = 0;
-		int maxDepth = 3;
+		final int maxDepth = 3;
 	
 		// convert player location to block location (with integer coordinates)
 		Location testLocation = player.getLocation().getBlock().getLocation().clone();
@@ -124,10 +112,10 @@ public class BlockManager {
 	/**
 	 * Check if block below location is a protected road block, searching down to maxDepth
 	 * @param location
-	 * @param maxDepth
+	 * @param passedMaxDepth
 	 * @return
 	 */
-	public boolean isRoadBelow(final Location location, final int passedMaxDepth) {
+	public final boolean isRoadBelow(final Location location, final int passedMaxDepth) {
 		
 		if (location == null) {
 			return false;
@@ -136,7 +124,7 @@ public class BlockManager {
 		int depth = 0;
 		int maxDepth = passedMaxDepth;
 		
-		// if maxDepth passed is less than one, default to 5
+		// if maxDepth passed is less than or equal to zero, default to 5
 		if (maxDepth <= 0) {
 			maxDepth = 5;
 		}
@@ -145,7 +133,7 @@ public class BlockManager {
 		maxDepth = Math.min(maxDepth, location.getBlockY());
 	
 		// get copy of location as block location (with integer coordinates)
-		Location testLocation = location.getBlock().getLocation().clone();
+		final Location testLocation = location.getBlock().getLocation().clone();
 		
 		// iterate until maxDepth reached
 		while (depth < maxDepth) {
@@ -169,7 +157,7 @@ public class BlockManager {
 	 * @param block
 	 * @return
 	 */
-	public boolean isRoadBlock(final Block block) {
+	public final boolean isRoadBlock(final Block block) {
 		
 		if (block == null) {
 			return false;
@@ -193,7 +181,7 @@ public class BlockManager {
 	 * @param block
 	 * @return
 	 */
-	boolean isRoadBlockMaterial(final Block block) {
+	final boolean isRoadBlockMaterial(final Block block) {
 		
 		if (block == null) {
 			return false;
@@ -207,7 +195,7 @@ public class BlockManager {
 	 * @param location
 	 * @return
 	 */
-	boolean isRoadBlockMaterial(final Location location) {
+	final boolean isRoadBlockMaterial(final Location location) {
 		
 		if (location == null) {
 			return false;
@@ -221,7 +209,7 @@ public class BlockManager {
 	 * @param material
 	 * @return
 	 */
-	public boolean isRoadBlockMaterial(final Material material) {
+	public final boolean isRoadBlockMaterial(final Material material) {
 		
 		if (material == null) {
 			return false;
@@ -234,7 +222,7 @@ public class BlockManager {
 	 * Put block locations in datastore
 	 * @param locationSet
 	 */
-	public void storeLocations(final HashSet<Location> locationSet) {
+	public final void storeLocations(final HashSet<Location> locationSet) {
 		plugin.dataStore.insertRecords(locationSet);
 	}
 	
@@ -243,63 +231,25 @@ public class BlockManager {
 	 * Remove block locations from datastore
 	 * @param locationSet
 	 */
-	public void removeLocations(final HashSet<Location> locationSet) {
+	public final void removeLocations(final HashSet<Location> locationSet) {
 		plugin.dataStore.deleteRecords(locationSet);
 	}
 	
-	public void removeLocation(final Location location) {
+	public final void removeLocation(final Location location) {
 		plugin.dataStore.deleteRecord(location);
 	}
 	
-	/**
-	 * get list of enabled worlds
-	 * @return ArrayList of String enabledWorlds
-	 */
-	public List<String> getEnabledWorlds() {
-		return this.enabledWorlds;
-	}
-
-	public boolean isWorldEnabled(World world) {
-		
-		if (world == null) {
-			return false;
-		}
-		
-		return this.getEnabledWorlds().contains(world.getName());
-	}
-
-	
-	/**
-	 * update enabledWorlds ArrayList field from config file settings
-	 */
-	public void updateEnabledWorlds() {
-	
-		// copy list of enabled worlds from config into enabledWorlds ArrayList field
-		this.enabledWorlds = new ArrayList<String>(plugin.getConfig().getStringList("enabled-worlds"));
-	
-		// if enabledWorlds ArrayList is empty, add all worlds to ArrayList
-		if (this.enabledWorlds.isEmpty()) {
-			for (World world : plugin.getServer().getWorlds()) {
-				enabledWorlds.add(world.getName());
-			}
-		}
-	
-		// remove each disabled world from enabled worlds field
-		for (String disabledWorld : plugin.getConfig().getStringList("disabled-worlds")) {
-			this.enabledWorlds.remove(disabledWorld);
-		}
-	}
-
 	
 	/**
 	 * Parse valid road block materials from config file
 	 * @return HashSet of materials
 	 */
-	public void updateMaterials() {
+	public final void updateMaterials() {
 		
-		ArrayList<String> materialStringList = new ArrayList<String>(plugin.getConfig().getStringList("materials"));
+		final ArrayList<String> materialStringList = 
+				new ArrayList<String>(plugin.getConfig().getStringList("materials"));
 		
-		HashSet<Material> returnSet = new HashSet<Material>();
+		final HashSet<Material> returnSet = new HashSet<Material>();
 		
 		Material matchMaterial = null;
 		
@@ -323,7 +273,7 @@ public class BlockManager {
 		this.roadBlockMaterials = returnSet;
 	}
 
-	public Set<Material> getRoadBlockMaterials() {
+	public final Set<Material> getRoadBlockMaterials() {
 		return roadBlockMaterials;
 	}
 

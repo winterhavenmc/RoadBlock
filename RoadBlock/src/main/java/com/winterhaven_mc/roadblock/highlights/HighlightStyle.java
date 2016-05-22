@@ -11,8 +11,8 @@ public enum HighlightStyle {
 	
 	private final static PluginMain plugin = PluginMain.instance;
 	
-	private Material defaultMaterial;
-	private String configString;
+	private final Material defaultMaterial;
+	private final String configString;
 
 	
 	/**
@@ -20,12 +20,12 @@ public enum HighlightStyle {
 	 * @param defaultMaterial
 	 * @param configString
 	 */
-	HighlightStyle(Material defaultMaterial, String configString) {
+	HighlightStyle(final Material defaultMaterial, final String configString) {
 		this.defaultMaterial = defaultMaterial;
 		this.configString = configString;
 	}
 
-	public Material getMaterial() {
+	final Material getMaterial() {
 
 		Material material = Material.matchMaterial(plugin.getConfig().getString(this.configString));
 

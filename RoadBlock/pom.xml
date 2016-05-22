@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.winterhaven-mc</groupId>
   <artifactId>RoadBlock</artifactId>
-  <version>1.0</version>
+  <version>1.0.0</version>
   <name>RoadBlock</name>
 	<properties>
 		<project.author>Tim Savage</project.author>
@@ -14,9 +14,32 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<minimizeJar>true</minimizeJar>
+							<artifactSet>
+								<includes>
+									<include>com.winterhaven-mc:config-accessor-lib</include>
+									<include>com.winterhaven-mc:string-util-lib</include>
+									<include>com.winterhaven-mc:world-manager-lib</include>
+								</includes>
+							</artifactSet>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 		<resources>
@@ -66,6 +89,21 @@
 					<artifactId>*</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.winterhaven-mc</groupId>
+			<artifactId>string-util-lib</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.winterhaven-mc</groupId>
+			<artifactId>config-accessor-lib</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.winterhaven-mc</groupId>
+			<artifactId>world-manager-lib</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
 </project>

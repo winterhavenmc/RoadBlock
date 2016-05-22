@@ -6,21 +6,18 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.winterhaven_mc.roadblock.PluginMain;
 
 
-public class RemoveHighlightTask extends BukkitRunnable {
+final class RemoveHighlightTask extends BukkitRunnable {
 
-	private Player player;
+	private final Player player;
 	
 	RemoveHighlightTask(final Player player) {
 		this.player = player;
 	}
 	
 	@Override
-	public void run() {
-
+	public final void run() {
 		PluginMain.instance.highlightManager.unHighlightBlocks(player);
-		
 		PluginMain.instance.highlightManager.unsetPendingRemoveTask(player);
-		
 	}
 
 }

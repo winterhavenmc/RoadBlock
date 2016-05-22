@@ -1,6 +1,6 @@
 package com.winterhaven_mc.roadblock.storage;
 
-public enum CacheStatus {
+enum CacheStatus {
 
 	TRUE,
 	FALSE,
