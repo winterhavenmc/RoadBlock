@@ -1,36 +1,23 @@
-package com.winterhaven_mc.roadblock;
+package com.winterhaven_mc.roadblock.listeners;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.winterhaven_mc.roadblock.PluginMain;
+import com.winterhaven_mc.roadblock.highlights.HighlightStyle;
+import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
-import org.bukkit.event.block.BlockPistonExtendEvent;
-import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
-import com.winterhaven_mc.roadblock.highlights.HighlightStyle;
-import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
+import java.util.*;
 
 
 /**
@@ -40,24 +27,24 @@ import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
  * @version		1.0
  *  
  */
-final class EventListener implements Listener {
+public final class EventListener implements Listener {
 
 	// reference to main class
 	private final PluginMain plugin;
 	
 	// set entity target cancel reasons
 	private static final Set<EntityTargetEvent.TargetReason> cancelReasons =
-			Collections.unmodifiableSet(new HashSet<EntityTargetEvent.TargetReason>(Arrays.asList(
+			Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
 					EntityTargetEvent.TargetReason.CLOSEST_PLAYER,
 					EntityTargetEvent.TargetReason.RANDOM_TARGET,
 					EntityTargetEvent.TargetReason.UNKNOWN
-				)));
+			)));
 	
 	/**
 	 * constructor method for <code>EventListener</code> class
 	 * @param	plugin		A reference to this plugin's main class
 	 */
-	EventListener(final PluginMain plugin) {
+	public EventListener(final PluginMain plugin) {
 		
 		// reference to main
 		this.plugin = plugin;
@@ -138,7 +125,7 @@ final class EventListener implements Listener {
 
 			// get road block locations attached to clicked block
 			HashSet<Location> locationSet = 
-					new HashSet<Location>(plugin.blockManager.getFill(clickedBlock.getLocation()));
+					new HashSet<>(plugin.blockManager.getFill(clickedBlock.getLocation()));
 
 			int quantity = locationSet.size();
 
@@ -176,7 +163,7 @@ final class EventListener implements Listener {
 	/**
 	 * Event handler for PlayerItemHeldEvent<br>
 	 * Unhighlight blocks when player changes held item from road block tool
-	 * @param event
+	 * @param event the event handled by this method
 	 */
 	@EventHandler
 	final void onPlayerChangeItem(final PlayerItemHeldEvent event) {
@@ -195,7 +182,7 @@ final class EventListener implements Listener {
 	/**
 	 * Event handler for PlayerGameModeChangeEvent<br>
 	 * Unhighlight blocks when player changes gamemode
-	 * @param event
+	 * @param event the event handled by this method
 	 */
 	@EventHandler
 	final void onPlayerChangeGameMode(final PlayerGameModeChangeEvent event) {
@@ -205,7 +192,7 @@ final class EventListener implements Listener {
 
 	/**
 	 * Item drop event handler
-	 * @param event
+	 * @param event the event handled by this method
 	 */
 	@EventHandler
 	final void onPlayerDropItem(final PlayerDropItemEvent event) {
@@ -237,7 +224,7 @@ final class EventListener implements Listener {
 	/**
 	 * Event listener for PlayerQuitEvent<br>
 	 * Remove player from highlighted blocks hashmap
-	 * @param event
+	 * @param event the event handled by this method
 	 */
 	@EventHandler
 	final void onPlayerQuit(final PlayerQuitEvent event) {
@@ -249,7 +236,7 @@ final class EventListener implements Listener {
 
 	/**
 	 * Event listener for BlockBreakEvent
-	 * @param event
+	 * @param event the event handled by this method
 	 */
 	@EventHandler
 	final void onBlockBreak(final BlockBreakEvent event) {
@@ -274,7 +261,7 @@ final class EventListener implements Listener {
 	/**
 	 * Event listener for BlockExplodeEvent
 	 * Prevent road blocks from being exploded by block explosions
-	 * @param event
+	 * @param event the event handled by this method
 	 */
 	@EventHandler
 	final void onBlockExplode(final BlockExplodeEvent event) {
@@ -285,7 +272,7 @@ final class EventListener implements Listener {
 		}
 		
 		// get list of exploded blocks
-		final List<Block> blocks = new ArrayList<Block>(event.blockList());
+		final List<Block> blocks = new ArrayList<>(event.blockList());
 		
 		// remove any road blocks from event block list
 		for (Block block : blocks) {
@@ -299,7 +286,7 @@ final class EventListener implements Listener {
 	/**
 	 * Event listener for EntityExplodeEvent<br>
 	 * Prevent road blocks from being exploded by entity explosions
-	 * @param event
+	 * @param event the event handled by this method
 	 */
 	@EventHandler
 	final void onEntityExplode(final EntityExplodeEvent event) {
@@ -310,7 +297,7 @@ final class EventListener implements Listener {
 		}
 
 		// get list of exploded blocks
-		final List<Block> blocks = new ArrayList<Block>(event.blockList());
+		final List<Block> blocks = new ArrayList<>(event.blockList());
 		
 		// remove any road blocks from event block list
 		for (Block block : blocks) {
@@ -371,13 +358,13 @@ final class EventListener implements Listener {
 	/**
 	 * Piston extend event handler<br>
 	 * Prevent extending pistons from effecting road blocks
-	 * @param event
+	 * @param event the event handled by this method
 	 */
 	@EventHandler
 	final void onPistonExtend(final BlockPistonExtendEvent event) {
 
 		// get list of blocks affected by piston 
-		final ArrayList<Block> blocks = new ArrayList<Block>(event.getBlocks());
+		final ArrayList<Block> blocks = new ArrayList<>(event.getBlocks());
 		
 		// iterate through block list checking for road blocks
 		for (Block block : blocks) {
@@ -396,13 +383,13 @@ final class EventListener implements Listener {
 	/**
 	 * Piston extend event handler<br>
 	 * Prevent extending pistons from effecting death chests
-	 * @param event
+	 * @param event the event handled by this method
 	 */
 	@EventHandler
 	final void onPistonRetract(final BlockPistonRetractEvent event) {
 		
 		// get list of blocks affected by piston 
-		final ArrayList<Block> blocks = new ArrayList<Block>(event.getBlocks());
+		final ArrayList<Block> blocks = new ArrayList<>(event.getBlocks());
 		
 		// iterate through block list checking for road blocks
 		for (Block block : blocks) {

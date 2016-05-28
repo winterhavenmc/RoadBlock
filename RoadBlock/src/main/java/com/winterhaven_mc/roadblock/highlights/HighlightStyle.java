@@ -17,8 +17,8 @@ public enum HighlightStyle {
 	
 	/**
 	 * Class constructor
-	 * @param defaultMaterial
-	 * @param configString
+	 * @param defaultMaterial the material type to use as default
+	 * @param configString the configuration key for material type
 	 */
 	HighlightStyle(final Material defaultMaterial, final String configString) {
 		this.defaultMaterial = defaultMaterial;

@@ -1,5 +1,14 @@
 package com.winterhaven_mc.roadblock.utilities;
 
+import com.winterhaven_mc.roadblock.PluginMain;
+import com.winterhaven_mc.util.ConfigAccessor;
+import com.winterhaven_mc.util.StringUtil;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -9,16 +18,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import com.winterhaven_mc.roadblock.PluginMain;
-import com.winterhaven_mc.util.StringUtil;
-import com.winterhaven_mc.util.ConfigAccessor;
 
 
 /**
@@ -49,7 +48,7 @@ public final class MessageManager {
 	/**
 	 * Constructor method for class
 	 * 
-	 * @param plugin
+	 * @param plugin reference to main class
 	 */
 	public MessageManager(final PluginMain plugin) {
 
@@ -72,7 +71,7 @@ public final class MessageManager {
 		this.sounds.saveDefaultConfig();
 
 		// initialize messageCooldownMap
-		this.messageCooldownMap = new ConcurrentHashMap<UUID,ConcurrentHashMap<String,Long>>();
+		this.messageCooldownMap = new ConcurrentHashMap<>();
 	}
 
 
@@ -98,8 +97,9 @@ public final class MessageManager {
 	 * @param messageId			message identifier in messages file
 	 * @param quantity			quantity
 	 */
-	public final void sendPlayerMessage(final CommandSender sender, final String messageId, 
-			final Integer quantity, final Material material) {
+	@SuppressWarnings("WeakerAccess")
+	public final void sendPlayerMessage(final CommandSender sender, final String messageId,
+										final Integer quantity, final Material material) {
 
 		// if message is not enabled in messages file, do nothing and return
 		if (!messages.getConfig().getBoolean(messageId + ".enabled")) {
@@ -113,7 +113,7 @@ public final class MessageManager {
 
 		if (material != null) {
 			materialName = material.toString();
-		};
+		}
 
 		// if sender is a player...
 		if (sender instanceof Player) {
@@ -167,8 +167,8 @@ public final class MessageManager {
 
 	/**
 	 * Play sound effect for action
-	 * @param sender
-	 * @param soundId
+	 * @param sender the player for whom to play sound
+	 * @param soundId the sound identifier
 	 */
 	public final void playerSound(final CommandSender sender, final String soundId) {
 
@@ -181,10 +181,10 @@ public final class MessageManager {
 
 	/**
 	 * Play sound effect for action
-	 * @param player
-	 * @param soundId
+	 * @param player the player for whom to play sound
+	 * @param soundId the sound identifier
 	 */
-	private final void playerSound(final Player player, final String soundId) {
+	private void playerSound(final Player player, final String soundId) {
 
 		// if sound effects are disabled in config, do nothing and return
 		if (!plugin.getConfig().getBoolean("sound-effects")) {
@@ -225,12 +225,12 @@ public final class MessageManager {
 
 	/**
 	 * Add entry to message cooldown map
-	 * @param player
-	 * @param messageId
+	 * @param player the player whose uuid will be added as a key to the cooldown map
+	 * @param messageId the message id to use as a key in the cooldown map
 	 */
-	private final void putMessageCooldown(final Player player, final String messageId) {
+	private void putMessageCooldown(final Player player, final String messageId) {
 
-		final ConcurrentHashMap<String, Long> tempMap = new ConcurrentHashMap<String, Long>();
+		final ConcurrentHashMap<String, Long> tempMap = new ConcurrentHashMap<>();
 		tempMap.put(messageId, System.currentTimeMillis());
 		messageCooldownMap.put(player.getUniqueId(), tempMap);
 	}
@@ -238,11 +238,11 @@ public final class MessageManager {
 
 	/**
 	 * get entry from message cooldown map
-	 * @param player
-	 * @param messageId
+	 * @param player the player whose uuid will be used to retrieve a message expire time from the cooldown map
+	 * @param messageId the message id to use as a key to retrieve a message expire time from the cooldown map
 	 * @return cooldown expire time
 	 */
-	private final long getMessageCooldown(final Player player, final String messageId) {
+	private long getMessageCooldown(final Player player, final String messageId) {
 
 		// check if player is in message cooldown hashmap
 		if (messageCooldownMap.containsKey(player.getUniqueId())) {
@@ -290,12 +290,13 @@ public final class MessageManager {
 	/**
 	 * Install localization files from <em>language</em> directory in jar 
 	 */
-	private final void installLocalizationFiles() {
+	private void installLocalizationFiles() {
 
-		List<String> filelist = new ArrayList<String>();
+		List<String> filelist = new ArrayList<>();
 
 		// get the absolute path to this plugin as URL
-		URL pluginURL = plugin.getServer().getPluginManager().getPlugin(plugin.getName()).getClass().getProtectionDomain().getCodeSource().getLocation();
+		URL pluginURL = plugin.getServer().getPluginManager().getPlugin(plugin.getName()).getClass()
+				.getProtectionDomain().getCodeSource().getLocation();
 
 		// read files contained in jar, adding language/*.yml files to list
 		ZipInputStream zip;
@@ -329,10 +330,10 @@ public final class MessageManager {
 
 	/**
 	 * Determine if a language file exists
-	 * @param language
-	 * @return
+	 * @param language the language for which to test for existence of a language file
+	 * @return the language identifier if file exists, else the default language identifier (en-US)
 	 */
-	private final String languageFileExists(final String language) {
+	private String languageFileExists(final String language) {
 
 		// check if localization file for configured language exists, if not then fallback to en-US
 		final File languageFile = new File(plugin.getDataFolder() 
@@ -349,7 +350,7 @@ public final class MessageManager {
 
 	/**
 	 * Get custom tool name from language file
-	 * @return
+	 * @return the custom tool name string
 	 */
 	final String getToolName() {
 		return ChatColor.translateAlternateColorCodes('&',messages.getConfig().getString("TOOL_NAME"));
@@ -358,7 +359,7 @@ public final class MessageManager {
 
 	/**
 	 * Get custom tool lore from language file
-	 * @return
+	 * @return the custom tool lore as a List of String
 	 */
 	final List<String> getToolLore() {
 		List<String> lore = messages.getConfig().getStringList("TOOL_LORE");

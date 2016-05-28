@@ -1,7 +1,8 @@
-package com.winterhaven_mc.roadblock;
+package com.winterhaven_mc.roadblock.commands;
 
-import java.util.HashMap;
-
+import com.winterhaven_mc.roadblock.PluginMain;
+import com.winterhaven_mc.roadblock.storage.DataStoreFactory;
+import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,8 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.winterhaven_mc.roadblock.storage.DataStoreFactory;
-import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
+import java.util.HashMap;
 
 
 public final class CommandManager implements CommandExecutor {
@@ -20,7 +20,7 @@ public final class CommandManager implements CommandExecutor {
 	
 	/**
 	 * Class constructor
-	 * @param plugin
+	 * @param plugin reference to main class
 	 */
 	public CommandManager(final PluginMain plugin) {
 		
@@ -69,10 +69,10 @@ public final class CommandManager implements CommandExecutor {
 	
 	/**
 	 * Display plugin status
-	 * @param sender
-	 * @return
+	 * @param sender the command sender
+	 * @return always returns {@code true}, to prevent usage message
 	 */
-	private final boolean statusCommand(final CommandSender sender) {
+	private boolean statusCommand(final CommandSender sender) {
 		
 		// check that sender has permission for status command
 		if (!sender.hasPermission("roadblock.status")) {
@@ -107,10 +107,10 @@ public final class CommandManager implements CommandExecutor {
 	
 	/**
 	 * Reload configuration
-	 * @param sender
-	 * @return
+	 * @param sender the command sender
+	 * @return always returns {@code true}, to prevent usage message
 	 */
-	private final boolean reloadCommand(final CommandSender sender) {
+	private boolean reloadCommand(final CommandSender sender) {
 		
 		// check that sender has permission for reload command
 		if (!sender.hasPermission("roadblock.reload")) {
@@ -147,9 +147,13 @@ public final class CommandManager implements CommandExecutor {
 		plugin.messageManager.sendPlayerMessage(sender, "COMMAND_SUCCESS_RELOAD");
 		return true;
 	}
-	
-	
-	private final boolean toolCommand(final CommandSender sender) {
+
+	/**
+	 * Place a tool in player inventory
+	 * @param sender the command sender
+	 * @return always returns {@code true}, to prevent usage message
+     */
+	private boolean toolCommand(final CommandSender sender) {
 		
 		// sender must be player
 		if (!(sender instanceof Player)) {

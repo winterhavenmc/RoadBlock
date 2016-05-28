@@ -9,11 +9,11 @@ import java.util.Set;
 
 public abstract class DataStore {
 
-	protected boolean initialized;
+	private boolean initialized;
 	
-	protected DataStoreType type;
+	DataStoreType type;
 
-	protected String filename;
+	String filename;
 
 	/**
 	 * Initialize storage
@@ -80,7 +80,7 @@ public abstract class DataStore {
 	/**
 	 * Delete datastore
 	 */
-	abstract void delete();
+	abstract boolean delete();
 	
 	/**
 	 * Check that datastore exists

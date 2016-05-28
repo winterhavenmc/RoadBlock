@@ -19,7 +19,7 @@ public final class BlockManager {
 		
 	/**
 	 * Class constructor
-	 * @param plugin
+	 * @param plugin reference to main class
 	 */
 	public BlockManager(final PluginMain plugin) {
 
@@ -33,8 +33,8 @@ public final class BlockManager {
 	
 	/**
 	 * Create HashSet of all blocks of valid road block material attached to location
-	 * @param startLocation
-	 * @return
+	 * @param startLocation location to begin searching for attached road blocks
+	 * @return Set of Locations of attached road blocks
 	 */
 	public final Set<Location> getFill(final Location startLocation) {
 		
@@ -43,10 +43,10 @@ public final class BlockManager {
 		}
 		
 		// create HashSet for return values
-		final Set<Location> returnSet = new HashSet<Location>();
+		final Set<Location> returnSet = new HashSet<>();
 		
 		// create queue using linked list implementation
-		final Queue<Location> queue = new LinkedList<Location>();
+		final Queue<Location> queue = new LinkedList<>();
 		
 		// put start location in queue
 		queue.add(startLocation);
@@ -76,9 +76,9 @@ public final class BlockManager {
 	
 
 	/**
-	 * Check if block below player is a protected road block, up to maxDepth
-	 * @param player
-	 * @return
+	 * Check if block below player is a protected road block
+	 * @param player the player to is above a road block
+	 * @return {@code true} if player is within three blocks above a road block, else {@code false}
 	 */
 	public final boolean isRoadBelowPlayer(final Player player) {
 		
@@ -111,32 +111,32 @@ public final class BlockManager {
 
 	/**
 	 * Check if block below location is a protected road block, searching down to maxDepth
-	 * @param location
-	 * @param passedMaxDepth
-	 * @return
+	 * @param location the location to test if above a road block
+	 * @param maxDepth the distance in blocks to test below location
+	 * @return {@code true} if location is above a road block, else {@code false}
 	 */
-	public final boolean isRoadBelow(final Location location, final int passedMaxDepth) {
+	public final boolean isRoadBelow(final Location location, final int maxDepth) {
 		
 		if (location == null) {
 			return false;
 		}
-		
+
+		int localMaxDepth = maxDepth;
 		int depth = 0;
-		int maxDepth = passedMaxDepth;
-		
+
 		// if maxDepth passed is less than or equal to zero, default to 5
 		if (maxDepth <= 0) {
-			maxDepth = 5;
+			localMaxDepth = 5;
 		}
 		
 		// don't let maxDepth go below bottom of world
-		maxDepth = Math.min(maxDepth, location.getBlockY());
+		localMaxDepth = Math.min(localMaxDepth, location.getBlockY());
 	
 		// get copy of location as block location (with integer coordinates)
 		final Location testLocation = location.getBlock().getLocation().clone();
 		
 		// iterate until maxDepth reached
-		while (depth < maxDepth) {
+		while (depth < localMaxDepth) {
 			
 			// don't check datastore unless block at location is road block material
 			if (isRoadBlockMaterial(testLocation)) {
@@ -154,8 +154,8 @@ public final class BlockManager {
 
 	/**
 	 * Check if block is a protected road block
-	 * @param block
-	 * @return
+	 * @param block the block to test
+	 * @return {@code true} if the block is a protected road block, else {@code false}
 	 */
 	public final boolean isRoadBlock(final Block block) {
 		
@@ -169,72 +169,62 @@ public final class BlockManager {
 		}
 		
 		// check if block is in cache or datastore
-		if (plugin.dataStore.isProtected(block.getLocation())) {
-			return true;
-		}
-		return false;
+		return plugin.dataStore.isProtected(block.getLocation());
 	}
 	
 
 	/**
 	 * Check if block is a valid road block material
-	 * @param block
-	 * @return
+	 * @param block the block to test for valid configured road block material
+	 * @return {@code true} if the block material is a configured road block material, {@code false} if it is not
 	 */
-	final boolean isRoadBlockMaterial(final Block block) {
-		
-		if (block == null) {
-			return false;
-		}
-		return roadBlockMaterials.contains(block.getType());
+	private boolean isRoadBlockMaterial(final Block block) {
+		return block != null && roadBlockMaterials.contains(block.getType());
 	}
 
 
 	/**
 	 * Check if block at location is a valid road block material
-	 * @param location
-	 * @return
+	 * @param location the location of a block to test for valid road block material
+	 * @return {@code true} if the block at location is a configured road block material, {@code false} if it is not
 	 */
-	final boolean isRoadBlockMaterial(final Location location) {
-		
-		if (location == null) {
-			return false;
-		}
-		return roadBlockMaterials.contains(location.getBlock().getType());
+	private boolean isRoadBlockMaterial(final Location location) {
+		return location != null && roadBlockMaterials.contains(location.getBlock().getType());
 	}
 
 	
 	/**
 	 * Check if a material is a valid road block material
-	 * @param material
-	 * @return
+	 * @param material the material type to test for valid configured road block material
+	 * @return {@code true} if the material is a valid configured road block material, {@code false} if it is not
 	 */
 	public final boolean isRoadBlockMaterial(final Material material) {
-		
-		if (material == null) {
-			return false;
-		}
-		return roadBlockMaterials.contains(material);
+		return material != null && roadBlockMaterials.contains(material);
 	}
 	
 	
 	/**
-	 * Put block locations in datastore
-	 * @param locationSet
+	 * Insert block locations into datastore
+	 * @param locations a Collection of Locations to be inserted into the datastore
 	 */
-	public final void storeLocations(final HashSet<Location> locationSet) {
-		plugin.dataStore.insertRecords(locationSet);
+	public final void storeLocations(final Collection<Location> locations) {
+		plugin.dataStore.insertRecords(locations);
 	}
 	
 
 	/**
 	 * Remove block locations from datastore
-	 * @param locationSet
+	 * @param locations a Collection of Locations to be deleted from the datastore
 	 */
-	public final void removeLocations(final HashSet<Location> locationSet) {
-		plugin.dataStore.deleteRecords(locationSet);
+	public final void removeLocations(final Collection<Location> locations) {
+		plugin.dataStore.deleteRecords(locations);
 	}
-	
+
+
+	/**
+	 * Remove a block location from datastore
+	 * @param location the location to be removed from the datastore
+     */
 	public final void removeLocation(final Location location) {
 		plugin.dataStore.deleteRecord(location);
 	}
@@ -242,14 +232,13 @@ public final class BlockManager {
 	
 	/**
 	 * Parse valid road block materials from config file
-	 * @return HashSet of materials
 	 */
 	public final void updateMaterials() {
 		
 		final ArrayList<String> materialStringList = 
-				new ArrayList<String>(plugin.getConfig().getStringList("materials"));
+				new ArrayList<>(plugin.getConfig().getStringList("materials"));
 		
-		final HashSet<Material> returnSet = new HashSet<Material>();
+		final HashSet<Material> returnSet = new HashSet<>();
 		
 		Material matchMaterial = null;
 		

@@ -1,20 +1,6 @@
 package com.winterhaven_mc.roadblock.storage;
 
-import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-
+import com.winterhaven_mc.roadblock.PluginMain;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -23,10 +9,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.winterhaven_mc.roadblock.PluginMain;
+import java.io.File;
+import java.sql.*;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 
-public final class DataStoreSQLite extends DataStore implements Listener {
+@SuppressWarnings({"SynchronizeOnNonFinalField", "SuspiciousNameCombination"})
+final class DataStoreSQLite extends DataStore implements Listener {
 
 	// reference to main class
 	private final PluginMain plugin;
@@ -43,7 +34,7 @@ public final class DataStoreSQLite extends DataStore implements Listener {
 	
 	/**
 	 * Class constructor
-	 * @param plugin
+	 * @param plugin reference to main class
 	 */
 	DataStoreSQLite(PluginMain plugin) {
 
@@ -57,10 +48,10 @@ public final class DataStoreSQLite extends DataStore implements Listener {
 		this.filename = "roadblocks.db";
 		
 		// create empty block cache
-		this.blockCache = new ConcurrentHashMap<Location,CacheStatus>();
+		this.blockCache = new ConcurrentHashMap<>();
 		
 		// crate empty chunk location cache
-		this.chunkCache = new HashSet<Location>();
+		this.chunkCache = new HashSet<>();
 
 		// register event handlers in this class
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -122,18 +113,19 @@ public final class DataStoreSQLite extends DataStore implements Listener {
 	 * Delete the SQLite datastore file
 	 */
 	@Override
-	final void delete() {
+	final boolean delete() {
 	
 		// get reference to dataStore file in file system
 		File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getFilename());
 		
 		// if file exists, delete file
+		boolean result = false;
 		if (dataStoreFile.exists()) {
-			dataStoreFile.delete();
+			result = dataStoreFile.delete();
 		}
 		
-		// release dataStoreFile reference
-		dataStoreFile = null;
+		// return result
+		return result;
 	}
 
 
@@ -176,8 +168,8 @@ public final class DataStoreSQLite extends DataStore implements Listener {
 
 	/**
 	 * Check if a location is a protected road block
-	 * @param location
-	 * @return boolean
+	 * @param location the location key to check for protected status
+	 * @return {@code true} if the location is protected, {@code false} if it is not
 	 */
 	@Override
 	final boolean isProtected(final Location location) {
@@ -244,7 +236,7 @@ public final class DataStoreSQLite extends DataStore implements Listener {
 							continue;
 						}
 						
-						String testWorldName = null;
+						String testWorldName;
 
 						// test that world in location is valid, otherwise skip to next location
 						try {
@@ -322,7 +314,7 @@ public final class DataStoreSQLite extends DataStore implements Listener {
 
 	/**
 	 * Insert a single record into the SQLite datastore
-	 * @param location
+	 * @param location the location to be inserted in the datastore
 	 */
 	@Override
 	final void insertRecord(final Location location) {
@@ -335,7 +327,7 @@ public final class DataStoreSQLite extends DataStore implements Listener {
 		// put location in cache with pending insert status
 		blockCache.put(location,CacheStatus.PENDING_INSERT);
 
-		String testWorldName = null;
+		String testWorldName;
 
 		// test that world in location is valid
 		try {
@@ -490,7 +482,7 @@ public final class DataStoreSQLite extends DataStore implements Listener {
 
 	/**
 	 * Delete a single location record from the SQLite datastore
-	 * @param location
+	 * @param location the location to be deleted from the datastore
 	 */
 	@Override
 	final void deleteRecord(final Location location) {
@@ -555,14 +547,14 @@ public final class DataStoreSQLite extends DataStore implements Listener {
 
 	/**
 	 * Retrieve all road block locations in chunk from the SQLite datastore
-	 * @param chunk
+	 * @param chunk the chunk for which to retrieve all road block locations from the datastore
 	 * @return Set of locations
 	 */
 	@Override
 	final Set<Location> selectBlockLocationsInChunk(final Chunk chunk) {
 
 		// create new set for results
-		final Set<Location> returnSet = new HashSet<Location>();
+		final Set<Location> returnSet = new HashSet<>();
 
 		try {
 			PreparedStatement preparedStatement = 
@@ -631,7 +623,7 @@ public final class DataStoreSQLite extends DataStore implements Listener {
 	@Override
 	final Set<Location> selectAllRecords() {
 		
-		final Set<Location> returnSet = new HashSet<Location>();
+		final Set<Location> returnSet = new HashSet<>();
 	
 		try {
 			PreparedStatement preparedStatement = 
@@ -681,9 +673,9 @@ public final class DataStoreSQLite extends DataStore implements Listener {
 
 	/**
 	 * Add all road block locations within chunk to cache
-	 * @param chunk
+	 * @param chunk the chunk for which to load all road block locations into cache
 	 */
-	private final void addCache(final Chunk chunk) {
+	private void addCache(final Chunk chunk) {
 
 		final Set<Location> blockSet = selectBlockLocationsInChunk(chunk);
 
@@ -707,9 +699,9 @@ public final class DataStoreSQLite extends DataStore implements Listener {
 	/**
 	 * Remove all road block locations within chunk from cache<br>
 	 * called on chunk unload event
-	 * @param chunk
+	 * @param chunk the chunk for which to remove all road block locations from cache
 	 */
-	private final void flushCache(final Chunk chunk) {
+	private void flushCache(final Chunk chunk) {
 		
 		int count = 0;
 		Long startTime = System.nanoTime();
@@ -733,10 +725,10 @@ public final class DataStoreSQLite extends DataStore implements Listener {
 
 	/**
 	 * Check if road block locations for a chunk are loaded in the cache
-	 * @param location
-	 * @return true if chunk is cached, false if not
+	 * @param location the location to test to determine if all chunk road blocks are cached
+	 * @return {@code true} if chunk is cached, {@code false} if not
 	 */
-	private final boolean isChunkCached(final Location location) {
+	private boolean isChunkCached(final Location location) {
 		
 		final Location chunkLoc = location.getChunk().getBlock(0, 0, 0).getLocation();
 		
@@ -752,7 +744,7 @@ public final class DataStoreSQLite extends DataStore implements Listener {
 	
 	/**
 	 * Event listener for chunk unload event
-	 * @param event
+	 * @param event the event being handled by this method
 	 */
 	@EventHandler
 	final void onChunkUnload(final ChunkUnloadEvent event) {

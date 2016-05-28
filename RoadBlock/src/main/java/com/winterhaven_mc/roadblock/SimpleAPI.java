@@ -3,6 +3,7 @@ package com.winterhaven_mc.roadblock;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
+@SuppressWarnings("unused")
 public final class SimpleAPI {
 	
 	/**
@@ -13,33 +14,30 @@ public final class SimpleAPI {
 	}
 	
 	/**
-	 * Check if location is within 5 blocks of road surface
-	 * @param location
-	 * @return
+	 * Check if location is within 5 blocks above a road block
+	 * @param location the location to check road block proximity
+	 * @return {@code true} if block is 5 blocks or less above a road block, else {@code false}
 	 */
-	public final static boolean isRoadBelow(final Location location) {
+	public static boolean isRoadBelow(final Location location) {
 		
 		int maxDepth = 5;
-		
-		if (PluginMain.instance.blockManager.isRoadBelow(location, maxDepth)) {
-			return true;
-		}
-		return false;
-	}
-	
-	
-	/**
-	 * Check if location is within maxDepth blocks of road surface
-	 * @param location
-	 * @param maxDepth
-	 * @return
-	 */
-	public final static boolean isRoadBelow(final Location location, final int maxDepth) {	
+
 		return PluginMain.instance.blockManager.isRoadBelow(location, maxDepth);
 	}
 	
 	
-	public final static boolean isRoadBlockMaterial(final Material material) {
+	/**
+	 * Check if location is within maxDepth blocks of a road block
+	 * @param location the location to test
+	 * @param maxDepth the number of blocks above a road block to consider
+	 * @return {@code true} if block is within {@code maxDepth} above a road block, else {@code false}
+	 */
+	public static boolean isRoadBelow(final Location location, final int maxDepth) {
+		return PluginMain.instance.blockManager.isRoadBelow(location, maxDepth);
+	}
+	
+	
+	public static boolean isRoadBlockMaterial(final Material material) {
 		return PluginMain.instance.blockManager.isRoadBlockMaterial(material);
 	}
 	

@@ -1,17 +1,16 @@
 package com.winterhaven_mc.roadblock.highlights;
 
-import java.util.Collection;
-
+import com.winterhaven_mc.roadblock.PluginMain;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.winterhaven_mc.roadblock.PluginMain;
+import java.util.Collection;
 
 
-public final class ShowHighlightTask extends BukkitRunnable {
+final class ShowHighlightTask extends BukkitRunnable {
 	
 	private final PluginMain plugin = PluginMain.instance;
 	

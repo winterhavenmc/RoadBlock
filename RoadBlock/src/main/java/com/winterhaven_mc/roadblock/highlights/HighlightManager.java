@@ -27,7 +27,7 @@ public final class HighlightManager {
 	
 	/**
 	 * Class constructor
-	 * @param plugin
+	 * @param plugin reference to main class
 	 */
 	public HighlightManager(PluginMain plugin) {
 
@@ -35,25 +35,25 @@ public final class HighlightManager {
 		this.plugin = plugin;
 		
 		// initialize highlight map
-		highlightMap = new ConcurrentHashMap<UUID,HashSet<Location>>();
+		highlightMap = new ConcurrentHashMap<>();
 		
 		// initialize timestamp map
-		pendingRemoveTask = new ConcurrentHashMap<UUID,BukkitTask>();
+		pendingRemoveTask = new ConcurrentHashMap<>();
 	}
 	
 	
 	/**
 	 * Highlight blocks in locationSet for player,
-	 * using blocks of <code>material</code> type as highlight
-	 * @param player
-	 * @param locationSet
+	 * using blocks of {@code material} type as highlight
+	 * @param player the player for whom to display the highlighted blocks
+	 * @param locationSet a collection of Locations of blocks to highlight
 	 */
-	public final void highlightBlocks(final Player player, final Collection<Location> locationSet, 
+	public final void highlightBlocks(final Player player, final Collection<Location> locationSet,
 			final HighlightStyle highlightStyle) {
 		
 		// if player uuid not in hashmap, insert with locationSet
 		if (!highlightMap.containsKey(player.getUniqueId())) {
-			highlightMap.put(player.getUniqueId(), new HashSet<Location>(locationSet));
+			highlightMap.put(player.getUniqueId(), new HashSet<>(locationSet));
 		}
 		// else add locationSet to existing player highlighted blocks in highlight map
 		else {
@@ -69,8 +69,10 @@ public final class HighlightManager {
 	
 	/**
 	 * Remove highlighting from blocks for player and remove locations from highlightMap
-	 * @param player
+	 * @param player the player for whom to remove highlights from blocks
+	 * @param locationSet a Collection of Locations to remove highlighting from blocks
 	 */
+	@SuppressWarnings("unused")
 	public final void unHighlightBlocks(final Player player, final Collection<Location> locationSet) {
 		
 		// remove highlight for player for blocks in locationSet
@@ -85,7 +87,7 @@ public final class HighlightManager {
 	
 	/**
 	 * Remove highlighting from all blocks for player
-	 * @param player
+	 * @param player the player for whom to remove all block highlighting
 	 */
 	public final void unHighlightBlocks(final Player player) {
 
@@ -101,12 +103,12 @@ public final class HighlightManager {
 	
 	/**
 	 * Send block change to player with highlight material
-	 * @param player
-	 * @param locationSet
-	 * @param material
+	 * @param player the player for whom to show highlighted blocks
+	 * @param locationSet a Collection of Location of block locations to highlight
+	 * @param material the material type to use as a highlight
 	 */
 	@SuppressWarnings("deprecation")
-	public final void showHighlight(final Player player, final Collection<Location> locationSet, final Material material) {
+	final void showHighlight(final Player player, final Collection<Location> locationSet, final Material material) {
 		
 		// iterate through all location in set
 		for (Location location : locationSet) {
@@ -119,11 +121,11 @@ public final class HighlightManager {
 
 	/**
 	 * Send block change to player with highlight material
-	 * @param player
-	 * @param locationSet
+	 * @param player the player for whom to remove highlights
+	 * @param locationSet a Collection of Location of block locations to remove highlight
 	 */
 	@SuppressWarnings("deprecation")
-	public final void removeHighlight(final Player player, final Collection<Location> locationSet) {
+	private void removeHighlight(final Player player, final Collection<Location> locationSet) {
 		
 		// iterate through all location in set
 		for (Location location : locationSet) {
@@ -139,7 +141,7 @@ public final class HighlightManager {
 
 	/**
 	 * Remove player from highlight map
-	 * @param player
+	 * @param player the player whoise UUID to remove from the highlight map
 	 */
 	public final void removePlayerFromMap(final Player player) {
 		
@@ -150,13 +152,11 @@ public final class HighlightManager {
 	}
 
 	
+	@SuppressWarnings("unused")
 	public final boolean isHighlighted(final Player player, final Location location) {
-		
-		if (highlightMap.containsKey(player.getUniqueId())
-				&& highlightMap.get(player.getUniqueId()).contains(location)) {
-			return true;
-		}
-		return false;
+
+		return highlightMap.containsKey(player.getUniqueId())
+				&& highlightMap.get(player.getUniqueId()).contains(location);
 	}
 	
 	

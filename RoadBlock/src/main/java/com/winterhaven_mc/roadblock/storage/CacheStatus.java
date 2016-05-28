@@ -3,8 +3,8 @@ package com.winterhaven_mc.roadblock.storage;
 enum CacheStatus {
 
 	TRUE,
-	FALSE,
+	@SuppressWarnings("unused")FALSE,
 	PENDING_INSERT,
-	PENDING_DELETE;
+	PENDING_DELETE,
 
 }

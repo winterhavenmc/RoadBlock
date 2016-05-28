@@ -1,13 +1,12 @@
 package com.winterhaven_mc.roadblock.storage;
 
+import com.winterhaven_mc.roadblock.PluginMain;
+import org.bukkit.Location;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.bukkit.Location;
-
-import com.winterhaven_mc.roadblock.PluginMain;
 
 
 public final class DataStoreFactory {
@@ -20,7 +19,7 @@ public final class DataStoreFactory {
 	 * No parameter version used when no current datastore exists
 	 * @return new datastore of configured type
 	 */
-	public final static DataStore create() {
+	public static DataStore create() {
 		
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
@@ -29,25 +28,16 @@ public final class DataStoreFactory {
 		}
 		return create(dataStoreType, null);
 	}
-	
-	/**
-	 * Create new data store of given type.<br>
-	 * Single parameter version used when no current datastore exists
-	 * @param dataStoreType
-	 * @return
-	 */
-	final static DataStore create(final DataStoreType dataStoreType) {
-		return create(dataStoreType, null);
-	}
-	
+
+
 	/**
 	 * Create new data store of given type and convert old data store.<br>
 	 * Two parameter version used when a datastore instance already exists
-	 * @param dataStoreType
-	 * @param oldDataStore
-	 * @return
+	 * @param dataStoreType the datastore type to be created
+	 * @param oldDataStore the existing datastore to be converted to the new datastore
+	 * @return instance of newly initialized datastore
 	 */
-	final static DataStore create(final DataStoreType dataStoreType, final DataStore oldDataStore) {
+	private static DataStore create(final DataStoreType dataStoreType, final DataStore oldDataStore) {
 	
 		// get new data store of specified type
 		final DataStore newDataStore = dataStoreType.create();
@@ -77,10 +67,10 @@ public final class DataStoreFactory {
 
 	/**
 	 * convert old data store to new data store
-	 * @param oldDataStore
-	 * @param newDataStore
+	 * @param oldDataStore the old datastore to be converted from
+	 * @param newDataStore the new datastore to be converted to
 	 */
-	final static void convertDataStore(final DataStore oldDataStore, final DataStore newDataStore) {
+	private static void convertDataStore(final DataStore oldDataStore, final DataStore newDataStore) {
 
 		// if datastores are same type, do not convert
 		if (oldDataStore.getType().equals(newDataStore.getType())) {
@@ -106,7 +96,7 @@ public final class DataStoreFactory {
 			}
 
 			// get set of all location records in old datastore
-			Set<Location> allRecords = new HashSet<Location>(oldDataStore.selectAllRecords());
+			Set<Location> allRecords = new HashSet<>(oldDataStore.selectAllRecords());
 			
 			int count = 0;
 			for (Location record : allRecords) {
@@ -125,16 +115,16 @@ public final class DataStoreFactory {
 	
 	/**
 	 * convert all existing data stores to new data store
-	 * @param newDataStore
+	 * @param newDataStore the new datastore that all other existing datastores should be converted to
 	 */
-	final static void convertAll(final DataStore newDataStore) {
+	private static void convertAll(final DataStore newDataStore) {
 		
 		// get array list of all data store types
 		final ArrayList<DataStoreType> dataStores = 
-				new ArrayList<DataStoreType>(Arrays.asList(DataStoreType.values()));
+				new ArrayList<>(Arrays.asList(DataStoreType.values()));
 		
 		// remove newDataStore from list of types to convert
-		dataStores.remove(newDataStore);
+		dataStores.remove(newDataStore.getType());
 		
 		for (DataStoreType type : dataStores) {
 
@@ -154,7 +144,7 @@ public final class DataStoreFactory {
 	}
 	
 	
-	public final static void reload() {
+	public static void reload() {
 		
 		// get current datastore type
 		final DataStoreType currentType = plugin.getDataStore().getType();

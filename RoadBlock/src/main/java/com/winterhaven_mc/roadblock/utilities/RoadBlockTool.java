@@ -1,23 +1,22 @@
 package com.winterhaven_mc.roadblock.utilities;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
+import com.winterhaven_mc.roadblock.PluginMain;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.winterhaven_mc.roadblock.PluginMain;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class RoadBlockTool {
 	
 	private final static PluginMain plugin = PluginMain.instance;
 	
 	public final static Set<Material> toolTransparentMaterials = 
-			Collections.unmodifiableSet(new HashSet<Material>(Arrays.asList(
+			Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
 					Material.AIR,
 					Material.SNOW,
 					Material.LONG_GRASS
@@ -28,7 +27,7 @@ public final class RoadBlockTool {
 	 * Create an item stack with configured tool material, name and lore
 	 * @return RoadBlock tool item stack
 	 */
-	public final static ItemStack create() {
+	public static ItemStack create() {
 		
 		// get configured material
 		Material material = Material.matchMaterial(plugin.getConfig().getString("tool-material"));
@@ -64,10 +63,10 @@ public final class RoadBlockTool {
 	
 	/**
 	 * Test if an item stack is a RoadBlock tool
-	 * @param itemStack
+	 * @param itemStack the ItemStack to be tested
 	 * @return true if item is a RoadBlock tool, false if it is not
 	 */
-	public final static boolean isTool(final ItemStack itemStack) {
+	public static boolean isTool(final ItemStack itemStack) {
 		
 		// if passed item stack is null, return false
 		if (itemStack == null) {
