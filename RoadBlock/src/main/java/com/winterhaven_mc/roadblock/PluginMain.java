@@ -7,6 +7,7 @@ import com.winterhaven_mc.roadblock.storage.BlockManager;
 import com.winterhaven_mc.roadblock.storage.DataStore;
 import com.winterhaven_mc.roadblock.storage.DataStoreFactory;
 import com.winterhaven_mc.roadblock.utilities.MessageManager;
+import com.winterhaven_mc.util.SoundManager;
 import com.winterhaven_mc.util.WorldManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,6 +20,7 @@ public final class PluginMain extends JavaPlugin {
 	public MessageManager messageManager;
 	public DataStore dataStore;
 	public WorldManager worldManager;
+	public SoundManager soundManager;
 	
 	public Boolean debug = getConfig().getBoolean("debug");
 	public Boolean profile = getConfig().getBoolean("profile");
@@ -38,6 +40,9 @@ public final class PluginMain extends JavaPlugin {
 		
 		// instantiate message manager
 		messageManager = new MessageManager(this);
+
+		// instantiate sound manager
+		soundManager = new SoundManager(this);
 
 		// get initialized destination storage object
 		dataStore = DataStoreFactory.create();

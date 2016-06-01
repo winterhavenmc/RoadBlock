@@ -36,7 +36,7 @@ public final class CommandManager implements CommandExecutor {
 
 		if (args.length > maxArgs) {
 			plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_ARGS_COUNT_OVER");
-			plugin.messageManager.playerSound(sender, "COMMAND_FAIL");
+			plugin.soundManager.playerSound(sender, "COMMAND_FAIL");
 			return false;
 		}
 		
@@ -62,7 +62,7 @@ public final class CommandManager implements CommandExecutor {
 		}
 		
 		plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_INVALID_COMMAND");
-		plugin.messageManager.playerSound(sender, "COMMAND_FAIL");
+		plugin.soundManager.playerSound(sender, "COMMAND_FAIL");
 		return false;
 	}
 	
@@ -77,7 +77,7 @@ public final class CommandManager implements CommandExecutor {
 		// check that sender has permission for status command
 		if (!sender.hasPermission("roadblock.status")) {
 			plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_STATUS_PERMISSION");
-			plugin.messageManager.playerSound(sender, "COMMAND_FAIL");
+			plugin.soundManager.playerSound(sender, "COMMAND_FAIL");
 		}
 		
 		String versionString = this.plugin.getDescription().getVersion();
@@ -115,7 +115,7 @@ public final class CommandManager implements CommandExecutor {
 		// check that sender has permission for reload command
 		if (!sender.hasPermission("roadblock.reload")) {
 			plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_RELOAD_PERMISSION");
-			plugin.messageManager.playerSound(sender, "COMMAND_FAIL");
+			plugin.soundManager.playerSound(sender, "COMMAND_FAIL");
 			return true;
 		}
 		
@@ -136,6 +136,9 @@ public final class CommandManager implements CommandExecutor {
 		
 		// reload messages
 		plugin.messageManager.reload();
+
+		// reload sounds
+		plugin.soundManager.reload();
 		
 		// reload enabled worlds
 		plugin.worldManager.reload();
@@ -167,7 +170,7 @@ public final class CommandManager implements CommandExecutor {
 		// check player permissions
 		if (!player.hasPermission("roadblock.tool")) {
 			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_TOOL_PERMISSION");
-			plugin.messageManager.playerSound(player, "COMMAND_FAIL");
+			plugin.soundManager.playerSound(player, "COMMAND_FAIL");
 			return true;
 		}
 		
@@ -179,12 +182,12 @@ public final class CommandManager implements CommandExecutor {
 		
 		if (!noFit.isEmpty()) {
 			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_TOOL_INVENTORY_FULL");
-			plugin.messageManager.playerSound(player, "COMMAND_FAIL");
+			plugin.soundManager.playerSound(player, "COMMAND_FAIL");
 			return true;
 		}
 		
 		// play success sound
-		plugin.messageManager.playerSound(player, "COMMAND_SUCCESS_TOOL");
+		plugin.soundManager.playerSound(player, "COMMAND_SUCCESS_TOOL");
 		return true;
 	}
 

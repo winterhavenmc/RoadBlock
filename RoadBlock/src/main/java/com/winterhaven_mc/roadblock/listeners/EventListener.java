@@ -112,14 +112,14 @@ public final class EventListener implements Listener {
 			// if player does not have roadblock.set permission, do nothing and return
 			if (!player.hasPermission("roadblock.set")) {
 				plugin.messageManager.sendPlayerMessage(player, "TOOL_FAIL_USE_PERMISSION");
-				plugin.messageManager.playerSound(player, "TOOL_FAIL_USE_PERMISSION");
+				plugin.soundManager.playerSound(player, "TOOL_FAIL_USE_PERMISSION");
 				return;
 			}
 
 			// if block clicked is not in list of road block materials, send message and return
 			if (!plugin.blockManager.getRoadBlockMaterials().contains(clickedBlock.getType())) {
 				plugin.messageManager.sendPlayerMessage(player, "TOOL_FAIL_INVALID_MATERIAL",clickedBlock.getType());
-				plugin.messageManager.playerSound(player, "TOOL_FAIL_INVALID_MATERIAL");
+				plugin.soundManager.playerSound(player, "TOOL_FAIL_INVALID_MATERIAL");
 				return;
 			}
 
@@ -140,7 +140,7 @@ public final class EventListener implements Listener {
 
 				// send player successful protect message
 				plugin.messageManager.sendPlayerMessage(player, "TOOL_SUCCESS_PROTECT",quantity);
-				plugin.messageManager.playerSound(player, "TOOL_SUCCESS_PROTECT");
+				plugin.soundManager.playerSound(player, "TOOL_SUCCESS_PROTECT");
 			}
 
 			// if left click, unprotect blocks
@@ -154,7 +154,7 @@ public final class EventListener implements Listener {
 
 				// send player successful unprotect message
 				plugin.messageManager.sendPlayerMessage(player, "TOOL_SUCCESS_UNPROTECT",quantity);
-				plugin.messageManager.playerSound(player, "TOOL_SUCCESS_UNPROTECT");
+				plugin.soundManager.playerSound(player, "TOOL_SUCCESS_UNPROTECT");
 			}
 		}
 	}
@@ -216,7 +216,7 @@ public final class EventListener implements Listener {
 		// tool drop sound to player
 		if (plugin.getConfig().getBoolean("sound-effects")) {
 			Player player = event.getPlayer();
-			plugin.messageManager.playerSound(player, "TOOL_DROP");
+			plugin.soundManager.playerSound(player, "TOOL_DROP");
 		}
 	}
 
