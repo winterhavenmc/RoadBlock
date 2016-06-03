@@ -147,7 +147,7 @@ public final class DataStoreFactory {
 	public static void reload() {
 		
 		// get current datastore type
-		final DataStoreType currentType = plugin.getDataStore().getType();
+		final DataStoreType currentType = plugin.dataStore.getType();
 		
 		// get configured datastore type
 		final DataStoreType newType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
@@ -156,7 +156,7 @@ public final class DataStoreFactory {
 		if (!currentType.equals(newType)) {
 			
 			// create new datastore
-			plugin.setDataStore(create(newType,plugin.getDataStore()));
+			plugin.dataStore = create(newType,plugin.dataStore);
 		}
 	}
 	

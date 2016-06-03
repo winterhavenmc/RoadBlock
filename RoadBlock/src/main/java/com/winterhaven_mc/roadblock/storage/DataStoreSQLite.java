@@ -186,7 +186,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		}
 		
 		// add chunk to cache
-		addCache(location.getChunk());
+		cacheChunk(location.getChunk());
 		
 		// check cache again
 		if (blockCache.containsKey(location)) {
@@ -675,7 +675,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * Add all road block locations within chunk to cache
 	 * @param chunk the chunk for which to load all road block locations into cache
 	 */
-	private void addCache(final Chunk chunk) {
+	private void cacheChunk(final Chunk chunk) {
 
 		final Set<Location> blockSet = selectBlockLocationsInChunk(chunk);
 

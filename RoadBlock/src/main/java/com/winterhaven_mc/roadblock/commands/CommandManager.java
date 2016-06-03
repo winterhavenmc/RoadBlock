@@ -28,7 +28,8 @@ public final class CommandManager implements CommandExecutor {
 		plugin.getCommand("roadblock").setExecutor(this);
 	}
 
-	
+
+	@Override
 	public final boolean onCommand(final CommandSender sender, final Command command, 
 			final String label, final String[] args) {
 

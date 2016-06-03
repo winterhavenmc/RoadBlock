@@ -66,13 +66,5 @@ public final class PluginMain extends JavaPlugin {
 		// close datastore
 		dataStore.close();
 	}
-	
-	public final DataStore getDataStore() {
-		return this.dataStore;
-	}
 
-	public final void setDataStore(DataStore dataStore) {
-		this.dataStore = dataStore;
-	}
-	
 }
