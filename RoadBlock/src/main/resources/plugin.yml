@@ -44,7 +44,6 @@ permissions:
     default: op
     children:
       roadblock.help: true
-      roadblock.break: true
       roadblock.reload: true
       roadblock.set: true
       roadblock.status: true

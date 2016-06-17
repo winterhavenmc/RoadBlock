@@ -1,0 +1,50 @@
+# post 1.9 sound configuration
+
+COMMAND_FAIL:
+  enabled: true
+  player-only: true
+  sound: VILLAGER_NO
+  volume: 1
+  pitch: 1
+    
+COMMAND_SUCCESS_TOOL:
+  enabled: true
+  player-only: true
+  sound: ITEM_PICKUP
+  volume: 1
+  pitch: 1
+
+TOOL_DROP:
+  enabled: true
+  player-only: true
+  sound: ITEM_BREAK
+  volume: 1
+  pitch: 1
+
+TOOL_FAIL_USE_PERMISSION:
+  enabled: true
+  player-only: true
+  sound: VILLAGER_NO
+  volume: 1
+  pitch: 1
+    
+TOOL_FAIL_INVALID_MATERIAL:
+  enabled: true
+  player-only: true
+  sound: VILLAGER_NO
+  volume: 1
+  pitch: 1
+    
+TOOL_SUCCESS_PROTECT:
+    enabled: true
+    player-only: true
+    sound: NOTE_PLING
+    volume: 1
+    pitch: 1
+
+TOOL_SUCCESS_UNPROTECT:
+    enabled: true
+    player-only: true
+    sound: NOTE_BASS
+    volume: 1
+    pitch: 1
