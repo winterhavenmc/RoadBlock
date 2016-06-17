@@ -48,3 +48,10 @@ TOOL_SUCCESS_UNPROTECT:
     sound: NOTE_BASS
     volume: 1
     pitch: 1
+
+BLOCK_PLACE_FAIL_GRASS_PATH:
+    enabled: true
+    player-only: true
+    sound: VILLAGER_NO
+    volume: 1
+    pitch: 1

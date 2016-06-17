@@ -6,6 +6,7 @@ import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -158,7 +159,42 @@ public final class EventListener implements Listener {
 			}
 		}
 	}
-	
+
+
+	/**
+	 * Event handler for BlockPlaceEvent<br>
+	 *     prevent placing blocks on top of road blocks
+	 * @param event event handled by this method
+	 */
+	@EventHandler
+	final void onBlockPlace(final BlockPlaceEvent event) {
+
+		final int height = plugin.getConfig().getInt("no-place-height");
+
+		final Block placedBlock = event.getBlockPlaced();
+		final Player player = event.getPlayer();
+
+		if (plugin.debug) {
+			plugin.getLogger().info("Block below: " + placedBlock.getRelative(BlockFace.DOWN).getType().toString());
+		}
+
+		// check if block below placed block is protected grass path, to prevent converting to regular dirt
+		// (using material name string to maintain backwards compatibility)
+		if (placedBlock.getRelative(BlockFace.DOWN).getType().toString().equals("GRASS_PATH")) {
+			event.setCancelled(true);
+			plugin.messageManager.sendPlayerMessage(player, "PLACE_BLOCK_FAIL_GRASS_PATH");
+			plugin.soundManager.playerSound(player,"BLOCK_PLACE_FAIL_GRASS_PATH");
+			return;
+		}
+
+		// check if block placed is configured distance above a road block
+		if (plugin.blockManager.isAboveRoad(placedBlock.getLocation(),height)) {
+			event.setCancelled(true);
+			plugin.messageManager.sendPlayerMessage(player, "PLACE_BLOCK_FAIL_ABOVE_ROAD");
+			plugin.soundManager.playerSound(player,"BLOCK_PLACE_FAIL_ABOVE_ROAD");
+		}
+	}
+
 	
 	/**
 	 * Event handler for PlayerItemHeldEvent<br>
@@ -332,7 +368,7 @@ public final class EventListener implements Listener {
 			final Player player = (Player) event.getTarget();
 			
 			// check that player is above a road block
-			if (plugin.blockManager.isRoadBelowPlayer(player)) {
+			if (plugin.blockManager.isAboveRoad(player)) {
 				
 				// if entity to target distance is less than 
 				// configured target distance (default 5 blocks),

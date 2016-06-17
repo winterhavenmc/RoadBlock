@@ -204,7 +204,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * @param locations HashSet of records to insert
 	 */
 	@Override
-	final void insertRecords(final Collection<Location> locations) {
+	synchronized final void insertRecords(final Collection<Location> locations) {
 		
 		// set cache for all records in list to pending insert
 		int count = 0;
@@ -317,7 +317,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * @param location the location to be inserted in the datastore
 	 */
 	@Override
-	final void insertRecord(final Location location) {
+	synchronized final void insertRecord(final Location location) {
 		
 		// if location is null do nothing and return
 		if (location == null) {
@@ -384,7 +384,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * @param locations HashSet of locations
 	 */
 	@Override
-	final void deleteRecords(final Collection<Location> locations) {
+	synchronized final void deleteRecords(final Collection<Location> locations) {
 		
 		// set cache for all records in list to pending delete
 		int count = 0;
@@ -485,7 +485,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * @param location the location to be deleted from the datastore
 	 */
 	@Override
-	final void deleteRecord(final Location location) {
+	synchronized final void deleteRecord(final Location location) {
 	
 		// if key is null return
 		if (location == null) {
@@ -551,7 +551,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * @return Set of locations
 	 */
 	@Override
-	final Set<Location> selectBlockLocationsInChunk(final Chunk chunk) {
+	synchronized final Set<Location> selectBlockLocationsInChunk(final Chunk chunk) {
 
 		// create new set for results
 		final Set<Location> returnSet = new HashSet<>();
@@ -621,7 +621,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * @return List of location records
 	 */
 	@Override
-	final Set<Location> selectAllRecords() {
+	synchronized final Set<Location> selectAllRecords() {
 		
 		final Set<Location> returnSet = new HashSet<>();
 	
@@ -740,7 +740,43 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		}
 		return false;
 	}
-	
+
+
+	@Override
+	synchronized int getTotalBlocks() {
+
+		int total = 0;
+
+		try {
+			PreparedStatement preparedStatement =
+					connection.prepareStatement(Queries.getQuery("CountAllBlocks"));
+
+			// execute sql query
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()){
+				total = rs.getInt("rowcount");
+			}
+
+		}
+		catch (Exception e) {
+
+			// output simple error message
+			plugin.getLogger().warning("An error occurred while trying to "
+					+ "count all records from the " + getDisplayName() + " datastore.");
+			plugin.getLogger().warning(e.getLocalizedMessage());
+
+			// if debugging is enabled, output stack trace
+			if (plugin.debug) {
+				e.getStackTrace();
+			}
+		}
+
+		// return result
+		return total;
+
+	}
+
 	
 	/**
 	 * Event listener for chunk unload event

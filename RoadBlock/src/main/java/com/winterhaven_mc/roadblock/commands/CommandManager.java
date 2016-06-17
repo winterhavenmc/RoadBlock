@@ -93,11 +93,22 @@ public final class CommandManager implements CommandExecutor {
 		if (plugin.profile) {
 			sender.sendMessage(ChatColor.DARK_RED + "PROFILE: true");
 		}
-		
-		sender.sendMessage(ChatColor.GREEN + "Spread distance: " 
+
+		if (plugin.getConfig().getBoolean("display-total")) {
+			sender.sendMessage(ChatColor.GREEN + "Total blocks protected: "
+					+ ChatColor.RESET + plugin.blockManager.getBlockTotal() + " blocks");
+		}
+
+		sender.sendMessage(ChatColor.GREEN + "Spread distance: "
 				+ ChatColor.RESET + plugin.getConfig().getInt("spread-distance") + " blocks");
 
-		sender.sendMessage(ChatColor.GREEN + "Mob targeting distance: " 
+		sender.sendMessage(ChatColor.GREEN + "No place height: "
+				+ ChatColor.RESET + plugin.getConfig().getInt("no-place-height") + " blocks");
+
+		sender.sendMessage(ChatColor.GREEN + "Player on road height: "
+				+ ChatColor.RESET + plugin.getConfig().getInt("on-road-height") + " blocks");
+
+		sender.sendMessage(ChatColor.GREEN + "Mob targeting distance: "
 				+ ChatColor.RESET + plugin.getConfig().getInt("target-distance") + " blocks");
 
 		sender.sendMessage(ChatColor.GREEN + "Enabled Worlds: " 

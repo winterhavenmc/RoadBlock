@@ -61,6 +61,12 @@ public abstract class DataStore {
 	abstract Set<Location> selectAllRecords();
 
 	/**
+	 * count records in blocks table
+	 * @return numner of records in blocks table
+	 */
+	abstract int getTotalBlocks();
+
+	/**
 	 * Get block records for locations within a chunk
 	 * @param chunk the chunk containing records to be returned
 	 * @return {@code Set} of {@code Location} for block records within the chunk

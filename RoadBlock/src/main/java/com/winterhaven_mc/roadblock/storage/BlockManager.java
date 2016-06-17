@@ -4,6 +4,7 @@ import com.winterhaven_mc.roadblock.PluginMain;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -16,7 +17,8 @@ public final class BlockManager {
 
 	// set of road block materials
 	private Set<Material> roadBlockMaterials;
-		
+
+
 	/**
 	 * Class constructor
 	 * @param plugin reference to main class
@@ -80,75 +82,65 @@ public final class BlockManager {
 	 * @param player the player to is above a road block
 	 * @return {@code true} if player is within three blocks above a road block, else {@code false}
 	 */
-	public final boolean isRoadBelowPlayer(final Player player) {
-		
+	public final boolean isAboveRoad(final Player player) {
+
+		// if player is null, return false
 		if (player == null) {
 			return false;
 		}
-		
-		int depth = 0;
-		final int maxDepth = 3;
-	
-		// convert player location to block location (with integer coordinates)
-		Location testLocation = player.getLocation().getBlock().getLocation().clone();
-		
-		// iterate until maxDepth reached
-		while (depth < maxDepth) {
-			
-			// don't check datastore unless block at location is road block material
-			if (isRoadBlockMaterial(testLocation)) {
-				if (plugin.dataStore.isProtected(testLocation)) {
-					return true;
-				}
-			}
-			// decrement test location height by one block
-			testLocation.add(0,-1,0);
-			depth++;
-		}		
-		return false;
+
+		// get configured height above road
+		final int distance = plugin.getConfig().getInt("on-road-height");
+
+		// if distance is less than one, return false
+		if (distance < 1) {
+			return false;
+		}
+
+		// return result of isAboveRoad for player location and configured height
+		return isAboveRoad(player.getLocation(),distance);
 	}
 
 
 	/**
 	 * Check if block below location is a protected road block, searching down to maxDepth
 	 * @param location the location to test if above a road block
-	 * @param maxDepth the distance in blocks to test below location
+	 * @param distance the distance in blocks to test below location for road blocks
 	 * @return {@code true} if location is above a road block, else {@code false}
 	 */
-	public final boolean isRoadBelow(final Location location, final int maxDepth) {
-		
+	public final boolean isAboveRoad(final Location location, final int distance) {
+
+		// if passed location is null, return false
 		if (location == null) {
 			return false;
 		}
 
-		int localMaxDepth = maxDepth;
-		int depth = 0;
-
-		// if maxDepth passed is less than or equal to zero, default to 5
-		if (maxDepth <= 0) {
-			localMaxDepth = 5;
+		// if passed distance is less than one, return false
+		if (distance < 1) {
+			return false;
 		}
-		
-		// don't let maxDepth go below bottom of world
-		localMaxDepth = Math.min(localMaxDepth, location.getBlockY());
-	
-		// get copy of location as block location (with integer coordinates)
-		final Location testLocation = location.getBlock().getLocation().clone();
-		
+
+		boolean result = false;
+		int checkDepth = distance;
+
 		// iterate until maxDepth reached
-		while (depth < localMaxDepth) {
-			
-			// don't check datastore unless block at location is road block material
-			if (isRoadBlockMaterial(testLocation)) {
-				if (plugin.dataStore.isProtected(testLocation)) {
-					return true;
+		while (checkDepth > 0) {
+
+			// get block at checkDepth
+			Block testBlock = location.getBlock().getRelative(BlockFace.DOWN,checkDepth);
+
+			// don't check datastore unless testBlock is road block material
+			if (isRoadBlockMaterial(testBlock)) {
+				if (plugin.dataStore.isProtected(testBlock.getLocation())) {
+					result = true;
+					break;
 				}
 			}
-			// decrement test location height by one block
-			testLocation.add(0,-1,0);
-			depth++;
+
+			// decrement checkDepth
+			checkDepth--;
 		}
-		return false;
+		return result;
 	}
 
 
@@ -188,6 +180,7 @@ public final class BlockManager {
 	 * @param location the location of a block to test for valid road block material
 	 * @return {@code true} if the block at location is a configured road block material, {@code false} if it is not
 	 */
+	@SuppressWarnings("unused")
 	private boolean isRoadBlockMaterial(final Location location) {
 		return location != null && roadBlockMaterials.contains(location.getBlock().getType());
 	}
@@ -260,6 +253,10 @@ public final class BlockManager {
 			}
 		}
 		this.roadBlockMaterials = returnSet;
+	}
+
+	synchronized public final int getBlockTotal() {
+		return plugin.dataStore.getTotalBlocks();
 	}
 
 	public final Set<Material> getRoadBlockMaterials() {

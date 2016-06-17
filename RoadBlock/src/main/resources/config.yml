@@ -13,7 +13,7 @@ disabled-worlds:
   - disabled_world1
   - disabled_world2
 
-# RoadBlock tool material
+# RoadBlock tool material - customize name and lore in messages file
 tool-material: GOLD_PICKAXE
 
 # Highlight material for protected blocks
@@ -22,11 +22,20 @@ protect-material: EMERALD_BLOCK
 # Highlight material for unprotected blocks
 unprotect-material: REDSTONE_BLOCK
 
+# Display total blocks in status
+display-total: true
+
 # How far to search for adjacent road blocks from clicked location
 spread-distance: 100
 
+# Distance above roads to prevent block placement
+no-place-height: 3
+
 # Prevent mobs from targeting players farther than this distance when on roads
 target-distance: 5
+
+# Distance in blocks a player can be above a road block, and still be considered 'on road' for mob targeting
+on-road-height: 6
 
 # Enable sound effects
 sound-effects: true
