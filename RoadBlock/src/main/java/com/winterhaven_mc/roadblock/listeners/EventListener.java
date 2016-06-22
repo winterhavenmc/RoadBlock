@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,7 +23,7 @@ import java.util.*;
 
 
 /**
- * Implements player event listener for <code>RoadBlock</code> events.
+ * Implements player event listener for RoadBlock events.
  * 
  * @author      Tim Savage
  * @version		1.0
@@ -42,7 +43,7 @@ public final class EventListener implements Listener {
 			)));
 	
 	/**
-	 * constructor method for <code>EventListener</code> class
+	 * constructor method for {@code EventListener} class
 	 * @param	plugin		A reference to this plugin's main class
 	 */
 	public EventListener(final PluginMain plugin) {
@@ -58,7 +59,7 @@ public final class EventListener implements Listener {
 	@EventHandler
 	final void onPlayerInteract(final PlayerInteractEvent event) {
 		
-		//NOTE: do not check for cancelled event here
+		//NOTE: do not check for cancelled event here; long distance clicks are considered cancelled
 		
 		final Player player = event.getPlayer();
 
@@ -125,10 +126,10 @@ public final class EventListener implements Listener {
 			}
 
 			// get road block locations attached to clicked block
-			HashSet<Location> locationSet = 
+			final HashSet<Location> locationSet =
 					new HashSet<>(plugin.blockManager.getFill(clickedBlock.getLocation()));
 
-			int quantity = locationSet.size();
+			final int quantity = locationSet.size();
 
 			// if right click, protect blocks		
 			if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR)) {
@@ -169,9 +170,18 @@ public final class EventListener implements Listener {
 	@EventHandler
 	final void onBlockPlace(final BlockPlaceEvent event) {
 
+		// if event is already cancelled, do nothing and return
+		if (event.isCancelled()) {
+			return;
+		}
+
+		// get configured no-place-height
 		final int height = plugin.getConfig().getInt("no-place-height");
 
+		// get block placed
 		final Block placedBlock = event.getBlockPlaced();
+
+		// get player
 		final Player player = event.getPlayer();
 
 		if (plugin.debug) {
@@ -195,7 +205,43 @@ public final class EventListener implements Listener {
 		}
 	}
 
-	
+
+	/**
+	 * Event handler for BlockMultiPlaceEvent<br>
+	 *     prevent placing blocks on top of road blocks
+	 * @param event event handled by this method
+	 */
+	@EventHandler
+	final void onBlockMultiPlace(final BlockMultiPlaceEvent event) {
+
+		// if event is already cancelled, do nothing and return
+		if (event.isCancelled()) {
+			return;
+		}
+
+		// get configured no-place-height
+		final int height = plugin.getConfig().getInt("no-place-height");
+
+		// get list of blocks that will be replaced
+		final List<BlockState> replacedBlocks = event.getReplacedBlockStates();
+
+		// get event player
+		final Player player = event.getPlayer();
+
+		// iterate through blocks and check if any are above a road block
+		for (BlockState blockState : replacedBlocks) {
+
+			// if block is above a road block, cancel event and send player message
+			if (plugin.blockManager.isAboveRoad(blockState.getLocation(),height)) {
+				event.setCancelled(true);
+				plugin.messageManager.sendPlayerMessage(player, "PLACE_BLOCK_FAIL_ABOVE_ROAD");
+				plugin.soundManager.playerSound(player,"BLOCK_PLACE_FAIL_ABOVE_ROAD");
+				break;
+			}
+		}
+	}
+
+
 	/**
 	 * Event handler for PlayerItemHeldEvent<br>
 	 * Unhighlight blocks when player changes held item from road block tool
@@ -232,12 +278,12 @@ public final class EventListener implements Listener {
 	 */
 	@EventHandler
 	final void onPlayerDropItem(final PlayerDropItemEvent event) {
-		
-		// if event is cancelled, do nothing and return
+
+		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
 			return;
 		}
-		
+
 		// get dropped item
 		final ItemStack droppedItem = event.getItemDrop().getItemStack();
 		
@@ -276,17 +322,29 @@ public final class EventListener implements Listener {
 	 */
 	@EventHandler
 	final void onBlockBreak(final BlockBreakEvent event) {
-		
+
+		// if event is already cancelled, do nothing and return
+		if (event.isCancelled()) {
+			return;
+		}
+
+		// get block being broken
 		final Block block = event.getBlock();
+
+		// get player
 		final Player player = event.getPlayer();
-		
+
+		// check if block is a protected road block
 		if (plugin.blockManager.isRoadBlock(block)) {
-			
+
+			// if player does not have override permission, cancel event and send player message
 			if (!player.hasPermission("roadblock.break")) {
 				event.setCancelled(true);
 				plugin.messageManager.sendPlayerMessage(player, "TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION");
 				return;
 			}
+
+			// player does have override permission; remove protection from block and send player message
 			plugin.blockManager.removeLocation(block.getLocation());
 			plugin.messageManager.sendPlayerMessage(player, "TOOL_SUCCESS_BREAK_BLOCK");
 			player.sendMessage("Road block protection removed.");
@@ -302,7 +360,7 @@ public final class EventListener implements Listener {
 	@EventHandler
 	final void onBlockExplode(final BlockExplodeEvent event) {
 		
-		// if event is cancelled, do nothing and return
+		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
 			return;
 		}
@@ -327,7 +385,7 @@ public final class EventListener implements Listener {
 	@EventHandler
 	final void onEntityExplode(final EntityExplodeEvent event) {
 		
-		// if event is cancelled, do nothing and return
+		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
 			return;
 		}
@@ -350,16 +408,37 @@ public final class EventListener implements Listener {
 	 */
 	@EventHandler
 	final void onEntityChangeBlock(final EntityChangeBlockEvent event) {
-		
+
+		// if event is already cancelled, do nothing and return
+		if (event.isCancelled()) {
+			return;
+		}
+
 		// if event block is a RoadBlock, cancel event
 		if (plugin.blockManager.isRoadBlock(event.getBlock())) {
 			event.setCancelled(true);
 		}
 	}
-	
-	
+
+
+	/**
+	 * Event listener for EntityTargetLivingEntityEvent<br>
+	 *     Cancel players being targeted by mobs if they are within configured height above a road block
+	 *     and mob is further away than configured target-distance
+	 * @param event the event handled by this method
+	 */
 	@EventHandler
 	final void onEntityTargetLivingEntity(final EntityTargetLivingEntityEvent event) {
+
+		// if event is already cancelled, do nothing and return
+		if (event.isCancelled()) {
+			return;
+		}
+
+		// if configured target distance is zero or negative, do nothing and return (feature is disabled)
+		if (plugin.getConfig().getInt("target-distance") <= 0) {
+			return;
+		}
 
 		// check that target is a player
 		if (event.getTarget() != null && event.getTarget() instanceof Player) {
@@ -371,7 +450,7 @@ public final class EventListener implements Listener {
 			if (plugin.blockManager.isAboveRoad(player)) {
 				
 				// if entity to target distance is less than 
-				// configured target distance (default 5 blocks),
+				// configured target distance,
 				// do nothing and return, allowing player to be targeted 
 				if (event.getEntity().getLocation()
 						.distanceSquared(player.getLocation()) < Math.pow(plugin
@@ -399,7 +478,12 @@ public final class EventListener implements Listener {
 	@EventHandler
 	final void onPistonExtend(final BlockPistonExtendEvent event) {
 
-		// get list of blocks affected by piston 
+		// if event is already cancelled, do nothing and return
+		if (event.isCancelled()) {
+			return;
+		}
+
+		// get list of blocks affected by piston
 		final ArrayList<Block> blocks = new ArrayList<>(event.getBlocks());
 		
 		// iterate through block list checking for road blocks
@@ -423,8 +507,13 @@ public final class EventListener implements Listener {
 	 */
 	@EventHandler
 	final void onPistonRetract(final BlockPistonRetractEvent event) {
-		
-		// get list of blocks affected by piston 
+
+		// if event is already cancelled, do nothing and return
+		if (event.isCancelled()) {
+			return;
+		}
+
+		// get list of blocks affected by piston
 		final ArrayList<Block> blocks = new ArrayList<>(event.getBlocks());
 		
 		// iterate through block list checking for road blocks
