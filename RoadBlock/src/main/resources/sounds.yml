@@ -17,7 +17,7 @@ COMMAND_SUCCESS_TOOL:
 COMMAND_SUCCESS_SHOW:
   enabled: true
   player-only: true
-  sound: ENTITY_LEVELUP
+  sound: ENTITY_PLAYER_LEVELUP
   volume: 1
   pitch: 1.5
 

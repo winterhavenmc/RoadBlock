@@ -254,6 +254,7 @@ public final class CommandManager implements CommandExecutor {
 
 		// send player success message
 		plugin.messageManager.sendPlayerMessage(player,"COMMAND_SUCCESS_SHOW", locations.size());
+		plugin.soundManager.playerSound(player, "COMMAND_SUCCESS_SHOW");
 
 		return true;
 	}
