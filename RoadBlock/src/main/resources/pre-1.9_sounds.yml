@@ -14,6 +14,13 @@ COMMAND_SUCCESS_TOOL:
   volume: 1
   pitch: 1
 
+COMMAND_SUCCESS_SHOW:
+  enabled: true
+  player-only: true
+  sound: LEVEL_UP
+  volume: 1
+  pitch: 1.5
+
 TOOL_DROP:
   enabled: true
   player-only: true
