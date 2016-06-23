@@ -7,8 +7,7 @@ TOOL_LORE:
   - '&eRoadBlock protection'
 
 
-# Variable substitutions
-#
+# Variable substitutions:
 #	%PLAYER_NAME%		name of player
 #	%WORLD_NAME%		name of player's current world
 #	%TOOL_NAME%			name of tool, as defined in this file
@@ -24,6 +23,14 @@ TOOL_LORE:
 ##################
 # Command Messages
 ##################
+COMMAND_SUCCESS_RELOAD:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &7Configuration reloaded.'
+
+COMMAND_SUCCESS_SHOW:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &7Highlighted %QUANTITY% nearby RoadBlocks.'
+
 COMMAND_FAIL_ARGS_COUNT_UNDER:
   enabled: true
   text: '&8[&eRoadBlock&8] &cToo few arguments!'
@@ -52,10 +59,6 @@ COMMAND_FAIL_TOOL_PERMISSION:
   enabled: true
   text: '&8[&eRoadBlock&8] &cYou do not have permission to create a %TOOL_NAME%!'
 
-COMMAND_SUCCESS_RELOAD:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &7Configuration reloaded.'
-
 COMMAND_FAIL_HELP_PERMISSION:
   enabled: true
   text: '&8[&eRoadBlock&8] &cYou do not have permission to view RoadBlock help!'
@@ -76,14 +79,25 @@ COMMAND_FAIL_SET_INVALID_INTEGER:
     enabled: true
     text: '&8[&eRoadBlock&8] &cValue must be an integer!'
 
-COMMAND_SUCCESS_SHOW:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &7Highlighted %QUANTITY% nearby RoadBlocks.'
-
 
 ###############
 # Tool Messages
 ###############
+TOOL_SUCCESS_PROTECT:
+  enabled: true
+  repeat-delay: 1
+  text: '&8[&eRoadBlock&8] &7Protected %QUANTITY% blocks.'
+
+TOOL_SUCCESS_UNPROTECT:
+  enabled: true
+  repeat-delay: 1
+  text: '&8[&eRoadBlock&8] &7Unprotected %QUANTITY% blocks.'
+
+TOOL_SUCCESS_BREAK_BLOCK:
+  enabled: true
+  repeat-delay: 1
+  text: '&8[&eRoadBlock&8] &7Removed protection from block.'
+
 TOOL_FAIL_WORLD_DISABLED:
   enabled: true
   repeat-delay: 1
@@ -108,21 +122,6 @@ TOOL_FAIL_USE_SHIFT_CLICK:
   enabled: true
   repeat-delay: 5
   text: '&8[&eRoadBlock&8] &7You must shift-click to use a %TOOL_NAME%.'
-
-TOOL_SUCCESS_PROTECT:
-  enabled: true
-  repeat-delay: 1
-  text: '&8[&eRoadBlock&8] &7Protected %QUANTITY% blocks.'
-
-TOOL_SUCCESS_UNPROTECT:
-  enabled: true
-  repeat-delay: 1
-  text: '&8[&eRoadBlock&8] &7Unprotected %QUANTITY% blocks.'
-
-TOOL_SUCCESS_BREAK_BLOCK:
-  enabled: true
-  repeat-delay: 1
-  text: '&8[&eRoadBlock&8] &7Removed protection from block.'
 
 
 ################
