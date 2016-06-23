@@ -774,9 +774,63 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 		// return result
 		return total;
-
 	}
 
+	@Override
+	Set<Location> selectNearbyBlocks (final Location location, final int distance) {
+
+		if (location == null) {
+			return Collections.emptySet();
+		}
+
+		final int minX = location.getBlockX() - distance;
+		final int maxX = location.getBlockX() + distance;
+		final int minZ = location.getBlockZ() - distance;
+		final int maxZ = location.getBlockZ() + distance;
+
+		Set<Location> resultSet = new HashSet<>();
+
+		try {
+			PreparedStatement preparedStatement =
+					connection.prepareStatement(Queries.getQuery("SelectNearbyBlocks"));
+
+			preparedStatement.setString(1, location.getWorld().getName());
+			preparedStatement.setInt(2, minX);
+			preparedStatement.setInt(3, maxX);
+			preparedStatement.setInt(4, minZ);
+			preparedStatement.setInt(5, maxZ);
+
+			// execute sql query
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+
+				String worldName = rs.getString("worldname");
+				Double x = rs.getDouble("x");
+				Double y = rs.getDouble("y");
+				Double z = rs.getDouble("z");
+				World world = plugin.getServer().getWorld(worldName);
+
+				Location newLocation = new Location(world,x,y,z);
+				resultSet.add(newLocation);
+			}
+
+		}
+		catch (Exception e) {
+
+			// output simple error message
+			plugin.getLogger().warning("An error occurred while trying to "
+					+ "select nearby block records from the " + getDisplayName() + " datastore.");
+			plugin.getLogger().warning(e.getLocalizedMessage());
+
+			// if debugging is enabled, output stack trace
+			if (plugin.debug) {
+				e.getStackTrace();
+			}
+		}
+
+		return resultSet;
+	}
 	
 	/**
 	 * Event listener for chunk unload event

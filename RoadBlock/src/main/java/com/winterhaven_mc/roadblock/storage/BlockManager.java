@@ -259,6 +259,10 @@ public final class BlockManager {
 		return plugin.dataStore.getTotalBlocks();
 	}
 
+	public final Set<Location> selectNearbyBlocks(Location location, int distance) {
+		return plugin.dataStore.selectNearbyBlocks(location, distance);
+	}
+
 	public final Set<Material> getRoadBlockMaterials() {
 		return roadBlockMaterials;
 	}

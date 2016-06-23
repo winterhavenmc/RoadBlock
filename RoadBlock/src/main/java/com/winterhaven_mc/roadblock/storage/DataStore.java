@@ -72,7 +72,15 @@ public abstract class DataStore {
 	 * @return {@code Set} of {@code Location} for block records within the chunk
 	 */
 	abstract Set<Location> selectBlockLocationsInChunk(Chunk chunk);
-	
+
+	/**
+	 * Get block records for locations within {@code distance} of {@code location}
+	 * @param location origin location
+	 * @param distance distance from origin to select blocks
+	 * @return Set of Locations that are within {@code distance} of {@code location}
+	 */
+	abstract Set<Location> selectNearbyBlocks (final Location location, final int distance);
+
 	/**
 	 * Close storage
 	 */

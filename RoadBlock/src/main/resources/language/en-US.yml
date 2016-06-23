@@ -64,9 +64,21 @@ COMMAND_FAIL_RELOAD_PERMISSION:
   enabled: true
   text: '&8[&eRoadBlock&8] &cYou do not have permission to reload RoadBlock configuration!'
 
+COMMAND_FAIL_SHOW_PERMISSION:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &cYou do not have permission to highlight nearby RoadBlocks!'
+
 COMMAND_FAIL_STATUS_PERMISSION:
   enabled: true
   text: '&8[&eRoadBlock&8] &cYou do not have permission to view RoadBlock settings!'
+
+COMMAND_FAIL_SET_INVALID_INTEGER:
+    enabled: true
+    text: '&8[&eRoadBlock&8] &cValue must be an integer!'
+
+COMMAND_SUCCESS_SHOW:
+  enabled: true
+  text: '&8[&eRoadBlock&8] &7Highlighted %QUANTITY% nearby RoadBlocks.'
 
 
 ###############

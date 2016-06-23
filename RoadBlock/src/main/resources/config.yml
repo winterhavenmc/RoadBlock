@@ -28,6 +28,9 @@ display-total: true
 # How far to search for adjacent road blocks from clicked location
 spread-distance: 100
 
+# How far to search for road blocks with show command
+show-distance: 100
+
 # Distance above roads to prevent block placement
 no-place-height: 3
 

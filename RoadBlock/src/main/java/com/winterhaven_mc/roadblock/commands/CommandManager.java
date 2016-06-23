@@ -1,9 +1,11 @@
 package com.winterhaven_mc.roadblock.commands;
 
 import com.winterhaven_mc.roadblock.PluginMain;
+import com.winterhaven_mc.roadblock.highlights.HighlightStyle;
 import com.winterhaven_mc.roadblock.storage.DataStoreFactory;
 import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.Set;
 
 
 public final class CommandManager implements CommandExecutor {
@@ -33,7 +36,7 @@ public final class CommandManager implements CommandExecutor {
 	public final boolean onCommand(final CommandSender sender, final Command command, 
 			final String label, final String[] args) {
 
-		final int maxArgs = 1;
+		final int maxArgs = 2;
 
 		if (args.length > maxArgs) {
 			plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_ARGS_COUNT_OVER");
@@ -56,7 +59,12 @@ public final class CommandManager implements CommandExecutor {
 		if (subcommand.equalsIgnoreCase("reload")) {
 			return reloadCommand(sender);
 		}
-		
+
+		// show command
+		if (subcommand.equalsIgnoreCase("show")) {
+			return showCommand(sender, args);
+		}
+
 		// tool command
 		if (subcommand.equalsIgnoreCase("tool")) {
 			return toolCommand(sender);
@@ -162,6 +170,77 @@ public final class CommandManager implements CommandExecutor {
 		plugin.messageManager.sendPlayerMessage(sender, "COMMAND_SUCCESS_RELOAD");
 		return true;
 	}
+
+
+	/**
+	 * Highlight blocks that are within specified distance of player location
+	 * @param sender the command sender
+	 * @param args command arguments
+	 * @return always returns {@code true}, to prevent usage message
+	 */
+	private boolean showCommand(final CommandSender sender, String[] args) {
+
+		// sender must be player
+		if (!(sender instanceof Player)) {
+			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_CONSOLE");
+			return true;
+		}
+
+		// get player from sender
+		final Player player = (Player) sender;
+
+		// check player permissions
+		if (!player.hasPermission("roadblock.show")) {
+			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_SHOW_PERMISSION");
+			plugin.soundManager.playerSound(player, "COMMAND_FAIL");
+			return true;
+		}
+
+		// argument limits
+		int minArgs = 1;
+		int maxArgs = 2;
+
+		// check min arguments
+		if (args.length < minArgs) {
+			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_ARGS_COUNT_UNDER");
+			return false;
+		}
+
+		// check max arguments
+		if (args.length > maxArgs) {
+			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_ARGS_COUNT_OVER");
+			return false;
+		}
+
+		// get show distance from config
+		int distance = plugin.getConfig().getInt("show-distance");
+
+		// if argument passed, try to parse string to int
+		if (args.length == 2) {
+			try {
+				distance = Integer.parseInt(args[1]);
+			}
+			catch (NumberFormatException nfe) {
+				// send player integer parse error message and return
+				plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_SET_INVALID_INTEGER");
+
+				player.sendMessage("§6/roadblock show <distance>");
+				return true;
+			}
+		}
+
+		// get set of block locations within distance of player location
+		Set<Location> locations = plugin.blockManager.selectNearbyBlocks(player.getLocation(), distance);
+
+		// highlight blocks
+		plugin.highlightManager.highlightBlocks(player, locations, HighlightStyle.PROTECT);
+
+		// send player success message
+		plugin.messageManager.sendPlayerMessage(player,"COMMAND_SUCCESS_SHOW", locations.size());
+
+		return true;
+	}
+
 
 	/**
 	 * Place a tool in player inventory

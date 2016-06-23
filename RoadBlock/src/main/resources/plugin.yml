@@ -39,6 +39,10 @@ permissions:
     description: Allows creating a RoadBlock tool in inventory.
     default: op
 
+  roadblock.show:
+    description: Allows highlighting blocks within specified distance.
+    default: op
+
   roadblock.admin:
     description: Allows all admin commands
     default: op
@@ -46,6 +50,7 @@ permissions:
       roadblock.help: true
       roadblock.reload: true
       roadblock.set: true
+      roadblock.show: true
       roadblock.status: true
       roadblock.tool: true
       roadblock.unset: true
