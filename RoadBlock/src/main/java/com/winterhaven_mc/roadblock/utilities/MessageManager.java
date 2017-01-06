@@ -57,17 +57,23 @@ public final class MessageManager {
 	}
 
 
-	public final void sendPlayerMessage(final CommandSender sender, final String messageId) {
+	public final void sendPlayerMessage(final CommandSender sender,
+										final String messageId) {
 		sendPlayerMessage(sender, messageId, 1, null);
 	}
 
 
-	public final void sendPlayerMessage(final CommandSender sender, final String messageId, final int quantity) {
+	public final void sendPlayerMessage(final CommandSender sender,
+										final String messageId,
+										final int quantity) {
 		sendPlayerMessage(sender, messageId, quantity, null);
 	}
 
 	
-	public final void sendPlayerMessage(final CommandSender sender, final String messageId, final Material material) {
+	@SuppressWarnings("SameParameterValue")
+	public final void sendPlayerMessage(final CommandSender sender,
+										final String messageId,
+										final Material material) {
 		sendPlayerMessage(sender, messageId, 1, material);
 	}
 
@@ -80,8 +86,10 @@ public final class MessageManager {
 	 * @param quantity			quantity
 	 */
 	@SuppressWarnings("WeakerAccess")
-	public final void sendPlayerMessage(final CommandSender sender, final String messageId,
-										final Integer quantity, final Material material) {
+	public final void sendPlayerMessage(final CommandSender sender,
+	                                    final String messageId,
+										final Integer quantity,
+										final Material material) {
 
 		// if message is not enabled in messages file, do nothing and return
 		if (!messages.getConfig().getBoolean(messageId + ".enabled")) {
