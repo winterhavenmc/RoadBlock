@@ -529,4 +529,29 @@ public final class EventListener implements Listener {
 		}
 	}
 
+	@EventHandler
+	final void onBlockForm(final BlockFormEvent event) {
+
+		// if event is already cancelled, do nothing and return
+		if (event.isCancelled()) {
+			return;
+		}
+
+		// if configured false, do nothing and return
+		if (!plugin.getConfig().getBoolean("snow-plow")) {
+			return;
+		}
+
+		// get event block
+		Block block = event.getBlock();
+
+		// if formed block is above road block, cancel event
+		if (plugin.blockManager.isAboveRoad(block.getLocation(),1)) {
+			event.setCancelled(true);
+			if (plugin.debug) {
+				plugin.getLogger().info("Prevented snow from forming on road block.");
+			}
+		}
+
+	}
 }

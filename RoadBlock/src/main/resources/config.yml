@@ -40,6 +40,9 @@ target-distance: 5
 # Distance in blocks a player can be above a road block, and still be considered 'on road' for mob targeting
 on-road-height: 6
 
+# Prevent snow forming above road blocks
+snow-plow: true
+
 # Enable sound effects
 sound-effects: true
 

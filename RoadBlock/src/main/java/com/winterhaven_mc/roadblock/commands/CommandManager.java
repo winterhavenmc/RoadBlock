@@ -141,7 +141,10 @@ public final class CommandManager implements CommandExecutor {
 		sender.sendMessage(ChatColor.GREEN + "Mob targeting distance: "
 				+ ChatColor.RESET + plugin.getConfig().getInt("target-distance") + " blocks");
 
-		sender.sendMessage(ChatColor.GREEN + "Enabled Worlds: " 
+		sender.sendMessage(ChatColor.GREEN + "Snow plow: "
+				+ ChatColor.RESET + plugin.getConfig().getString("snow-plow"));
+
+		sender.sendMessage(ChatColor.GREEN + "Enabled Worlds: "
 				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());
 		return true;
 	}
