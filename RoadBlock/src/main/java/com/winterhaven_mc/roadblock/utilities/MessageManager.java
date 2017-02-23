@@ -84,6 +84,7 @@ public final class MessageManager {
 	 * @param sender			player receiving message
 	 * @param messageId			message identifier in messages file
 	 * @param quantity			quantity
+	 * @param material			material type to be referenced in message
 	 */
 	@SuppressWarnings("WeakerAccess")
 	public final void sendPlayerMessage(final CommandSender sender,

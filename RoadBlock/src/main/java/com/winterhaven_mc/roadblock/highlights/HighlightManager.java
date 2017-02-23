@@ -47,6 +47,7 @@ public final class HighlightManager {
 	 * using blocks of {@code material} type as highlight
 	 * @param player the player for whom to display the highlighted blocks
 	 * @param locationSet a collection of Locations of blocks to highlight
+	 * @param highlightStyle HighlightStyle enum value to use for highlighting
 	 */
 	public final void highlightBlocks(final Player player, final Collection<Location> locationSet,
 			final HighlightStyle highlightStyle) {
