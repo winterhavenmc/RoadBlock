@@ -6,7 +6,7 @@ import com.winterhaven_mc.roadblock.listeners.EventListener;
 import com.winterhaven_mc.roadblock.storage.BlockManager;
 import com.winterhaven_mc.roadblock.storage.DataStore;
 import com.winterhaven_mc.roadblock.storage.DataStoreFactory;
-import com.winterhaven_mc.roadblock.utilities.MessageManager;
+import com.winterhaven_mc.roadblock.messages.MessageManager;
 import com.winterhaven_mc.util.SoundManager;
 import com.winterhaven_mc.util.WorldManager;
 import org.bukkit.plugin.java.JavaPlugin;

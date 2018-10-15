@@ -2,6 +2,7 @@ package com.winterhaven_mc.roadblock.listeners;
 
 import com.winterhaven_mc.roadblock.PluginMain;
 import com.winterhaven_mc.roadblock.highlights.HighlightStyle;
+import com.winterhaven_mc.roadblock.messages.MessageId;
 import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -75,7 +76,7 @@ public final class EventListener implements Listener {
 
 			// if world is not enabled, send message and return
 			if (!plugin.worldManager.isEnabled(player.getWorld())) {
-				plugin.messageManager.sendPlayerMessage(event.getPlayer(), "TOOL_FAIL_WORLD_DISABLED");
+				plugin.messageManager.sendPlayerMessage(event.getPlayer(), MessageId.TOOL_FAIL_WORLD_DISABLED);
 				return;
 			}
 			
@@ -98,7 +99,7 @@ public final class EventListener implements Listener {
 
 			// if clicked block is air, the actual clicked block was too far away
 			if (clickedBlock.getType().equals(Material.AIR)) {
-				plugin.messageManager.sendPlayerMessage(player, "TOOL_FAIL_DISTANCE_EXCEEDED");
+				plugin.messageManager.sendPlayerMessage(player, MessageId.TOOL_FAIL_DISTANCE_EXCEEDED);
 				return;
 			}
 			
@@ -113,14 +114,14 @@ public final class EventListener implements Listener {
 
 			// if player does not have roadblock.set permission, do nothing and return
 			if (!player.hasPermission("roadblock.set")) {
-				plugin.messageManager.sendPlayerMessage(player, "TOOL_FAIL_USE_PERMISSION");
+				plugin.messageManager.sendPlayerMessage(player, MessageId.TOOL_FAIL_USE_PERMISSION);
 				plugin.soundManager.playerSound(player, "TOOL_FAIL_USE_PERMISSION");
 				return;
 			}
 
 			// if block clicked is not in list of road block materials, send message and return
 			if (!plugin.blockManager.getRoadBlockMaterials().contains(clickedBlock.getType())) {
-				plugin.messageManager.sendPlayerMessage(player, "TOOL_FAIL_INVALID_MATERIAL",clickedBlock.getType());
+				plugin.messageManager.sendPlayerMessage(player, MessageId.TOOL_FAIL_INVALID_MATERIAL,clickedBlock.getType());
 				plugin.soundManager.playerSound(player, "TOOL_FAIL_INVALID_MATERIAL");
 				return;
 			}
@@ -141,7 +142,7 @@ public final class EventListener implements Listener {
 				plugin.blockManager.storeLocations(locationSet);
 
 				// send player successful protect message
-				plugin.messageManager.sendPlayerMessage(player, "TOOL_SUCCESS_PROTECT",quantity);
+				plugin.messageManager.sendPlayerMessage(player, MessageId.TOOL_SUCCESS_PROTECT, quantity);
 				plugin.soundManager.playerSound(player, "TOOL_SUCCESS_PROTECT");
 			}
 
@@ -155,7 +156,7 @@ public final class EventListener implements Listener {
 				plugin.blockManager.removeLocations(locationSet);
 
 				// send player successful unprotect message
-				plugin.messageManager.sendPlayerMessage(player, "TOOL_SUCCESS_UNPROTECT",quantity);
+				plugin.messageManager.sendPlayerMessage(player, MessageId.TOOL_SUCCESS_UNPROTECT, quantity);
 				plugin.soundManager.playerSound(player, "TOOL_SUCCESS_UNPROTECT");
 			}
 		}
@@ -192,7 +193,7 @@ public final class EventListener implements Listener {
 		// (using material name string to maintain backwards compatibility)
 		if (placedBlock.getRelative(BlockFace.DOWN).getType().toString().equals("GRASS_PATH")) {
 			event.setCancelled(true);
-			plugin.messageManager.sendPlayerMessage(player, "PLACE_BLOCK_FAIL_GRASS_PATH");
+			plugin.messageManager.sendPlayerMessage(player, MessageId.PLACE_BLOCK_FAIL_GRASS_PATH);
 			plugin.soundManager.playerSound(player,"BLOCK_PLACE_FAIL_GRASS_PATH");
 			return;
 		}
@@ -200,7 +201,7 @@ public final class EventListener implements Listener {
 		// check if block placed is configured distance above a road block
 		if (plugin.blockManager.isAboveRoad(placedBlock.getLocation(),height)) {
 			event.setCancelled(true);
-			plugin.messageManager.sendPlayerMessage(player, "PLACE_BLOCK_FAIL_ABOVE_ROAD");
+			plugin.messageManager.sendPlayerMessage(player, MessageId.PLACE_BLOCK_FAIL_ABOVE_ROAD);
 			plugin.soundManager.playerSound(player,"BLOCK_PLACE_FAIL_ABOVE_ROAD");
 		}
 	}
@@ -234,7 +235,7 @@ public final class EventListener implements Listener {
 			// if block is above a road block, cancel event and send player message
 			if (plugin.blockManager.isAboveRoad(blockState.getLocation(),height)) {
 				event.setCancelled(true);
-				plugin.messageManager.sendPlayerMessage(player, "PLACE_BLOCK_FAIL_ABOVE_ROAD");
+				plugin.messageManager.sendPlayerMessage(player, MessageId.PLACE_BLOCK_FAIL_ABOVE_ROAD);
 				plugin.soundManager.playerSound(player,"BLOCK_PLACE_FAIL_ABOVE_ROAD");
 				break;
 			}
@@ -254,8 +255,7 @@ public final class EventListener implements Listener {
 		
 		final ItemStack previousItem = player.getInventory().getItem(event.getPreviousSlot());
 		
-		if (previousItem != null 
-				&& RoadBlockTool.isTool(previousItem)) {
+		if (RoadBlockTool.isTool(previousItem)) {
 			plugin.highlightManager.unHighlightBlocks(player);
 		}
 	}
@@ -340,13 +340,13 @@ public final class EventListener implements Listener {
 			// if player does not have override permission, cancel event and send player message
 			if (!player.hasPermission("roadblock.break")) {
 				event.setCancelled(true);
-				plugin.messageManager.sendPlayerMessage(player, "TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION");
+				plugin.messageManager.sendPlayerMessage(player, MessageId.TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION);
 				return;
 			}
 
 			// player does have override permission; remove protection from block and send player message
 			plugin.blockManager.removeLocation(block.getLocation());
-			plugin.messageManager.sendPlayerMessage(player, "TOOL_SUCCESS_BREAK_BLOCK");
+			plugin.messageManager.sendPlayerMessage(player, MessageId.TOOL_SUCCESS_BREAK_BLOCK);
 			player.sendMessage("Road block protection removed.");
 		}
 	}
@@ -529,6 +529,7 @@ public final class EventListener implements Listener {
 		}
 	}
 
+
 	@EventHandler
 	final void onBlockForm(final BlockFormEvent event) {
 
@@ -552,6 +553,6 @@ public final class EventListener implements Listener {
 				plugin.getLogger().info("Prevented snow from forming on road block.");
 			}
 		}
-
 	}
+
 }

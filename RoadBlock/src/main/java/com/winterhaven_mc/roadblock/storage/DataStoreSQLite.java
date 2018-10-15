@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 
-@SuppressWarnings({"SynchronizeOnNonFinalField", "SuspiciousNameCombination"})
+@SuppressWarnings({"SynchronizeOnNonFinalField", "SuspiciousNameCombination", "RedundantIfStatement"})
 final class DataStoreSQLite extends DataStore implements Listener {
 
 	// reference to main class
@@ -299,7 +299,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 					}
 				}
 				
-				Long elapsedTime = (System.nanoTime() - startTime);
+				long elapsedTime = (System.nanoTime() - startTime);
 				if (plugin.profile) {
 					if (count > 0) {
 						plugin.getLogger().info(count + " blocks inserted into " + getDisplayName() + " datastore in " 
@@ -468,7 +468,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 					}
 				}
 				
-				Long elapsedTime = (System.nanoTime() - startTime);
+				long elapsedTime = (System.nanoTime() - startTime);
 				if (plugin.profile) {
 					if (count > 0) {
 						plugin.getLogger().info(count + " blocks removed from " + getDisplayName() + " datastore in " 
@@ -568,7 +568,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 			Long startTime = System.nanoTime();
 			ResultSet rs = preparedStatement.executeQuery();
 
-			Long elapsedTime = System.nanoTime() - startTime;
+			long elapsedTime = System.nanoTime() - startTime;
 
 			int count = 0;
 			
@@ -713,7 +713,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		}
 		chunkCache.remove(chunk.getBlock(0, 0, 0).getLocation());
 		
-		Long elapsedTime = (System.nanoTime() - startTime);
+		long elapsedTime = (System.nanoTime() - startTime);
 		if (plugin.profile) {
 			if (count > 0) {
 				plugin.getLogger().info(count + " blocks removed from cache in " 

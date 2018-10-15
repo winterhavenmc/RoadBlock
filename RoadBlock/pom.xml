@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.winterhaven-mc</groupId>
   <artifactId>RoadBlock</artifactId>
-  <version>1.0.4</version>
+  <version>1.13.1</version>
   <name>RoadBlock</name>
 
 	<properties>
@@ -25,21 +25,7 @@
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/*</include>
-				</includes>
-				<excludes>
-					<exclude>config.yml</exclude>
-					<exclude>plugin.yml</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
-				<includes>
-					<include>config.yml</include>
-					<include>plugin.yml</include>
-				</includes>
 			</resource>
 		</resources>
 
@@ -48,8 +34,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 
@@ -57,7 +43,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.3</version>
+				<version>2.4.3</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -68,7 +54,6 @@
 							<minimizeJar>true</minimizeJar>
 							<artifactSet>
 								<includes>
-									<include>com.winterhaven-mc:config-accessor-lib</include>
 									<include>com.winterhaven-mc:string-util-lib</include>
 									<include>com.winterhaven-mc:world-manager-lib</include>
 									<include>com.winterhaven-mc:language-manager-lib</include>
@@ -163,36 +148,41 @@
 	</repositories>
 
 	<dependencies>
+
+		<!-- Bukkit -->
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.11.2-R0.1-SNAPSHOT</version>
+			<version>1.13.1-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- StringUtilLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>string-util-lib</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.2</version>
 		</dependency>
-		<dependency>
-			<groupId>com.winterhaven-mc</groupId>
-			<artifactId>config-accessor-lib</artifactId>
-			<version>1.0.0</version>
-		</dependency>
+
+		<!-- WorldManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>world-manager-lib</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
+
+		<!-- LanguageManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>language-manager-lib</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.3</version>
 		</dependency>
+
+		<!-- SoundManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>sound-manager-lib</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.5</version>
 		</dependency>
 	</dependencies>
 </project>

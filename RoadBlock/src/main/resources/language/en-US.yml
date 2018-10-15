@@ -123,6 +123,11 @@ TOOL_FAIL_USE_SHIFT_CLICK:
   repeat-delay: 5
   text: '&8[&eRoadBlock&8] &7You must shift-click to use a %TOOL_NAME%.'
 
+TOOL_FAIL_DISTANCE_EXCEEDED:
+  enabled: true
+  repeat-delay: 5
+  text: '&8[&eRoadBlock&8] &7Clicked block is too far away!'
+
 
 ################
 # Other messages

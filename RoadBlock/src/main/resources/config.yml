@@ -14,7 +14,7 @@ disabled-worlds:
   - disabled_world2
 
 # RoadBlock tool material - customize name and lore in messages file
-tool-material: GOLD_PICKAXE
+tool-material: GOLDEN_PICKAXE
 
 # Highlight material for protected blocks
 protect-material: EMERALD_BLOCK

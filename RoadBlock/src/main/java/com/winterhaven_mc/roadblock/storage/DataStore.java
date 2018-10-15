@@ -17,7 +17,7 @@ public abstract class DataStore {
 
 	/**
 	 * Initialize storage
-	 * @throws Exception
+	 * @throws Exception initialization failed
 	 */
 	abstract void initialize() throws Exception;
 	
@@ -94,6 +94,7 @@ public abstract class DataStore {
 	/**
 	 * Delete datastore
 	 */
+	@SuppressWarnings("UnusedReturnValue")
 	abstract boolean delete();
 	
 	/**

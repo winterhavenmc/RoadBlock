@@ -2,6 +2,7 @@ package com.winterhaven_mc.roadblock.commands;
 
 import com.winterhaven_mc.roadblock.PluginMain;
 import com.winterhaven_mc.roadblock.highlights.HighlightStyle;
+import com.winterhaven_mc.roadblock.messages.MessageId;
 import com.winterhaven_mc.roadblock.storage.DataStoreFactory;
 import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
 import org.bukkit.ChatColor;
@@ -17,17 +18,17 @@ import java.util.Set;
 
 
 public final class CommandManager implements CommandExecutor {
-	
+
 	private final PluginMain plugin;
 
-	
+
 	/**
 	 * Class constructor
 	 * @param plugin reference to main class
 	 */
 	public CommandManager(final PluginMain plugin) {
-		
-		this.plugin = plugin;		
+
+		this.plugin = plugin;
 		plugin.getCommand("roadblock").setExecutor(this);
 	}
 
@@ -41,29 +42,26 @@ public final class CommandManager implements CommandExecutor {
 
 		// check min arguments
 		if (args.length < minArgs) {
-			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_ARGS_COUNT_UNDER");
+			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER);
 			plugin.soundManager.playerSound(sender, "COMMAND_FAIL");
 			return false;
 		}
 
 		// check max arguments
 		if (args.length > maxArgs) {
-			plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_ARGS_COUNT_OVER");
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
 			plugin.soundManager.playerSound(sender, "COMMAND_FAIL");
 			return false;
 		}
-		
-		String subcommand = "status";
-		
-		if (args.length > 0) {
-			subcommand = args[0];
-		}
-		
+
+		// get subcommand
+		String subcommand = args[0];
+
 		// status command
 		if (subcommand.equalsIgnoreCase("status")) {			
 			return statusCommand(sender,args);
 		}
-		
+
 		// reload command
 		if (subcommand.equalsIgnoreCase("reload")) {
 			return reloadCommand(sender,args);
@@ -78,23 +76,23 @@ public final class CommandManager implements CommandExecutor {
 		if (subcommand.equalsIgnoreCase("tool")) {
 			return toolCommand(sender,args);
 		}
-		
-		plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_INVALID_COMMAND");
+
+		plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND);
 		plugin.soundManager.playerSound(sender, "COMMAND_FAIL");
 		return false;
 	}
-	
-	
+
+
 	/**
 	 * Display plugin status
 	 * @param sender the command sender
 	 * @return always returns {@code true}, to prevent usage message
 	 */
 	private boolean statusCommand(final CommandSender sender, String[] args) {
-		
+
 		// check that sender has permission for status command
 		if (!sender.hasPermission("roadblock.status")) {
-			plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_STATUS_PERMISSION");
+			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_STATUS_PERMISSION);
 			plugin.soundManager.playerSound(sender, "COMMAND_FAIL");
 		}
 
@@ -103,7 +101,7 @@ public final class CommandManager implements CommandExecutor {
 
 		// check max arguments
 		if (args.length > maxArgs) {
-			plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_ARGS_COUNT_OVER");
+			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
 			plugin.soundManager.playerSound(sender, "COMMAND_FAIL");
 			return false;
 		}
@@ -112,11 +110,11 @@ public final class CommandManager implements CommandExecutor {
 		sender.sendMessage(ChatColor.DARK_GRAY + "[" 
 				+ ChatColor.YELLOW + plugin.getName() + ChatColor.DARK_GRAY + "] " 
 				+ ChatColor.AQUA + "Version: " + ChatColor.RESET + versionString);
-		
+
 		if (plugin.debug) {
 			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: true");
 		}
-		
+
 		if (plugin.profile) {
 			sender.sendMessage(ChatColor.DARK_RED + "PROFILE: true");
 		}
@@ -148,18 +146,18 @@ public final class CommandManager implements CommandExecutor {
 				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());
 		return true;
 	}
-	
-	
+
+
 	/**
 	 * Reload configuration
 	 * @param sender the command sender
 	 * @return always returns {@code true}, to prevent usage message
 	 */
 	private boolean reloadCommand(final CommandSender sender, String[] args) {
-		
+
 		// check that sender has permission for reload command
 		if (!sender.hasPermission("roadblock.reload")) {
-			plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_RELOAD_PERMISSION");
+			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_RELOAD_PERMISSION);
 			plugin.soundManager.playerSound(sender, "COMMAND_FAIL");
 			return true;
 		}
@@ -169,40 +167,40 @@ public final class CommandManager implements CommandExecutor {
 
 		// check max arguments
 		if (args.length > maxArgs) {
-			plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_ARGS_COUNT_OVER");
+			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
 			plugin.soundManager.playerSound(sender, "COMMAND_FAIL");
 			return false;
 		}
 
 		// re-install config file if necessary
 		plugin.saveDefaultConfig();
-		
+
 		// reload config file
 		plugin.reloadConfig();
-		
+
 		// update debug field
 		plugin.debug = plugin.getConfig().getBoolean("debug");
-		
+
 		// update profile field
 		plugin.profile = plugin.getConfig().getBoolean("profile");
-		
+
 		// update road block materials list
 		plugin.blockManager.updateMaterials();
-		
+
 		// reload messages
 		plugin.messageManager.reload();
 
 		// reload sounds
 		plugin.soundManager.reload();
-		
+
 		// reload enabled worlds
 		plugin.worldManager.reload();
-		
+
 		// reload datastore
 		DataStoreFactory.reload();
-		
+
 		// send player success message
-		plugin.messageManager.sendPlayerMessage(sender, "COMMAND_SUCCESS_RELOAD");
+		plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_SUCCESS_RELOAD);
 		return true;
 	}
 
@@ -217,7 +215,7 @@ public final class CommandManager implements CommandExecutor {
 
 		// sender must be player
 		if (!(sender instanceof Player)) {
-			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_CONSOLE");
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_CONSOLE);
 			return true;
 		}
 
@@ -226,7 +224,7 @@ public final class CommandManager implements CommandExecutor {
 
 		// check player permissions
 		if (!player.hasPermission("roadblock.show")) {
-			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_SHOW_PERMISSION");
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_SHOW_PERMISSION);
 			plugin.soundManager.playerSound(player, "COMMAND_FAIL");
 			return true;
 		}
@@ -241,7 +239,7 @@ public final class CommandManager implements CommandExecutor {
 			}
 			catch (NumberFormatException nfe) {
 				// send player integer parse error message and return
-				plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_SET_INVALID_INTEGER");
+				plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_SET_INVALID_INTEGER);
 				plugin.soundManager.playerSound(sender, "COMMAND_FAIL");
 
 				player.sendMessage("§6/roadblock show <distance>");
@@ -256,7 +254,7 @@ public final class CommandManager implements CommandExecutor {
 		plugin.highlightManager.highlightBlocks(player, locations, HighlightStyle.PROTECT);
 
 		// send player success message
-		plugin.messageManager.sendPlayerMessage(player,"COMMAND_SUCCESS_SHOW", locations.size());
+		plugin.messageManager.sendPlayerMessage(player, MessageId.COMMAND_SUCCESS_SHOW, locations.size());
 		plugin.soundManager.playerSound(player, "COMMAND_SUCCESS_SHOW");
 
 		return true;
@@ -269,19 +267,19 @@ public final class CommandManager implements CommandExecutor {
 	 * @return always returns {@code true}, to prevent usage message
      */
 	private boolean toolCommand(final CommandSender sender, String[] args) {
-		
+
 		// sender must be player
 		if (!(sender instanceof Player)) {
-			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_CONSOLE");
+			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_CONSOLE);
 			return true;
 		}
-		
+
 		// get player from sender
 		final Player player = (Player) sender;
-		
+
 		// check player permissions
 		if (!player.hasPermission("roadblock.tool")) {
-			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_TOOL_PERMISSION");
+			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_TOOL_PERMISSION);
 			plugin.soundManager.playerSound(player, "COMMAND_FAIL");
 			return true;
 		}
@@ -291,23 +289,23 @@ public final class CommandManager implements CommandExecutor {
 
 		// check max arguments
 		if (args.length > maxArgs) {
-			plugin.messageManager.sendPlayerMessage(sender, "COMMAND_FAIL_ARGS_COUNT_OVER");
+			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
 			plugin.soundManager.playerSound(sender, "COMMAND_FAIL");
 			return false;
 		}
 
 		// create road block tool itemStack
 		final ItemStack rbTool = RoadBlockTool.create();
-		
+
 		// put tool in player's inventory
 		final HashMap<Integer,ItemStack> noFit = player.getInventory().addItem(rbTool);
-		
+
 		if (!noFit.isEmpty()) {
-			plugin.messageManager.sendPlayerMessage(sender,"COMMAND_FAIL_TOOL_INVENTORY_FULL");
+			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_TOOL_INVENTORY_FULL);
 			plugin.soundManager.playerSound(player, "COMMAND_FAIL");
 			return true;
 		}
-		
+
 		// play success sound
 		plugin.soundManager.playerSound(player, "COMMAND_SUCCESS_TOOL");
 		return true;

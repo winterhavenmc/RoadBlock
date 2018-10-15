@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+
 public final class HighlightManager {
 
 	// reference to main class
@@ -165,11 +166,13 @@ public final class HighlightManager {
 		return pendingRemoveTask.get(player.getUniqueId());
 	}
 
+
 	final void setPendingRemoveTask(final Player player, final BukkitTask task) {
 		pendingRemoveTask.put(player.getUniqueId(), task);
 		
 	}
 	
+
 	final void unsetPendingRemoveTask(final Player player) {
 		pendingRemoveTask.remove(player.getUniqueId());
 	}

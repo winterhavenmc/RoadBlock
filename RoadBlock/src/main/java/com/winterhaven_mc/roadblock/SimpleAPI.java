@@ -26,30 +26,6 @@ public final class SimpleAPI {
 
 
 	/**
-	 * Check if location is within 5 blocks above a road block
-	 * @param location the location to check road block proximity
-	 * @return {@code true} if block is 5 blocks or less above a road block, else {@code false}
-	 */
-	@Deprecated
-	public static boolean isRoadBelow(final Location location) {
-		int maxDepth = 5;
-		return PluginMain.instance.blockManager.isAboveRoad(location, maxDepth);
-	}
-
-
-	/**
-	 * Check if location is within maxDepth blocks of a road block
-	 * @param location the location to test
-	 * @param maxDepth the number of blocks above a road block to consider
-	 * @return {@code true} if block is within {@code maxDepth} above a road block, else {@code false}
-	 */
-	@Deprecated
-	public static boolean isRoadBelow(final Location location, final int maxDepth) {
-		return PluginMain.instance.blockManager.isAboveRoad(location, maxDepth);
-	}
-
-
-	/**
 	 * Check if player location is within configured on-road-height distance above a road block
 	 * @param player the player to check for road block proximity
 	 * @return {@code true} if player is configured height or less above a road block, else {@code false}

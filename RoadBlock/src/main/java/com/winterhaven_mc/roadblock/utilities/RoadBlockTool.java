@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+
 public final class RoadBlockTool {
 	
 	private final static PluginMain plugin = PluginMain.instance;
@@ -19,7 +20,7 @@ public final class RoadBlockTool {
 			Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
 					Material.AIR,
 					Material.SNOW,
-					Material.LONG_GRASS
+					Material.TALL_GRASS
 				)));
 	
 	
@@ -34,7 +35,7 @@ public final class RoadBlockTool {
 		
 		// if no matching material found, use default GOLD_PICKAXE
 		if (material == null) {
-			material = Material.GOLD_PICKAXE;
+			material = Material.GOLDEN_PICKAXE;
 		}
 		// create item stack of configured tool material
 		final ItemStack itemStack = new ItemStack(material);
@@ -79,11 +80,12 @@ public final class RoadBlockTool {
 		}
 
 		// if player item does not have configured tool display name, return false
+		//noinspection RedundantIfStatement
 		if (!itemStack.hasItemMeta() ||
 				!itemStack.getItemMeta().getDisplayName().equals(plugin.messageManager.getToolName())) {
 			return false;
 		}
-		
+
 		// return true
 		return true;
 	}
