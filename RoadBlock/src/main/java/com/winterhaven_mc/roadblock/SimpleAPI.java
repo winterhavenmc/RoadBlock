@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+
 @SuppressWarnings({"unused", "WeakerAccess"})
 public final class SimpleAPI {
 	

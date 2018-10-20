@@ -126,7 +126,6 @@ public final class HighlightManager {
 	 * @param player the player for whom to remove highlights
 	 * @param locationSet a Collection of Location of block locations to remove highlight
 	 */
-	@SuppressWarnings("deprecation")
 	private void removeHighlight(final Player player, final Collection<Location> locationSet) {
 		
 		// iterate through all location in set
@@ -136,7 +135,7 @@ public final class HighlightManager {
 			Block block = location.getBlock();
 			
 			// send player block change with existing block type and data
-			player.sendBlockChange(location, block.getType(), block.getData());
+			player.sendBlockChange(location, block.getBlockData());
 		}
 	}
 
