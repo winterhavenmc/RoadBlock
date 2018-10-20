@@ -4,6 +4,7 @@ import org.bukkit.Material;
 
 import com.winterhaven_mc.roadblock.PluginMain;
 
+
 public enum HighlightStyle {
 
 	PROTECT(Material.EMERALD_BLOCK,"protect-material"),
@@ -24,6 +25,7 @@ public enum HighlightStyle {
 		this.defaultMaterial = defaultMaterial;
 		this.configString = configString;
 	}
+
 
 	final Material getMaterial() {
 
