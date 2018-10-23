@@ -17,7 +17,7 @@ import org.bukkit.command.CommandSender;
  */
 public final class MessageManager extends AbstractMessageManager {
 
-	// inherit constructor from super
+	// inherit constructor from super class
 	public MessageManager(PluginMain plugin) {
 		super(plugin);
 	}

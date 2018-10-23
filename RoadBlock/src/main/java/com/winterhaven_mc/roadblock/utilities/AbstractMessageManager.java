@@ -3,10 +3,11 @@ package com.winterhaven_mc.roadblock.utilities;
 import com.winterhaven_mc.roadblock.PluginMain;
 import com.winterhaven_mc.roadblock.messages.MessageId;
 import com.winterhaven_mc.util.LanguageManager;
+import com.winterhaven_mc.util.YamlLanguageManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Entity;
 
 import java.util.EnumMap;
@@ -28,7 +29,7 @@ public abstract class AbstractMessageManager {
 	private LanguageManager languageManager;
 
 	// configuration object for messages
-	private YamlConfiguration messages;
+	private Configuration messages;
 
 
 	/**
@@ -45,7 +46,7 @@ public abstract class AbstractMessageManager {
 		this.messageCooldownMap = new ConcurrentHashMap<>();
 
 		// instantiate language manager
-		this.languageManager = new LanguageManager(plugin);
+		this.languageManager = new YamlLanguageManager(plugin);
 
 		// load messages from file
 		this.messages = languageManager.loadMessages();
