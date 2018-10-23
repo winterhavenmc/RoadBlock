@@ -22,6 +22,13 @@ public final class MessageManager extends AbstractMessageManager {
 		super(plugin);
 	}
 
+
+	/**
+	 *  Send message to player
+	 *
+	 * @param recipient			player receiving message
+	 * @param messageId			message identifier in messages file
+	 */
 	public final void sendMessage(final CommandSender recipient,
 								  final MessageId messageId) {
 
@@ -29,6 +36,13 @@ public final class MessageManager extends AbstractMessageManager {
 	}
 
 
+	/**
+	 *  Send message to player
+	 *
+	 * @param recipient			player receiving message
+	 * @param messageId			message identifier in messages file
+	 * @param quantity			quantity
+	 */
 	public final void sendMessage(final CommandSender recipient,
 								  final MessageId messageId,
 								  final int quantity) {
@@ -36,7 +50,14 @@ public final class MessageManager extends AbstractMessageManager {
 		sendMessage(recipient, messageId, quantity, null);
 	}
 
-	
+
+	/**
+	 *  Send message to player
+	 *
+	 * @param recipient			player receiving message
+	 * @param messageId			message identifier in messages file
+	 * @param material			material type to be referenced in message
+	 */
 	public final void sendMessage(final CommandSender recipient,
 								  final MessageId messageId,
 								  final Material material) {

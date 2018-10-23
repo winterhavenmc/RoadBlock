@@ -69,4 +69,3 @@ BLOCK_PLACE_FAIL_ABOVE_ROAD:
     sound: ENTITY_VILLAGER_NO
     volume: 1
     pitch: 1
-
