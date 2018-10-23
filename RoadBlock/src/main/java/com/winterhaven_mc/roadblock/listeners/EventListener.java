@@ -36,14 +36,15 @@ public final class EventListener implements Listener {
 	// reference to main class
 	private final PluginMain plugin;
 	
-	// set entity target cancel reasons
+	// static set of entity target cancel reasons
 	private static final Set<EntityTargetEvent.TargetReason> cancelReasons =
 			Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
 					EntityTargetEvent.TargetReason.CLOSEST_PLAYER,
 					EntityTargetEvent.TargetReason.RANDOM_TARGET,
 					EntityTargetEvent.TargetReason.UNKNOWN
 			)));
-	
+
+
 	/**
 	 * constructor method for {@code EventListener} class
 	 * @param	plugin		A reference to this plugin's main class
@@ -58,6 +59,10 @@ public final class EventListener implements Listener {
 	}
 
 
+	/**
+	 * Event handler for PlayerInteractEvent handles blocks clicked with RoadBlock tool
+	 * @param event the event handled by this method
+	 */
 	@EventHandler
 	final void onPlayerInteract(final PlayerInteractEvent event) {
 		
@@ -159,9 +164,8 @@ public final class EventListener implements Listener {
 
 
 	/**
-	 * Event handler for BlockPlaceEvent<br>
-	 *     prevent placing blocks on top of road blocks
-	 * @param event event handled by this method
+	 * Event handler for BlockPlaceEvent prevent placing blocks on top of road blocks
+	 * @param event the event handled by this method
 	 */
 	@EventHandler
 	final void onBlockPlace(final BlockPlaceEvent event) {
@@ -198,9 +202,8 @@ public final class EventListener implements Listener {
 
 
 	/**
-	 * Event handler for BlockMultiPlaceEvent<br>
-	 *     prevent placing blocks on top of road blocks
-	 * @param event event handled by this method
+	 * Event handler for BlockMultiPlaceEvent prevents placing blocks on top of road blocks
+	 * @param event the event handled by this method
 	 */
 	@EventHandler
 	final void onBlockMultiPlace(final BlockMultiPlaceEvent event) {
@@ -252,8 +255,8 @@ public final class EventListener implements Listener {
 
 
 	/**
-	 * Event handler for PlayerGameModeChangeEvent<br>
-	 * Unhighlight blocks when player changes gamemode
+	 * Event handler for PlayerGameModeChangeEvent;
+	 *   Unhighlights blocks when player changes gamemode
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
@@ -263,7 +266,8 @@ public final class EventListener implements Listener {
 
 
 	/**
-	 * Item drop event handler
+	 * Event handler for PlayerDropItemEvent;
+	 *   removes custom tool from game when dropped
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
@@ -291,8 +295,7 @@ public final class EventListener implements Listener {
 
 
 	/**
-	 * Event listener for PlayerQuitEvent<br>
-	 * Remove player from highlighted blocks hashmap
+	 * Event handler for PlayerQuitEvent; removes player from highlighted blocks hashmap
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
@@ -304,7 +307,8 @@ public final class EventListener implements Listener {
 
 
 	/**
-	 * Event listener for BlockBreakEvent
+	 * Event handler for BlockBreakEvent;
+	 * prevents breaking protected road blocks
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
@@ -339,8 +343,8 @@ public final class EventListener implements Listener {
 	
 	
 	/**
-	 * Event listener for BlockExplodeEvent
-	 * Prevent road blocks from being exploded by block explosions
+	 * Event handler for BlockExplodeEvent;
+	 * prevents road blocks from being destroyed by block explosions
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
@@ -364,8 +368,8 @@ public final class EventListener implements Listener {
 
 	
 	/**
-	 * Event listener for EntityExplodeEvent<br>
-	 * Prevent road blocks from being exploded by entity explosions
+	 * Event handler for EntityExplodeEvent;
+	 *   prevents road blocks from being destroyed by entity explosions
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
@@ -389,8 +393,8 @@ public final class EventListener implements Listener {
 	
 	
 	/**
-	 * Event listener for EntityChangeBlockEvent<br>
-	 * Stop entities from changing road blocks
+	 * Event handler for EntityChangeBlockEvent;
+	 * stops entities from changing road blocks
 	 */
 	@EventHandler
 	final void onEntityChangeBlock(final EntityChangeBlockEvent event) {
@@ -408,9 +412,9 @@ public final class EventListener implements Listener {
 
 
 	/**
-	 * Event listener for EntityTargetLivingEntityEvent<br>
-	 *     Cancel players being targeted by mobs if they are within configured height above a road block
-	 *     and mob is further away than configured target-distance
+	 * Event handler for EntityTargetLivingEntityEvent;
+	 *   Cancels players being targeted by mobs if they are within configured height above a road block
+	 *   and mob is further away than configured target-distance
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
@@ -457,8 +461,8 @@ public final class EventListener implements Listener {
 	
 
 	/**
-	 * Piston extend event handler<br>
-	 * Prevent extending pistons from effecting road blocks
+	 * Event handler for BlockPistonExtendEvent;
+	 * prevents extending pistons from effecting road blocks
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
@@ -487,8 +491,8 @@ public final class EventListener implements Listener {
 
 	
 	/**
-	 * Piston extend event handler<br>
-	 * Prevent extending pistons from effecting death chests
+	 * Event handler for BlockPistonRetractEvent;
+	 *   Prevents retracting pistons from effecting road blocks
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
@@ -516,6 +520,11 @@ public final class EventListener implements Listener {
 	}
 
 
+	/**
+	 * Event handler for BlockFormEvent;
+	 *   prevents snow from forming on road blocks (if configured)
+	 * @param event the event handled by this method
+	 */
 	@EventHandler
 	final void onBlockForm(final BlockFormEvent event) {
 
