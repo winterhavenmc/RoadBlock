@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -55,10 +54,10 @@ public abstract class AbstractMessageManager {
 
 	/**
 	 * Add entry to message cooldown map
-	 * @param player the player whose uuid will be added as a key to the cooldown map
+	 * @param entity the entity whose uuid will be added as a key to the cooldown map
 	 * @param messageId the message id to use as a key in the cooldown map
 	 */
-	private void putMessageCooldown(final Player player, final MessageId messageId) {
+	private void putMessageCooldown(final Entity entity, final MessageId messageId) {
 
 		// create new EnumMap with MessageId as key type
 		EnumMap<MessageId,Long> tempMap = new EnumMap<>(MessageId.class);
@@ -67,26 +66,26 @@ public abstract class AbstractMessageManager {
 		tempMap.put(messageId, System.currentTimeMillis());
 
 		// put EnumMap in cooldown map with PlayerUUID as key
-		messageCooldownMap.put(player.getUniqueId(), tempMap);
+		messageCooldownMap.put(entity.getUniqueId(), tempMap);
 	}
 
 
 	/**
 	 * get entry from message cooldown map
-	 * @param player the player for whom to retrieve cooldown time
+	 * @param entity the entity for whom to retrieve cooldown time
 	 * @param messageId the message identifier for which retrieve cooldown time
 	 * @return cooldown expire time
 	 */
-	private long getMessageCooldown(final Player player, final MessageId messageId) {
+	private long getMessageCooldown(final Entity entity, final MessageId messageId) {
 
-		// check if player is in message cooldown hashmap
-		if (messageCooldownMap.containsKey(player.getUniqueId())) {
+		// check if entity is in message cooldown hashmap
+		if (messageCooldownMap.containsKey(entity.getUniqueId())) {
 
-			// check if messageID is in player's cooldown hashmap
-			if (messageCooldownMap.get(player.getUniqueId()).containsKey(messageId)) {
+			// check if messageID is in entity's cooldown hashmap
+			if (messageCooldownMap.get(entity.getUniqueId()).containsKey(messageId)) {
 
 				// return cooldown time
-				return messageCooldownMap.get(player.getUniqueId()).get(messageId);
+				return messageCooldownMap.get(entity.getUniqueId()).get(messageId);
 			}
 		}
 		return 0L;
@@ -141,14 +140,14 @@ public abstract class AbstractMessageManager {
 
 	protected boolean isCooled(CommandSender recipient, MessageId messageId) {
 
-		// if recipient is a player...
-		if (recipient instanceof Player) {
+		// if recipient is entity...
+		if (recipient instanceof Entity) {
 
-			// cast sender to Player
-			Player player = (Player) recipient;
+			// cast sender to Entity
+			Entity entity = (Entity) recipient;
 
 			// get message cooldown time remaining
-			long lastDisplayed = getMessageCooldown(player, messageId);
+			long lastDisplayed = getMessageCooldown(entity, messageId);
 
 			// get message repeat delay
 			long messageRepeatDelay = getRepeatDelay(messageId);
@@ -160,7 +159,7 @@ public abstract class AbstractMessageManager {
 
 			// if repeat delay value is greater than zero, add entry to messageCooldownMap
 			if (messageRepeatDelay > 0) {
-				putMessageCooldown(player, messageId);
+				putMessageCooldown(entity, messageId);
 			}
 		}
 		return true;
