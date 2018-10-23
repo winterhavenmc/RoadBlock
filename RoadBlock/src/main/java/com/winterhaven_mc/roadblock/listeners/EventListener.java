@@ -183,7 +183,7 @@ public final class EventListener implements Listener {
 		// check if block below placed block is protected grass path, to prevent converting to regular dirt
 		if (placedBlock.getRelative(BlockFace.DOWN).getType().equals(Material.GRASS_PATH)) {
 			event.setCancelled(true);
-			plugin.messageManager.sendMessage(player, MessageId.PLACE_BLOCK_FAIL_GRASS_PATH);
+			plugin.messageManager.sendMessage(player, MessageId.BLOCK_PLACE_FAIL_GRASS_PATH);
 			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_GRASS_PATH);
 			return;
 		}
@@ -191,7 +191,7 @@ public final class EventListener implements Listener {
 		// check if block placed is configured distance above a road block
 		if (plugin.blockManager.isAboveRoad(placedBlock.getLocation(),height)) {
 			event.setCancelled(true);
-			plugin.messageManager.sendMessage(player, MessageId.PLACE_BLOCK_FAIL_ABOVE_ROAD);
+			plugin.messageManager.sendMessage(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD);
 			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_ABOVE_ROAD);
 		}
 	}
@@ -225,7 +225,7 @@ public final class EventListener implements Listener {
 			// if block is above a road block, cancel event and send player message
 			if (plugin.blockManager.isAboveRoad(blockState.getLocation(),height)) {
 				event.setCancelled(true);
-				plugin.messageManager.sendMessage(player, MessageId.PLACE_BLOCK_FAIL_ABOVE_ROAD);
+				plugin.messageManager.sendMessage(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD);
 				plugin.soundConfig.playSound(player,SoundId.BLOCK_PLACE_FAIL_ABOVE_ROAD);
 				break;
 			}

@@ -139,12 +139,12 @@ messages:
   ################
   # Other messages
   ################
-  PLACE_BLOCK_FAIL_GRASS_PATH:
+  BLOCK_PLACE_FAIL_GRASS_PATH:
     enabled: true
     repeat-delay: 1
     string: '&8[&eRoadBlock&8] &cYou cannot place blocks on top of protected grass path blocks.'
 
-  PLACE_BLOCK_FAIL_ABOVE_ROAD:
+  BLOCK_PLACE_FAIL_ABOVE_ROAD:
     enabled: true
     repeat-delay: 1
     string: '&8[&eRoadBlock&8] &cYou cannot place blocks over protected road blocks.'
