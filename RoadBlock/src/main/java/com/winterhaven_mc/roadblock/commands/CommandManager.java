@@ -43,14 +43,14 @@ public final class CommandManager implements CommandExecutor {
 
 		// check min arguments
 		if (args.length < minArgs) {
-			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER);
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return false;
 		}
 
 		// check max arguments
 		if (args.length > maxArgs) {
-			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
+			plugin.messageManager.sendMessage(sender,MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return false;
 		}
@@ -78,7 +78,7 @@ public final class CommandManager implements CommandExecutor {
 			return toolCommand(sender,args);
 		}
 
-		plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND);
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND);
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 		return false;
 	}
@@ -93,7 +93,7 @@ public final class CommandManager implements CommandExecutor {
 
 		// check that sender has permission for status command
 		if (!sender.hasPermission("roadblock.status")) {
-			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_STATUS_PERMISSION);
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_STATUS_PERMISSION);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 		}
 
@@ -102,7 +102,7 @@ public final class CommandManager implements CommandExecutor {
 
 		// check max arguments
 		if (args.length > maxArgs) {
-			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return false;
 		}
@@ -158,7 +158,7 @@ public final class CommandManager implements CommandExecutor {
 
 		// check that sender has permission for reload command
 		if (!sender.hasPermission("roadblock.reload")) {
-			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_RELOAD_PERMISSION);
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_RELOAD_PERMISSION);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -168,7 +168,7 @@ public final class CommandManager implements CommandExecutor {
 
 		// check max arguments
 		if (args.length > maxArgs) {
-			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return false;
 		}
@@ -201,7 +201,7 @@ public final class CommandManager implements CommandExecutor {
 		DataStoreFactory.reload();
 
 		// send player success message
-		plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_SUCCESS_RELOAD);
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_RELOAD);
 		return true;
 	}
 
@@ -216,7 +216,7 @@ public final class CommandManager implements CommandExecutor {
 
 		// sender must be player
 		if (!(sender instanceof Player)) {
-			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_CONSOLE);
+			plugin.messageManager.sendMessage(sender,MessageId.COMMAND_FAIL_CONSOLE);
 			return true;
 		}
 
@@ -225,7 +225,7 @@ public final class CommandManager implements CommandExecutor {
 
 		// check player permissions
 		if (!player.hasPermission("roadblock.show")) {
-			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_SHOW_PERMISSION);
+			plugin.messageManager.sendMessage(sender,MessageId.COMMAND_FAIL_SHOW_PERMISSION);
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -240,7 +240,7 @@ public final class CommandManager implements CommandExecutor {
 			}
 			catch (NumberFormatException nfe) {
 				// send player integer parse error message and return
-				plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_SET_INVALID_INTEGER);
+				plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_SET_INVALID_INTEGER);
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 
 				player.sendMessage("§6/roadblock show <distance>");
@@ -255,7 +255,7 @@ public final class CommandManager implements CommandExecutor {
 		plugin.highlightManager.highlightBlocks(player, locations, HighlightStyle.PROTECT);
 
 		// send player success message
-		plugin.messageManager.sendPlayerMessage(player, MessageId.COMMAND_SUCCESS_SHOW, locations.size());
+		plugin.messageManager.sendMessage(player, MessageId.COMMAND_SUCCESS_SHOW, locations.size());
 		plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_SHOW);
 
 		return true;
@@ -271,7 +271,7 @@ public final class CommandManager implements CommandExecutor {
 
 		// sender must be player
 		if (!(sender instanceof Player)) {
-			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_CONSOLE);
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_CONSOLE);
 			return true;
 		}
 
@@ -280,7 +280,7 @@ public final class CommandManager implements CommandExecutor {
 
 		// check player permissions
 		if (!player.hasPermission("roadblock.tool")) {
-			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_TOOL_PERMISSION);
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_TOOL_PERMISSION);
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -290,7 +290,7 @@ public final class CommandManager implements CommandExecutor {
 
 		// check max arguments
 		if (args.length > maxArgs) {
-			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return false;
 		}
@@ -302,7 +302,7 @@ public final class CommandManager implements CommandExecutor {
 		final HashMap<Integer,ItemStack> noFit = player.getInventory().addItem(rbTool);
 
 		if (!noFit.isEmpty()) {
-			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_TOOL_INVENTORY_FULL);
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_TOOL_INVENTORY_FULL);
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
