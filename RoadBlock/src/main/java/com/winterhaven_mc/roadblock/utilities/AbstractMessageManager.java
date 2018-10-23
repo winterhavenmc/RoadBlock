@@ -123,6 +123,11 @@ public abstract class AbstractMessageManager {
 	}
 
 
+	/**
+	 * get current world name of message recipient
+	 * @param recipient player to fetch world name
+	 * @return String containing recipient world name
+	 */
 	protected String getWorldName(CommandSender recipient) {
 
 		// get default world name
@@ -139,12 +144,18 @@ public abstract class AbstractMessageManager {
 	}
 
 
+	/**
+	 * check if player message is in cooldown map
+	 * @param recipient player being sent message
+	 * @param messageId message id of message being sent
+	 * @return true if player message is not in cooldown map, false if it is
+	 */
 	protected boolean isCooled(CommandSender recipient, MessageId messageId) {
 
 		// if recipient is entity...
 		if (recipient instanceof Entity) {
 
-			// cast sender to Entity
+			// cast recipient to Entity
 			Entity entity = (Entity) recipient;
 
 			// get message cooldown time remaining
@@ -215,6 +226,10 @@ public abstract class AbstractMessageManager {
 
 	/**
 	 * replace substrings within string.
+	 * @param s string to perform replacements on
+	 * @param sub substring to replace
+	 * @param with replacement string
+	 * @return modified string
 	 */
 	@SuppressWarnings("StringBufferMayBeStringBuilder")
 	protected static String replace(final String s, final String sub, final String with) {
