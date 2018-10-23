@@ -3,7 +3,7 @@ package com.winterhaven_mc.roadblock.highlights;
 import com.winterhaven_mc.roadblock.PluginMain;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -109,14 +109,16 @@ public final class HighlightManager {
 	 * @param locationSet a Collection of Location of block locations to highlight
 	 * @param material the material type to use as a highlight
 	 */
-	@SuppressWarnings("deprecation")
 	final void showHighlight(final Player player, final Collection<Location> locationSet, final Material material) {
 		
 		// iterate through all location in set
 		for (Location location : locationSet) {
-	
+
+			// create block data with passed material
+			BlockData blockData = plugin.getServer().createBlockData(material);
+
 			// send player block change with highlight material
-			player.sendBlockChange(location, material, (byte) 0);
+			player.sendBlockChange(location, blockData);
 		}
 	}
 
@@ -126,16 +128,17 @@ public final class HighlightManager {
 	 * @param player the player for whom to remove highlights
 	 * @param locationSet a Collection of Location of block locations to remove highlight
 	 */
-	private void removeHighlight(final Player player, final Collection<Location> locationSet) {
+	@SuppressWarnings("WeakerAccess")
+	final void removeHighlight(final Player player, final Collection<Location> locationSet) {
 		
 		// iterate through all location in set
 		for (Location location : locationSet) {
 	
-			// get block at location
-			Block block = location.getBlock();
+			// get block data at location
+			BlockData blockData = location.getBlock().getBlockData();
 			
 			// send player block change with existing block type and data
-			player.sendBlockChange(location, block.getBlockData());
+			player.sendBlockChange(location, blockData);
 		}
 	}
 
