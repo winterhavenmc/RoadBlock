@@ -22,15 +22,8 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.13.1-R0.1-SNAPSHOT</version>
+			<version>1.13.2-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
-		</dependency>
-
-		<!-- StringUtilLib -->
-		<dependency>
-			<groupId>com.winterhaven-mc</groupId>
-			<artifactId>string-util-lib</artifactId>
-			<version>1.0.5</version>
 		</dependency>
 
 		<!-- WorldManagerLib -->
@@ -88,7 +81,6 @@
 							<minimizeJar>true</minimizeJar>
 							<artifactSet>
 								<includes>
-									<include>com.winterhaven-mc:string-util-lib</include>
 									<include>com.winterhaven-mc:world-manager-lib</include>
 									<include>com.winterhaven-mc:language-manager-lib</include>
 									<include>com.winterhaven-mc:sound-config-lib</include>
