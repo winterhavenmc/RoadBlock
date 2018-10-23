@@ -1,8 +1,14 @@
-# Tool Display Name
-TOOL_NAME: '&6RoadBlock Tool'
+# Configuration file for ${project.name} v${project.version}
 
-# Tool Lore
-TOOL_LORE:
+###########
+# Tool Info
+###########
+tool_info:
+  # Tool Display Name
+  TOOL_NAME: '&6RoadBlock Tool'
+
+  # Tool Lore
+  TOOL_LORE:
   - '&eUse to set'
   - '&eRoadBlock protection'
 
@@ -23,121 +29,122 @@ TOOL_LORE:
 ##################
 # Command Messages
 ##################
-COMMAND_SUCCESS_RELOAD:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &7Configuration reloaded.'
-
-COMMAND_SUCCESS_SHOW:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &7Highlighted %QUANTITY% nearby RoadBlocks.'
-
-COMMAND_FAIL_ARGS_COUNT_UNDER:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &cToo few arguments!'
-
-COMMAND_FAIL_ARGS_COUNT_OVER:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &cToo many arguments!'
-
-COMMAND_FAIL_CONSOLE:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &cYou must be in game to use this command!'
-
-COMMAND_FAIL_INVALID_COMMAND:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &cThat is not a valid command!'
-
-COMMAND_FAIL_INVALID_QUANTITY:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &cInvalid quantity!'
-
-COMMAND_FAIL_TOOL_INVENTORY_FULL:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &cCould not give %TOOL_NAME% because your inventory is full.'
-
-COMMAND_FAIL_TOOL_PERMISSION:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &cYou do not have permission to create a %TOOL_NAME%!'
-
-COMMAND_FAIL_HELP_PERMISSION:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &cYou do not have permission to view RoadBlock help!'
-
-COMMAND_FAIL_RELOAD_PERMISSION:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &cYou do not have permission to reload RoadBlock configuration!'
-
-COMMAND_FAIL_SHOW_PERMISSION:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &cYou do not have permission to highlight nearby RoadBlocks!'
-
-COMMAND_FAIL_STATUS_PERMISSION:
-  enabled: true
-  text: '&8[&eRoadBlock&8] &cYou do not have permission to view RoadBlock settings!'
-
-COMMAND_FAIL_SET_INVALID_INTEGER:
+messages:
+  COMMAND_SUCCESS_RELOAD:
     enabled: true
-    text: '&8[&eRoadBlock&8] &cValue must be an integer!'
+    string: '&8[&eRoadBlock&8] &7Configuration reloaded.'
+
+  COMMAND_SUCCESS_SHOW:
+    enabled: true
+    string: '&8[&eRoadBlock&8] &7Highlighted %QUANTITY% nearby RoadBlocks.'
+
+  COMMAND_FAIL_ARGS_COUNT_UNDER:
+    enabled: true
+    string: '&8[&eRoadBlock&8] &cToo few arguments!'
+
+  COMMAND_FAIL_ARGS_COUNT_OVER:
+    enabled: true
+    string: '&8[&eRoadBlock&8] &cToo many arguments!'
+
+  COMMAND_FAIL_CONSOLE:
+    enabled: true
+    string: '&8[&eRoadBlock&8] &cYou must be in game to use this command!'
+
+  COMMAND_FAIL_INVALID_COMMAND:
+    enabled: true
+    string: '&8[&eRoadBlock&8] &cThat is not a valid command!'
+
+  COMMAND_FAIL_INVALID_QUANTITY:
+    enabled: true
+    string: '&8[&eRoadBlock&8] &cInvalid quantity!'
+
+  COMMAND_FAIL_TOOL_INVENTORY_FULL:
+    enabled: true
+    string: '&8[&eRoadBlock&8] &cCould not give %TOOL_NAME% because your inventory is full.'
+
+  COMMAND_FAIL_TOOL_PERMISSION:
+    enabled: true
+    string: '&8[&eRoadBlock&8] &cYou do not have permission to create a %TOOL_NAME%!'
+
+  COMMAND_FAIL_HELP_PERMISSION:
+    enabled: true
+    string: '&8[&eRoadBlock&8] &cYou do not have permission to view RoadBlock help!'
+
+  COMMAND_FAIL_RELOAD_PERMISSION:
+    enabled: true
+    string: '&8[&eRoadBlock&8] &cYou do not have permission to reload RoadBlock configuration!'
+
+  COMMAND_FAIL_SHOW_PERMISSION:
+    enabled: true
+    string: '&8[&eRoadBlock&8] &cYou do not have permission to highlight nearby RoadBlocks!'
+
+  COMMAND_FAIL_STATUS_PERMISSION:
+    enabled: true
+    string: '&8[&eRoadBlock&8] &cYou do not have permission to view RoadBlock settings!'
+
+  COMMAND_FAIL_SET_INVALID_INTEGER:
+    enabled: true
+    string: '&8[&eRoadBlock&8] &cValue must be an integer!'
 
 
-###############
-# Tool Messages
-###############
-TOOL_SUCCESS_PROTECT:
-  enabled: true
-  repeat-delay: 1
-  text: '&8[&eRoadBlock&8] &7Protected %QUANTITY% blocks.'
+  ###############
+  # Tool Messages
+  ###############
+  TOOL_SUCCESS_PROTECT:
+    enabled: true
+    repeat-delay: 1
+    string: '&8[&eRoadBlock&8] &7Protected %QUANTITY% blocks.'
 
-TOOL_SUCCESS_UNPROTECT:
-  enabled: true
-  repeat-delay: 1
-  text: '&8[&eRoadBlock&8] &7Unprotected %QUANTITY% blocks.'
+  TOOL_SUCCESS_UNPROTECT:
+    enabled: true
+    repeat-delay: 1
+    string: '&8[&eRoadBlock&8] &7Unprotected %QUANTITY% blocks.'
 
-TOOL_SUCCESS_BREAK_BLOCK:
-  enabled: true
-  repeat-delay: 1
-  text: '&8[&eRoadBlock&8] &7Removed protection from block.'
+  TOOL_SUCCESS_BREAK_BLOCK:
+    enabled: true
+    repeat-delay: 1
+    string: '&8[&eRoadBlock&8] &7Removed protection from block.'
 
-TOOL_FAIL_WORLD_DISABLED:
-  enabled: true
-  repeat-delay: 1
-  text: '&8[&eRoadBlock&8] &cRoadBlocks are not enabled in world %WORLD_NAME%.'
+  TOOL_FAIL_WORLD_DISABLED:
+    enabled: true
+    repeat-delay: 1
+    string: '&8[&eRoadBlock&8] &cRoadBlocks are not enabled in world %WORLD_NAME%.'
 
-TOOL_FAIL_USE_PERMISSION:
-  enabled: true
-  repeat-delay: 1
-  text: '&8[&eRoadBlock&8] &cYou do not have permission to use a &b%TOOL_NAME%&r&3 in %WORLD_NAME%.'
+  TOOL_FAIL_USE_PERMISSION:
+    enabled: true
+    repeat-delay: 1
+    string: '&8[&eRoadBlock&8] &cYou do not have permission to use a &b%TOOL_NAME%&r&3 in %WORLD_NAME%.'
 
-TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION:
-  enabled: true
-  repeat-delay: 1
-  text: '&8[&eRoadBlock&8] &cYou do not have permission to break road blocks in %WORLD_NAME%.'
+  TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION:
+    enabled: true
+    repeat-delay: 1
+    string: '&8[&eRoadBlock&8] &cYou do not have permission to break road blocks in %WORLD_NAME%.'
 
-TOOL_FAIL_INVALID_MATERIAL:
-  enabled: true
-  repeat-delay: 1
-  text: '&8[&eRoadBlock&8] &cBlock type %MATERIAL% is not a valid RoadBlock material!'
+  TOOL_FAIL_INVALID_MATERIAL:
+    enabled: true
+    repeat-delay: 1
+    string: '&8[&eRoadBlock&8] &cBlock type %MATERIAL% is not a valid RoadBlock material!'
 
-TOOL_FAIL_USE_SHIFT_CLICK:
-  enabled: true
-  repeat-delay: 5
-  text: '&8[&eRoadBlock&8] &7You must shift-click to use a %TOOL_NAME%.'
+  TOOL_FAIL_USE_SHIFT_CLICK:
+    enabled: true
+    repeat-delay: 5
+    string: '&8[&eRoadBlock&8] &7You must shift-click to use a %TOOL_NAME%.'
 
-TOOL_FAIL_DISTANCE_EXCEEDED:
-  enabled: true
-  repeat-delay: 5
-  text: '&8[&eRoadBlock&8] &7Clicked block is too far away!'
+  TOOL_FAIL_DISTANCE_EXCEEDED:
+    enabled: true
+    repeat-delay: 5
+    string: '&8[&eRoadBlock&8] &7Clicked block is too far away!'
 
 
-################
-# Other messages
-################
-PLACE_BLOCK_FAIL_GRASS_PATH:
-  enabled: true
-  repeat-delay: 1
-  text: '&8[&eRoadBlock&8] &cYou cannot place blocks on top of protected grass path blocks.'
+  ################
+  # Other messages
+  ################
+  PLACE_BLOCK_FAIL_GRASS_PATH:
+    enabled: true
+    repeat-delay: 1
+    string: '&8[&eRoadBlock&8] &cYou cannot place blocks on top of protected grass path blocks.'
 
-PLACE_BLOCK_FAIL_ABOVE_ROAD:
-  enabled: true
-  repeat-delay: 1
-  text: '&8[&eRoadBlock&8] &cYou cannot place blocks over protected road blocks.'
+  PLACE_BLOCK_FAIL_ABOVE_ROAD:
+    enabled: true
+    repeat-delay: 1
+    string: '&8[&eRoadBlock&8] &cYou cannot place blocks over protected road blocks.'
