@@ -1,14 +1,14 @@
-# Configuration file for ${project.name} v${project.version}
+# Language configuration file for ${project.name} v${project.version}
 
 ###########
-# Tool Info
+# Item Info
 ###########
-tool_info:
-  # Tool Display Name
-  TOOL_NAME: '&6RoadBlock Tool'
+item_info:
+  # Item Display Name
+  ITEM_NAME: '&6RoadBlock Tool'
 
-  # Tool Lore
-  TOOL_LORE:
+  # Item Lore
+  ITEM_LORE:
   - '&eUse to set'
   - '&eRoadBlock protection'
 
