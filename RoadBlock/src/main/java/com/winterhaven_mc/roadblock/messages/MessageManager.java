@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -40,7 +39,7 @@ public final class MessageManager extends AbstractMessageManager {
 		Map<String,String> replacements = new HashMap<>();
 		replacements.put("%PLAYER_NAME%",recipient.getName());
 		replacements.put("%WORLD_NAME%",ChatColor.stripColor(getWorldName(recipient)));
-		replacements.put("%TOOL_NAME%", ChatColor.stripColor(getToolName()));
+		replacements.put("%TOOL_NAME%", ChatColor.stripColor(getItemName()));
 		replacements.put("%QUANTITY%","1");
 		replacements.put("%MATERIAL%","unknown");
 
@@ -110,41 +109,5 @@ public final class MessageManager extends AbstractMessageManager {
 		//noinspection unchecked
 		sendMessage(recipient, messageId, replacements);
 	}
-
-
-	/**
-	 * Get custom tool name from language file
-	 * @return the custom tool name string
-	 */
-	public final String getToolName() {
-
-		// get tool name from language file
-		String toolName = messages.getString("tool_info.TOOL_NAME");
-
-		// if fetching tool name failed, use plugin name
-		if (toolName == null) {
-			toolName = plugin.getName() + " Tool";
-		}
-
-		// replace alt color code character
-		toolName = ChatColor.translateAlternateColorCodes('&', toolName);
-		return toolName;
-	}
-
-
-	/**
-	 * Get custom tool lore from language file
-	 * @return the custom tool lore as a List of String
-	 */
-	public final List<String> getToolLore() {
-		List<String> lore = messages.getStringList("tool_info.TOOL_LORE");
-		int lineNumber = 0;
-		while (lineNumber < lore.size()) {
-			lore.set(lineNumber, ChatColor.translateAlternateColorCodes('&',lore.get(lineNumber)));
-			lineNumber++;
-		}
-		return lore;
-	}
-
 
 }
