@@ -7,9 +7,11 @@ import com.winterhaven_mc.roadblock.messages.MessageManager;
 import com.winterhaven_mc.roadblock.storage.BlockManager;
 import com.winterhaven_mc.roadblock.storage.DataStore;
 import com.winterhaven_mc.roadblock.storage.DataStoreFactory;
-import com.winterhaven_mc.util.SoundConfiguration;
+
 import com.winterhaven_mc.util.WorldManager;
+import com.winterhaven_mc.util.SoundConfiguration;
 import com.winterhaven_mc.util.YamlSoundConfiguration;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -35,7 +37,10 @@ public final class PluginMain extends JavaPlugin {
 		
 		// install default config.yml if not present  
 		saveDefaultConfig();
-		
+
+		// get initialized destination storage object
+		dataStore = DataStoreFactory.create();
+
 		// instantiate world manager
 		worldManager = new WorldManager(this);
 		
@@ -45,9 +50,6 @@ public final class PluginMain extends JavaPlugin {
 		// instantiate sound configuration
 		soundConfig = new YamlSoundConfiguration(this);
 
-		// get initialized destination storage object
-		dataStore = DataStoreFactory.create();
-		
 		// instantiate block manager
 		blockManager = new BlockManager(this);
 		
