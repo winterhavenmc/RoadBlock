@@ -1,10 +1,11 @@
 package com.winterhaven_mc.roadblock.messages;
 
 import com.winterhaven_mc.roadblock.PluginMain;
+import com.winterhaven_mc.util.AbstractMessageManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import util.AbstractMessageManager;
 
 import java.util.HashMap;
 import java.util.List;
