@@ -94,20 +94,20 @@ public final class SimpleAPI {
 
 
 	/**
-	 * Get tool name from language config file
+	 * Get item name from language config file
 	 * @return String - tool name as defined in language config file
 	 */
-	public static String getToolName() {
-		return PluginMain.instance.messageManager.getToolName();
+	public static String getItemName() {
+		return PluginMain.instance.messageManager.getItemName();
 	}
 
 
 	/**
-	 * Get tool lore from language config file
+	 * Get item lore from language config file
 	 * @return List of String - lines of tool lore as defined in language config file
 	 */
-	public static List<String> getToolLore() {
-		return PluginMain.instance.messageManager.getToolLore();
+	public static List getItemLore() {
+		return PluginMain.instance.messageManager.getItemLore();
 	}
 
 }
