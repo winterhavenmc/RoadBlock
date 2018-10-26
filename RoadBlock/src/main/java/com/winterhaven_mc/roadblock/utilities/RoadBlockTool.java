@@ -70,21 +70,22 @@ public final class RoadBlockTool {
 	 */
 	public static boolean isTool(final ItemStack itemStack) {
 		
-		// if passed item stack is null, return false
+		// if item stack is null, return false
 		if (itemStack == null) {
 			return false;
 		}
 		
-		// if player item does not have configured tool display name, return false
+		// if item stack does not have meta data, return false
 		if (!itemStack.hasItemMeta()) {
 			return false;
 		}
 
+		// if item stack display name does not match configured item name, return false
 		if (!(itemStack.getItemMeta().getDisplayName()).equals(plugin.messageManager.getItemName())) {
 			return false;
 		}
 
-		// if item stack is not configured tool-material, return false
+		// if item stack material does not match configured tool material, return false
 		//noinspection RedundantIfStatement
 		if (!itemStack.getType().equals(Material.matchMaterial(plugin.getConfig().getString("tool-material")))) {
 			return false;
