@@ -298,22 +298,6 @@ public final class EventListener implements Listener {
 
 
 	/**
-	 * Event handler for PlayerQuitEvent;
-	 *   removes player from highlighted blocks hashmap
-	 * @param event the event handled by this method
-	 */
-	@EventHandler
-	final void onPlayerQuit(final PlayerQuitEvent event) {
-		
-		// remove player from highlight map
-		plugin.highlightManager.removePlayerFromMap(event.getPlayer());
-
-		// remove player from message cooldown map
-		plugin.messageManager.removePlayerCooldown(event.getPlayer());
-	}
-
-
-	/**
 	 * Event handler for BlockBreakEvent;
 	 *   prevents breaking protected road blocks
 	 * @param event the event handled by this method

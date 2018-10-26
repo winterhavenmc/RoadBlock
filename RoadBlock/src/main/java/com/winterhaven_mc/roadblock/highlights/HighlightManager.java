@@ -5,6 +5,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collection;
@@ -14,7 +17,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public final class HighlightManager {
+public final class HighlightManager implements Listener {
 
 	// reference to main class
 	private final PluginMain plugin;
@@ -40,6 +43,9 @@ public final class HighlightManager {
 		
 		// initialize timestamp map
 		pendingRemoveTask = new ConcurrentHashMap<>();
+
+		// register events in this class
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
 	
@@ -147,7 +153,7 @@ public final class HighlightManager {
 	 * Remove player from highlight map
 	 * @param player the player whoise UUID to remove from the highlight map
 	 */
-	public final void removePlayerFromMap(final Player player) {
+	private void removePlayerFromMap(final Player player) {
 		
 		if (highlightMap.containsKey(player.getUniqueId())) {
 			highlightMap.get(player.getUniqueId()).clear();
@@ -177,6 +183,19 @@ public final class HighlightManager {
 
 	final void unsetPendingRemoveTask(final Player player) {
 		pendingRemoveTask.remove(player.getUniqueId());
+	}
+
+
+	/**
+	 * Event handler for PlayerQuitEvent;
+	 *   removes player from highlighted blocks hashmap
+	 * @param event the event handled by this method
+	 */
+	@EventHandler
+	public final void onPlayerQuit(final PlayerQuitEvent event) {
+
+		// remove player from highlight map
+		plugin.highlightManager.removePlayerFromMap(event.getPlayer());
 	}
 
 }
