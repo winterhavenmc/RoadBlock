@@ -165,6 +165,64 @@ public final class EventListener implements Listener {
 
 
 	/**
+	 * Event handler for PlayerItemHeldEvent;
+	 *   unhighlights blocks when player changes held item from road block tool
+	 * @param event the event handled by this method
+	 */
+	@EventHandler
+	final void onPlayerChangeItem(final PlayerItemHeldEvent event) {
+		
+		final Player player = event.getPlayer();
+		
+		final ItemStack previousItem = player.getInventory().getItem(event.getPreviousSlot());
+		
+		if (RoadBlockTool.isTool(previousItem)) {
+			plugin.highlightManager.unHighlightBlocks(player);
+		}
+	}
+
+
+	/**
+	 * Event handler for PlayerGameModeChangeEvent;
+	 *   unhighlights blocks when player changes gamemode
+	 * @param event the event handled by this method
+	 */
+	@EventHandler
+	final void onPlayerChangeGameMode(final PlayerGameModeChangeEvent event) {
+		plugin.highlightManager.unHighlightBlocks(event.getPlayer());
+	}
+
+
+	/**
+	 * Event handler for PlayerDropItemEvent;
+	 *   removes custom tool from game when dropped
+	 * @param event the event handled by this method
+	 */
+	@EventHandler
+	final void onPlayerDropItem(final PlayerDropItemEvent event) {
+
+		// if event is already cancelled, do nothing and return
+		if (event.isCancelled()) {
+			return;
+		}
+
+		// get dropped item
+		final ItemStack droppedItem = event.getItemDrop().getItemStack();
+		
+		// if dropped item is not a road block tool, do nothing and return
+		if (!RoadBlockTool.isTool(droppedItem)) {
+			return;
+		}
+		
+		// remove dropped item
+		event.getItemDrop().remove();
+		
+		// tool drop sound to player
+		plugin.soundConfig.playSound(event.getPlayer(), SoundId.TOOL_DROP);
+	}
+
+
+	/**
 	 * Event handler for BlockPlaceEvent;
 	 *   prevents placing blocks on top of road blocks
 	 * @param event the event handled by this method
@@ -236,64 +294,6 @@ public final class EventListener implements Listener {
 				break;
 			}
 		}
-	}
-
-
-	/**
-	 * Event handler for PlayerItemHeldEvent;
-	 *   unhighlights blocks when player changes held item from road block tool
-	 * @param event the event handled by this method
-	 */
-	@EventHandler
-	final void onPlayerChangeItem(final PlayerItemHeldEvent event) {
-		
-		final Player player = event.getPlayer();
-		
-		final ItemStack previousItem = player.getInventory().getItem(event.getPreviousSlot());
-		
-		if (RoadBlockTool.isTool(previousItem)) {
-			plugin.highlightManager.unHighlightBlocks(player);
-		}
-	}
-
-
-	/**
-	 * Event handler for PlayerGameModeChangeEvent;
-	 *   unhighlights blocks when player changes gamemode
-	 * @param event the event handled by this method
-	 */
-	@EventHandler
-	final void onPlayerChangeGameMode(final PlayerGameModeChangeEvent event) {
-		plugin.highlightManager.unHighlightBlocks(event.getPlayer());
-	}
-
-
-	/**
-	 * Event handler for PlayerDropItemEvent;
-	 *   removes custom tool from game when dropped
-	 * @param event the event handled by this method
-	 */
-	@EventHandler
-	final void onPlayerDropItem(final PlayerDropItemEvent event) {
-
-		// if event is already cancelled, do nothing and return
-		if (event.isCancelled()) {
-			return;
-		}
-
-		// get dropped item
-		final ItemStack droppedItem = event.getItemDrop().getItemStack();
-		
-		// if dropped item is not a road block tool, do nothing and return
-		if (!RoadBlockTool.isTool(droppedItem)) {
-			return;
-		}
-		
-		// remove dropped item
-		event.getItemDrop().remove();
-		
-		// tool drop sound to player
-		plugin.soundConfig.playSound(event.getPlayer(), SoundId.TOOL_DROP);
 	}
 
 
