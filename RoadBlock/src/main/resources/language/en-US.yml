@@ -13,18 +13,22 @@ item_info:
   - '&eRoadBlock protection'
 
 
+##########
+# Messages
+##########
+
 # Variable substitutions:
-#	%PLAYER_NAME%		name of player
-#	%WORLD_NAME%		name of player's current world
-#	%TOOL_NAME%			name of tool, as defined in this file
-#	%QUANTITY%			a quantity
-#	%MATERIAL%			block material
+#  %PLAYER_NAME%    name of player
+#  %WORLD_NAME%     name of player's current world
+#  %TOOL_NAME%      name of tool, as defined in this file
+#  %QUANTITY%       a quantity
+#  %MATERIAL%       block material
 
 # Color codes:
-# &0 black			&4 red			&8 dark grey 		&c salmon
-# &1 dark blue		&5 purple		&9 lavender			&d light purple
-# &2 dark green		&6 gold			&a light green		&e yellow
-# &3 agua			&7 light grey	&b light blue		&f white
+# &0 black          &4 red          &8 dark grey        &c salmon
+# &1 dark blue      &5 purple       &9 lavender         &d light purple
+# &2 dark green     &6 gold         &a light green      &e yellow
+# &3 agua           &7 light grey   &b light blue       &f white
 
 ##################
 # Command Messages
@@ -137,7 +141,7 @@ messages:
 
 
   ################
-  # Other messages
+  # Other Messages
   ################
   BLOCK_PLACE_FAIL_GRASS_PATH:
     enabled: true
