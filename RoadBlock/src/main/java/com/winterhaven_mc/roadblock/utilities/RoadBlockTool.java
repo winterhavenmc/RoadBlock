@@ -75,15 +75,18 @@ public final class RoadBlockTool {
 			return false;
 		}
 		
-		// if item stack is not configured tool-material, return false
-		if (!itemStack.getType().equals(Material.matchMaterial(plugin.getConfig().getString("tool-material")))) {
+		// if player item does not have configured tool display name, return false
+		if (!itemStack.hasItemMeta()) {
 			return false;
 		}
 
-		// if player item does not have configured tool display name, return false
+		if (!(itemStack.getItemMeta().getDisplayName()).equals(plugin.messageManager.getItemName())) {
+			return false;
+		}
+
+		// if item stack is not configured tool-material, return false
 		//noinspection RedundantIfStatement
-		if (!itemStack.hasItemMeta() ||
-				!itemStack.getItemMeta().getDisplayName().equals(plugin.messageManager.getItemName())) {
+		if (!itemStack.getType().equals(Material.matchMaterial(plugin.getConfig().getString("tool-material")))) {
 			return false;
 		}
 
