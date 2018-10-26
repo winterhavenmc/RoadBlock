@@ -44,10 +44,11 @@ public final class RoadBlockTool {
 		final ItemMeta metaData = itemStack.getItemMeta();
 		
 		// set display name to configured tool name
-		metaData.setDisplayName(plugin.messageManager.getToolName());
+		metaData.setDisplayName(plugin.messageManager.getItemName());
 		
 		// set lore to configured tool lore
-		metaData.setLore(plugin.messageManager.getToolLore());
+		//noinspection unchecked
+		metaData.setLore(plugin.messageManager.getItemLore());
 
 		// hide item stack attributes and enchants
 		metaData.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -82,7 +83,7 @@ public final class RoadBlockTool {
 		// if player item does not have configured tool display name, return false
 		//noinspection RedundantIfStatement
 		if (!itemStack.hasItemMeta() ||
-				!itemStack.getItemMeta().getDisplayName().equals(plugin.messageManager.getToolName())) {
+				!itemStack.getItemMeta().getDisplayName().equals(plugin.messageManager.getItemName())) {
 			return false;
 		}
 
