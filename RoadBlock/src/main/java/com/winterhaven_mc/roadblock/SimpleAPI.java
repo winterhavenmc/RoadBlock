@@ -106,7 +106,8 @@ public final class SimpleAPI {
 	 * Get item lore from language config file
 	 * @return List of String - lines of tool lore as defined in language config file
 	 */
-	public static List getItemLore() {
+	public static List<String> getItemLore() {
+		//noinspection unchecked
 		return PluginMain.instance.messageManager.getItemLore();
 	}
 
