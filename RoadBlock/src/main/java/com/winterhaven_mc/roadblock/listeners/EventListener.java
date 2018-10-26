@@ -306,7 +306,10 @@ public final class EventListener implements Listener {
 	final void onPlayerQuit(final PlayerQuitEvent event) {
 		
 		// remove player from highlight map
-		plugin.highlightManager.removePlayerFromMap(event.getPlayer());	
+		plugin.highlightManager.removePlayerFromMap(event.getPlayer());
+
+		// remove player from message cooldown map
+		plugin.messageManager.removePlayerCooldown(event.getPlayer());
 	}
 
 
