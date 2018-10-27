@@ -5,6 +5,7 @@ import com.winterhaven_mc.roadblock.highlights.HighlightStyle;
 import com.winterhaven_mc.roadblock.messages.MessageId;
 import com.winterhaven_mc.roadblock.sounds.SoundId;
 import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -66,18 +67,18 @@ public final class EventListener implements Listener {
 	 */
 	@EventHandler
 	final void onPlayerInteract(final PlayerInteractEvent event) {
-		
+
 		//NOTE: do not check for cancelled event here; long distance clicks are considered cancelled
-		
+
 		final Player player = event.getPlayer();
 
 		final ItemStack playerItem = event.getItem();
-		
+
 		final Action action = event.getAction();
-		
+
 		// get clicked block
 		Block clickedBlock = event.getClickedBlock();
-		
+
 		// if event is air/block click with RoadBlock tool, begin tool use procedure
 		if (RoadBlockTool.isTool(playerItem) && !action.equals(Action.PHYSICAL)) {
 
@@ -86,10 +87,10 @@ public final class EventListener implements Listener {
 				plugin.messageManager.sendMessage(event.getPlayer(), MessageId.TOOL_FAIL_WORLD_DISABLED);
 				return;
 			}
-			
+
 			// if clicked block is tool transparent material, try to find non-air block along line of sight
 			if (clickedBlock == null || RoadBlockTool.toolTransparentMaterials.contains(clickedBlock.getType())) {
-				
+
 				// RH says this can sometimes throw an exception, so using try..catch block
 				try {
 					clickedBlock = player.getTargetBlock(RoadBlockTool.toolTransparentMaterials, 100);
@@ -109,7 +110,7 @@ public final class EventListener implements Listener {
 				plugin.messageManager.sendMessage(player, MessageId.TOOL_FAIL_DISTANCE_EXCEEDED);
 				return;
 			}
-			
+
 			// cancel event to prevent breaking blocks with road block tool
 			event.setCancelled(true);
 
@@ -133,7 +134,7 @@ public final class EventListener implements Listener {
 
 			final int quantity = locationSet.size();
 
-			// if right click, protect blocks		
+			// if right click, protect blocks
 			if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR)) {
 
 				// highlight blocks
