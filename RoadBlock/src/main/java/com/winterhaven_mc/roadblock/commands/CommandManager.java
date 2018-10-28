@@ -6,21 +6,30 @@ import com.winterhaven_mc.roadblock.messages.MessageId;
 import com.winterhaven_mc.roadblock.sounds.SoundId;
 import com.winterhaven_mc.roadblock.storage.DataStoreFactory;
 import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 
-public final class CommandManager implements CommandExecutor {
+public final class CommandManager implements CommandExecutor, TabCompleter {
 
 	private final PluginMain plugin;
+
+	private final static ChatColor helpColor = ChatColor.YELLOW;
+	private final static ChatColor usageColor = ChatColor.GOLD;
+
+	// list of possible subcommands
+	private final static List<String> SUBCOMMANDS =
+			Collections.unmodifiableList(new ArrayList<>(Arrays.asList(
+					"reload","show","status","tool","help")));
 
 
 	/**
@@ -29,8 +38,44 @@ public final class CommandManager implements CommandExecutor {
 	 */
 	public CommandManager(final PluginMain plugin) {
 
+		// reference to main class
 		this.plugin = plugin;
+
+		// register this class as command executor
 		plugin.getCommand("roadblock").setExecutor(this);
+
+		// register this class as tab completer
+		plugin.getCommand("roadblock").setTabCompleter(this);
+	}
+
+
+	/**
+	 * Tab completer for RoadBlock commands
+	 */
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final Command command,
+									  final String alias, final String[] args) {
+
+		List<String> returnList = new ArrayList<>();
+
+		// return list of valid matching subcommands
+		if (args.length == 1) {
+			for (String subcommand : SUBCOMMANDS) {
+				if (sender.hasPermission("roadblock." + subcommand)
+						&& subcommand.startsWith(args[0].toLowerCase())) {
+					returnList.add(subcommand);
+				}
+			}
+		}
+		else if (args.length == 2 || args[0].equalsIgnoreCase("help")) {
+			for (String subcommand : SUBCOMMANDS) {
+				if (sender.hasPermission("roadblock." + subcommand)
+						&& subcommand.startsWith(args[1].toLowerCase())) {
+					returnList.add(subcommand);
+				}
+			}
+		}
+		return returnList;
 	}
 
 
@@ -76,6 +121,11 @@ public final class CommandManager implements CommandExecutor {
 		// tool command
 		if (subcommand.equalsIgnoreCase("tool")) {
 			return toolCommand(sender,args);
+		}
+
+		// help command
+		if (subcommand.equalsIgnoreCase("help")) {
+			return helpCommand(sender,args);
 		}
 
 		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND);
@@ -275,7 +325,7 @@ public final class CommandManager implements CommandExecutor {
 			return true;
 		}
 
-		// get player from sender
+		// cast sender to player
 		final Player player = (Player) sender;
 
 		// check player permissions
@@ -301,6 +351,7 @@ public final class CommandManager implements CommandExecutor {
 		// put tool in player's inventory
 		final HashMap<Integer,ItemStack> noFit = player.getInventory().addItem(rbTool);
 
+		// if no room in inventory, send message
 		if (!noFit.isEmpty()) {
 			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_TOOL_INVENTORY_FULL);
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
@@ -310,6 +361,90 @@ public final class CommandManager implements CommandExecutor {
 		// play success sound
 		plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_TOOL);
 		return true;
+	}
+
+
+	/**
+	 * Display help message for commands
+	 * @param sender the command sender
+	 * @param args the command arguments
+	 * @return always returns {@code true}, to prevent display of bukkit usage message
+	 */
+	private boolean helpCommand(final CommandSender sender, final String args[]) {
+
+		// if command sender does not have permission to display help, output error message and return true
+		if (!sender.hasPermission("roadblock.help")) {
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_HELP_PERMISSION);
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+			return true;
+		}
+
+		String command = "help";
+
+		if (args.length > 1) {
+			command = args[1];
+		}
+
+		String helpMessage = "That is not a valid command.";
+
+		if (command.equalsIgnoreCase("status")) {
+			helpMessage = "Displays current configuration settings.";
+		}
+		if (command.equalsIgnoreCase("reload")) {
+			helpMessage = "Reloads the configuration without needing to restart the server.";
+		}
+		if (command.equalsIgnoreCase("show")) {
+			helpMessage = "Highlights protected RoadBlocks within configured radius.";
+		}
+		if (command.equalsIgnoreCase("tool")) {
+			helpMessage = "Places a RoadBlock tool in player inventory.";
+		}
+		if (command.equalsIgnoreCase("help")) {
+			helpMessage = "Displays help for RoadBlock commands.";
+		}
+		sender.sendMessage(helpColor + helpMessage);
+		displayUsage(sender,command);
+		return true;
+	}
+
+
+	/**
+	 * Display command usage
+	 * @param sender the command sender
+	 * @param passedCommand the command for which to display usage string
+	 */
+	private void displayUsage(final CommandSender sender, final String passedCommand) {
+
+		String command = passedCommand;
+
+		if (command.isEmpty() || command.equalsIgnoreCase("help")) {
+			command = "all";
+		}
+		if ((command.equalsIgnoreCase("status")
+				|| command.equalsIgnoreCase("all"))
+				&& sender.hasPermission("roadblock.status")) {
+			sender.sendMessage(usageColor + "/roadblock status");
+		}
+		if ((command.equalsIgnoreCase("reload")
+				|| command.equalsIgnoreCase("all"))
+				&& sender.hasPermission("roadblock.reload")) {
+			sender.sendMessage(usageColor + "/roadblock reload");
+		}
+		if ((command.equalsIgnoreCase("show")
+				|| command.equalsIgnoreCase("all"))
+				&& sender.hasPermission("roadblock.show")) {
+			sender.sendMessage(usageColor + "/roadblock show");
+		}
+		if ((command.equalsIgnoreCase("tool")
+				|| command.equalsIgnoreCase("all"))
+				&& sender.hasPermission("roadblock.tool")) {
+			sender.sendMessage(usageColor + "/roadblock tool");
+		}
+		if ((command.equalsIgnoreCase("help")
+				|| command.equalsIgnoreCase("all"))
+				&& sender.hasPermission("roadblock.help")) {
+			sender.sendMessage(usageColor + "/roadblock help [command]");
+		}
 	}
 
 }
