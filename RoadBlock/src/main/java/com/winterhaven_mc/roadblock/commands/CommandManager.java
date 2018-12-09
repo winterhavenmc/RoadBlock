@@ -370,7 +370,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean helpCommand(final CommandSender sender, final String args[]) {
+	private boolean helpCommand(final CommandSender sender, final String[] args) {
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("roadblock.help")) {
