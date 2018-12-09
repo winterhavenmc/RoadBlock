@@ -9,7 +9,7 @@ commands:
   roadblock:
     aliases: rb
     description: This is the RoadBlock command.
-    usage: /<command> [command] <value>
+    usage: /<command> command
 
 permissions:
   roadblock.help:
