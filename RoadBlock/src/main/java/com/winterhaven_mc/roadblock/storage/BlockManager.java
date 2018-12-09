@@ -239,7 +239,7 @@ public final class BlockManager {
 			
 			// try to split on colon
 			if (!string.isEmpty()) {
-				String materialElements[] = string.split("\\s*:\\s*");
+				String[] materialElements = string.split("\\s*:\\s*");
 	
 				// try to match material
 				if (materialElements.length > 0) {
