@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.winterhaven-mc</groupId>
   <artifactId>RoadBlock</artifactId>
-  <version>1.13.2</version>
+  <version>1.13.1</version>
   <name>RoadBlock</name>
 
 	<properties>
@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>message-manager-lib</artifactId>
-			<version>1.0.2</version>
+			<version>1.0.3</version>
 		</dependency>
 
 		<!-- SoundConfigLib -->
