@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 
-@SuppressWarnings({"SynchronizeOnNonFinalField", "SuspiciousNameCombination", "RedundantIfStatement"})
+@SuppressWarnings("SynchronizeOnNonFinalField")
 final class DataStoreSQLite extends DataStore implements Listener {
 
 	// reference to main class
@@ -50,7 +50,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		// create empty block cache
 		this.blockCache = new ConcurrentHashMap<>();
 		
-		// crate empty chunk location cache
+		// create empty chunk location cache
 		this.chunkCache = new HashSet<>();
 
 		// register event handlers in this class
@@ -177,10 +177,8 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		// check cache first
 		if (isChunkCached(location)) {
 			if (blockCache.containsKey(location)) {
-				if (blockCache.get(location).equals(CacheStatus.TRUE)
-						|| blockCache.get(location).equals(CacheStatus.PENDING_INSERT)) {
-					return true;
-				}
+				return blockCache.get(location).equals(CacheStatus.TRUE)
+						|| blockCache.get(location).equals(CacheStatus.PENDING_INSERT);
 			}
 			return false;
 		}
@@ -190,10 +188,8 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		
 		// check cache again
 		if (blockCache.containsKey(location)) {
-			if (blockCache.get(location).equals(CacheStatus.TRUE)
-					|| blockCache.get(location).equals(CacheStatus.PENDING_INSERT)) {
-				return true;
-			}
+			return blockCache.get(location).equals(CacheStatus.TRUE)
+					|| blockCache.get(location).equals(CacheStatus.PENDING_INSERT);
 		}
 		return false;
 	}
