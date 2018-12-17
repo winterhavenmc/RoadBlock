@@ -53,8 +53,10 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * Tab completer for RoadBlock commands
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender, final Command command,
-									  final String alias, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender,
+									  final Command command,
+									  final String alias,
+									  final String[] args) {
 
 		List<String> returnList = new ArrayList<>();
 
