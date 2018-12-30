@@ -1,7 +1,7 @@
 package com.winterhaven_mc.roadblock.messages;
 
 public enum MessageId {
-	
+
 	COMMAND_SUCCESS_RELOAD,
 	COMMAND_SUCCESS_SHOW,
 	COMMAND_FAIL_ARGS_COUNT_UNDER,

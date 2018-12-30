@@ -29,11 +29,12 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	// list of possible subcommands
 	private final static List<String> SUBCOMMANDS =
 			Collections.unmodifiableList(new ArrayList<>(Arrays.asList(
-					"reload","show","status","tool","help")));
+					"reload", "show", "status", "tool", "help")));
 
 
 	/**
 	 * Class constructor
+	 *
 	 * @param plugin reference to main class
 	 */
 	public CommandManager(final PluginMain plugin) {
@@ -82,8 +83,8 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 
 	@Override
-	public final boolean onCommand(final CommandSender sender, final Command command, 
-			final String label, final String[] args) {
+	public final boolean onCommand(final CommandSender sender, final Command command,
+								   final String label, final String[] args) {
 
 		final int minArgs = 1;
 		final int maxArgs = 2;
@@ -97,7 +98,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// check max arguments
 		if (args.length > maxArgs) {
-			plugin.messageManager.sendMessage(sender,MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return false;
 		}
@@ -106,28 +107,28 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		String subcommand = args[0];
 
 		// status command
-		if (subcommand.equalsIgnoreCase("status")) {			
-			return statusCommand(sender,args);
+		if (subcommand.equalsIgnoreCase("status")) {
+			return statusCommand(sender, args);
 		}
 
 		// reload command
 		if (subcommand.equalsIgnoreCase("reload")) {
-			return reloadCommand(sender,args);
+			return reloadCommand(sender, args);
 		}
 
 		// show command
 		if (subcommand.equalsIgnoreCase("show")) {
-			return showCommand(sender,args);
+			return showCommand(sender, args);
 		}
 
 		// tool command
 		if (subcommand.equalsIgnoreCase("tool")) {
-			return toolCommand(sender,args);
+			return toolCommand(sender, args);
 		}
 
 		// help command
 		if (subcommand.equalsIgnoreCase("help")) {
-			return helpCommand(sender,args);
+			return helpCommand(sender, args);
 		}
 
 		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND);
@@ -138,6 +139,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Display plugin status
+	 *
 	 * @param sender the command sender
 	 * @return always returns {@code true}, to prevent usage message
 	 */
@@ -160,8 +162,8 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		String versionString = this.plugin.getDescription().getVersion();
-		sender.sendMessage(ChatColor.DARK_GRAY + "[" 
-				+ ChatColor.YELLOW + plugin.getName() + ChatColor.DARK_GRAY + "] " 
+		sender.sendMessage(ChatColor.DARK_GRAY + "["
+				+ ChatColor.YELLOW + plugin.getName() + ChatColor.DARK_GRAY + "] "
 				+ ChatColor.AQUA + "Version: " + ChatColor.RESET + versionString);
 
 		if (plugin.debug) {
@@ -203,6 +205,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Reload configuration
+	 *
 	 * @param sender the command sender
 	 * @return always returns {@code true}, to prevent usage message
 	 */
@@ -260,15 +263,16 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Highlight blocks that are within specified distance of player location
+	 *
 	 * @param sender the command sender
-	 * @param args command arguments
+	 * @param args   command arguments
 	 * @return always returns {@code true}, to prevent (bukkit) usage message
 	 */
 	private boolean showCommand(final CommandSender sender, String[] args) {
 
 		// sender must be player
 		if (!(sender instanceof Player)) {
-			plugin.messageManager.sendMessage(sender,MessageId.COMMAND_FAIL_CONSOLE);
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_CONSOLE);
 			return true;
 		}
 
@@ -277,7 +281,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// check player permissions
 		if (!player.hasPermission("roadblock.show")) {
-			plugin.messageManager.sendMessage(sender,MessageId.COMMAND_FAIL_SHOW_PERMISSION);
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_SHOW_PERMISSION);
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -316,9 +320,10 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Place a tool in player inventory
+	 *
 	 * @param sender the command sender
 	 * @return always returns {@code true}, to prevent usage message
-     */
+	 */
 	private boolean toolCommand(final CommandSender sender, String[] args) {
 
 		// sender must be player
@@ -351,7 +356,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		final ItemStack rbTool = RoadBlockTool.create();
 
 		// put tool in player's inventory
-		final HashMap<Integer,ItemStack> noFit = player.getInventory().addItem(rbTool);
+		final HashMap<Integer, ItemStack> noFit = player.getInventory().addItem(rbTool);
 
 		// if no room in inventory, send message
 		if (!noFit.isEmpty()) {
@@ -368,8 +373,9 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Display help message for commands
+	 *
 	 * @param sender the command sender
-	 * @param args the command arguments
+	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
 	private boolean helpCommand(final CommandSender sender, final String[] args) {
@@ -405,14 +411,15 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 			helpMessage = "Displays help for RoadBlock commands.";
 		}
 		sender.sendMessage(helpColor + helpMessage);
-		displayUsage(sender,command);
+		displayUsage(sender, command);
 		return true;
 	}
 
 
 	/**
 	 * Display command usage
-	 * @param sender the command sender
+	 *
+	 * @param sender        the command sender
 	 * @param passedCommand the command for which to display usage string
 	 */
 	private void displayUsage(final CommandSender sender, final String passedCommand) {

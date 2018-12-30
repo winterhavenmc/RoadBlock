@@ -27,14 +27,14 @@ public final class PluginMain extends JavaPlugin {
 
 	public Boolean debug = getConfig().getBoolean("debug");
 	public Boolean profile = getConfig().getBoolean("profile");
-	
+
 
 	@Override
 	public void onEnable() {
-		
+
 		// set static reference to main class
 		instance = this;
-		
+
 		// install default config.yml if not present  
 		saveDefaultConfig();
 
@@ -43,7 +43,7 @@ public final class PluginMain extends JavaPlugin {
 
 		// instantiate world manager
 		worldManager = new WorldManager(this);
-		
+
 		// instantiate message manager
 		messageManager = new MessageManager(this);
 
@@ -52,7 +52,7 @@ public final class PluginMain extends JavaPlugin {
 
 		// instantiate block manager
 		blockManager = new BlockManager(this);
-		
+
 		// instantiate highlight manager
 		highlightManager = new HighlightManager(this);
 
@@ -66,7 +66,7 @@ public final class PluginMain extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		
+
 		// close datastore
 		dataStore.close();
 	}

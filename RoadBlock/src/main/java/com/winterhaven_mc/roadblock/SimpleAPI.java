@@ -9,7 +9,7 @@ import java.util.List;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public final class SimpleAPI {
-	
+
 	/**
 	 * Private constructor to prevent instantiation this class
 	 */
@@ -20,6 +20,7 @@ public final class SimpleAPI {
 
 	/**
 	 * Check if a material is in the configured list of RoadBlock materials
+	 *
 	 * @param material the material to check
 	 * @return {@code true} if the material is in the configured list of RoadBlock materials, else {@code false}
 	 */
@@ -30,6 +31,7 @@ public final class SimpleAPI {
 
 	/**
 	 * Check if player location is within configured on-road-height distance above a road block
+	 *
 	 * @param player the player to check for road block proximity
 	 * @return {@code true} if player is configured height or less above a road block, else {@code false}
 	 */
@@ -40,6 +42,7 @@ public final class SimpleAPI {
 
 	/**
 	 * Check if location is above a protected road block, using configured no-place-height
+	 *
 	 * @param location the location to check road block proximity
 	 * @return {@code true} if block is within configured no-place-height above a road block, else {@code false}
 	 */
@@ -55,8 +58,9 @@ public final class SimpleAPI {
 
 	/**
 	 * Check if location is above a protected road block, overriding configured no-place-height with passed height
+	 *
 	 * @param location the location to test
-	 * @param height the number of blocks above a road block to consider
+	 * @param height   the number of blocks above a road block to consider
 	 * @return {@code true} if block is within {@code height} above a road block, else {@code false}
 	 */
 	public static boolean isAboveRoad(final Location location, final int height) {
@@ -66,6 +70,7 @@ public final class SimpleAPI {
 
 	/**
 	 * Check if a block can be placed at a location, using configured no-place-height
+	 *
 	 * @param location the location to check
 	 * @return {@code true} if block can be placed at location, else {@code false}
 	 */
@@ -81,8 +86,9 @@ public final class SimpleAPI {
 
 	/**
 	 * Check if a block can be placed at a location, overriding configured no-place-height with passed height
+	 *
 	 * @param location the location to check
-	 * @param height the height above road to consider not placeable
+	 * @param height   the height above road to consider not placeable
 	 * @return {@code true} if the block can be place at location, else {@code false}
 	 */
 	public static boolean canPlace(final Location location, final int height) {
@@ -95,6 +101,7 @@ public final class SimpleAPI {
 
 	/**
 	 * Get item name from language config file
+	 *
 	 * @return String - tool name as defined in language config file
 	 */
 	public static String getItemName() {
@@ -104,6 +111,7 @@ public final class SimpleAPI {
 
 	/**
 	 * Get item lore from language config file
+	 *
 	 * @return List of String - lines of tool lore as defined in language config file
 	 */
 	public static List<String> getItemLore() {
