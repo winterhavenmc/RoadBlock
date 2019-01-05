@@ -4,7 +4,7 @@ import com.winterhaven_mc.roadblock.PluginMain;
 import com.winterhaven_mc.roadblock.highlights.HighlightStyle;
 import com.winterhaven_mc.roadblock.messages.MessageId;
 import com.winterhaven_mc.roadblock.sounds.SoundId;
-import com.winterhaven_mc.roadblock.storage.DataStoreFactory;
+import com.winterhaven_mc.roadblock.storage.DataStore;
 import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
 
 import org.bukkit.ChatColor;
@@ -253,7 +253,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.worldManager.reload();
 
 		// reload datastore
-		DataStoreFactory.reload();
+		DataStore.reload();
 
 		// send player success message
 		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_RELOAD);

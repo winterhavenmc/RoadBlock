@@ -6,7 +6,6 @@ import com.winterhaven_mc.roadblock.listeners.EventListener;
 import com.winterhaven_mc.roadblock.messages.MessageManager;
 import com.winterhaven_mc.roadblock.storage.BlockManager;
 import com.winterhaven_mc.roadblock.storage.DataStore;
-import com.winterhaven_mc.roadblock.storage.DataStoreFactory;
 
 import com.winterhaven_mc.util.WorldManager;
 import com.winterhaven_mc.util.SoundConfiguration;
@@ -39,7 +38,7 @@ public final class PluginMain extends JavaPlugin {
 		saveDefaultConfig();
 
 		// get initialized destination storage object
-		dataStore = DataStoreFactory.create();
+		dataStore = DataStore.create();
 
 		// instantiate world manager
 		worldManager = new WorldManager(this);
