@@ -11,10 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -35,7 +32,7 @@ public final class HighlightManager implements Listener {
 	 *
 	 * @param plugin reference to main class
 	 */
-	public HighlightManager(PluginMain plugin) {
+	public HighlightManager(final PluginMain plugin) {
 
 		// set reference to main class
 		this.plugin = plugin;
@@ -59,10 +56,16 @@ public final class HighlightManager implements Listener {
 	 * @param locationSet    a collection of Locations of blocks to highlight
 	 * @param highlightStyle HighlightStyle enum value to use for highlighting
 	 */
-	public final void highlightBlocks(final Player player, final Collection<Location> locationSet,
+	public final void highlightBlocks(final Player player,
+									  final Collection<Location> locationSet,
 									  final HighlightStyle highlightStyle) {
 
-		// if player uuid not in hashmap, insert with locationSet
+		// check for null parameters
+		Objects.requireNonNull(player);
+		Objects.requireNonNull(locationSet);
+		Objects.requireNonNull(highlightStyle);
+
+		// if player uuid not in map, insert with locationSet
 		if (!highlightMap.containsKey(player.getUniqueId())) {
 			highlightMap.put(player.getUniqueId(), new HashSet<>(locationSet));
 		}
@@ -87,6 +90,10 @@ public final class HighlightManager implements Listener {
 	@SuppressWarnings("unused")
 	public final void unHighlightBlocks(final Player player, final Collection<Location> locationSet) {
 
+		// check for null parameters
+		Objects.requireNonNull(player);
+		Objects.requireNonNull(locationSet);
+
 		// remove highlight for player for blocks in locationSet
 		removeHighlight(player, locationSet);
 
@@ -103,6 +110,9 @@ public final class HighlightManager implements Listener {
 	 * @param player the player for whom to remove all block highlighting
 	 */
 	public final void unHighlightBlocks(final Player player) {
+
+		// check for null parameters
+		Objects.requireNonNull(player);
 
 		if (highlightMap.containsKey(player.getUniqueId())) {
 			HashSet<Location> locationSet = highlightMap.get(player.getUniqueId());
@@ -122,6 +132,11 @@ public final class HighlightManager implements Listener {
 	 * @param material    the material type to use as a highlight
 	 */
 	final void showHighlight(final Player player, final Collection<Location> locationSet, final Material material) {
+
+		// check for null parameters
+		Objects.requireNonNull(player);
+		Objects.requireNonNull(locationSet);
+		Objects.requireNonNull(material);
 
 		// iterate through all location in set
 		for (Location location : locationSet) {
@@ -144,6 +159,10 @@ public final class HighlightManager implements Listener {
 	@SuppressWarnings("WeakerAccess")
 	final void removeHighlight(final Player player, final Collection<Location> locationSet) {
 
+		// check for null parameters
+		Objects.requireNonNull(player);
+		Objects.requireNonNull(locationSet);
+
 		// iterate through all location in set
 		for (Location location : locationSet) {
 
@@ -163,6 +182,9 @@ public final class HighlightManager implements Listener {
 	 */
 	private void removePlayerFromMap(final Player player) {
 
+		// check for null parameters
+		Objects.requireNonNull(player);
+
 		if (highlightMap.containsKey(player.getUniqueId())) {
 			highlightMap.get(player.getUniqueId()).clear();
 			highlightMap.remove(player.getUniqueId());
@@ -173,12 +195,20 @@ public final class HighlightManager implements Listener {
 	@SuppressWarnings("unused")
 	public final boolean isHighlighted(final Player player, final Location location) {
 
+		// check for null parameters
+		Objects.requireNonNull(player);
+		Objects.requireNonNull(location);
+
 		return highlightMap.containsKey(player.getUniqueId())
 				&& highlightMap.get(player.getUniqueId()).contains(location);
 	}
 
 
 	final BukkitTask getPendingRemoveTask(final Player player) {
+
+		// check for null parameter
+		Objects.requireNonNull(player);
+
 		return pendingRemoveTask.get(player.getUniqueId());
 	}
 
@@ -190,6 +220,10 @@ public final class HighlightManager implements Listener {
 
 
 	final void unsetPendingRemoveTask(final Player player) {
+
+		// check for null parameter
+		Objects.requireNonNull(player);
+
 		pendingRemoveTask.remove(player.getUniqueId());
 	}
 
