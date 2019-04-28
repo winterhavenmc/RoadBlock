@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 
-@SuppressWarnings("SynchronizeOnNonFinalField")
+@SuppressWarnings({"SynchronizeOnNonFinalField", "ConstantConditions"})
 final class DataStoreSQLite extends DataStore implements Listener {
 
 	// reference to main class
@@ -222,7 +222,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 			public void run() {
 
 				int count = 0;
-				Long startTime = System.nanoTime();
+				long startTime = System.nanoTime();
 
 				try {
 
@@ -406,7 +406,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 			public void run() {
 
 				int count = 0;
-				Long startTime = System.nanoTime();
+				long startTime = System.nanoTime();
 
 				try {
 					connection.setAutoCommit(false);
@@ -571,7 +571,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 			preparedStatement.setInt(3, chunk.getZ());
 
 			// execute sql query
-			Long startTime = System.nanoTime();
+			long startTime = System.nanoTime();
 			ResultSet rs = preparedStatement.executeQuery();
 
 			long elapsedTime = System.nanoTime() - startTime;
@@ -581,9 +581,9 @@ final class DataStoreSQLite extends DataStore implements Listener {
 			while (rs.next()) {
 
 				String worldName = rs.getString("worldname");
-				Double x = rs.getDouble("x");
-				Double y = rs.getDouble("y");
-				Double z = rs.getDouble("z");
+				double x = rs.getDouble("x");
+				double y = rs.getDouble("y");
+				double z = rs.getDouble("z");
 
 				World world;
 
@@ -643,9 +643,9 @@ final class DataStoreSQLite extends DataStore implements Listener {
 			while (rs.next()) {
 
 				String worldName = rs.getString("worldname");
-				Double x = rs.getDouble("x");
-				Double y = rs.getDouble("y");
-				Double z = rs.getDouble("z");
+				double x = rs.getDouble("x");
+				double y = rs.getDouble("y");
+				double z = rs.getDouble("z");
 
 				World world;
 
@@ -715,7 +715,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	private void flushCache(final Chunk chunk) {
 
 		int count = 0;
-		Long startTime = System.nanoTime();
+		long startTime = System.nanoTime();
 		for (Location location : blockCache.keySet()) {
 			if (location.getChunk().equals(chunk)) {
 				blockCache.remove(location);
@@ -818,9 +818,9 @@ final class DataStoreSQLite extends DataStore implements Listener {
 			while (rs.next()) {
 
 				String worldName = rs.getString("worldname");
-				Double x = rs.getDouble("x");
-				Double y = rs.getDouble("y");
-				Double z = rs.getDouble("z");
+				double x = rs.getDouble("x");
+				double y = rs.getDouble("y");
+				double z = rs.getDouble("z");
 				World world = plugin.getServer().getWorld(worldName);
 
 				Location newLocation = new Location(world, x, y, z);
