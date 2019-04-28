@@ -33,6 +33,7 @@ public final class RoadBlockTool {
 	public static ItemStack create() {
 
 		// get configured material
+		//noinspection ConstantConditions
 		Material material = Material.matchMaterial(plugin.getConfig().getString("tool-material"));
 
 		// if no matching material found, use default GOLD_PICKAXE
@@ -46,6 +47,7 @@ public final class RoadBlockTool {
 		final ItemMeta metaData = itemStack.getItemMeta();
 
 		// set display name to configured tool name
+		//noinspection ConstantConditions
 		metaData.setDisplayName(plugin.messageManager.getItemName());
 
 		// set lore to configured tool lore
@@ -84,12 +86,13 @@ public final class RoadBlockTool {
 		}
 
 		// if item stack display name does not match configured item name, return false
+		//noinspection ConstantConditions
 		if (!(itemStack.getItemMeta().getDisplayName()).equals(plugin.messageManager.getItemName())) {
 			return false;
 		}
 
 		// if item stack material does not match configured tool material, return false
-		//noinspection RedundantIfStatement
+		//noinspection RedundantIfStatement,ConstantConditions
 		if (!itemStack.getType().equals(Material.matchMaterial(plugin.getConfig().getString("tool-material")))) {
 			return false;
 		}
