@@ -43,9 +43,11 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		this.plugin = plugin;
 
 		// register this class as command executor
+		//noinspection ConstantConditions
 		plugin.getCommand("roadblock").setExecutor(this);
 
 		// register this class as tab completer
+		//noinspection ConstantConditions
 		plugin.getCommand("roadblock").setTabCompleter(this);
 	}
 
