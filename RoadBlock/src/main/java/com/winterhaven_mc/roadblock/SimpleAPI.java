@@ -115,7 +115,6 @@ public final class SimpleAPI {
 	 * @return List of String - lines of tool lore as defined in language config file
 	 */
 	public static List<String> getItemLore() {
-		//noinspection unchecked
 		return PluginMain.instance.messageManager.getItemLore();
 	}
 
