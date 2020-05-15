@@ -17,7 +17,7 @@ import java.util.Map;
  * @author Tim Savage
  * @version 1.0
  */
-public final class MessageManager extends AbstractMessageManager {
+public final class MessageManager extends AbstractMessageManager<MessageId> {
 
 
 	/**
@@ -28,7 +28,6 @@ public final class MessageManager extends AbstractMessageManager {
 	public MessageManager(PluginMain plugin) {
 
 		// call super class constructor
-		//noinspection unchecked
 		super(plugin, MessageId.class);
 	}
 
@@ -60,7 +59,6 @@ public final class MessageManager extends AbstractMessageManager {
 		Map<String, String> replacements = getDefaultReplacements(recipient);
 
 		// send message to recipient
-		//noinspection unchecked
 		sendMessage(recipient, messageId, replacements);
 	}
 
@@ -83,7 +81,6 @@ public final class MessageManager extends AbstractMessageManager {
 		replacements.put("%QUANTITY%", quantity.toString());
 
 		// send message to recipient
-		//noinspection unchecked
 		sendMessage(recipient, messageId, replacements);
 	}
 
@@ -106,7 +103,6 @@ public final class MessageManager extends AbstractMessageManager {
 		replacements.put("%MATERIAL%", material.toString());
 
 		// send message to recipient
-		//noinspection unchecked
 		sendMessage(recipient, messageId, replacements);
 	}
 
