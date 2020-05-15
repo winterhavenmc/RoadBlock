@@ -72,7 +72,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 				}
 			}
 		}
-		else if (args.length == 2 || args[0].equalsIgnoreCase("help")) {
+		else if (args.length == 2 && args[0].equalsIgnoreCase("help")) {
 			for (String subcommand : SUBCOMMANDS) {
 				if (sender.hasPermission("roadblock." + subcommand)
 						&& subcommand.startsWith(args[1].toLowerCase())) {
