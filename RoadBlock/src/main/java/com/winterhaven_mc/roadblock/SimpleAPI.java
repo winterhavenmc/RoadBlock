@@ -4,8 +4,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public final class SimpleAPI {
@@ -96,26 +94,6 @@ public final class SimpleAPI {
 		// return result of: block is a protected road block or block is within passed height above a road block
 		return PluginMain.instance.blockManager.isRoadBlock(location.getBlock())
 				|| PluginMain.instance.blockManager.isAboveRoad(location, height);
-	}
-
-
-	/**
-	 * Get item name from language config file
-	 *
-	 * @return String - tool name as defined in language config file
-	 */
-	public static String getItemName() {
-		return PluginMain.instance.messageManager.getItemName();
-	}
-
-
-	/**
-	 * Get item lore from language config file
-	 *
-	 * @return List of String - lines of tool lore as defined in language config file
-	 */
-	public static List<String> getItemLore() {
-		return PluginMain.instance.messageManager.getItemLore();
 	}
 
 }
