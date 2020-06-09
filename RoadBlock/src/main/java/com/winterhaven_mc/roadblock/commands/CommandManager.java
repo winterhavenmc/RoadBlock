@@ -31,11 +31,6 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	private final static ChatColor helpColor = ChatColor.YELLOW;
 	private final static ChatColor usageColor = ChatColor.GOLD;
 
-	// list of possible subcommands
-	private final static List<String> SUBCOMMANDS =
-			Collections.unmodifiableList(new ArrayList<>(Arrays.asList(
-					"reload", "show", "status", "tool", "help")));
-
 
 	/**
 	 * Class constructor
@@ -70,18 +65,18 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// return list of valid matching subcommands
 		if (args.length == 1) {
-			for (String subcommand : SUBCOMMANDS) {
-				if (sender.hasPermission("roadblock." + subcommand)
-						&& subcommand.startsWith(args[0].toLowerCase())) {
-					returnList.add(subcommand);
+			for (Subcommand subcommand : Subcommand.values()) {
+				if (sender.hasPermission("roadblock." + subcommand.toString().toLowerCase())
+						&& subcommand.toString().toLowerCase().startsWith(args[0].toLowerCase())) {
+					returnList.add(subcommand.toString());
 				}
 			}
 		}
 		else if (args.length == 2 && args[0].equalsIgnoreCase("help")) {
-			for (String subcommand : SUBCOMMANDS) {
-				if (sender.hasPermission("roadblock." + subcommand)
-						&& subcommand.startsWith(args[1].toLowerCase())) {
-					returnList.add(subcommand);
+			for (Subcommand subcommand : Subcommand.values()) {
+				if (sender.hasPermission("roadblock." + subcommand.toString().toLowerCase())
+						&& subcommand.toString().toLowerCase().startsWith(args[1].toLowerCase())) {
+					returnList.add(subcommand.toString());
 				}
 			}
 		}
@@ -164,7 +159,6 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		// check max arguments
 		if (args.length > maxArgs) {
 			new Message.Builder<MessageId,Macro>(sender,COMMAND_FAIL_ARGS_COUNT_OVER).send();
-
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return false;
 		}
