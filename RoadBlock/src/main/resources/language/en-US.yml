@@ -18,9 +18,8 @@ ITEM_INFO:
 ##########
 
 # Variable substitutions:
-#  %PLAYER_NAME%    name of player
+#  %ITEM_NAME%      item name from this file
 #  %WORLD_NAME%     name of player's current world
-#  %TOOL_NAME%      name of tool, as defined in this file
 #  %QUANTITY%       a quantity
 #  %MATERIAL%       block material
 
@@ -64,11 +63,11 @@ MESSAGES:
 
   COMMAND_FAIL_TOOL_INVENTORY_FULL:
     enabled: true
-    string: '&8[&eRoadBlock&8] &cCould not give %TOOL_NAME% because your inventory is full.'
+    string: '&8[&eRoadBlock&8] &cCould not give %ITEM_NAME%&r&c because your inventory is full.'
 
   COMMAND_FAIL_TOOL_PERMISSION:
     enabled: true
-    string: '&8[&eRoadBlock&8] &cYou do not have permission to create a %TOOL_NAME%!'
+    string: '&8[&eRoadBlock&8] &cYou do not have permission to create a %ITEM_NAME%!'
 
   COMMAND_FAIL_HELP_PERMISSION:
     enabled: true
@@ -112,12 +111,12 @@ MESSAGES:
   TOOL_FAIL_WORLD_DISABLED:
     enabled: true
     repeat-delay: 1
-    string: '&8[&eRoadBlock&8] &cRoadBlocks are not enabled in world %WORLD_NAME%.'
+    string: '&8[&eRoadBlock&8] &cRoadBlocks are not enabled in world ''%WORLD_NAME%''.'
 
   TOOL_FAIL_USE_PERMISSION:
     enabled: true
     repeat-delay: 1
-    string: '&8[&eRoadBlock&8] &cYou do not have permission to use a &b%TOOL_NAME%&r&3 in %WORLD_NAME%.'
+    string: '&8[&eRoadBlock&8] &cYou do not have permission to use a &b%ITEM_NAME%&r&c in %WORLD_NAME%.'
 
   TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION:
     enabled: true
@@ -132,7 +131,7 @@ MESSAGES:
   TOOL_FAIL_USE_SHIFT_CLICK:
     enabled: true
     repeat-delay: 5
-    string: '&8[&eRoadBlock&8] &7You must shift-click to use a %TOOL_NAME%.'
+    string: '&8[&eRoadBlock&8] &7You must shift-click to use a %ITEM_NAME%&r&7.'
 
   TOOL_FAIL_DISTANCE_EXCEEDED:
     enabled: true
