@@ -555,9 +555,9 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 			while (rs.next()) {
 
-				World world;
-				long worldUidMsb;
-				long worldUidLsb;
+				final World world;
+				final long worldUidMsb;
+				final long worldUidLsb;
 
 				final String worldName = rs.getString("worldname");
 				final double x = rs.getDouble("x");
@@ -566,29 +566,21 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 				// if schema version 0, get world object from stored world name
 				if (schemaVersion == 0) {
-					try {
-						world = plugin.getServer().getWorld(worldName);
-					}
-					catch (Exception e) {
-						plugin.getLogger().warning("Stored block has unloaded world: "
-								+ worldName + ". Skipping record.");
-						continue;
-					}
+					world = plugin.getServer().getWorld(worldName);
 				}
 				// else get world object from stored world uuid
 				else {
 					worldUidMsb = rs.getLong("worlduidmsb");
 					worldUidLsb = rs.getLong("worlduidlsb");
 					UUID worldUid = new UUID(worldUidMsb, worldUidLsb);
+					world = plugin.getServer().getWorld(worldUid);
+				}
 
-					try {
-						world = plugin.getServer().getWorld(worldUid);
-					}
-					catch (Exception e) {
-						plugin.getLogger().warning("Stored block has unloaded world: "
-								+ worldName + ". Skipping record.");
-						continue;
-					}
+				// if world is null, skip adding record to return set
+				if (world == null) {
+					plugin.getLogger().warning("Stored block has unloaded world: "
+							+ worldName + ". Skipping record.");
+					continue;
 				}
 
 				Location location = new Location(world, x, y, z);
