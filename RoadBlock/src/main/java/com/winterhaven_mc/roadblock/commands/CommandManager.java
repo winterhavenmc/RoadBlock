@@ -66,16 +66,16 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		// return list of valid matching subcommands
 		if (args.length == 1) {
 			for (Subcommand subcommand : Subcommand.values()) {
-				if (sender.hasPermission("roadblock." + subcommand.toString().toLowerCase())
-						&& subcommand.toString().toLowerCase().startsWith(args[0].toLowerCase())) {
+				if (sender.hasPermission("roadblock." + subcommand.toString())
+						&& subcommand.toString().startsWith(args[0].toLowerCase())) {
 					returnList.add(subcommand.toString());
 				}
 			}
 		}
 		else if (args.length == 2 && args[0].equalsIgnoreCase("help")) {
 			for (Subcommand subcommand : Subcommand.values()) {
-				if (sender.hasPermission("roadblock." + subcommand.toString().toLowerCase())
-						&& subcommand.toString().toLowerCase().startsWith(args[1].toLowerCase())) {
+				if (sender.hasPermission("roadblock." + subcommand.toString())
+						&& subcommand.toString().startsWith(args[1].toLowerCase())) {
 					returnList.add(subcommand.toString());
 				}
 			}
@@ -93,14 +93,14 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// check min arguments
 		if (args.length < minArgs) {
-			new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			new Message<MessageId, Macro>(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return false;
 		}
 
 		// check max arguments
 		if (args.length > maxArgs) {
-			new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			new Message<MessageId, Macro>(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return false;
 		}
@@ -133,7 +133,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 			return helpCommand(sender, args);
 		}
 
-		new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_INVALID_COMMAND).send();
+		new Message<MessageId, Macro>(sender, COMMAND_FAIL_INVALID_COMMAND).send();
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 		return false;
 	}
@@ -149,7 +149,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// check that sender has permission for status command
 		if (!sender.hasPermission("roadblock.status")) {
-			new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_STATUS_PERMISSION).send();
+			new Message<MessageId, Macro>(sender, COMMAND_FAIL_STATUS_PERMISSION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 		}
 
@@ -158,7 +158,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// check max arguments
 		if (args.length > maxArgs) {
-			new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			new Message<MessageId, Macro>(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return false;
 		}
@@ -215,7 +215,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// check that sender has permission for reload command
 		if (!sender.hasPermission("roadblock.reload")) {
-			new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_RELOAD_PERMISSION).send();
+			new Message<MessageId, Macro>(sender, COMMAND_FAIL_RELOAD_PERMISSION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -225,7 +225,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// check max arguments
 		if (args.length > maxArgs) {
-			new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			new Message<MessageId, Macro>(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return false;
 		}
@@ -258,7 +258,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		DataStore.reload();
 
 		// send player success message
-		new Message.Builder<MessageId, Macro>(sender, COMMAND_SUCCESS_RELOAD).send();
+		new Message<MessageId, Macro>(sender, COMMAND_SUCCESS_RELOAD).send();
 		return true;
 	}
 
@@ -274,7 +274,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// sender must be player
 		if (!(sender instanceof Player)) {
-			new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_CONSOLE).send();
+			new Message<MessageId, Macro>(sender, COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
 
@@ -283,7 +283,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// check player permissions
 		if (!player.hasPermission("roadblock.show")) {
-			new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_SHOW_PERMISSION).send();
+			new Message<MessageId, Macro>(sender, COMMAND_FAIL_SHOW_PERMISSION).send();
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -298,7 +298,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 			}
 			catch (NumberFormatException nfe) {
 				// send player integer parse error message and return
-				new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_SET_INVALID_INTEGER).send();
+				new Message<MessageId, Macro>(sender, COMMAND_FAIL_SET_INVALID_INTEGER).send();
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 
 				player.sendMessage("§6/roadblock show <distance>");
@@ -313,7 +313,9 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.highlightManager.highlightBlocks(player, locations, HighlightStyle.PROTECT);
 
 		// send player success message
-		new Message.Builder<MessageId, Macro>(player, COMMAND_SUCCESS_SHOW).send();
+		new Message<MessageId, Macro>(player, COMMAND_SUCCESS_SHOW)
+				.setMacro(Macro.QUANTITY, locations.size())
+				.send();
 		plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_SHOW);
 
 		return true;
@@ -330,7 +332,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// sender must be player
 		if (!(sender instanceof Player)) {
-			new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_CONSOLE).send();
+			new Message<MessageId, Macro>(sender, COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
 
@@ -339,7 +341,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// check player permissions
 		if (!player.hasPermission("roadblock.tool")) {
-			new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_TOOL_PERMISSION).send();
+			new Message<MessageId, Macro>(sender, COMMAND_FAIL_TOOL_PERMISSION).send();
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -349,7 +351,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// check max arguments
 		if (args.length > maxArgs) {
-			new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			new Message<MessageId, Macro>(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return false;
 		}
@@ -362,7 +364,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// if no room in inventory, send message
 		if (!noFit.isEmpty()) {
-			new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_TOOL_INVENTORY_FULL).send();
+			new Message<MessageId, Macro>(sender, COMMAND_FAIL_TOOL_INVENTORY_FULL).send();
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -384,7 +386,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("roadblock.help")) {
-			new Message.Builder<MessageId, Macro>(sender, COMMAND_FAIL_HELP_PERMISSION).send();
+			new Message<MessageId, Macro>(sender, COMMAND_FAIL_HELP_PERMISSION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
