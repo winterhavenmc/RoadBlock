@@ -206,32 +206,34 @@ public final class BlockManager {
 
 
 	/**
-	 * Insert block locations into datastore
+	 * Insert block location records into datastore
 	 *
-	 * @param locations a Collection of Locations to be inserted into the datastore
+	 * @param locationRecords a Collection of Locations to be inserted into the datastore
 	 */
-	public final void storeLocations(final Collection<Location> locations) {
-		plugin.dataStore.insertRecords(locations);
+	public final void storeLocations(final Collection<LocationRecord> locationRecords) {
+		plugin.dataStore.insertRecords(locationRecords);
 	}
 
 
 	/**
 	 * Remove block locations from datastore
 	 *
-	 * @param locations a Collection of Locations to be deleted from the datastore
+	 * @param locationRecords a Collection of Locations to be deleted from the datastore
 	 */
-	public final void removeLocations(final Collection<Location> locations) {
-		plugin.dataStore.deleteRecords(locations);
+	public final void removeLocations(final Collection<LocationRecord> locationRecords) {
+		plugin.dataStore.deleteRecords(locationRecords);
 	}
 
 
 	/**
 	 * Remove a block location from datastore
 	 *
-	 * @param location the location to be removed from the datastore
+	 * @param locationRecord the location to be removed from the datastore
 	 */
-	public final void removeLocation(final Location location) {
-		plugin.dataStore.deleteRecord(location);
+	public final void removeLocation(final LocationRecord locationRecord) {
+		Set<LocationRecord> locationRecords = new HashSet<>();
+		locationRecords.add(locationRecord);
+		plugin.dataStore.deleteRecords(locationRecords);
 	}
 
 
