@@ -32,6 +32,8 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	// chunk cache
 	private final Set<Location> chunkCache;
 
+	// schema version
+	private int schemaVersion;
 
 	/**
 	 * Class constructor
@@ -86,6 +88,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		// create a database connection
 		connection = DriverManager.getConnection(dbUrl);
 
+		// update database schema if necessary
 		updateSchema();
 
 		// set initialized true
@@ -94,22 +97,35 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	}
 
 
-	private void updateSchema() throws SQLException {
-
-		final Statement statement = connection.createStatement();
-
-		ResultSet rs = statement.executeQuery(Queries.getQuery("GetUserVersion"));
+	private int getSchemaVersion() {
 
 		int version = -1;
 
-		while (rs.next()) {
-			version = rs.getInt(1);
+		try {
+			final Statement statement = connection.createStatement();
+
+			ResultSet rs = statement.executeQuery(Queries.getQuery("GetUserVersion"));
+
+			while (rs.next()) {
+				version = rs.getInt(1);
+			}
 		}
+		catch (SQLException e) {
+			plugin.getLogger().warning("Could not get schema version!");
+		}
+		return version;
+	}
 
-		plugin.getLogger().info("SQLite schema user version: " + version);
 
-		if (version == 0) {
-			Set<LocationRecord> records = selectAllRecordsVersion0();
+	private void updateSchema() throws SQLException {
+
+		schemaVersion = getSchemaVersion();
+		plugin.getLogger().info("SQLite schema v" + schemaVersion);
+
+		final Statement statement = connection.createStatement();
+
+		if (schemaVersion == 0) {
+			Set<LocationRecord> records = selectAllRecords();
 			statement.executeUpdate("DROP TABLE IF EXISTS blocks");
 			statement.executeUpdate("DROP INDEX IF EXISTS chunks");
 			statement.executeUpdate(Queries.getQuery("CreateBlockTable"));
@@ -117,6 +133,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 			int count = insertRecords(records);
 			plugin.getLogger().info(count + " block records migrated to schema v1");
 			statement.executeUpdate("PRAGMA user_version = 1");
+			schemaVersion = 1;
 			return;
 		}
 
@@ -525,64 +542,6 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 *
 	 * @return List of location records
 	 */
-	synchronized final Set<LocationRecord> selectAllRecordsVersion0() {
-
-		final Set<LocationRecord> returnSet = new HashSet<>();
-
-		try {
-			PreparedStatement preparedStatement =
-					connection.prepareStatement(Queries.getQuery("SelectAllBlocks"));
-
-			// execute sql query
-			ResultSet rs = preparedStatement.executeQuery();
-
-			while (rs.next()) {
-
-				String worldName = rs.getString("worldname");
-				double x = rs.getDouble("x");
-				double y = rs.getDouble("y");
-				double z = rs.getDouble("z");
-
-				World world;
-
-				try {
-					world = plugin.getServer().getWorld(worldName);
-				}
-				catch (Exception e) {
-					plugin.getLogger().warning("Stored block has unloaded world: "
-							+ worldName + ". Skipping record.");
-					continue;
-				}
-
-				Location location = new Location(world, x, y, z);
-				LocationRecord locationRecord = new LocationRecord(location);
-				returnSet.add(locationRecord);
-			}
-		}
-		catch (Exception e) {
-
-			// output simple error message
-			plugin.getLogger().warning("An error occurred while trying to "
-					+ "fetch all records from the " + getDisplayName() + " datastore.");
-			plugin.getLogger().warning(e.getLocalizedMessage());
-
-			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
-				e.getStackTrace();
-			}
-		}
-
-		// return results in an unmodifiable set
-		return Collections.unmodifiableSet(returnSet);
-	}
-
-
-	/**
-	 * Retrieve all road block location records from SQLite datastore
-	 *
-	 * @return List of location records
-	 */
-	@Override
 	synchronized final Set<LocationRecord> selectAllRecords() {
 
 		final Set<LocationRecord> returnSet = new HashSet<>();
@@ -596,23 +555,40 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 			while (rs.next()) {
 
+				World world;
+				long worldUidMsb;
+				long worldUidLsb;
+
 				final String worldName = rs.getString("worldname");
-				final long worldUidMsb = rs.getLong("worlduidmsb");
-				final long worldUidLsb = rs.getLong("worlduidlsb");
 				final double x = rs.getDouble("x");
 				final double y = rs.getDouble("y");
 				final double z = rs.getDouble("z");
 
-				UUID worldUid = new UUID(worldUidMsb, worldUidLsb);
-				World world;
-
-				try {
-					world = plugin.getServer().getWorld(worldUid);
+				// if schema version 0, get world object from stored world name
+				if (schemaVersion == 0) {
+					try {
+						world = plugin.getServer().getWorld(worldName);
+					}
+					catch (Exception e) {
+						plugin.getLogger().warning("Stored block has unloaded world: "
+								+ worldName + ". Skipping record.");
+						continue;
+					}
 				}
-				catch (Exception e) {
-					plugin.getLogger().warning("Stored block has unloaded world: "
-							+ worldName + ". Skipping record.");
-					continue;
+				// else get world object from stored world uuid
+				else {
+					worldUidMsb = rs.getLong("worlduidmsb");
+					worldUidLsb = rs.getLong("worlduidlsb");
+					UUID worldUid = new UUID(worldUidMsb, worldUidLsb);
+
+					try {
+						world = plugin.getServer().getWorld(worldUid);
+					}
+					catch (Exception e) {
+						plugin.getLogger().warning("Stored block has unloaded world: "
+								+ worldName + ". Skipping record.");
+						continue;
+					}
 				}
 
 				Location location = new Location(world, x, y, z);
