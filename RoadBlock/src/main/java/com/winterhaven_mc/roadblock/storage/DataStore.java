@@ -38,35 +38,21 @@ public abstract class DataStore {
 	/**
 	 * Store list of records
 	 *
-	 * @param locations a {@code Collection} of {@code Location}
+	 * @param locationRecords a {@code Collection} of {@code Location}
 	 *                  for block locations to be inserted into the datastore
 	 */
-	abstract void insertRecords(final Collection<Location> locations);
-
-
-	/**
-	 * Store record
-	 *
-	 * @param location a {@code Location} of a block to be inserted into the datastore
-	 */
-	abstract void insertRecord(final Location location);
+	@SuppressWarnings("UnusedReturnValue")
+	abstract int insertRecords(final Collection<LocationRecord> locationRecords);
 
 
 	/**
 	 * delete list of records
 	 *
-	 * @param locationSet {@code Collection} of {@code Location}
+	 * @param locationRecords {@code Collection} of {@code Location}
 	 *                    containing unique composite keys of records to delete
 	 */
-	abstract void deleteRecords(final Collection<Location> locationSet);
-
-
-	/**
-	 * Delete record
-	 *
-	 * @param location unique composite key for a record
-	 */
-	abstract void deleteRecord(final Location location);
+	@SuppressWarnings("UnusedReturnValue")
+	abstract int deleteRecords(final Collection<LocationRecord> locationRecords);
 
 
 	/**
@@ -74,7 +60,7 @@ public abstract class DataStore {
 	 *
 	 * @return Set of {@code Location} for all block records
 	 */
-	abstract Set<Location> selectAllRecords();
+	abstract Set<LocationRecord> selectAllRecords();
 
 
 	/**
@@ -279,14 +265,11 @@ public abstract class DataStore {
 			}
 
 			// get set of all location records in old datastore
-			Set<Location> allRecords = new HashSet<>(oldDataStore.selectAllRecords());
+			Set<LocationRecord> allRecords = new HashSet<>(oldDataStore.selectAllRecords());
 
-			int count = 0;
-			for (Location record : allRecords) {
-				newDataStore.insertRecord(record);
-				count++;
-			}
-			plugin.getLogger().info(count + " records converted to " + newDataStore.getDisplayName() + " datastore.");
+			int count = newDataStore.insertRecords(allRecords);
+			plugin.getLogger().info(count + " records converted to "
+					+ newDataStore.getDisplayName() + " datastore.");
 
 			newDataStore.sync();
 
