@@ -6,10 +6,7 @@ import com.winterhaven_mc.roadblock.listeners.EventListener;
 import com.winterhaven_mc.roadblock.storage.BlockManager;
 import com.winterhaven_mc.roadblock.storage.DataStore;
 
-import com.winterhaven_mc.util.LanguageManager;
-import com.winterhaven_mc.util.WorldManager;
-import com.winterhaven_mc.util.SoundConfiguration;
-import com.winterhaven_mc.util.YamlSoundConfiguration;
+import com.winterhaven_mc.util.*;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -51,8 +48,8 @@ public final class PluginMain extends JavaPlugin {
 		// instantiate highlight manager
 		highlightManager = new HighlightManager(this);
 
-		// load language file
-		LanguageManager.getInstance().loadMessages();
+		// force loading of language file at startup
+		LanguageManager.getInstance();
 
 		// instantiate command manager
 		new CommandManager(this);
