@@ -5,6 +5,7 @@ import com.winterhaven_mc.roadblock.highlights.HighlightStyle;
 import com.winterhaven_mc.roadblock.messages.Macro;
 import com.winterhaven_mc.roadblock.messages.MessageId;
 import com.winterhaven_mc.roadblock.sounds.SoundId;
+import com.winterhaven_mc.roadblock.storage.LocationRecord;
 import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
 
 import com.winterhaven_mc.util.Message;
@@ -89,7 +90,7 @@ public final class EventListener implements Listener {
 
 			// if world is not enabled, send message and return
 			if (!plugin.worldManager.isEnabled(player.getWorld())) {
-				new Message.Builder<MessageId, Macro>(player,TOOL_FAIL_WORLD_DISABLED)
+				new Message<MessageId, Macro>(player,TOOL_FAIL_WORLD_DISABLED)
 						.setMacro(Macro.WORLD_NAME,player.getWorld())
 						.send();
 				return;
@@ -115,7 +116,7 @@ public final class EventListener implements Listener {
 
 			// if clicked block is air, the actual clicked block was too far away
 			if (clickedBlock.getType().equals(Material.AIR)) {
-				new Message.Builder<MessageId, Macro>(player, TOOL_FAIL_DISTANCE_EXCEEDED).send();
+				new Message<MessageId, Macro>(player, TOOL_FAIL_DISTANCE_EXCEEDED).send();
 				return;
 			}
 
@@ -124,14 +125,14 @@ public final class EventListener implements Listener {
 
 			// if player does not have roadblock.set permission, do nothing and return
 			if (!player.hasPermission("roadblock.set")) {
-				new Message.Builder<MessageId, Macro>(player, TOOL_FAIL_USE_PERMISSION).send();
+				new Message<MessageId, Macro>(player, TOOL_FAIL_USE_PERMISSION).send();
 				plugin.soundConfig.playSound(player, SoundId.TOOL_FAIL_USE_PERMISSION);
 				return;
 			}
 
 			// if block clicked is not in list of road block materials, send message and return
 			if (!plugin.blockManager.getRoadBlockMaterials().contains(clickedBlock.getType())) {
-				new Message.Builder<MessageId, Macro>(player, TOOL_FAIL_INVALID_MATERIAL)
+				new Message<MessageId, Macro>(player, TOOL_FAIL_INVALID_MATERIAL)
 						.setMacro(Macro.MATERIAL, clickedBlock.getType())
 						.send();
 				plugin.soundConfig.playSound(player, SoundId.TOOL_FAIL_INVALID_MATERIAL);
@@ -144,6 +145,12 @@ public final class EventListener implements Listener {
 
 			final int quantity = locationSet.size();
 
+			// create set of location records from locationSet
+			Set<LocationRecord> locationRecords = new HashSet<>();
+			for (Location location : locationSet) {
+				locationRecords.add(new LocationRecord(location));
+			}
+
 			// if right click, protect blocks
 			if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR)) {
 
@@ -151,10 +158,10 @@ public final class EventListener implements Listener {
 				plugin.highlightManager.highlightBlocks(player, locationSet, HighlightStyle.PROTECT);
 
 				// store blocks
-				plugin.blockManager.storeLocations(locationSet);
+				plugin.blockManager.storeLocations(locationRecords);
 
 				// send player successful protect message
-				new Message.Builder<MessageId, Macro>(player, TOOL_SUCCESS_PROTECT)
+				new Message<MessageId, Macro>(player, TOOL_SUCCESS_PROTECT)
 						.setMacro(Macro.QUANTITY, quantity)
 						.send();
 				plugin.soundConfig.playSound(player, SoundId.TOOL_SUCCESS_PROTECT);
@@ -167,11 +174,11 @@ public final class EventListener implements Listener {
 				plugin.highlightManager.highlightBlocks(player, locationSet, HighlightStyle.UNPROTECT);
 
 				// remove blocks from storage
-				plugin.blockManager.removeLocations(locationSet);
+				plugin.blockManager.removeLocations(locationRecords);
 
 				// send player successful unprotect message
-				new Message.Builder<MessageId, Macro>(player, TOOL_SUCCESS_UNPROTECT)
-						.setMacro(Macro.QUANTITY,quantity)
+				new Message<MessageId, Macro>(player, TOOL_SUCCESS_UNPROTECT)
+						.setMacro(Macro.QUANTITY, quantity)
 						.send();
 				plugin.soundConfig.playSound(player, SoundId.TOOL_SUCCESS_UNPROTECT);
 			}
@@ -266,7 +273,7 @@ public final class EventListener implements Listener {
 		// check if block below placed block is protected grass path, to prevent converting to regular dirt
 		if (placedBlock.getRelative(BlockFace.DOWN).getType().equals(Material.GRASS_PATH)) {
 			event.setCancelled(true);
-			new Message.Builder<MessageId, Macro>(player, BLOCK_PLACE_FAIL_GRASS_PATH).send();
+			new Message<MessageId, Macro>(player, BLOCK_PLACE_FAIL_GRASS_PATH).send();
 			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_GRASS_PATH);
 			return;
 		}
@@ -274,7 +281,7 @@ public final class EventListener implements Listener {
 		// check if block placed is configured distance above a road block
 		if (plugin.blockManager.isAboveRoad(placedBlock.getLocation(), height)) {
 			event.setCancelled(true);
-			new Message.Builder<MessageId, Macro>(player, BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
+			new Message<MessageId, Macro>(player, BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
 			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_ABOVE_ROAD);
 		}
 	}
@@ -309,7 +316,7 @@ public final class EventListener implements Listener {
 			// if block is above a road block, cancel event and send player message
 			if (plugin.blockManager.isAboveRoad(blockState.getLocation(), height)) {
 				event.setCancelled(true);
-				new Message.Builder<MessageId, Macro>(player, BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
+				new Message<MessageId, Macro>(player, BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
 				plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_ABOVE_ROAD);
 				break;
 			}
@@ -343,13 +350,13 @@ public final class EventListener implements Listener {
 			// if player does not have override permission, cancel event and send player message
 			if (!player.hasPermission("roadblock.break")) {
 				event.setCancelled(true);
-				new Message.Builder<MessageId, Macro>(player, TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION).send();
+				new Message<MessageId, Macro>(player, TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION).send();
 				return;
 			}
 
 			// player does have override permission; remove protection from block and send player message
-			plugin.blockManager.removeLocation(block.getLocation());
-			new Message.Builder<MessageId, Macro>(player, TOOL_SUCCESS_BREAK_BLOCK).send();
+			plugin.blockManager.removeLocation(new LocationRecord(block.getLocation()));
+			new Message<MessageId, Macro>(player, TOOL_SUCCESS_BREAK_BLOCK).send();
 		}
 	}
 
