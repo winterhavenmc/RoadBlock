@@ -27,7 +27,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	private Connection connection;
 
 	// block cache
-	private final Map<LocationRecord, CacheStatus> blockCache;
+	private final Map<Location, CacheStatus> blockCache;
 
 	// chunk cache
 	private final Set<Location> chunkCache;
@@ -209,7 +209,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		catch (Exception e) {
 
 			// output simple error message
-			plugin.getLogger().warning("An error occured while closing the " + getDisplayName() + " datastore.");
+			plugin.getLogger().warning("An error occurred while closing the " + getDisplayName() + " datastore.");
 			plugin.getLogger().warning(e.getMessage());
 
 			// if debugging is enabled, output stack trace
@@ -230,13 +230,11 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	@Override
 	final boolean isProtected(final Location location) {
 
-		LocationRecord locationRecord = new LocationRecord(location);
-
 		// check cache first
 		if (isChunkCached(location)) {
-			if (blockCache.containsKey(locationRecord)) {
-				return blockCache.get(locationRecord).equals(CacheStatus.TRUE)
-						|| blockCache.get(locationRecord).equals(CacheStatus.PENDING_INSERT);
+			if (blockCache.containsKey(location)) {
+				return blockCache.get(location).equals(CacheStatus.TRUE)
+						|| blockCache.get(location).equals(CacheStatus.PENDING_INSERT);
 			}
 			return false;
 		}
@@ -245,9 +243,9 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		cacheChunk(location.getChunk());
 
 		// check cache again
-		if (blockCache.containsKey(locationRecord)) {
-			return blockCache.get(locationRecord).equals(CacheStatus.TRUE)
-					|| blockCache.get(locationRecord).equals(CacheStatus.PENDING_INSERT);
+		if (blockCache.containsKey(location)) {
+			return blockCache.get(location).equals(CacheStatus.TRUE)
+					|| blockCache.get(location).equals(CacheStatus.PENDING_INSERT);
 		}
 		return false;
 	}
@@ -264,7 +262,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		// set cache for all records in list to pending insert
 		int count = 0;
 		for (LocationRecord locationRecord : locationRecords) {
-			blockCache.put(locationRecord, CacheStatus.PENDING_INSERT);
+			blockCache.put(locationRecord.getLocation(), CacheStatus.PENDING_INSERT);
 			count++;
 		}
 		if (plugin.debug) {
@@ -295,7 +293,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 						if (plugin.getServer().getWorld(locationRecord.getWorldUid()) == null) {
 							plugin.getLogger().warning("An error occured while inserting"
 									+ " a record in the " + getDisplayName() + " datastore. World invalid!");
-							blockCache.remove(locationRecord);
+							blockCache.remove(locationRecord.getLocation());
 							continue;
 						}
 
@@ -334,7 +332,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 							continue;
 						}
 						count++;
-						blockCache.put(locationRecord, CacheStatus.TRUE);
+						blockCache.put(locationRecord.getLocation(), CacheStatus.TRUE);
 					}
 					connection.commit();
 					connection.setAutoCommit(true);
@@ -375,7 +373,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		// set cache for all records in list to pending delete
 		int count = 0;
 		for (LocationRecord locationRecord : locationRecords) {
-			blockCache.put(locationRecord, CacheStatus.PENDING_DELETE);
+			blockCache.put(locationRecord.getLocation(), CacheStatus.PENDING_DELETE);
 			count++;
 		}
 		if (plugin.debug) {
@@ -432,7 +430,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 								e.getStackTrace();
 							}
 						}
-						blockCache.remove(locationRecord);
+						blockCache.remove(locationRecord.getLocation());
 						count = count + rowsAffected;
 					}
 					connection.commit();
@@ -625,7 +623,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		int count = 0;
 
 		for (Location location : blockSet) {
-			blockCache.put(new LocationRecord(location), CacheStatus.TRUE);
+			blockCache.put(location, CacheStatus.TRUE);
 			count++;
 		}
 
@@ -649,9 +647,9 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 		int count = 0;
 		long startTime = System.nanoTime();
-		for (LocationRecord locationRecord : blockCache.keySet()) {
-			if (locationRecord.getLocation().getChunk().equals(chunk)) {
-				blockCache.remove(locationRecord);
+		for (Location location : blockCache.keySet()) {
+			if (location.getChunk().equals(chunk)) {
+				blockCache.remove(location);
 				count++;
 			}
 		}
