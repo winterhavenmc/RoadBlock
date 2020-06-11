@@ -316,7 +316,11 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		new Message<MessageId, Macro>(player, COMMAND_SUCCESS_SHOW)
 				.setMacro(Macro.QUANTITY, locations.size())
 				.send();
-		plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_SHOW);
+
+		// if any blocks highlighted, play sound
+		if (locations.size() > 0) {
+			plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_SHOW);
+		}
 
 		return true;
 	}
