@@ -126,11 +126,11 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 		if (schemaVersion == 0) {
 			int count;
-			ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='blocks'");
+			ResultSet rs = statement.executeQuery(Queries.getQuery("SelectBlockTable"));
 			if (rs.next()) {
 				Set<LocationRecord> existingRecords = selectAllRecords();
-				statement.executeUpdate("DROP TABLE IF EXISTS blocks");
-				statement.executeUpdate("DROP INDEX IF EXISTS chunks");
+				statement.executeUpdate(Queries.getQuery("DropBlockTable"));
+				statement.executeUpdate(Queries.getQuery("DropChunkIndex"));
 				statement.executeUpdate(Queries.getQuery("CreateBlockTable"));
 				statement.executeUpdate(Queries.getQuery("CreateChunkIndex"));
 				count = insertRecords(existingRecords);
