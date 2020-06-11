@@ -120,21 +120,28 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	private void updateSchema() throws SQLException {
 
 		schemaVersion = getSchemaVersion();
-		plugin.getLogger().info("SQLite schema v" + schemaVersion);
+		plugin.getLogger().info(getDisplayName() + " datastore schema v" + schemaVersion);
 
 		final Statement statement = connection.createStatement();
 
 		if (schemaVersion == 0) {
-			Set<LocationRecord> records = selectAllRecords();
-			statement.executeUpdate("DROP TABLE IF EXISTS blocks");
-			statement.executeUpdate("DROP INDEX IF EXISTS chunks");
-			statement.executeUpdate(Queries.getQuery("CreateBlockTable"));
-			statement.executeUpdate(Queries.getQuery("CreateChunkIndex"));
-			int count = insertRecords(records);
-			plugin.getLogger().info(count + " block records migrated to schema v1");
+			int count;
+			ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='blocks'");
+			if (rs.next()) {
+				Set<LocationRecord> existingRecords = selectAllRecords();
+				statement.executeUpdate("DROP TABLE IF EXISTS blocks");
+				statement.executeUpdate("DROP INDEX IF EXISTS chunks");
+				statement.executeUpdate(Queries.getQuery("CreateBlockTable"));
+				statement.executeUpdate(Queries.getQuery("CreateChunkIndex"));
+				count = insertRecords(existingRecords);
+				plugin.getLogger().info(count + " block records migrated to schema v1");
+			}
+
+			// update schema version in database
 			statement.executeUpdate("PRAGMA user_version = 1");
+
+			// update schema version field
 			schemaVersion = 1;
-			return;
 		}
 
 		// execute table creation statement
