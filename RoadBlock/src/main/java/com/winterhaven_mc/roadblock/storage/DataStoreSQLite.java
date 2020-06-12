@@ -13,7 +13,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.sql.*;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 
@@ -27,7 +26,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	private Connection connection;
 
 	// block cache
-	private final Map<Location, CacheStatus> blockCache;
+	private final LocationCache blockCache;
 
 	// chunk cache
 	private final Set<Location> chunkCache;
@@ -52,7 +51,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		this.filename = "roadblocks.db";
 
 		// create empty block cache
-		this.blockCache = new ConcurrentHashMap<>();
+		this.blockCache = LocationCache.getInstance();
 
 		// create empty chunk location cache
 		this.chunkCache = new HashSet<>();
@@ -308,11 +307,11 @@ final class DataStoreSQLite extends DataStore implements Listener {
 								preparedStatement.setString(1, locationRecord.getWorldName());
 								preparedStatement.setLong(2, locationRecord.getWorldUid().getMostSignificantBits());
 								preparedStatement.setLong(3, locationRecord.getWorldUid().getLeastSignificantBits());
-								preparedStatement.setDouble(4, locationRecord.getBlockX());
-								preparedStatement.setDouble(5, locationRecord.getBlockY());
-								preparedStatement.setDouble(6, locationRecord.getBlockZ());
-								preparedStatement.setFloat(7, locationRecord.getChunkX());
-								preparedStatement.setFloat(8, locationRecord.getChunkZ());
+								preparedStatement.setInt(4, locationRecord.getBlockX());
+								preparedStatement.setInt(5, locationRecord.getBlockY());
+								preparedStatement.setInt(6, locationRecord.getBlockZ());
+								preparedStatement.setInt(7, locationRecord.getChunkX());
+								preparedStatement.setInt(8, locationRecord.getChunkZ());
 
 								// execute prepared statement
 								preparedStatement.executeUpdate();
@@ -539,6 +538,88 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 		// return results in an unmodifiable set
 		return Collections.unmodifiableSet(returnSet);
+	}
+
+
+	/**
+	 * Retrieve all road block locations in chunk from the SQLite datastore
+	 *
+	 * @param chunk the chunk for which to retrieve all road block locations from the datastore
+	 * @return Set of locations
+	 */
+	@Override
+	synchronized final Set<LocationRecord> selectLocationRecordsInChunk(final Chunk chunk) {
+
+		// create new set for results
+		final Set<LocationRecord> returnSet = new HashSet<>();
+
+		try {
+			PreparedStatement preparedStatement =
+					connection.prepareStatement(Queries.getQuery("SelectBlocksInChunk"));
+
+			long worldUidMsb = chunk.getWorld().getUID().getMostSignificantBits();
+			long worldUidLsb = chunk.getWorld().getUID().getLeastSignificantBits();
+
+			preparedStatement.setLong(1, worldUidMsb);
+			preparedStatement.setLong(2, worldUidLsb);
+			preparedStatement.setInt(3, chunk.getX());
+			preparedStatement.setInt(4, chunk.getZ());
+
+			// execute sql query
+			long startTime = System.nanoTime();
+			ResultSet rs = preparedStatement.executeQuery();
+
+			long elapsedTime = System.nanoTime() - startTime;
+
+			int count = 0;
+
+			while (rs.next()) {
+
+				final long worldUidMSB = rs.getLong("worlduidmsb");
+				final long worldUidLSB = rs.getLong("worlduidlsb");
+				String worldName = rs.getString("worldname");
+				int blockX = rs.getInt("x");
+				int blockY = rs.getInt("y");
+				int blockZ = rs.getInt("z");
+				int chunkX = rs.getInt("chunk_x");
+				int chunkZ = rs.getInt("chunk_z");
+
+				UUID worldUid = new UUID(worldUidMSB,worldUidLSB);
+
+				if (plugin.getServer().getWorld(worldUid) == null) {
+					plugin.getLogger().warning("Stored location has invalid world: "
+							+ worldName + ". Skipping record.");
+					continue;
+				}
+
+				// get current world name
+				worldName = plugin.getServer().getWorld(worldUid).getName();
+
+				LocationRecord record = new LocationRecord(worldName, worldUid,	blockX, blockY, blockZ, chunkX, chunkZ);
+				returnSet.add(record);
+				count++;
+			}
+
+			if (plugin.profile) {
+				plugin.getLogger().info("Fetched " + count + " blocks in chunk in "
+						+ TimeUnit.NANOSECONDS.toMicros(elapsedTime) + " microseconds.");
+			}
+		}
+		catch (Exception e) {
+
+			// output simple error message
+			plugin.getLogger().warning("An error occurred while trying to "
+					+ "fetch records from the " + getDisplayName() + " datastore.");
+			plugin.getLogger().warning(e.getLocalizedMessage());
+
+			// if debugging is enabled, output stack trace
+			if (plugin.debug) {
+				e.printStackTrace();
+			}
+		}
+
+		// return result set
+		return returnSet;
 	}
 
 
