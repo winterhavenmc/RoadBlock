@@ -38,21 +38,21 @@ public abstract class DataStore {
 	/**
 	 * Store list of records
 	 *
-	 * @param locationRecords a {@code Collection} of {@code Location}
+	 * @param blockRecords a {@code Collection} of {@code Location}
 	 *                  for block locations to be inserted into the datastore
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	abstract int insertRecords(final Collection<LocationRecord> locationRecords);
+	abstract int insertRecords(final Collection<BlockRecord> blockRecords);
 
 
 	/**
 	 * delete list of records
 	 *
-	 * @param locationRecords {@code Collection} of {@code Location}
+	 * @param blockRecords {@code Collection} of {@code Location}
 	 *                    containing unique composite keys of records to delete
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	abstract int deleteRecords(final Collection<LocationRecord> locationRecords);
+	abstract int deleteRecords(final Collection<BlockRecord> blockRecords);
 
 
 	/**
@@ -60,7 +60,7 @@ public abstract class DataStore {
 	 *
 	 * @return Set of {@code Location} for all block records
 	 */
-	abstract Set<LocationRecord> selectAllRecords();
+	abstract Set<BlockRecord> selectAllRecords();
 
 
 	/**
@@ -72,21 +72,12 @@ public abstract class DataStore {
 
 
 	/**
-	 * Get block locations of road blocks within a chunk
-	 *
-	 * @param chunk the chunk containing records to be returned
-	 * @return {@code Set} of {@code Location} for block records within the chunk
-	 */
-	abstract Set<Location> selectBlockLocationsInChunk(final Chunk chunk);
-
-
-	/**
 	 * Get block records for locations within a chunk
 	 *
 	 * @param chunk the chunk containing records to be returned
 	 * @return {@code Set} of {@code LocationRecords} for block records within the chunk
 	 */
-	abstract Set<LocationRecord> selectLocationRecordsInChunk(final Chunk chunk);
+	abstract Set<BlockRecord> selectRecordsInChunk(final Chunk chunk);
 
 	/**
 	 * Get block records for locations within {@code distance} of {@code location}
@@ -273,7 +264,7 @@ public abstract class DataStore {
 			}
 
 			// get set of all location records in old datastore
-			Set<LocationRecord> allRecords = new HashSet<>(oldDataStore.selectAllRecords());
+			Set<BlockRecord> allRecords = new HashSet<>(oldDataStore.selectAllRecords());
 
 			int count = newDataStore.insertRecords(allRecords);
 			plugin.getLogger().info(count + " records converted to "

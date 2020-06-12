@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 
-public class LocationRecord {
+public class BlockRecord {
 
 	private final String worldName;
 	private final UUID worldUid;
@@ -23,7 +23,7 @@ public class LocationRecord {
 	 * Class constructor
 	 * @param location location for which to create location record
 	 */
-	public LocationRecord(final Location location) {
+	public BlockRecord(final Location location) {
 
 		World world = location.getWorld();
 		if (world != null) {
@@ -44,14 +44,22 @@ public class LocationRecord {
 
 	/**
 	 * Class constructor
+	 *
+	 * @param worldName location world name
+	 * @param worldUid location world uid
+	 * @param blockX location block x coordinate
+	 * @param blockY location block y coordinate
+	 * @param blockZ location block z coordinate
+	 * @param chunkX location chunk x coordinate
+	 * @param chunkZ location chunk z coordinate
 	 */
-	public LocationRecord(final String worldName,
-						  final UUID worldUid,
-						  final int blockX,
-						  final int blockY,
-						  final int blockZ,
-						  final int chunkX,
-						  final int chunkZ) {
+	public BlockRecord(final String worldName,
+					   final UUID worldUid,
+					   final int blockX,
+					   final int blockY,
+					   final int blockZ,
+					   final int chunkX,
+					   final int chunkZ) {
 
 		this.worldName = worldName;
 		this.worldUid = worldUid;
@@ -151,7 +159,7 @@ public class LocationRecord {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		LocationRecord that = (LocationRecord) o;
+		BlockRecord that = (BlockRecord) o;
 		return blockX == that.blockX &&
 				blockY == that.blockY &&
 				blockZ == that.blockZ &&

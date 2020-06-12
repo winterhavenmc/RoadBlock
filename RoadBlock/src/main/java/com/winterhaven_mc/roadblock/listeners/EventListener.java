@@ -5,7 +5,7 @@ import com.winterhaven_mc.roadblock.highlights.HighlightStyle;
 import com.winterhaven_mc.roadblock.messages.Macro;
 import com.winterhaven_mc.roadblock.messages.MessageId;
 import com.winterhaven_mc.roadblock.sounds.SoundId;
-import com.winterhaven_mc.roadblock.storage.LocationRecord;
+import com.winterhaven_mc.roadblock.storage.BlockRecord;
 import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
 
 import com.winterhaven_mc.util.Message;
@@ -146,9 +146,9 @@ public final class EventListener implements Listener {
 			final int quantity = locationSet.size();
 
 			// create set of location records from locationSet
-			Set<LocationRecord> locationRecords = new HashSet<>();
+			Set<BlockRecord> blockRecords = new HashSet<>();
 			for (Location location : locationSet) {
-				locationRecords.add(new LocationRecord(location));
+				blockRecords.add(new BlockRecord(location));
 			}
 
 			// if right click, protect blocks
@@ -158,7 +158,7 @@ public final class EventListener implements Listener {
 				plugin.highlightManager.highlightBlocks(player, locationSet, HighlightStyle.PROTECT);
 
 				// store blocks
-				plugin.blockManager.storeLocations(locationRecords);
+				plugin.blockManager.storeLocations(blockRecords);
 
 				// send player successful protect message
 				new Message<MessageId, Macro>(player, TOOL_SUCCESS_PROTECT)
@@ -174,7 +174,7 @@ public final class EventListener implements Listener {
 				plugin.highlightManager.highlightBlocks(player, locationSet, HighlightStyle.UNPROTECT);
 
 				// remove blocks from storage
-				plugin.blockManager.removeLocations(locationRecords);
+				plugin.blockManager.removeLocations(blockRecords);
 
 				// send player successful unprotect message
 				new Message<MessageId, Macro>(player, TOOL_SUCCESS_UNPROTECT)
@@ -355,7 +355,7 @@ public final class EventListener implements Listener {
 			}
 
 			// player does have override permission; remove protection from block and send player message
-			plugin.blockManager.removeLocation(new LocationRecord(block.getLocation()));
+			plugin.blockManager.removeLocation(new BlockRecord(block.getLocation()));
 			new Message<MessageId, Macro>(player, TOOL_SUCCESS_BREAK_BLOCK).send();
 		}
 	}
