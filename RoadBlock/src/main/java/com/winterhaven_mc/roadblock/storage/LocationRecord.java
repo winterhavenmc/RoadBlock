@@ -43,6 +43,27 @@ public class LocationRecord {
 
 
 	/**
+	 * Class constructor
+	 */
+	public LocationRecord(final String worldName,
+						  final UUID worldUid,
+						  final int blockX,
+						  final int blockY,
+						  final int blockZ,
+						  final int chunkX,
+						  final int chunkZ) {
+
+		this.worldName = worldName;
+		this.worldUid = worldUid;
+		this.blockX = blockX;
+		this.blockY = blockY;
+		this.blockZ = blockZ;
+		this.chunkX = chunkX;
+		this.chunkZ = chunkZ;
+	}
+
+
+	/**
 	 * Get location represented by location record
 	 * @return location
 	 */
