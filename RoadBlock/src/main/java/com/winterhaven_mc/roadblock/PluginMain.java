@@ -58,7 +58,7 @@ public final class PluginMain extends JavaPlugin {
 	public void onDisable() {
 
 		// close datastore
-		blockManager.closeDataStore();
+		blockManager.close();
 	}
 
 }

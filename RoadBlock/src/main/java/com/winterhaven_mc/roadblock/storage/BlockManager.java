@@ -43,7 +43,7 @@ public final class BlockManager {
 	/**
 	 * Close data store
 	 */
-	public void closeDataStore() {
+	public void close() {
 		dataStore.close();
 	}
 
