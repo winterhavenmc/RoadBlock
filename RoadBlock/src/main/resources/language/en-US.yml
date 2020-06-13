@@ -111,7 +111,7 @@ MESSAGES:
   TOOL_FAIL_WORLD_DISABLED:
     enabled: true
     repeat-delay: 1
-    string: '&8[&eRoadBlock&8] &cRoadBlocks are not enabled in world ''%WORLD_NAME%''.'
+    string: '&8[&eRoadBlock&8] &cPlugin is not enabled in world ''%WORLD_NAME%''.'
 
   TOOL_FAIL_USE_PERMISSION:
     enabled: true
