@@ -131,7 +131,7 @@ public abstract class DataStore {
 	 *
 	 * @return DataStoreType of this datastore type
 	 */
-	private DataStoreType getType() {
+	DataStoreType getType() {
 		return this.type;
 	}
 
@@ -195,6 +195,23 @@ public abstract class DataStore {
 
 
 	/**
+	 * Create new data store of configured type.<br>
+	 * No parameter version used when no current datastore exists
+	 *
+	 * @param dataStoreType datastore type to create
+	 * @return new datastore of configured type
+	 */
+	public static DataStore create(DataStoreType dataStoreType) {
+
+		// if passed data store type is null, use default type
+		if (dataStoreType == null) {
+			dataStoreType = DataStoreType.getDefaultType();
+		}
+		return create(dataStoreType, null);
+	}
+
+
+	/**
 	 * Create new data store of given type and convert old data store.<br>
 	 * Two parameter version used when a datastore instance already exists
 	 *
@@ -202,7 +219,7 @@ public abstract class DataStore {
 	 * @param oldDataStore  the existing datastore to be converted to the new datastore
 	 * @return instance of newly initialized datastore
 	 */
-	private static DataStore create(final DataStoreType dataStoreType, final DataStore oldDataStore) {
+	static DataStore create(final DataStoreType dataStoreType, final DataStore oldDataStore) {
 
 		// get new data store of specified type
 		final DataStore newDataStore = dataStoreType.create();
@@ -310,20 +327,20 @@ public abstract class DataStore {
 	}
 
 
-	public static void reload() {
-
-		// get current datastore type
-		final DataStoreType currentType = plugin.dataStore.getType();
-
-		// get configured datastore type
-		final DataStoreType newType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
-
-		// if current datastore type does not match configured datastore type, create new datastore
-		if (!currentType.equals(newType)) {
-
-			// create new datastore
-			plugin.dataStore = create(newType, plugin.dataStore);
-		}
-	}
+//	public static void reload() {
+//
+//		// get current datastore type
+//		final DataStoreType currentType = plugin.dataStore.getType();
+//
+//		// get configured datastore type
+//		final DataStoreType newType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
+//
+//		// if current datastore type does not match configured datastore type, create new datastore
+//		if (!currentType.equals(newType)) {
+//
+//			// create new datastore
+//			plugin.dataStore = create(newType, plugin.dataStore);
+//		}
+//	}
 
 }

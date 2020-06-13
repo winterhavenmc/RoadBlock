@@ -243,7 +243,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.profile = plugin.getConfig().getBoolean("profile");
 
 		// update road block materials list
-		plugin.blockManager.updateMaterials();
+		plugin.blockManager.reload();
 
 		// reload messages
 		LanguageManager.getInstance().loadMessages();
@@ -253,9 +253,6 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// reload enabled worlds
 		plugin.worldManager.reload();
-
-		// reload datastore
-		DataStore.reload();
 
 		// send player success message
 		new Message<MessageId, Macro>(sender, COMMAND_SUCCESS_RELOAD).send();

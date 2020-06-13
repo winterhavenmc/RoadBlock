@@ -4,7 +4,6 @@ import com.winterhaven_mc.roadblock.commands.CommandManager;
 import com.winterhaven_mc.roadblock.highlights.HighlightManager;
 import com.winterhaven_mc.roadblock.listeners.EventListener;
 import com.winterhaven_mc.roadblock.storage.BlockManager;
-import com.winterhaven_mc.roadblock.storage.DataStore;
 
 import com.winterhaven_mc.util.*;
 
@@ -14,7 +13,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class PluginMain extends JavaPlugin {
 
 	public static PluginMain instance;
-	public DataStore dataStore;
 	public BlockManager blockManager;
 	public HighlightManager highlightManager;
 	public SoundConfiguration soundConfig;
@@ -32,9 +30,6 @@ public final class PluginMain extends JavaPlugin {
 
 		// install default config.yml if not present  
 		saveDefaultConfig();
-
-		// get initialized destination storage object
-		dataStore = DataStore.create();
 
 		// instantiate world manager
 		worldManager = new WorldManager(this);
@@ -63,7 +58,7 @@ public final class PluginMain extends JavaPlugin {
 	public void onDisable() {
 
 		// close datastore
-		dataStore.close();
+		blockManager.closeDataStore();
 	}
 
 }
