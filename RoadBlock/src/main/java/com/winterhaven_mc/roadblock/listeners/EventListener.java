@@ -90,6 +90,7 @@ public final class EventListener implements Listener {
 			// if world is not enabled, send message and return
 			if (!plugin.worldManager.isEnabled(player.getWorld())) {
 				Message.create(player, TOOL_FAIL_WORLD_DISABLED).setMacro(WORLD_NAME, player.getWorld()).send();
+				event.setCancelled(true);
 				return;
 			}
 
