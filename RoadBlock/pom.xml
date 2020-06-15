@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.winterhaven-mc</groupId>
   <artifactId>RoadBlock</artifactId>
-  <version>1.15.0</version>
+  <version>1.15.1-SNAPSHOT</version>
   <name>RoadBlock</name>
 
 	<properties>
@@ -43,11 +43,11 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- MessageManagerLib -->
+		<!-- MessengerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
-			<artifactId>message-manager-lib</artifactId>
-			<version>1.0.8</version>
+			<artifactId>messenger-lib</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 
 		<!-- SoundConfigLib -->
@@ -101,7 +101,7 @@
 								<includes>
 									<include>com.winterhaven-mc:world-manager-lib</include>
 									<include>com.winterhaven-mc:sound-config-lib</include>
-									<include>com.winterhaven-mc:message-manager-lib</include>
+									<include>com.winterhaven-mc:messenger-lib</include>
 								</includes>
 							</artifactSet>
 							<relocations>

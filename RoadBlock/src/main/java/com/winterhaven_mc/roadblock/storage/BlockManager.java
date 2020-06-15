@@ -19,6 +19,8 @@ public final class BlockManager {
 	// set of road block materials
 	private Set<Material> roadBlockMaterials;
 
+	// data store
+	DataStore dataStore;
 
 	/**
 	 * Class constructor
@@ -32,17 +34,52 @@ public final class BlockManager {
 
 		// get road block materials from config file
 		updateMaterials();
+
+		// create data store using configured type
+		dataStore = DataStore.create(DataStoreType.match(plugin.getConfig().getString("storage-type")));
 	}
 
 
 	/**
-	 * Create HashSet of all blocks of valid road block material attached to location
+	 * Close data store
+	 */
+	public void close() {
+		dataStore.close();
+	}
+
+
+	/**
+	 * reload data store
+	 */
+	public void reload() {
+
+		// reload road block materials from config
+		updateMaterials();
+
+		// get current datastore type
+		final DataStoreType currentType = dataStore.getType();
+
+		// get configured datastore type
+		final DataStoreType newType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
+
+		// if current datastore type does not match configured datastore type, create new datastore
+		if (!currentType.equals(newType)) {
+
+			// create new datastore
+			dataStore = DataStore.create(newType, dataStore);
+		}
+	}
+
+
+	/**
+	 * Create Set of all blocks of valid road block material attached to location
 	 *
 	 * @param startLocation location to begin searching for attached road blocks
 	 * @return Set of Locations of attached road blocks
 	 */
 	public final Set<Location> getFill(final Location startLocation) {
 
+		// if passed location is null, return empty set
 		if (startLocation == null) {
 			return Collections.emptySet();
 		}
@@ -136,7 +173,7 @@ public final class BlockManager {
 
 			// don't check datastore unless testBlock is road block material
 			if (isRoadBlockMaterial(testBlock)) {
-				if (plugin.dataStore.isProtected(testBlock.getLocation())) {
+				if (dataStore.isProtected(testBlock.getLocation())) {
 					result = true;
 					break;
 				}
@@ -157,6 +194,7 @@ public final class BlockManager {
 	 */
 	public final boolean isRoadBlock(final Block block) {
 
+		// if passed block is null, return false
 		if (block == null) {
 			return false;
 		}
@@ -167,7 +205,7 @@ public final class BlockManager {
 		}
 
 		// check if block is in cache or datastore
-		return plugin.dataStore.isProtected(block.getLocation());
+		return dataStore.isProtected(block.getLocation());
 	}
 
 
@@ -206,32 +244,34 @@ public final class BlockManager {
 
 
 	/**
-	 * Insert block locations into datastore
+	 * Insert block location records into datastore
 	 *
-	 * @param locations a Collection of Locations to be inserted into the datastore
+	 * @param blockRecords a Collection of Locations to be inserted into the datastore
 	 */
-	public final void storeLocations(final Collection<Location> locations) {
-		plugin.dataStore.insertRecords(locations);
+	public final void storeLocations(final Collection<BlockRecord> blockRecords) {
+		dataStore.insertRecords(blockRecords);
 	}
 
 
 	/**
 	 * Remove block locations from datastore
 	 *
-	 * @param locations a Collection of Locations to be deleted from the datastore
+	 * @param blockRecords a Collection of Locations to be deleted from the datastore
 	 */
-	public final void removeLocations(final Collection<Location> locations) {
-		plugin.dataStore.deleteRecords(locations);
+	public final void removeLocations(final Collection<BlockRecord> blockRecords) {
+		dataStore.deleteRecords(blockRecords);
 	}
 
 
 	/**
 	 * Remove a block location from datastore
 	 *
-	 * @param location the location to be removed from the datastore
+	 * @param blockRecord the location to be removed from the datastore
 	 */
-	public final void removeLocation(final Location location) {
-		plugin.dataStore.deleteRecord(location);
+	public final void removeLocation(final BlockRecord blockRecord) {
+		Set<BlockRecord> blockRecords = new HashSet<>();
+		blockRecords.add(blockRecord);
+		dataStore.deleteRecords(blockRecords);
 	}
 
 
@@ -269,12 +309,12 @@ public final class BlockManager {
 
 
 	synchronized public final int getBlockTotal() {
-		return plugin.dataStore.getTotalBlocks();
+		return dataStore.getTotalBlocks();
 	}
 
 
 	public final Set<Location> selectNearbyBlocks(Location location, int distance) {
-		return plugin.dataStore.selectNearbyBlocks(location, distance);
+		return dataStore.selectNearbyBlocks(location, distance);
 	}
 
 

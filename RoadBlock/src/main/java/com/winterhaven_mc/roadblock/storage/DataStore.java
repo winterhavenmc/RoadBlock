@@ -38,35 +38,21 @@ public abstract class DataStore {
 	/**
 	 * Store list of records
 	 *
-	 * @param locations a {@code Collection} of {@code Location}
+	 * @param blockRecords a {@code Collection} of {@code Location}
 	 *                  for block locations to be inserted into the datastore
 	 */
-	abstract void insertRecords(final Collection<Location> locations);
-
-
-	/**
-	 * Store record
-	 *
-	 * @param location a {@code Location} of a block to be inserted into the datastore
-	 */
-	abstract void insertRecord(final Location location);
+	@SuppressWarnings("UnusedReturnValue")
+	abstract int insertRecords(final Collection<BlockRecord> blockRecords);
 
 
 	/**
 	 * delete list of records
 	 *
-	 * @param locationSet {@code Collection} of {@code Location}
+	 * @param blockRecords {@code Collection} of {@code Location}
 	 *                    containing unique composite keys of records to delete
 	 */
-	abstract void deleteRecords(final Collection<Location> locationSet);
-
-
-	/**
-	 * Delete record
-	 *
-	 * @param location unique composite key for a record
-	 */
-	abstract void deleteRecord(final Location location);
+	@SuppressWarnings("UnusedReturnValue")
+	abstract int deleteRecords(final Collection<BlockRecord> blockRecords);
 
 
 	/**
@@ -74,7 +60,7 @@ public abstract class DataStore {
 	 *
 	 * @return Set of {@code Location} for all block records
 	 */
-	abstract Set<Location> selectAllRecords();
+	abstract Set<BlockRecord> selectAllRecords();
 
 
 	/**
@@ -89,10 +75,9 @@ public abstract class DataStore {
 	 * Get block records for locations within a chunk
 	 *
 	 * @param chunk the chunk containing records to be returned
-	 * @return {@code Set} of {@code Location} for block records within the chunk
+	 * @return {@code Set} of {@code LocationRecords} for block records within the chunk
 	 */
-	abstract Set<Location> selectBlockLocationsInChunk(Chunk chunk);
-
+	abstract Set<BlockRecord> selectRecordsInChunk(final Chunk chunk);
 
 	/**
 	 * Get block records for locations within {@code distance} of {@code location}
@@ -146,7 +131,7 @@ public abstract class DataStore {
 	 *
 	 * @return DataStoreType of this datastore type
 	 */
-	private DataStoreType getType() {
+	DataStoreType getType() {
 		return this.type;
 	}
 
@@ -210,6 +195,23 @@ public abstract class DataStore {
 
 
 	/**
+	 * Create new data store of configured type.<br>
+	 * No parameter version used when no current datastore exists
+	 *
+	 * @param dataStoreType datastore type to create
+	 * @return new datastore of configured type
+	 */
+	public static DataStore create(DataStoreType dataStoreType) {
+
+		// if passed data store type is null, use default type
+		if (dataStoreType == null) {
+			dataStoreType = DataStoreType.getDefaultType();
+		}
+		return create(dataStoreType, null);
+	}
+
+
+	/**
 	 * Create new data store of given type and convert old data store.<br>
 	 * Two parameter version used when a datastore instance already exists
 	 *
@@ -217,7 +219,7 @@ public abstract class DataStore {
 	 * @param oldDataStore  the existing datastore to be converted to the new datastore
 	 * @return instance of newly initialized datastore
 	 */
-	private static DataStore create(final DataStoreType dataStoreType, final DataStore oldDataStore) {
+	static DataStore create(final DataStoreType dataStoreType, final DataStore oldDataStore) {
 
 		// get new data store of specified type
 		final DataStore newDataStore = dataStoreType.create();
@@ -279,14 +281,11 @@ public abstract class DataStore {
 			}
 
 			// get set of all location records in old datastore
-			Set<Location> allRecords = new HashSet<>(oldDataStore.selectAllRecords());
+			Set<BlockRecord> allRecords = new HashSet<>(oldDataStore.selectAllRecords());
 
-			int count = 0;
-			for (Location record : allRecords) {
-				newDataStore.insertRecord(record);
-				count++;
-			}
-			plugin.getLogger().info(count + " records converted to " + newDataStore.getDisplayName() + " datastore.");
+			int count = newDataStore.insertRecords(allRecords);
+			plugin.getLogger().info(count + " records converted to "
+					+ newDataStore.getDisplayName() + " datastore.");
 
 			newDataStore.sync();
 
@@ -328,20 +327,20 @@ public abstract class DataStore {
 	}
 
 
-	public static void reload() {
-
-		// get current datastore type
-		final DataStoreType currentType = plugin.dataStore.getType();
-
-		// get configured datastore type
-		final DataStoreType newType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
-
-		// if current datastore type does not match configured datastore type, create new datastore
-		if (!currentType.equals(newType)) {
-
-			// create new datastore
-			plugin.dataStore = create(newType, plugin.dataStore);
-		}
-	}
+//	public static void reload() {
+//
+//		// get current datastore type
+//		final DataStoreType currentType = plugin.dataStore.getType();
+//
+//		// get configured datastore type
+//		final DataStoreType newType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
+//
+//		// if current datastore type does not match configured datastore type, create new datastore
+//		if (!currentType.equals(newType)) {
+//
+//			// create new datastore
+//			plugin.dataStore = create(newType, plugin.dataStore);
+//		}
+//	}
 
 }
