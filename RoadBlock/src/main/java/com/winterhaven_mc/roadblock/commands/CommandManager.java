@@ -106,29 +106,17 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		// get subcommand
 		String subcommand = args[0];
 
-		// status command
-		if (subcommand.equalsIgnoreCase("status")) {
-			return statusCommand(sender, args);
-		}
-
-		// reload command
-		if (subcommand.equalsIgnoreCase("reload")) {
-			return reloadCommand(sender, args);
-		}
-
-		// show command
-		if (subcommand.equalsIgnoreCase("show")) {
-			return showCommand(sender, args);
-		}
-
-		// tool command
-		if (subcommand.equalsIgnoreCase("tool")) {
-			return toolCommand(sender, args);
-		}
-
-		// help command
-		if (subcommand.equalsIgnoreCase("help")) {
-			return helpCommand(sender, args);
+		switch (subcommand.toLowerCase()) {
+			case "status":
+				return statusCommand(sender, args);
+			case "reload":
+				return reloadCommand(sender, args);
+			case "show":
+				return showCommand(sender, args);
+			case "tool":
+				return toolCommand(sender, args);
+			case "help":
+				return helpCommand(sender, args);
 		}
 
 		Message.create(sender, COMMAND_FAIL_INVALID_COMMAND).send();
