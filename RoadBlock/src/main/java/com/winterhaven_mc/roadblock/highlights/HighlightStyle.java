@@ -3,6 +3,7 @@ package com.winterhaven_mc.roadblock.highlights;
 import com.winterhaven_mc.roadblock.PluginMain;
 
 import org.bukkit.Material;
+import org.bukkit.plugin.java.JavaPlugin;
 
 
 public enum HighlightStyle {
@@ -10,7 +11,7 @@ public enum HighlightStyle {
 	PROTECT(Material.EMERALD_BLOCK, "protect-material"),
 	UNPROTECT(Material.REDSTONE_BLOCK, "unprotect-material");
 
-	private final static PluginMain plugin = PluginMain.instance;
+	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
 	private final Material defaultMaterial;
 	private final String configString;

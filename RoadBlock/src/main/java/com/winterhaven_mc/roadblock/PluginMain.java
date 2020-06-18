@@ -12,7 +12,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PluginMain extends JavaPlugin {
 
-	public static PluginMain instance;
 	public BlockManager blockManager;
 	public HighlightManager highlightManager;
 	public SoundConfiguration soundConfig;
@@ -25,11 +24,11 @@ public final class PluginMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
-		// set static reference to main class
-		instance = this;
-
-		// install default config.yml if not present  
+		// install default config.yml if not present
 		saveDefaultConfig();
+
+		// force loading of language file at startup
+		LanguageManager.init();
 
 		// instantiate world manager
 		worldManager = new WorldManager(this);
@@ -42,9 +41,6 @@ public final class PluginMain extends JavaPlugin {
 
 		// instantiate highlight manager
 		highlightManager = new HighlightManager(this);
-
-		// force loading of language file at startup
-		LanguageManager.init();
 
 		// instantiate command manager
 		new CommandManager(this);

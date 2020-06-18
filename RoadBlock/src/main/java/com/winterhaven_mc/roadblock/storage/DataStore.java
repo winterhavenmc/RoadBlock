@@ -3,13 +3,14 @@ package com.winterhaven_mc.roadblock.storage;
 import com.winterhaven_mc.roadblock.PluginMain;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
 
 public abstract class DataStore {
 
-	private final static PluginMain plugin = PluginMain.instance;
+	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
 	private boolean initialized;
 

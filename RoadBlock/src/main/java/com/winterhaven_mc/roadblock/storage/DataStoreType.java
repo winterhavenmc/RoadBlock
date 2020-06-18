@@ -1,6 +1,7 @@
 package com.winterhaven_mc.roadblock.storage;
 
 import com.winterhaven_mc.roadblock.PluginMain;
+import org.bukkit.plugin.java.JavaPlugin;
 
 
 enum DataStoreType {
@@ -15,7 +16,7 @@ enum DataStoreType {
 	};
 
 	// static reference to main class
-	private final static PluginMain plugin = PluginMain.instance;
+	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
 	// datastore type formatted display name
 	private final String displayName;
