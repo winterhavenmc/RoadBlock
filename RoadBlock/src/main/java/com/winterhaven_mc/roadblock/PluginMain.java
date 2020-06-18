@@ -44,7 +44,7 @@ public final class PluginMain extends JavaPlugin {
 		highlightManager = new HighlightManager(this);
 
 		// force loading of language file at startup
-		LanguageManager.getInstance();
+		LanguageManager.init();
 
 		// instantiate command manager
 		new CommandManager(this);
