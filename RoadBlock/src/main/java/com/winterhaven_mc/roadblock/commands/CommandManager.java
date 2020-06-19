@@ -380,23 +380,27 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 			command = args[1];
 		}
 
-		String helpMessage = "That is not a valid command.";
+		String helpMessage;
+		switch (command.toLowerCase()) {
+			case "status":
+				helpMessage = "Displays current configuration settings.";
+				break;
+			case "reload":
+				helpMessage = "Reloads the configuration without needing to restart the server.";
+				break;
+			case "show":
+				helpMessage = "Highlights protected RoadBlocks within configured radius.";
+				break;
+			case "tool":
+				helpMessage = "Places a RoadBlock tool in player inventory.";
+				break;
+			case "help":
+				helpMessage = "Displays help for RoadBlock commands.";
+				break;
+			default:
+				helpMessage = "That is not a valid command.";
+		}
 
-		if (command.equalsIgnoreCase("status")) {
-			helpMessage = "Displays current configuration settings.";
-		}
-		if (command.equalsIgnoreCase("reload")) {
-			helpMessage = "Reloads the configuration without needing to restart the server.";
-		}
-		if (command.equalsIgnoreCase("show")) {
-			helpMessage = "Highlights protected RoadBlocks within configured radius.";
-		}
-		if (command.equalsIgnoreCase("tool")) {
-			helpMessage = "Places a RoadBlock tool in player inventory.";
-		}
-		if (command.equalsIgnoreCase("help")) {
-			helpMessage = "Displays help for RoadBlock commands.";
-		}
 		sender.sendMessage(helpColor + helpMessage);
 		displayUsage(sender, command);
 		return true;
