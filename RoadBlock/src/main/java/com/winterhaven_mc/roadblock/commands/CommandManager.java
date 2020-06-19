@@ -374,7 +374,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		String command = "help";
+		String command = "";
 
 		if (args.length > 1) {
 			command = args[1];
