@@ -2,10 +2,16 @@ package com.winterhaven_mc.roadblock.commands;
 
 public enum Subcommand {
 
-	reload,
-	show,
-	status,
-	tool,
-	help,
+	RELOAD,
+	SHOW,
+	STATUS,
+	TOOL,
+	HELP;
+
+	@Override
+	public String toString() {
+		return name().toLowerCase();
+	}
 
 }
+

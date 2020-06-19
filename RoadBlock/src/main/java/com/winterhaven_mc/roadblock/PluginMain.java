@@ -27,7 +27,7 @@ public final class PluginMain extends JavaPlugin {
 		// install default config.yml if not present
 		saveDefaultConfig();
 
-		// force loading of language file at startup
+		// initialize language manager
 		LanguageManager.init();
 
 		// instantiate world manager
