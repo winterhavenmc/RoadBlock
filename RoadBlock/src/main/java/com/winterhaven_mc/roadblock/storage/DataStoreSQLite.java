@@ -119,7 +119,6 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	private void updateSchema() throws SQLException {
 
 		schemaVersion = getSchemaVersion();
-		plugin.getLogger().info(getDisplayName() + " datastore schema v" + schemaVersion);
 
 		final Statement statement = connection.createStatement();
 
