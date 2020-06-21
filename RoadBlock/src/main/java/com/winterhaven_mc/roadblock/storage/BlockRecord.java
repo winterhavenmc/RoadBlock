@@ -2,7 +2,6 @@ package com.winterhaven_mc.roadblock.storage;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -68,23 +67,6 @@ public class BlockRecord {
 		this.blockZ = blockZ;
 		this.chunkX = chunkX;
 		this.chunkZ = chunkZ;
-	}
-
-
-	/**
-	 * Get location represented by location record
-	 * @return location
-	 */
-	public Location getLocation() {
-
-		// get reference to instance of main plugin class
-		JavaPlugin plugin = JavaPlugin.getProvidingPlugin(this.getClass());
-
-		// get reference to world object using uid
-		World world = plugin.getServer().getWorld(worldUid);
-
-		// return new location object
-		return new Location(world, blockX, blockY, blockZ);
 	}
 
 
