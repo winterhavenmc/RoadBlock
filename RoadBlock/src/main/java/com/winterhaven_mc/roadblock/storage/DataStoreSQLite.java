@@ -463,6 +463,80 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 
 	/**
+	 * Retrieve all road block location records from SQLite datastore
+	 *
+	 * @return List of location records
+	 */
+	synchronized final Collection<BlockRecord> selectAllRecords() {
+
+		final Collection<BlockRecord> returnSet = new HashSet<>();
+
+		try {
+			PreparedStatement preparedStatement =
+					connection.prepareStatement(Queries.getQuery("SelectAllBlocks"));
+
+			// execute sql query
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+
+				final World world;
+				final long worldUidMsb;
+				final long worldUidLsb;
+
+				final String worldName = rs.getString("worldname");
+				final int blockX = rs.getInt("x");
+				final int blockY = rs.getInt("y");
+				final int blockZ = rs.getInt("z");
+				final int chunkX = rs.getInt("chunk_x");
+				final int chunkZ = rs.getInt("chunk_z");
+
+				// if schema version 0, get world object from stored world name
+				if (schemaVersion == 0) {
+					world = plugin.getServer().getWorld(worldName);
+				}
+				// else get world object from stored world uuid
+				else {
+					worldUidMsb = rs.getLong("worlduidmsb");
+					worldUidLsb = rs.getLong("worlduidlsb");
+					UUID worldUid = new UUID(worldUidMsb, worldUidLsb);
+					world = plugin.getServer().getWorld(worldUid);
+				}
+
+				// if world is null, skip adding record to return set
+				if (world == null) {
+					plugin.getLogger().warning("Stored block has unloaded world: "
+							+ worldName + ". Skipping record.");
+					continue;
+				}
+
+				// create block record object from retrieved record
+				BlockRecord blockRecord = new BlockRecord(world.getName(), world.getUID(),
+						blockX, blockY, blockZ, chunkX, chunkZ);
+
+				// add block record to return set
+				returnSet.add(blockRecord);
+			}
+		}
+		catch (Exception e) {
+
+			// output simple error message
+			plugin.getLogger().warning("An error occurred while trying to "
+					+ "fetch all records from the " + getDisplayName() + " datastore.");
+			plugin.getLogger().warning(e.getLocalizedMessage());
+
+			// if debugging is enabled, output stack trace
+			if (plugin.debug) {
+				e.printStackTrace();
+			}
+		}
+
+		// return results in an unmodifiable set
+		return returnSet;
+	}
+
+
+	/**
 	 * Retrieve all road block locations in chunk from the SQLite datastore
 	 *
 	 * @param chunk the chunk for which to retrieve all road block locations from the datastore
@@ -544,67 +618,55 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	}
 
 
-	/**
-	 * Retrieve all road block location records from SQLite datastore
-	 *
-	 * @return List of location records
-	 */
-	synchronized final Collection<BlockRecord> selectAllRecords() {
+	@Override
+	Collection<Location> selectNearbyBlocks(final Location location, final int distance) {
 
-		final Collection<BlockRecord> returnSet = new HashSet<>();
+		if (location == null) {
+			return Collections.emptySet();
+		}
+
+		final int minX = location.getBlockX() - distance;
+		final int maxX = location.getBlockX() + distance;
+		final int minZ = location.getBlockZ() - distance;
+		final int maxZ = location.getBlockZ() + distance;
+
+		Collection<Location> resultSet = new HashSet<>();
 
 		try {
 			PreparedStatement preparedStatement =
-					connection.prepareStatement(Queries.getQuery("SelectAllBlocks"));
+					connection.prepareStatement(Queries.getQuery("SelectNearbyBlocks"));
+
+			preparedStatement.setLong(1, location.getWorld().getUID().getMostSignificantBits());
+			preparedStatement.setLong(2, location.getWorld().getUID().getLeastSignificantBits());
+			preparedStatement.setInt(3, minX);
+			preparedStatement.setInt(4, maxX);
+			preparedStatement.setInt(5, minZ);
+			preparedStatement.setInt(6, maxZ);
 
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
 
-				final World world;
-				final long worldUidMsb;
-				final long worldUidLsb;
+				final long worldUidMsb = rs.getLong("worlduidmsb");
+				final long worldUidLsb = rs.getLong("worlduidlsb");
+				final double x = rs.getDouble("x");
+				final double y = rs.getDouble("y");
+				final double z = rs.getDouble("z");
 
-				final String worldName = rs.getString("worldname");
-				final int blockX = rs.getInt("x");
-				final int blockY = rs.getInt("y");
-				final int blockZ = rs.getInt("z");
-				final int chunkX = rs.getInt("chunk_x");
-				final int chunkZ = rs.getInt("chunk_z");
+				UUID worldUid = new UUID(worldUidMsb,worldUidLsb);
+				World world = plugin.getServer().getWorld(worldUid);
 
-				// if schema version 0, get world object from stored world name
-				if (schemaVersion == 0) {
-					world = plugin.getServer().getWorld(worldName);
-				}
-				// else get world object from stored world uuid
-				else {
-					worldUidMsb = rs.getLong("worlduidmsb");
-					worldUidLsb = rs.getLong("worlduidlsb");
-					UUID worldUid = new UUID(worldUidMsb, worldUidLsb);
-					world = plugin.getServer().getWorld(worldUid);
-				}
-
-				// if world is null, skip adding record to return set
-				if (world == null) {
-					plugin.getLogger().warning("Stored block has unloaded world: "
-							+ worldName + ". Skipping record.");
-					continue;
-				}
-
-				// create block record object from retrieved record
-				BlockRecord blockRecord = new BlockRecord(world.getName(), world.getUID(),
-						blockX, blockY, blockZ, chunkX, chunkZ);
-
-				// add block record to return set
-				returnSet.add(blockRecord);
+				Location newLocation = new Location(world, x, y, z);
+				resultSet.add(newLocation);
 			}
+
 		}
 		catch (Exception e) {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
-					+ "fetch all records from the " + getDisplayName() + " datastore.");
+					+ "select nearby block records from the " + getDisplayName() + " datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
@@ -613,8 +675,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 			}
 		}
 
-		// return results in an unmodifiable set
-		return returnSet;
+		return resultSet;
 	}
 
 
@@ -729,65 +790,6 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		return total;
 	}
 
-	@Override
-	Collection<Location> selectNearbyBlocks(final Location location, final int distance) {
-
-		if (location == null) {
-			return Collections.emptySet();
-		}
-
-		final int minX = location.getBlockX() - distance;
-		final int maxX = location.getBlockX() + distance;
-		final int minZ = location.getBlockZ() - distance;
-		final int maxZ = location.getBlockZ() + distance;
-
-		Collection<Location> resultSet = new HashSet<>();
-
-		try {
-			PreparedStatement preparedStatement =
-					connection.prepareStatement(Queries.getQuery("SelectNearbyBlocks"));
-
-			preparedStatement.setLong(1, location.getWorld().getUID().getMostSignificantBits());
-			preparedStatement.setLong(2, location.getWorld().getUID().getLeastSignificantBits());
-			preparedStatement.setInt(3, minX);
-			preparedStatement.setInt(4, maxX);
-			preparedStatement.setInt(5, minZ);
-			preparedStatement.setInt(6, maxZ);
-
-			// execute sql query
-			ResultSet rs = preparedStatement.executeQuery();
-
-			while (rs.next()) {
-
-				final long worldUidMsb = rs.getLong("worlduidmsb");
-				final long worldUidLsb = rs.getLong("worlduidlsb");
-				final double x = rs.getDouble("x");
-				final double y = rs.getDouble("y");
-				final double z = rs.getDouble("z");
-
-				UUID worldUid = new UUID(worldUidMsb,worldUidLsb);
-				World world = plugin.getServer().getWorld(worldUid);
-
-				Location newLocation = new Location(world, x, y, z);
-				resultSet.add(newLocation);
-			}
-
-		}
-		catch (Exception e) {
-
-			// output simple error message
-			plugin.getLogger().warning("An error occurred while trying to "
-					+ "select nearby block records from the " + getDisplayName() + " datastore.");
-			plugin.getLogger().warning(e.getLocalizedMessage());
-
-			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
-				e.printStackTrace();
-			}
-		}
-
-		return resultSet;
-	}
 
 	/**
 	 * Event listener for chunk unload event
