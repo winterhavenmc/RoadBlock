@@ -29,7 +29,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	private final BlockRecordCache blockCache;
 
 	// chunk cache
-	private final Set<Location> chunkCache;
+	private final Collection<Location> chunkCache;
 
 	// schema version
 	private int schemaVersion;
@@ -126,7 +126,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 			int count;
 			ResultSet rs = statement.executeQuery(Queries.getQuery("SelectBlockTable"));
 			if (rs.next()) {
-				Set<BlockRecord> existingRecords = selectAllRecords();
+				Collection<BlockRecord> existingRecords = selectAllRecords();
 				statement.executeUpdate(Queries.getQuery("DropBlockTable"));
 				statement.executeUpdate(Queries.getQuery("DropChunkIndex"));
 				statement.executeUpdate(Queries.getQuery("CreateBlockTable"));
@@ -255,7 +255,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	/**
 	 * Insert records into the SQLite datastore
 	 *
-	 * @param blockRecords HashSet of records to insert
+	 * @param blockRecords Collection of records to insert
 	 */
 	@Override
 	synchronized final int insertRecords(final Collection<BlockRecord> blockRecords) {
@@ -366,7 +366,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	/**
 	 * Delete a list of locations from the SQLite datastore
 	 *
-	 * @param blockRecords HashSet of locations
+	 * @param blockRecords Collection of locations
 	 */
 	@Override
 	synchronized final int deleteRecords(final Collection<BlockRecord> blockRecords) {
@@ -466,13 +466,13 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * Retrieve all road block locations in chunk from the SQLite datastore
 	 *
 	 * @param chunk the chunk for which to retrieve all road block locations from the datastore
-	 * @return Set of locations
+	 * @return Collection of locations
 	 */
 	@Override
-	synchronized final Set<BlockRecord> selectRecordsInChunk(final Chunk chunk) {
+	synchronized final Collection<BlockRecord> selectRecordsInChunk(final Chunk chunk) {
 
 		// create new set for results
-		final Set<BlockRecord> returnSet = new HashSet<>();
+		final Collection<BlockRecord> returnSet = new HashSet<>();
 
 		try {
 			PreparedStatement preparedStatement =
@@ -549,9 +549,9 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 *
 	 * @return List of location records
 	 */
-	synchronized final Set<BlockRecord> selectAllRecords() {
+	synchronized final Collection<BlockRecord> selectAllRecords() {
 
-		final Set<BlockRecord> returnSet = new HashSet<>();
+		final Collection<BlockRecord> returnSet = new HashSet<>();
 
 		try {
 			PreparedStatement preparedStatement =
@@ -614,7 +614,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		}
 
 		// return results in an unmodifiable set
-		return Collections.unmodifiableSet(returnSet);
+		return returnSet;
 	}
 
 
@@ -625,7 +625,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 */
 	private void cacheChunk(final Chunk chunk) {
 
-		final Set<BlockRecord> blockSet = selectRecordsInChunk(chunk);
+		final Collection<BlockRecord> blockSet = selectRecordsInChunk(chunk);
 
 		int count = 0;
 
@@ -730,7 +730,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	}
 
 	@Override
-	Set<Location> selectNearbyBlocks(final Location location, final int distance) {
+	Collection<Location> selectNearbyBlocks(final Location location, final int distance) {
 
 		if (location == null) {
 			return Collections.emptySet();
@@ -741,7 +741,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 		final int minZ = location.getBlockZ() - distance;
 		final int maxZ = location.getBlockZ() + distance;
 
-		Set<Location> resultSet = new HashSet<>();
+		Collection<Location> resultSet = new HashSet<>();
 
 		try {
 			PreparedStatement preparedStatement =

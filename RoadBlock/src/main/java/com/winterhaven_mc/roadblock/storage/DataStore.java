@@ -61,7 +61,7 @@ public abstract class DataStore {
 	 *
 	 * @return Set of {@code Location} for all block records
 	 */
-	abstract Set<BlockRecord> selectAllRecords();
+	abstract Collection<BlockRecord> selectAllRecords();
 
 
 	/**
@@ -78,7 +78,7 @@ public abstract class DataStore {
 	 * @param chunk the chunk containing records to be returned
 	 * @return {@code Set} of {@code LocationRecords} for block records within the chunk
 	 */
-	abstract Set<BlockRecord> selectRecordsInChunk(final Chunk chunk);
+	abstract Collection<BlockRecord> selectRecordsInChunk(final Chunk chunk);
 
 	/**
 	 * Get block records for locations within {@code distance} of {@code location}
@@ -87,7 +87,7 @@ public abstract class DataStore {
 	 * @param distance distance from origin to select blocks
 	 * @return Set of Locations that are within {@code distance} of {@code location}
 	 */
-	abstract Set<Location> selectNearbyBlocks(final Location location, final int distance);
+	abstract Collection<Location> selectNearbyBlocks(final Location location, final int distance);
 
 
 	/**
@@ -282,7 +282,7 @@ public abstract class DataStore {
 			}
 
 			// get set of all location records in old datastore
-			Set<BlockRecord> allRecords = new HashSet<>(oldDataStore.selectAllRecords());
+			Collection<BlockRecord> allRecords = new HashSet<>(oldDataStore.selectAllRecords());
 
 			int count = newDataStore.insertRecords(allRecords);
 			plugin.getLogger().info(count + " records converted to "
