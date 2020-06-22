@@ -212,7 +212,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
-				e.getStackTrace();
+				e.printStackTrace();
 			}
 		}
 		setInitialized(false);
@@ -346,7 +346,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 					// if debugging is enabled, output stack trace
 					if (plugin.debug) {
-						e.getStackTrace();
+						e.printStackTrace();
 					}
 				}
 
@@ -428,7 +428,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 							// if debugging is enabled, output stack trace
 							if (plugin.debug) {
-								e.getStackTrace();
+								e.printStackTrace();
 							}
 						}
 						blockCache.remove(blockRecord);
@@ -445,7 +445,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 					// if debugging is enabled, output stack trace
 					if (plugin.debug) {
-						e.getStackTrace();
+						e.printStackTrace();
 					}
 				}
 
@@ -609,7 +609,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
-				e.getStackTrace();
+				e.printStackTrace();
 			}
 		}
 
@@ -721,7 +721,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
-				e.getStackTrace();
+				e.printStackTrace();
 			}
 		}
 
@@ -782,7 +782,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
-				e.getStackTrace();
+				e.printStackTrace();
 			}
 		}
 
