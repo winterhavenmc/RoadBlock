@@ -288,7 +288,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		// get set of block locations within distance of player location
-		Set<Location> locations = plugin.blockManager.selectNearbyBlocks(player.getLocation(), distance);
+		Collection<Location> locations = plugin.blockManager.selectNearbyBlocks(player.getLocation(), distance);
 
 		// highlight blocks
 		plugin.highlightManager.highlightBlocks(player, locations, HighlightStyle.PROTECT);
