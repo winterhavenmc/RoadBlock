@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 
-public class BlockRecord {
+public final class BlockRecord {
 
 	private final String worldName;
 	private final UUID worldUid;
