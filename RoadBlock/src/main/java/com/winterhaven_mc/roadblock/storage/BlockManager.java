@@ -313,7 +313,7 @@ public final class BlockManager {
 	}
 
 
-	public final Set<Location> selectNearbyBlocks(Location location, int distance) {
+	public final Collection<Location> selectNearbyBlocks(Location location, int distance) {
 		return dataStore.selectNearbyBlocks(location, distance);
 	}
 
