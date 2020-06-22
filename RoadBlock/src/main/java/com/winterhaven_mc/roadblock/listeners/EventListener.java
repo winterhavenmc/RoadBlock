@@ -234,7 +234,7 @@ public final class EventListener implements Listener {
 		// remove dropped item
 		event.getItemDrop().remove();
 
-		// tool drop sound to player
+		// paly tool drop sound for player
 		plugin.soundConfig.playSound(event.getPlayer(), SoundId.TOOL_DROP);
 	}
 
