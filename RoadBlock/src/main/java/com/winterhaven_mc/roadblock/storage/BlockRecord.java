@@ -24,7 +24,10 @@ public class BlockRecord {
 	 */
 	public BlockRecord(final Location location) {
 
+		// get location world
 		World world = location.getWorld();
+
+		// if world is null, set worldName and worldUid null
 		if (world != null) {
 			this.worldName = location.getWorld().getName();
 			this.worldUid = location.getWorld().getUID();
@@ -33,6 +36,8 @@ public class BlockRecord {
 			this.worldName = null;
 			this.worldUid = null;
 		}
+
+		// set block and chunk coordinates
 		this.blockX = location.getBlockX();
 		this.blockY = location.getBlockY();
 		this.blockZ = location.getBlockZ();
