@@ -567,9 +567,11 @@ final class DataStoreSQLite extends DataStore implements Listener {
 				final long worldUidLsb;
 
 				final String worldName = rs.getString("worldname");
-				final double x = rs.getDouble("x");
-				final double y = rs.getDouble("y");
-				final double z = rs.getDouble("z");
+				final int blockX = rs.getInt("x");
+				final int blockY = rs.getInt("y");
+				final int blockZ = rs.getInt("z");
+				final int chunkX = rs.getInt("chunk_x");
+				final int chunkZ = rs.getInt("chunk_z");
 
 				// if schema version 0, get world object from stored world name
 				if (schemaVersion == 0) {
@@ -590,8 +592,11 @@ final class DataStoreSQLite extends DataStore implements Listener {
 					continue;
 				}
 
-				Location location = new Location(world, x, y, z);
-				BlockRecord blockRecord = new BlockRecord(location);
+				// create block record object from retrieved record
+				BlockRecord blockRecord = new BlockRecord(world.getName(), world.getUID(),
+						blockX, blockY, blockZ, chunkX, chunkZ);
+
+				// add block record to return set
 				returnSet.add(blockRecord);
 			}
 		}
