@@ -16,14 +16,11 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
-@SuppressWarnings({"SynchronizeOnNonFinalField", "ConstantConditions"})
+@SuppressWarnings("SynchronizeOnNonFinalField")
 final class DataStoreSQLite extends DataStore implements Listener {
 
 	// reference to main class
 	private final PluginMain plugin;
-
-	// database connection object
-	private Connection connection;
 
 	// block cache
 	private final BlockRecordCache blockCache;
@@ -31,8 +28,12 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	// chunk cache
 	private final Collection<Location> chunkCache;
 
+	// database connection object
+	private Connection connection;
+
 	// schema version
 	private int schemaVersion;
+
 
 	/**
 	 * Class constructor
@@ -579,18 +580,24 @@ final class DataStoreSQLite extends DataStore implements Listener {
 				int chunkX = rs.getInt("chunk_x");
 				int chunkZ = rs.getInt("chunk_z");
 
+				// reconstitute world uid from components
 				UUID worldUid = new UUID(worldUidMSB,worldUidLSB);
 
-				if (plugin.getServer().getWorld(worldUid) == null) {
+				// get world by uid
+				World world = plugin.getServer().getWorld(worldUid);
+
+				// if world is null, skip to next record
+				if (world == null) {
 					plugin.getLogger().warning("Stored location has invalid world: "
 							+ worldName + ". Skipping record.");
 					continue;
 				}
 
 				// get current world name
-				worldName = plugin.getServer().getWorld(worldUid).getName();
+				worldName = world.getName();
 
-				BlockRecord record = new BlockRecord(worldName, worldUid,	blockX, blockY, blockZ, chunkX, chunkZ);
+				// create block record from stored location
+				BlockRecord record = new BlockRecord(worldName, worldUid, blockX, blockY, blockZ, chunkX, chunkZ);
 				returnSet.add(record);
 				count++;
 			}
@@ -621,7 +628,16 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	@Override
 	Collection<Location> selectNearbyBlocks(final Location location, final int distance) {
 
+		// if passed location is null, return empty set
 		if (location == null) {
+			return Collections.emptySet();
+		}
+
+		// get world for location
+		World world = location.getWorld();
+
+		// if world is null, return empty set
+		if (world == null) {
 			return Collections.emptySet();
 		}
 
@@ -636,8 +652,8 @@ final class DataStoreSQLite extends DataStore implements Listener {
 			PreparedStatement preparedStatement =
 					connection.prepareStatement(Queries.getQuery("SelectNearbyBlocks"));
 
-			preparedStatement.setLong(1, location.getWorld().getUID().getMostSignificantBits());
-			preparedStatement.setLong(2, location.getWorld().getUID().getLeastSignificantBits());
+			preparedStatement.setLong(1, world.getUID().getMostSignificantBits());
+			preparedStatement.setLong(2, world.getUID().getLeastSignificantBits());
 			preparedStatement.setInt(3, minX);
 			preparedStatement.setInt(4, maxX);
 			preparedStatement.setInt(5, minZ);
@@ -648,16 +664,14 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 			while (rs.next()) {
 
-				final long worldUidMsb = rs.getLong("worlduidmsb");
-				final long worldUidLsb = rs.getLong("worlduidlsb");
 				final double x = rs.getDouble("x");
 				final double y = rs.getDouble("y");
 				final double z = rs.getDouble("z");
 
-				UUID worldUid = new UUID(worldUidMsb,worldUidLsb);
-				World world = plugin.getServer().getWorld(worldUid);
-
+				// get location for stored record
 				Location newLocation = new Location(world, x, y, z);
+
+				// add location to result set
 				resultSet.add(newLocation);
 			}
 
