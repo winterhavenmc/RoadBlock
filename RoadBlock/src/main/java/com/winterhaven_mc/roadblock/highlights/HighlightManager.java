@@ -132,7 +132,6 @@ public final class HighlightManager implements Listener {
 	 * @param player      the player for whom to remove highlights
 	 * @param locationSet a Collection of Location of block locations to remove highlight
 	 */
-	@SuppressWarnings("WeakerAccess")
 	final void removeHighlight(final Player player, final Collection<Location> locationSet) {
 
 		// check for null parameters
@@ -165,18 +164,6 @@ public final class HighlightManager implements Listener {
 			highlightMap.get(player.getUniqueId()).clear();
 			highlightMap.remove(player.getUniqueId());
 		}
-	}
-
-
-	@SuppressWarnings("unused")
-	public final boolean isHighlighted(final Player player, final Location location) {
-
-		// check for null parameters
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(location);
-
-		return highlightMap.containsKey(player.getUniqueId())
-				&& highlightMap.get(player.getUniqueId()).contains(location);
 	}
 
 
