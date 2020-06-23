@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
-@SuppressWarnings("SynchronizeOnNonFinalField")
 final class DataStoreSQLite extends DataStore implements Listener {
 
 	// reference to main class
@@ -301,7 +300,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 						try {
 							// synchronize on database connection
-							synchronized (connection) {
+							synchronized (this) {
 
 								// create prepared statement
 								PreparedStatement preparedStatement =
@@ -320,7 +319,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 								preparedStatement.executeUpdate();
 							}
 						}
-						catch (Exception e) {
+						catch (SQLException e) {
 
 							// output simple error message
 							plugin.getLogger().warning("An error occurred while inserting a location "
@@ -404,7 +403,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 						try {
 							// synchronize on database connection
-							synchronized (connection) {
+							synchronized (this) {
 
 								// create prepared statement
 								PreparedStatement preparedStatement =
@@ -420,7 +419,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 								rowsAffected = preparedStatement.executeUpdate();
 							}
 						}
-						catch (Exception e) {
+						catch (SQLException e) {
 
 							// output simple error message
 							plugin.getLogger().warning("An error occurred while attempting to "
@@ -519,7 +518,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 				returnSet.add(blockRecord);
 			}
 		}
-		catch (Exception e) {
+		catch (SQLException e) {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
@@ -607,7 +606,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 						+ TimeUnit.NANOSECONDS.toMicros(elapsedTime) + " microseconds.");
 			}
 		}
-		catch (Exception e) {
+		catch (SQLException e) {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
@@ -676,7 +675,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 			}
 
 		}
-		catch (Exception e) {
+		catch (SQLException e) {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
@@ -787,7 +786,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 			}
 
 		}
-		catch (Exception e) {
+		catch (SQLException e) {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
