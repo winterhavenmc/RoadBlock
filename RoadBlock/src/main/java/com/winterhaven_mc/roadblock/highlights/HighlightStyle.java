@@ -31,9 +31,16 @@ public enum HighlightStyle {
 
 	final Material getMaterial() {
 
-		//noinspection ConstantConditions
-		Material material = Material.matchMaterial(plugin.getConfig().getString(this.configString));
+		// get configured material
+		String materialString = plugin.getConfig().getString(this.configString);
+		if (materialString == null) {
+			return this.defaultMaterial;
+		}
 
+		// try to match configured material
+		Material material = Material.matchMaterial(materialString);
+
+		// if no matching material, use default material
 		if (material == null) {
 			material = this.defaultMaterial;
 		}
