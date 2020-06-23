@@ -3,7 +3,6 @@ package com.winterhaven_mc.roadblock.utilities;
 import com.winterhaven_mc.roadblock.PluginMain;
 
 import com.winterhaven_mc.util.LanguageManager;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
@@ -19,7 +18,7 @@ public final class RoadBlockTool {
 
 	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
-	private final static NamespacedKey toolKey = new NamespacedKey(plugin, "isTool");
+	private final static NamespacedKey PERSISTENT_KEY = new NamespacedKey(plugin, "isTool");
 
 	public final static Set<Material> toolTransparentMaterials =
 			Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
@@ -60,7 +59,7 @@ public final class RoadBlockTool {
 		LanguageManager languageManager = LanguageManager.getInstance();
 
 		// set display name to configured tool name
-		//noinspection ConstantConditions
+		assert metaData != null;
 		metaData.setDisplayName(languageManager.getItemName());
 
 		// set lore to configured tool lore
@@ -72,54 +71,7 @@ public final class RoadBlockTool {
 		metaData.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
 		// set persistent data in item metadata
-		metaData.getPersistentDataContainer().set(toolKey, PersistentDataType.BYTE, (byte) 1);
-
-		// set item stack metadata
-		itemStack.setItemMeta(metaData);
-
-		// return item stack
-		return itemStack;
-	}
-
-
-	/**
-	 * Create an item stack with configured tool material, name and lore
-	 *
-	 * @param material material type to use for new tool
-	 * @param itemName name to use for new tool
-	 * @param itemLore lore to use for new tool
-	 * @return RoadBlock tool item stack
-	 */
-	public static ItemStack create(final Material material, final String itemName, final List<String> itemLore) {
-
-		// check for null parameters
-		Objects.requireNonNull(material);
-		Objects.requireNonNull(itemName);
-		Objects.requireNonNull(itemLore);
-
-		// create item stack of configured tool material
-		final ItemStack itemStack = new ItemStack(material);
-
-		// get item stack metadata
-		final ItemMeta metaData = itemStack.getItemMeta();
-
-		// set display name to configured tool name
-		//noinspection ConstantConditions
-		metaData.setDisplayName(ChatColor.RESET + itemName);
-
-		// set lore to configured tool lore
-		metaData.setLore(itemLore);
-
-		// set unbreakable
-		metaData.setUnbreakable(true);
-
-		// hide item stack attributes and enchants
-		metaData.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-		metaData.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-		metaData.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-
-		// set persistent data in item metadata
-		metaData.getPersistentDataContainer().set(toolKey, PersistentDataType.BYTE, (byte) 1);
+		metaData.getPersistentDataContainer().set(PERSISTENT_KEY, PersistentDataType.BYTE, (byte) 1);
 
 		// set item stack metadata
 		itemStack.setItemMeta(metaData);
@@ -148,8 +100,9 @@ public final class RoadBlockTool {
 		}
 
 		// if item stack does not have persistent data tag, return false
-		//noinspection ConstantConditions,RedundantIfStatement
-		if (!itemStack.getItemMeta().getPersistentDataContainer().has(toolKey, PersistentDataType.BYTE)) {
+		//noinspection RedundantIfStatement
+		if (!Objects.requireNonNull(itemStack.getItemMeta())
+				.getPersistentDataContainer().has(PERSISTENT_KEY, PersistentDataType.BYTE)) {
 			return false;
 		}
 
