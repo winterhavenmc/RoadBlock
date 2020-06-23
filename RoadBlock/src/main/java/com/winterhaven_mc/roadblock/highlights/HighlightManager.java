@@ -214,8 +214,12 @@ public final class HighlightManager implements Listener {
 
 
 	final void setPendingRemoveTask(final Player player, final BukkitTask task) {
-		pendingRemoveTask.put(player.getUniqueId(), task);
 
+		// check for null parameters
+		Objects.requireNonNull(player);
+		Objects.requireNonNull(task);
+
+		pendingRemoveTask.put(player.getUniqueId(), task);
 	}
 
 
