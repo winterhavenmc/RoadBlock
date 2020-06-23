@@ -75,9 +75,8 @@ public final class HighlightManager implements Listener {
 		}
 
 		// run showHighlight task with small delay
-		new ShowHighlightTask(player, locationSet, highlightStyle.getMaterial()).runTaskLaterAsynchronously(plugin, 5L);
-
-		// update pending remove highlight
+		new ShowHighlightTask(plugin, player, locationSet, highlightStyle.getMaterial())
+				.runTaskLaterAsynchronously(plugin, 5L);
 	}
 
 
