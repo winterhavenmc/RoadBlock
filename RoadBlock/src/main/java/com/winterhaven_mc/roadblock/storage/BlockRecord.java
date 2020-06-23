@@ -20,7 +20,8 @@ public final class BlockRecord {
 
 	/**
 	 * Class constructor
-	 * @param location location for which to create location record
+	 *
+	 * @param location location to use for block record
 	 */
 	public BlockRecord(final Location location) {
 
