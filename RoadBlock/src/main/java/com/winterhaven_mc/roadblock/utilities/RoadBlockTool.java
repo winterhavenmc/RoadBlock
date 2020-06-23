@@ -36,14 +36,20 @@ public final class RoadBlockTool {
 	 */
 	public static ItemStack create() {
 
-		// get configured material
-		//noinspection ConstantConditions
-		Material material = Material.matchMaterial(plugin.getConfig().getString("tool-material"));
+		// initialize material
+		Material material = null;
 
-		// if no matching material found, use default GOLD_PICKAXE
+		// get configured material
+		String materialString = plugin.getConfig().getString("tool-material");
+		if (materialString != null) {
+			material = Material.matchMaterial(materialString);
+		}
+
+		// if no matching material found, use default GOLDEN_PICKAXE
 		if (material == null) {
 			material = Material.GOLDEN_PICKAXE;
 		}
+
 		// create item stack of configured tool material
 		final ItemStack itemStack = new ItemStack(material);
 
