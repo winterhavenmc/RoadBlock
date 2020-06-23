@@ -81,29 +81,6 @@ public final class HighlightManager implements Listener {
 
 
 	/**
-	 * Remove highlighting from blocks for player and remove locations from highlightMap
-	 *
-	 * @param player      the player for whom to remove highlights from blocks
-	 * @param locationSet a Collection of Locations to remove highlighting from blocks
-	 */
-	@SuppressWarnings("unused")
-	public final void unHighlightBlocks(final Player player, final Collection<Location> locationSet) {
-
-		// check for null parameters
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(locationSet);
-
-		// remove highlight for player for blocks in locationSet
-		removeHighlight(player, locationSet);
-
-		// remove locations from highlightMap
-		if (highlightMap.containsKey(player.getUniqueId())) {
-			highlightMap.get(player.getUniqueId()).removeAll(locationSet);
-		}
-	}
-
-
-	/**
 	 * Remove highlighting from all blocks for player
 	 *
 	 * @param player the player for whom to remove all block highlighting
