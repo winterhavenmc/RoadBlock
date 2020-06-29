@@ -25,6 +25,8 @@ Note that block selection will only spread on the same vertical level. This is i
 
 # Commands
 
+Command | Description
+------- | -----------
 `/roadblock reload` | reloads the configuration without needing to restart the server.
 `/roadblock show <distance>` | highlights protected RoadBlocks within specified distance. Uses `show-distance` setting in config.yml if argument is omitted.
 `/roadblock status` | displays configuration settings.
