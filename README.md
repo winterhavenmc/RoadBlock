@@ -35,55 +35,12 @@ Command | Description
 
 # Permissions
 
-<table>
-<tbody>
-
-<tr>
-<th>Permission</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-
-<tr>
-<td>`roadblock.admin`</td>
-<td>Allows a player access to all RoadBlock commands and allows use of RoadBlock tool to protect/unprotect blocks.</td>
-<td>op</td>
-</tr>
-
-<tr>
-<td>`roadblock.break`</td>
-<td>Allows breaking RoadBlock protected blocks. (Not included in roadblock.admin permission set, must be set explicitly.)</td>
-<td>op</td>
-</tr>
-
-<tr>
-<td>`roadblock.reload`</td>
-<td>Allows reloading the config file.</td>
-<td>op</td>
-</tr>
-
-<tr>
-<td>`roadblock.status`</td>
-<td>Allows display of config settings.</td>
-<td>op</td>
-</tr>
-
-<tr>
-<td>`roadblock.show`</td>
-<td>Allows use of show command to highlight nearby RoadBlocks.</td>
-<td>op</td>
-</tr>
-
-<tr>
-<td>`roadblock.unset`</td>
-<td>Allows removing RoadBlock protection on blocks.</td>
-<td>op</td>
-</tr>
-
-<tr>
-<td>`roadblock.tool`</td>
-<td>Allows creating a RoadBlock tool in inventory.</td>
-<td>op</td>
-</tr>
-</tbody>
-</table>
+Permission | Description | Default
+---------- | ----------- | -------
+`roadblock.admin` | Allows a player access to all RoadBlock commands and allows use of RoadBlock tool to protect/unprotect blocks. | op
+`roadblock.break` | Allows breaking RoadBlock protected blocks. (Not included in roadblock.admin permission set, must be set explicitly.) | op
+`roadblock.reload` | Allows reloading the config file. | op
+`roadblock.status` | Allows display of config settings. | op
+`roadblock.show` | Allows use of show command to highlight nearby RoadBlocks. | op
+`roadblock.unset` | Allows removing RoadBlock protection on blocks. | op
+`roadblock.tool` | Allows creating a RoadBlock tool in inventory. | op
