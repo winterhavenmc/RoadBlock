@@ -80,6 +80,7 @@ public abstract class DataStore {
 	 */
 	abstract Collection<BlockRecord> selectRecordsInChunk(final Chunk chunk);
 
+
 	/**
 	 * Get block records for locations within {@code distance} of {@code location}
 	 *
