@@ -25,36 +25,11 @@ Note that block selection will only spread on the same vertical level. This is i
 
 # Commands
 
-<table>
-<tbody>
-
-<tr>
-<td>`/roadblock reload`</td>
-<td>reloads the configuration without needing to restart the server.</td>
-</tr>
-
-<tr>
-<td>`/roadblock show <distance>`</td>
-<td>highlights protected RoadBlocks within specified distance. Uses `show-distance` setting in config.yml if argument is omitted.</td>
-</tr>
-
-<tr>
-<td>`/roadblock status`</td>
-<td>displays configuration settings.</td>
-</tr>
-
-<tr>
-<td>`/roadblock tool`</td>
-<td>places the custom roadblock tool in your inventory (if permission allows it).</td>
-</tr>
-
-<tr>
-<td>`/rb [subcommand]`</td>
-<td>command alias</td>
-</tr>
-
-</tbody>
-</table>
+`/roadblock reload` | reloads the configuration without needing to restart the server.
+`/roadblock show <distance>` | highlights protected RoadBlocks within specified distance. Uses `show-distance` setting in config.yml if argument is omitted.
+`/roadblock status` | displays configuration settings.
+`/roadblock tool` | places the custom roadblock tool in your inventory (if permission allows it).
+`/rb [subcommand]` | command alias
 
 # Permissions
 
