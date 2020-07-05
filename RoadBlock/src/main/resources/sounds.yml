@@ -6,7 +6,7 @@ COMMAND_FAIL:
   sound: ENTITY_VILLAGER_NO
   volume: 1
   pitch: 1
-    
+
 COMMAND_SUCCESS_TOOL:
   enabled: true
   player-only: true
@@ -34,14 +34,14 @@ TOOL_FAIL_USE_PERMISSION:
   sound: ENTITY_VILLAGER_NO
   volume: 1
   pitch: 1
-    
+
 TOOL_FAIL_INVALID_MATERIAL:
   enabled: true
   player-only: true
   sound: ENTITY_VILLAGER_NO
   volume: 1
   pitch: 1
-    
+
 TOOL_SUCCESS_PROTECT:
     enabled: true
     player-only: true
