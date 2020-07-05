@@ -30,10 +30,7 @@ import static com.winterhaven_mc.roadblock.messages.MessageId.*;
 
 
 /**
- * Implements player event listener for RoadBlock events.
- *
- * @author Tim Savage
- * @version 1.0
+ * Implements player event listeners for RoadBlock events.
  */
 public final class EventListener implements Listener {
 
@@ -50,7 +47,7 @@ public final class EventListener implements Listener {
 
 
 	/**
-	 * constructor method for {@code EventListener} class
+	 * Class constructor for EventListener class
 	 *
 	 * @param plugin reference to this plugin's main class
 	 */
