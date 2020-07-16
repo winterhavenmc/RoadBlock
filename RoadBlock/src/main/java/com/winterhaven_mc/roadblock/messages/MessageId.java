@@ -1,5 +1,8 @@
 package com.winterhaven_mc.roadblock.messages;
 
+/**
+ * Enum with entries for all player messages in language configuration files
+ */
 public enum MessageId {
 
 	COMMAND_SUCCESS_RELOAD,
