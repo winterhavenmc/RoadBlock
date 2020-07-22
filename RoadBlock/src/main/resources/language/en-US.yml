@@ -18,8 +18,8 @@ ITEM_INFO:
 ##########
 
 # Variable substitutions:
-#  %ITEM_NAME%      item name from this file
-#  %WORLD_NAME%     name of player's current world
+#  %ITEM%           item name from this file
+#  %WORLD%          name of player's current world
 #  %QUANTITY%       a quantity
 #  %MATERIAL%       block material
 
@@ -40,6 +40,36 @@ MESSAGES:
   COMMAND_SUCCESS_SHOW:
     enabled: true
     string: '&8[&eRoadBlock&8] &7Highlighted %QUANTITY% nearby RoadBlocks.'
+
+
+  COMMAND_HELP_INVALID:
+    enabled: true
+    string: '&3[RoadBlock]&c That is not a valid command!'
+
+  COMMAND_HELP_HELP:
+    enabled: true
+    string: '&eDisplay help for RoadBlock commands.'
+
+  COMMAND_HELP_RELOAD:
+    enabled: true
+    string: '&eReload the configuration without needing to restart the server.'
+
+  COMMAND_HELP_SHOW:
+    enabled: true
+    string: '&eHighlight protected RoadBlocks within configured radius.'
+
+  COMMAND_HELP_STATUS:
+    enabled: true
+    string: '&eDisplay plugin configuration settings.'
+
+  COMMAND_HELP_TOOL:
+    enabled: true
+    string: '&ePlace a RoadBlock tool in player inventory.'
+
+  COMMAND_HELP_USAGE_HEADER:
+    enabled: true
+    string: '&eCommand usage:'
+
 
   COMMAND_FAIL_ARGS_COUNT_UNDER:
     enabled: true
@@ -63,11 +93,11 @@ MESSAGES:
 
   COMMAND_FAIL_TOOL_INVENTORY_FULL:
     enabled: true
-    string: '&8[&eRoadBlock&8] &cCould not give %ITEM_NAME%&r&c because your inventory is full.'
+    string: '&8[&eRoadBlock&8] &cCould not give %ITEM%&r&c because your inventory is full.'
 
   COMMAND_FAIL_TOOL_PERMISSION:
     enabled: true
-    string: '&8[&eRoadBlock&8] &cYou do not have permission to create a %ITEM_NAME%!'
+    string: '&8[&eRoadBlock&8] &cYou do not have permission to create a %ITEM%!'
 
   COMMAND_FAIL_HELP_PERMISSION:
     enabled: true
@@ -111,17 +141,17 @@ MESSAGES:
   TOOL_FAIL_WORLD_DISABLED:
     enabled: true
     repeat-delay: 1
-    string: '&8[&eRoadBlock&8] &cPlugin is not enabled in world ''%WORLD_NAME%''.'
+    string: '&8[&eRoadBlock&8] &cPlugin is not enabled in world ''%WORLD%''.'
 
   TOOL_FAIL_USE_PERMISSION:
     enabled: true
     repeat-delay: 1
-    string: '&8[&eRoadBlock&8] &cYou do not have permission to use a &b%ITEM_NAME%&r&c in %WORLD_NAME%.'
+    string: '&8[&eRoadBlock&8] &cYou do not have permission to use a &b%ITEM%&r&c in %WORLD%.'
 
   TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION:
     enabled: true
     repeat-delay: 1
-    string: '&8[&eRoadBlock&8] &cYou do not have permission to break road blocks in %WORLD_NAME%.'
+    string: '&8[&eRoadBlock&8] &cYou do not have permission to break road blocks in %WORLD%.'
 
   TOOL_FAIL_INVALID_MATERIAL:
     enabled: true
@@ -131,7 +161,7 @@ MESSAGES:
   TOOL_FAIL_USE_SHIFT_CLICK:
     enabled: true
     repeat-delay: 5
-    string: '&8[&eRoadBlock&8] &7You must shift-click to use a %ITEM_NAME%&r&7.'
+    string: '&8[&eRoadBlock&8] &7You must shift-click to use a %ITEM%&r&7.'
 
   TOOL_FAIL_DISTANCE_EXCEEDED:
     enabled: true
