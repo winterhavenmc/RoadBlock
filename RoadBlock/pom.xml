@@ -106,8 +106,6 @@
 									<include>com.winterhaven-mc:world-manager-lib</include>
 									<include>com.winterhaven-mc:sound-config-lib</include>
 									<include>com.winterhaven-mc:messenger-lib</include>
-									<include>co.aikar.commands</include>
-									<include>co.aikar.locales</include>
 								</includes>
 							</artifactSet>
 							<relocations>
@@ -117,14 +115,6 @@
 									<includes>
 										<include>com.winterhaven_mc.util.*</include>
 									</includes>
-								</relocation>
-								<relocation>
-									<pattern>co.aikar.commands</pattern>
-									<shadedPattern>com.winterhaven_mc.roadblock.acf</shadedPattern>
-								</relocation>
-								<relocation>
-									<pattern>co.aikar.locales</pattern>
-									<shadedPattern>com.winterhaven_mc.roadblock.locales</shadedPattern>
 								</relocation>
 							</relocations>
 						</configuration>
