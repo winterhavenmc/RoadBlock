@@ -7,6 +7,6 @@ public enum Macro {
 
 	QUANTITY,
 	MATERIAL,
-	WORLD_NAME,
+	WORLD,
 
 }

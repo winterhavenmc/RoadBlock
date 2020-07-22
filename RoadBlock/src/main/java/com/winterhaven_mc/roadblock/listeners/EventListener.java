@@ -6,7 +6,6 @@ import com.winterhaven_mc.roadblock.messages.Message;
 import com.winterhaven_mc.roadblock.sounds.SoundId;
 import com.winterhaven_mc.roadblock.storage.BlockRecord;
 import com.winterhaven_mc.roadblock.utilities.RoadBlockTool;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -20,7 +19,10 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -86,7 +88,9 @@ public final class EventListener implements Listener {
 
 			// if world is not enabled, send message and return
 			if (!plugin.worldManager.isEnabled(player.getWorld())) {
-				Message.create(player, TOOL_FAIL_WORLD_DISABLED).setMacro(WORLD_NAME, player.getWorld()).send();
+				Message.create(player, TOOL_FAIL_WORLD_DISABLED)
+						.setMacro(WORLD, player.getWorld())
+						.send();
 				event.setCancelled(true);
 				return;
 			}
