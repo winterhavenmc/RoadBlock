@@ -1,17 +1,45 @@
 package com.winterhaven_mc.roadblock.commands;
 
-public enum Subcommand {
+import com.winterhaven_mc.roadblock.messages.MessageId;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 
-	RELOAD,
-	SHOW,
-	STATUS,
-	TOOL,
-	HELP;
+import java.util.List;
 
-	@Override
-	public String toString() {
-		return name().toLowerCase();
-	}
+
+public interface Subcommand {
+
+	boolean onCommand(CommandSender sender, List<String> argsList);
+
+	List<String> onTabComplete(final CommandSender sender, final Command command,
+							   final String alias, final String[] args);
+
+	String getName();
+
+	void setName(final String name);
+
+	List<String> getAliases();
+
+	void setAliases(List<String> aliases);
+
+	void addAlias(String alias);
+
+	String getUsage();
+
+	void setUsage(String usageString);
+
+	void displayUsage(CommandSender sender);
+
+	MessageId getDescription();
+
+	void setDescription(MessageId messageId);
+
+	int getMinArgs();
+
+	void setMinArgs(int minArgs);
+
+	int getMaxArgs();
+
+	void setMaxArgs(int maxArgs);
 
 }
-
