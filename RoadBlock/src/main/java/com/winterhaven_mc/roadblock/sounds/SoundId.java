@@ -3,6 +3,7 @@ package com.winterhaven_mc.roadblock.sounds;
 public enum SoundId {
 
 	COMMAND_FAIL,
+	COMMAND_INVALID,
 	COMMAND_SUCCESS_TOOL,
 	COMMAND_SUCCESS_SHOW,
 	TOOL_DROP,
