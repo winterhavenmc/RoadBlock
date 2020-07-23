@@ -39,7 +39,7 @@ public class HelpCommand extends AbstractSubcommand {
 		if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("help")) {
 				for (String subcommand : subcommandMap.getKeys()) {
-					if (sender.hasPermission("homestar." + subcommand)
+					if (sender.hasPermission("roadblock." + subcommand)
 							&& subcommand.startsWith(args[1].toLowerCase())
 							&& !subcommand.equalsIgnoreCase("help")) {
 						returnList.add(subcommand);
@@ -56,7 +56,7 @@ public class HelpCommand extends AbstractSubcommand {
 	public boolean onCommand(CommandSender sender, List<String> argsList) {
 
 		// if command sender does not have permission to display help, output error message and return true
-		if (!sender.hasPermission("homestar.help")) {
+		if (!sender.hasPermission("roadblock.help")) {
 			Message.create(sender,  COMMAND_FAIL_HELP_PERMISSION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
