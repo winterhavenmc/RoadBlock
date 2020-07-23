@@ -12,6 +12,13 @@ public enum SubcommandType {
 		}
 	},
 
+	MATERIALS() {
+		@Override
+		void register(final PluginMain plugin, final SubcommandMap subcommandMap) {
+			subcommandMap.register(new MaterialsCommand(plugin));
+		}
+	},
+
 	RELOAD() {
 		@Override
 		void register(final PluginMain plugin, final SubcommandMap subcommandMap) {
