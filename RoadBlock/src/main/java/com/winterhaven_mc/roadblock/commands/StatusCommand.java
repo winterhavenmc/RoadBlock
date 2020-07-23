@@ -3,6 +3,7 @@ package com.winterhaven_mc.roadblock.commands;
 import com.winterhaven_mc.roadblock.PluginMain;
 import com.winterhaven_mc.roadblock.messages.Message;
 import com.winterhaven_mc.roadblock.sounds.SoundId;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -79,7 +80,7 @@ public class StatusCommand extends AbstractSubcommand {
 		sender.sendMessage(ChatColor.GREEN + "Snow plow: "
 				+ ChatColor.RESET + plugin.getConfig().getString("snow-plow"));
 
-		sender.sendMessage(ChatColor.GREEN + "Enabled Worlds: "
+		sender.sendMessage(ChatColor.GREEN + "Enabled worlds: "
 				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());
 
 		return true;
