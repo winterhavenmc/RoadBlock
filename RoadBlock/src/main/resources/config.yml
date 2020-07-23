@@ -46,13 +46,19 @@ snow-plow: true
 # Enable sound effects
 sound-effects: true
 
-# materials to be considered road blocks
+# materials to be considered road blocks (material types documented here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html)
 materials:
-  - STEP
-  - DOUBLE_STEP
+  - GRASS_PATH
   - COBBLESTONE
+  - COBBLESTONE_SLAB
   - COBBLESTONE_STAIRS
   - MOSSY_COBBLESTONE
-  - SMOOTH_BRICK
-  - SMOOTH_STAIRS
-  - GRASS_PATH
+  - MOSSY_COBBLESTONE_SLAB
+  - MOSSY_COBBLESTONE_STAIRS
+  - STONE_BRICKS
+  - STONE_BRICK_SLAB
+  - STONE_BRICK_STAIRS
+  - CRACKED_STONE_BRICKS
+  - MOSSY_STONE_BRICKS
+  - MOSSY_STONE_BRICK_SLAB
+  - MOSSY_STONE_BRICK_STAIRS
