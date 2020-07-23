@@ -50,6 +50,10 @@ MESSAGES:
     enabled: true
     string: '&eDisplay help for RoadBlock commands.'
 
+  COMMAND_HELP_MATERIALS:
+    enabled: true
+    string: '&eDisplay configured RoadBlock materials.'
+
   COMMAND_HELP_RELOAD:
     enabled: true
     string: '&eReload the configuration without needing to restart the server.'
@@ -110,6 +114,10 @@ MESSAGES:
   COMMAND_FAIL_SHOW_PERMISSION:
     enabled: true
     string: '&8[&eRoadBlock&8] &cYou do not have permission to highlight nearby RoadBlocks!'
+
+  COMMAND_FAIL_MATERIALS_PERMISSION:
+    enabled: true
+    string: '&8[&eRoadBlock&8] &cYou do not have permission to view RoadBlock materials!'
 
   COMMAND_FAIL_STATUS_PERMISSION:
     enabled: true
