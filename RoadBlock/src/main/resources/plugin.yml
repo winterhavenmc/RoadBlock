@@ -8,7 +8,7 @@ softdepend: [Multiverse-Core]
 commands:
   roadblock:
     aliases: rb
-    description: This is the RoadBlock command.
+    description: Use /<command> help [command] to display subcommand help.
     usage: /<command> command
 
 permissions:
@@ -18,6 +18,10 @@ permissions:
 
   roadblock.status:
     description: Allows display of config settings.
+    default: op
+
+  roadblock.materials:
+    description: Allows display of configured RoadBlock materials.
     default: op
 
   roadblock.reload:
