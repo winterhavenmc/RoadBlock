@@ -8,8 +8,8 @@ softdepend: [Multiverse-Core]
 commands:
   roadblock:
     aliases: rb
-    description: Use /<command> help [command] to display subcommand help.
-    usage: /<command> command
+    description: Use /roadblock help [command] to display subcommand help.
+    usage: /roadblock [command]
 
 permissions:
   roadblock.help:
