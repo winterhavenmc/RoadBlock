@@ -328,21 +328,4 @@ public abstract class DataStore {
 		}
 	}
 
-
-//	public static void reload() {
-//
-//		// get current datastore type
-//		final DataStoreType currentType = plugin.dataStore.getType();
-//
-//		// get configured datastore type
-//		final DataStoreType newType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
-//
-//		// if current datastore type does not match configured datastore type, create new datastore
-//		if (!currentType.equals(newType)) {
-//
-//			// create new datastore
-//			plugin.dataStore = create(newType, plugin.dataStore);
-//		}
-//	}
-
 }
