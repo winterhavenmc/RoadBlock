@@ -29,6 +29,14 @@ public final class RoadBlockTool {
 
 
 	/**
+	 * Private constructor to prevent instantiation of this utility class
+	 */
+	private RoadBlockTool() {
+		throw new AssertionError();
+	}
+
+
+	/**
 	 * Create an item stack with configured tool material, name and lore
 	 *
 	 * @return RoadBlock tool item stack
