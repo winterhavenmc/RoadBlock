@@ -12,10 +12,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PluginMain extends JavaPlugin {
 
+	public LanguageHandler LanguageHandler;
+	public WorldManager worldManager;
+	public SoundConfiguration soundConfig;
 	public BlockManager blockManager;
 	public HighlightManager highlightManager;
-	public SoundConfiguration soundConfig;
-	public WorldManager worldManager;
 
 	public Boolean debug = getConfig().getBoolean("debug");
 	public Boolean profile = getConfig().getBoolean("profile");
@@ -27,8 +28,8 @@ public final class PluginMain extends JavaPlugin {
 		// install default config.yml if not present
 		saveDefaultConfig();
 
-		// initialize language manager
-		LanguageManager.init();
+		// instantiate language manager
+		LanguageHandler = new LanguageHandler(this);
 
 		// instantiate world manager
 		worldManager = new WorldManager(this);

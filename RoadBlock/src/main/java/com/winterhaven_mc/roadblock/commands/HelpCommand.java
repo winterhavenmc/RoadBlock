@@ -57,14 +57,14 @@ public class HelpCommand extends AbstractSubcommand {
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("roadblock.help")) {
-			Message.create(sender,  COMMAND_FAIL_HELP_PERMISSION).send();
+			Message.create(sender,  COMMAND_FAIL_HELP_PERMISSION).send(plugin.LanguageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (argsList.size() > getMaxArgs()) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.LanguageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -95,13 +95,13 @@ public class HelpCommand extends AbstractSubcommand {
 
 		// if subcommand found in map, display help message and usage
 		if (subcommand != null) {
-			Message.create(sender, subcommand.getDescription()).send();
+			Message.create(sender, subcommand.getDescription()).send(plugin.LanguageHandler);
 			subcommand.displayUsage(sender);
 		}
 
 		// else display invalid command help message and usage for all commands
 		else {
-			Message.create(sender, COMMAND_HELP_INVALID).send();
+			Message.create(sender, COMMAND_HELP_INVALID).send(plugin.LanguageHandler);
 			plugin.soundConfig.playSound(sender, COMMAND_INVALID);
 			displayUsageAll(sender);
 		}
@@ -114,7 +114,7 @@ public class HelpCommand extends AbstractSubcommand {
 	 */
 	void displayUsageAll(CommandSender sender) {
 
-		Message.create(sender, COMMAND_HELP_USAGE_HEADER).send();
+		Message.create(sender, COMMAND_HELP_USAGE_HEADER).send(plugin.LanguageHandler);
 
 		for (String subcommandName : subcommandMap.getKeys()) {
 			if (subcommandMap.getCommand(subcommandName) != null) {

@@ -3,7 +3,6 @@ package com.winterhaven_mc.roadblock.commands;
 import com.winterhaven_mc.roadblock.PluginMain;
 import com.winterhaven_mc.roadblock.messages.Message;
 import com.winterhaven_mc.roadblock.sounds.SoundId;
-import com.winterhaven_mc.util.LanguageManager;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -32,14 +31,14 @@ public class ReloadCommand extends AbstractSubcommand {
 
 		// check that sender has permission for reload command
 		if (!sender.hasPermission("roadblock.reload")) {
-			Message.create(sender, COMMAND_FAIL_RELOAD_PERMISSION).send();
+			Message.create(sender, COMMAND_FAIL_RELOAD_PERMISSION).send(plugin.LanguageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (argsList.size() > getMaxArgs()) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.LanguageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -61,7 +60,7 @@ public class ReloadCommand extends AbstractSubcommand {
 		plugin.blockManager.reload();
 
 		// reload messages
-		LanguageManager.reload();
+		plugin.LanguageHandler.reload();
 
 		// reload sounds
 		plugin.soundConfig.reload();
@@ -70,7 +69,7 @@ public class ReloadCommand extends AbstractSubcommand {
 		plugin.worldManager.reload();
 
 		// send player success message
-		Message.create(sender, COMMAND_SUCCESS_RELOAD).send();
+		Message.create(sender, COMMAND_SUCCESS_RELOAD).send(plugin.LanguageHandler);
 
 		return true;
 	}

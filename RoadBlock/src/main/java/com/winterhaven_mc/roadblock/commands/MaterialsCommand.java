@@ -31,14 +31,14 @@ public class MaterialsCommand extends AbstractSubcommand {
 
 		// check that sender has permission for status command
 		if (!sender.hasPermission("roadblock.materials")) {
-			Message.create(sender, COMMAND_FAIL_MATERIALS_PERMISSION).send();
+			Message.create(sender, COMMAND_FAIL_MATERIALS_PERMISSION).send(plugin.LanguageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (argsList.size() > getMaxArgs()) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.LanguageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;

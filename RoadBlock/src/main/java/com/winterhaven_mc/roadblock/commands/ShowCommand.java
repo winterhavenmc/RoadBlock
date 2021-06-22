@@ -35,7 +35,7 @@ public class ShowCommand extends AbstractSubcommand {
 
 		// sender must be player
 		if (!(sender instanceof Player)) {
-			Message.create(sender, COMMAND_FAIL_CONSOLE).send();
+			Message.create(sender, COMMAND_FAIL_CONSOLE).send(plugin.LanguageHandler);
 			return true;
 		}
 
@@ -44,14 +44,14 @@ public class ShowCommand extends AbstractSubcommand {
 
 		// check player permissions
 		if (!player.hasPermission("roadblock.show")) {
-			Message.create(sender, COMMAND_FAIL_SHOW_PERMISSION).send();
+			Message.create(sender, COMMAND_FAIL_SHOW_PERMISSION).send(plugin.LanguageHandler);
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (argsList.size() > getMaxArgs()) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.LanguageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -67,7 +67,7 @@ public class ShowCommand extends AbstractSubcommand {
 			}
 			catch (NumberFormatException nfe) {
 				// send player integer parse error message and return
-				Message.create(sender, COMMAND_FAIL_SET_INVALID_INTEGER).send();
+				Message.create(sender, COMMAND_FAIL_SET_INVALID_INTEGER).send(plugin.LanguageHandler);
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 
 				// display usage message for player
@@ -83,7 +83,7 @@ public class ShowCommand extends AbstractSubcommand {
 		plugin.highlightManager.highlightBlocks(player, locations, HighlightStyle.PROTECT);
 
 		// send player success message
-		Message.create(player, COMMAND_SUCCESS_SHOW).setMacro(QUANTITY, locations.size()).send();
+		Message.create(player, COMMAND_SUCCESS_SHOW).setMacro(QUANTITY, locations.size()).send(plugin.LanguageHandler);
 
 		// if any blocks highlighted, play sound
 		if (locations.size() > 0) {
