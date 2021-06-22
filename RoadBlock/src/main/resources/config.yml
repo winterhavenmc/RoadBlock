@@ -4,7 +4,8 @@
 language: en-US
 
 # If this list is empty, all worlds will be added to the enabled worlds list
-enabled-worlds:
+# note: empty list explicitly declared for testing
+enabled-worlds: []
 #  - enabled_world1
 #  - enabled_world2
 
