@@ -46,6 +46,11 @@ snow-plow: true
 # Enable sound effects
 sound-effects: true
 
+# Add potion effect on player when running on road
+add-potion:
+  enable: true
+  potion-level: 1.0
+
 # materials to be considered road blocks (material types documented here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html)
 materials:
   - GRASS_PATH

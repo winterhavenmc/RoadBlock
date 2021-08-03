@@ -19,11 +19,10 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
@@ -101,8 +100,7 @@ public final class EventListener implements Listener {
 				// RH says this can sometimes throw an exception, so using try..catch block
 				try {
 					clickedBlock = player.getTargetBlock(RoadBlockTool.toolTransparentMaterials, 100);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					plugin.getLogger().info("player.getTargetBlock() threw an exception.");
 					plugin.getLogger().info(e.getLocalizedMessage());
 				}
@@ -264,7 +262,7 @@ public final class EventListener implements Listener {
 		final Player player = event.getPlayer();
 
 		// check if block below placed block is protected grass path, to prevent converting to regular dirt
-		if (placedBlock.getRelative(BlockFace.DOWN).getType().equals(Material.GRASS_PATH)) {
+		if (placedBlock.getRelative(BlockFace.DOWN).getType().equals(Material.LEGACY_GRASS_PATH)) {
 			event.setCancelled(true);
 			Message.create(player, BLOCK_PLACE_FAIL_GRASS_PATH).send();
 			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_GRASS_PATH);
@@ -454,9 +452,9 @@ public final class EventListener implements Listener {
 			// check that player is above a road block
 			if (plugin.blockManager.isAboveRoad(player)) {
 
-				// if entity to target distance is less than 
+				// if entity to target distance is less than
 				// configured target distance,
-				// do nothing and return, allowing player to be targeted 
+				// do nothing and return, allowing player to be targeted
 				if (event.getEntity().getLocation()
 						.distanceSquared(player.getLocation()) < Math.pow(plugin
 						.getConfig().getInt("target-distance"), 2)) {
@@ -565,4 +563,26 @@ public final class EventListener implements Listener {
 		}
 	}
 
+	@EventHandler
+	final void onPlayerMove(final PlayerMoveEvent event) {
+		if (plugin.getConfig().getBoolean("add-potion.enable")) {
+			// get block being broken
+			final Block block = event.getTo().getBlock();
+			// get player
+			final Player player = event.getPlayer();
+			final int speed_level = plugin.getConfig().getInt("add-potion.potion-level") - 1;
+			// check if block is a protected road block
+			if (plugin.blockManager.isRoadBlock(block)) {
+				if (player.getPotionEffect(PotionEffectType.SPEED) != null) {
+					if (player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() == speed_level) {
+						player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10, speed_level));
+					}
+				} else {
+					player.removePotionEffect(PotionEffectType.SPEED);
+					player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10, speed_level));
+				}
+			}
+		}
+
+	}
 }
