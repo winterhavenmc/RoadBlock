@@ -100,7 +100,8 @@ public final class EventListener implements Listener {
 				// RH says this can sometimes throw an exception, so using try..catch block
 				try {
 					clickedBlock = player.getTargetBlock(RoadBlockTool.toolTransparentMaterials, 100);
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					plugin.getLogger().info("player.getTargetBlock() threw an exception.");
 					plugin.getLogger().info(e.getLocalizedMessage());
 				}
