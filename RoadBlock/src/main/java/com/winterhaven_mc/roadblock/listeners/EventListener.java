@@ -70,7 +70,7 @@ public final class EventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	final void onPlayerInteract(final PlayerInteractEvent event) {
+	void onPlayerInteract(final PlayerInteractEvent event) {
 
 		//NOTE: do not check for cancelled event here; long distance clicks are considered cancelled
 
@@ -186,7 +186,7 @@ public final class EventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	final void onPlayerChangeItem(final PlayerItemHeldEvent event) {
+	void onPlayerChangeItem(final PlayerItemHeldEvent event) {
 
 		final Player player = event.getPlayer();
 
@@ -205,7 +205,7 @@ public final class EventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	final void onPlayerChangeGameMode(final PlayerGameModeChangeEvent event) {
+	void onPlayerChangeGameMode(final PlayerGameModeChangeEvent event) {
 		plugin.highlightManager.unHighlightBlocks(event.getPlayer());
 	}
 
@@ -217,7 +217,7 @@ public final class EventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	final void onPlayerDropItem(final PlayerDropItemEvent event) {
+	void onPlayerDropItem(final PlayerDropItemEvent event) {
 
 		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -247,7 +247,7 @@ public final class EventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	final void onBlockPlace(final BlockPlaceEvent event) {
+	void onBlockPlace(final BlockPlaceEvent event) {
 
 		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -264,7 +264,8 @@ public final class EventListener implements Listener {
 		final Player player = event.getPlayer();
 
 		// check if block below placed block is protected grass path, to prevent converting to regular dirt
-		if (placedBlock.getRelative(BlockFace.DOWN).getType().equals(Material.GRASS_PATH)) {
+		final Block blockBelow = placedBlock.getRelative(BlockFace.DOWN);
+		if (blockBelow.getType().equals(Material.GRASS_PATH) && plugin.blockManager.isRoadBlock(blockBelow)) {
 			event.setCancelled(true);
 			Message.create(player, BLOCK_PLACE_FAIL_GRASS_PATH).send(plugin.LanguageHandler);
 			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_GRASS_PATH);
@@ -287,7 +288,7 @@ public final class EventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	final void onBlockMultiPlace(final BlockMultiPlaceEvent event) {
+	void onBlockMultiPlace(final BlockMultiPlaceEvent event) {
 
 		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -324,7 +325,7 @@ public final class EventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	final void onBlockBreak(final BlockBreakEvent event) {
+	void onBlockBreak(final BlockBreakEvent event) {
 
 		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -361,7 +362,7 @@ public final class EventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	final void onBlockExplode(final BlockExplodeEvent event) {
+	void onBlockExplode(final BlockExplodeEvent event) {
 
 		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -387,7 +388,7 @@ public final class EventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	final void onEntityExplode(final EntityExplodeEvent event) {
+	void onEntityExplode(final EntityExplodeEvent event) {
 
 		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -411,7 +412,7 @@ public final class EventListener implements Listener {
 	 * stops entities from changing protected road blocks
 	 */
 	@EventHandler
-	final void onEntityChangeBlock(final EntityChangeBlockEvent event) {
+	void onEntityChangeBlock(final EntityChangeBlockEvent event) {
 
 		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -433,7 +434,7 @@ public final class EventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	final void onEntityTargetLivingEntity(final EntityTargetLivingEntityEvent event) {
+	void onEntityTargetLivingEntity(final EntityTargetLivingEntityEvent event) {
 
 		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -482,7 +483,7 @@ public final class EventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	final void onPistonExtend(final BlockPistonExtendEvent event) {
+	void onPistonExtend(final BlockPistonExtendEvent event) {
 
 		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -513,7 +514,7 @@ public final class EventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	final void onPistonRetract(final BlockPistonRetractEvent event) {
+	void onPistonRetract(final BlockPistonRetractEvent event) {
 
 		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -544,7 +545,7 @@ public final class EventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	final void onBlockForm(final BlockFormEvent event) {
+	void onBlockForm(final BlockFormEvent event) {
 
 		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
