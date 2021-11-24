@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.winterhaven-mc</groupId>
   <artifactId>RoadBlock</artifactId>
-  <version>1.16.0-SNAPSHOT</version>
+  <version>1.16.0</version>
   <name>RoadBlock</name>
 
 	<properties>
@@ -59,21 +59,21 @@
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>messenger-lib</artifactId>
-			<version>1.16.1-SNAPSHOT</version>
+			<version>1.16.1</version>
 		</dependency>
 
 		<!-- SoundConfigLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>sound-config-lib</artifactId>
-			<version>1.16.1-SNAPSHOT</version>
+			<version>1.16.1</version>
 		</dependency>
 
 		<!-- WorldManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>world-manager-lib</artifactId>
-			<version>1.16.1-SNAPSHOT</version>
+			<version>1.16.1</version>
 		</dependency>
 
 		<!-- Unit Testing Dependencies -->
