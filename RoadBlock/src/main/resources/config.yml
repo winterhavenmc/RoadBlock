@@ -49,7 +49,7 @@ sound-effects: true
 
 # materials to be considered road blocks (material types documented here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html)
 materials:
-  - GRASS_PATH
+  - DIRT_PATH
   - COBBLESTONE
   - COBBLESTONE_SLAB
   - COBBLESTONE_STAIRS
