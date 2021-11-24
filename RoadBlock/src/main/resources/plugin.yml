@@ -2,7 +2,7 @@ name: ${project.name}
 main: com.winterhaven_mc.roadblock.PluginMain
 author: ${project.author}
 version: ${project.version}
-api-version: 1.15
+api-version: 1.17
 softdepend: [Multiverse-Core]
 
 commands:
