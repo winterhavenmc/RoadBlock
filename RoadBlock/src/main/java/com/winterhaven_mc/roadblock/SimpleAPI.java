@@ -13,7 +13,7 @@ public final class SimpleAPI {
 
 
 	/**
-	 * Private constructor to prevent instantiation this class
+	 * Private constructor to prevent instantiation of this utility class
 	 */
 	private SimpleAPI() {
 		throw new AssertionError();
