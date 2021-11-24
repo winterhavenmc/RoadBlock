@@ -265,7 +265,7 @@ public final class EventListener implements Listener {
 
 		// check if block below placed block is protected grass path, to prevent converting to regular dirt
 		final Block blockBelow = placedBlock.getRelative(BlockFace.DOWN);
-		if (blockBelow.getType().equals(Material.GRASS_PATH) && plugin.blockManager.isRoadBlock(blockBelow)) {
+		if (blockBelow.getType().equals(Material.DIRT_PATH) && plugin.blockManager.isRoadBlock(blockBelow)) {
 			event.setCancelled(true);
 			Message.create(player, BLOCK_PLACE_FAIL_GRASS_PATH).send(plugin.LanguageHandler);
 			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_GRASS_PATH);
