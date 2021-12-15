@@ -77,7 +77,7 @@ public final class BlockManager {
 	 * @param startLocation location to begin searching for attached road blocks
 	 * @return Set of Locations of attached road blocks
 	 */
-	public final Set<Location> getFill(final Location startLocation) {
+	public Set<Location> getFill(final Location startLocation) {
 
 		// if passed location is null, return empty set
 		if (startLocation == null) {
@@ -123,7 +123,7 @@ public final class BlockManager {
 	 * @param player the player to is above a road block
 	 * @return {@code true} if player is within three blocks above a road block, else {@code false}
 	 */
-	public final boolean isAboveRoad(final Player player) {
+	public boolean isAboveRoad(final Player player) {
 
 		// if player is null, return false
 		if (player == null) {
@@ -150,7 +150,7 @@ public final class BlockManager {
 	 * @param distance the distance in blocks to test below location for road blocks
 	 * @return {@code true} if location is above a road block, else {@code false}
 	 */
-	public final boolean isAboveRoad(final Location location, final int distance) {
+	public boolean isAboveRoad(final Location location, final int distance) {
 
 		// if passed location is null, return false
 		if (location == null) {
@@ -192,7 +192,7 @@ public final class BlockManager {
 	 * @param block the block to test
 	 * @return {@code true} if the block is a protected road block, else {@code false}
 	 */
-	public final boolean isRoadBlock(final Block block) {
+	public boolean isRoadBlock(final Block block) {
 
 		// if passed block is null, return false
 		if (block == null) {
@@ -238,7 +238,7 @@ public final class BlockManager {
 	 * @param material the material type to test for valid configured road block material
 	 * @return {@code true} if the material is a valid configured road block material, {@code false} if it is not
 	 */
-	public final boolean isRoadBlockMaterial(final Material material) {
+	public boolean isRoadBlockMaterial(final Material material) {
 		return material != null && roadBlockMaterials.contains(material);
 	}
 
@@ -248,7 +248,7 @@ public final class BlockManager {
 	 *
 	 * @param blockRecords a Collection of Locations to be inserted into the datastore
 	 */
-	public final void storeLocations(final Collection<BlockRecord> blockRecords) {
+	public void storeLocations(final Collection<BlockRecord> blockRecords) {
 		dataStore.insertRecords(blockRecords);
 	}
 
@@ -258,7 +258,7 @@ public final class BlockManager {
 	 *
 	 * @param blockRecords a Collection of Locations to be deleted from the datastore
 	 */
-	public final void removeLocations(final Collection<BlockRecord> blockRecords) {
+	public void removeLocations(final Collection<BlockRecord> blockRecords) {
 		dataStore.deleteRecords(blockRecords);
 	}
 
@@ -268,7 +268,7 @@ public final class BlockManager {
 	 *
 	 * @param blockRecord the location to be removed from the datastore
 	 */
-	public final void removeLocation(final BlockRecord blockRecord) {
+	public void removeLocation(final BlockRecord blockRecord) {
 		Set<BlockRecord> blockRecords = new HashSet<>();
 		blockRecords.add(blockRecord);
 		dataStore.deleteRecords(blockRecords);
@@ -278,7 +278,7 @@ public final class BlockManager {
 	/**
 	 * Parse valid road block materials from config file
 	 */
-	public final void updateMaterials() {
+	public void updateMaterials() {
 
 		final ArrayList<String> materialStringList =
 				new ArrayList<>(plugin.getConfig().getStringList("materials"));
@@ -308,17 +308,17 @@ public final class BlockManager {
 	}
 
 
-	synchronized public final int getBlockTotal() {
+	synchronized public int getBlockTotal() {
 		return dataStore.getTotalBlocks();
 	}
 
 
-	public final Collection<Location> selectNearbyBlocks(Location location, int distance) {
+	public Collection<Location> selectNearbyBlocks(Location location, int distance) {
 		return dataStore.selectNearbyBlocks(location, distance);
 	}
 
 
-	public final Set<Material> getRoadBlockMaterials() {
+	public Set<Material> getRoadBlockMaterials() {
 		return roadBlockMaterials;
 	}
 
