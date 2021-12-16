@@ -24,6 +24,11 @@
 		</license>
 	</licenses>
 
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/tim-savage/RoadBlock/issues</url>
+	</issueManagement>
+
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
