@@ -7,6 +7,10 @@
 
 	<url>https://github.com/tim-savage/RoadBlock</url>
 
+	<description>
+		A minecraft plugin that prevents breaking of blocks that have been designated as roads.
+	</description>
+
 	<properties>
 		<project.author>Tim Savage</project.author>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
