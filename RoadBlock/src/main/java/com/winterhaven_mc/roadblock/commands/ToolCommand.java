@@ -33,7 +33,7 @@ public class ToolCommand extends AbstractSubcommand {
 
 		// sender must be player
 		if (!(sender instanceof Player)) {
-			Message.create(sender, COMMAND_FAIL_CONSOLE).send(plugin.LanguageHandler);
+			Message.create(sender, COMMAND_FAIL_CONSOLE).send(plugin.languageHandler);
 			return true;
 		}
 
@@ -42,14 +42,14 @@ public class ToolCommand extends AbstractSubcommand {
 
 		// check player permissions
 		if (!player.hasPermission("roadblock.tool")) {
-			Message.create(sender, COMMAND_FAIL_TOOL_PERMISSION).send(plugin.LanguageHandler);
+			Message.create(sender, COMMAND_FAIL_TOOL_PERMISSION).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (argsList.size() > getMaxArgs()) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.LanguageHandler);
+			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -63,7 +63,7 @@ public class ToolCommand extends AbstractSubcommand {
 
 		// if no room in inventory, send message
 		if (!noFit.isEmpty()) {
-			Message.create(sender, COMMAND_FAIL_TOOL_INVENTORY_FULL).send(plugin.LanguageHandler);
+			Message.create(sender, COMMAND_FAIL_TOOL_INVENTORY_FULL).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}

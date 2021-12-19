@@ -12,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PluginMain extends JavaPlugin {
 
-	public LanguageHandler LanguageHandler;
+	public LanguageHandler languageHandler;
 	public WorldManager worldManager;
 	public SoundConfiguration soundConfig;
 	public BlockManager blockManager;
@@ -29,7 +29,7 @@ public final class PluginMain extends JavaPlugin {
 		saveDefaultConfig();
 
 		// instantiate language manager
-		LanguageHandler = new LanguageHandler(this);
+		languageHandler = new LanguageHandler(this);
 
 		// instantiate world manager
 		worldManager = new WorldManager(this);

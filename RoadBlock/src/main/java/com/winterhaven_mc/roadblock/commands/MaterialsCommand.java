@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.winterhaven_mc.roadblock.messages.MessageId.*;
 
@@ -31,14 +30,14 @@ public class MaterialsCommand extends AbstractSubcommand {
 
 		// check that sender has permission for status command
 		if (!sender.hasPermission("roadblock.materials")) {
-			Message.create(sender, COMMAND_FAIL_MATERIALS_PERMISSION).send(plugin.LanguageHandler);
+			Message.create(sender, COMMAND_FAIL_MATERIALS_PERMISSION).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (argsList.size() > getMaxArgs()) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.LanguageHandler);
+			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;

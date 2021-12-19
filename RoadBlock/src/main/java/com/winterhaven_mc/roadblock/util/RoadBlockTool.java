@@ -64,7 +64,7 @@ public final class RoadBlockTool {
 		final ItemMeta metaData = itemStack.getItemMeta();
 
 		// get language manager instance
-		LanguageHandler LanguageHandler = plugin.LanguageHandler;
+		LanguageHandler LanguageHandler = plugin.languageHandler;
 
 		// set display name to configured tool name
 		assert metaData != null;
