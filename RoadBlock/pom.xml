@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.winterhaven-mc</groupId>
 	<artifactId>RoadBlock</artifactId>
-	<version>1.18.1</version>
+	<version>1.18.2-SNAPSHOT</version>
 	<name>RoadBlock</name>
 
 	<url>https://github.com/tim-savage/RoadBlock</url>
@@ -66,7 +66,7 @@
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>messenger-lib</artifactId>
-			<version>1.16.1</version>
+			<version>1.16.2</version>
 		</dependency>
 
 		<!-- SoundConfigLib -->
