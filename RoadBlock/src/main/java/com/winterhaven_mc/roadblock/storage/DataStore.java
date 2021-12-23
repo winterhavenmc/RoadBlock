@@ -193,92 +193,13 @@ public interface DataStore {
 
 		// if old data store was passed, convert to new data store
 		if (oldDataStore != null) {
-			convertDataStore(plugin, oldDataStore, newDataStore);
+			DataStoreType.convertDataStore(plugin, oldDataStore, newDataStore);
 		}
 		else {
-			convertAll(plugin, newDataStore);
+			DataStoreType.convertAll(plugin, newDataStore);
 		}
 		// return initialized data store
 		return newDataStore;
-	}
-
-
-	/**
-	 * convert old data store to new data store
-	 *
-	 * @param oldDataStore the old datastore to be converted from
-	 * @param newDataStore the new datastore to be converted to
-	 */
-	static void convertDataStore(final PluginMain plugin, final DataStore oldDataStore, final DataStore newDataStore) {
-
-		// if datastores are same type, do not convert
-		if (oldDataStore.getType().equals(newDataStore.getType())) {
-			return;
-		}
-
-		// if old datastore file exists, attempt to read all records
-		if (oldDataStore.exists()) {
-
-			plugin.getLogger().info("Converting existing " + oldDataStore.getDisplayName() + " datastore to "
-					+ newDataStore.getDisplayName() + " datastore...");
-
-			// initialize old datastore if necessary
-			if (!oldDataStore.isInitialized()) {
-				try {
-					oldDataStore.initialize();
-				}
-				catch (Exception e) {
-					plugin.getLogger().warning("Could not initialize "
-							+ oldDataStore.getDisplayName() + " datastore for conversion.");
-					plugin.getLogger().warning(e.getLocalizedMessage());
-					return;
-				}
-			}
-
-			// get set of all location records in old datastore
-			Collection<BlockRecord> allRecords = new HashSet<>(oldDataStore.selectAllRecords());
-
-			int count = newDataStore.insertRecords(allRecords);
-			plugin.getLogger().info(count + " records converted to "
-					+ newDataStore.getDisplayName() + " datastore.");
-
-			newDataStore.sync();
-
-			oldDataStore.close();
-			oldDataStore.delete();
-		}
-	}
-
-
-	/**
-	 * convert all existing data stores to new data store
-	 *
-	 * @param newDataStore the new datastore that all other existing datastores should be converted to
-	 */
-	static void convertAll(final PluginMain plugin, final DataStore newDataStore) {
-
-		// get array list of all data store types
-		final ArrayList<DataStoreType> dataStores =
-				new ArrayList<>(Arrays.asList(DataStoreType.values()));
-
-		// remove newDataStore from list of types to convert
-		dataStores.remove(newDataStore.getType());
-
-		for (DataStoreType type : dataStores) {
-
-			// create oldDataStore holder
-			DataStore oldDataStore = null;
-
-			if (type.equals(DataStoreType.SQLITE)) {
-				oldDataStore = new DataStoreSQLite(plugin);
-			}
-
-			// add additional datastore types here as they become available
-
-			if (oldDataStore != null) {
-				convertDataStore(plugin, oldDataStore, newDataStore);
-			}
-		}
 	}
 
 }
