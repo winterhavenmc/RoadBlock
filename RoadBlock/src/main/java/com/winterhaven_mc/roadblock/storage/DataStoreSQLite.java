@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
-final class DataStoreSQLite extends DataStore implements Listener {
+final class DataStoreSQLite extends AbstractDataStore implements DataStore, Listener {
 
 	// reference to main class
 	private final PluginMain plugin;
@@ -66,7 +66,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * Initialize SQLite datastore
 	 */
 	@Override
-	final void initialize() throws SQLException, ClassNotFoundException {
+	public void initialize() throws SQLException, ClassNotFoundException {
 
 		// if data store is already initialized, do nothing and return
 		if (this.isInitialized()) {
@@ -155,10 +155,8 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * (unused for SQLite datastore)
 	 */
 	@Override
-	final void sync() {
-
+	public void sync() {
 		// no action necessary for this storage type
-
 	}
 
 
@@ -166,7 +164,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * Delete the SQLite datastore file
 	 */
 	@Override
-	final boolean delete() {
+	public boolean delete() {
 
 		// get reference to dataStore file in file system
 		File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getFilename());
@@ -186,7 +184,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * Check that SQLite datastore file exists on disk
 	 */
 	@Override
-	final boolean exists() {
+	public boolean exists() {
 
 		// get path name to data store file
 		final File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getFilename());
@@ -198,7 +196,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * Close SQLite datastore connection
 	 */
 	@Override
-	public final void close() {
+	public void close() {
 
 		try {
 			connection.close();
@@ -226,7 +224,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * @return {@code true} if the location is protected, {@code false} if it is not
 	 */
 	@Override
-	final boolean isProtected(final Location location) {
+	public boolean isProtected(final Location location) {
 
 		// get LocationRecord for location
 		BlockRecord blockRecord = new BlockRecord(location);
@@ -258,7 +256,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * @param blockRecords Collection of records to insert
 	 */
 	@Override
-	synchronized final int insertRecords(final Collection<BlockRecord> blockRecords) {
+	synchronized public int insertRecords(final Collection<BlockRecord> blockRecords) {
 
 		// set cache for all records in list to pending insert
 		int count = 0;
@@ -369,7 +367,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * @param blockRecords Collection of locations
 	 */
 	@Override
-	synchronized final int deleteRecords(final Collection<BlockRecord> blockRecords) {
+	synchronized public int deleteRecords(final Collection<BlockRecord> blockRecords) {
 
 		// set cache for all records in list to pending delete
 		int count = 0;
@@ -467,7 +465,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 *
 	 * @return List of location records
 	 */
-	synchronized final Collection<BlockRecord> selectAllRecords() {
+	synchronized public Collection<BlockRecord> selectAllRecords() {
 
 		final Collection<BlockRecord> returnSet = new HashSet<>();
 
@@ -543,7 +541,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * @return Collection of locations
 	 */
 	@Override
-	synchronized final Collection<BlockRecord> selectRecordsInChunk(final Chunk chunk) {
+	synchronized public Collection<BlockRecord> selectRecordsInChunk(final Chunk chunk) {
 
 		// create new set for results
 		final Collection<BlockRecord> returnSet = new HashSet<>();
@@ -625,7 +623,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 
 	@Override
-	Collection<Location> selectNearbyBlocks(final Location location, final int distance) {
+	public Collection<Location> selectNearbyBlocks(final Location location, final int distance) {
 
 		// if passed location is null, return empty set
 		if (location == null) {
@@ -770,7 +768,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 
 
 	@Override
-	synchronized int getTotalBlocks() {
+	synchronized public int getTotalBlocks() {
 
 		int total = 0;
 
@@ -810,7 +808,7 @@ final class DataStoreSQLite extends DataStore implements Listener {
 	 * @param event the event being handled by this method
 	 */
 	@EventHandler
-	final void onChunkUnload(final ChunkUnloadEvent event) {
+	public void onChunkUnload(final ChunkUnloadEvent event) {
 		flushCache(event.getChunk());
 	}
 

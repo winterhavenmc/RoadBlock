@@ -3,28 +3,18 @@ package com.winterhaven_mc.roadblock.storage;
 import com.winterhaven_mc.roadblock.PluginMain;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
 
-public abstract class DataStore {
-
-	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
-
-	private boolean initialized;
-
-	DataStoreType type;
-
-	String filename;
-
+public interface DataStore {
 
 	/**
 	 * Initialize storage
 	 *
 	 * @throws Exception initialization failed
 	 */
-	abstract void initialize() throws Exception;
+	void initialize() throws Exception;
 
 
 	/**
@@ -33,7 +23,7 @@ public abstract class DataStore {
 	 * @param location block location to check for RoadBlock protection
 	 * @return {@code true} if block at location is protected, otherwise {@code false}
 	 */
-	abstract boolean isProtected(final Location location);
+	boolean isProtected(final Location location);
 
 
 	/**
@@ -43,7 +33,7 @@ public abstract class DataStore {
 	 *                  for block locations to be inserted into the datastore
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	abstract int insertRecords(final Collection<BlockRecord> blockRecords);
+	int insertRecords(final Collection<BlockRecord> blockRecords);
 
 
 	/**
@@ -53,7 +43,7 @@ public abstract class DataStore {
 	 *                    containing unique composite keys of records to delete
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	abstract int deleteRecords(final Collection<BlockRecord> blockRecords);
+	int deleteRecords(final Collection<BlockRecord> blockRecords);
 
 
 	/**
@@ -61,7 +51,7 @@ public abstract class DataStore {
 	 *
 	 * @return Set of {@code Location} for all block records
 	 */
-	abstract Collection<BlockRecord> selectAllRecords();
+	Collection<BlockRecord> selectAllRecords();
 
 
 	/**
@@ -69,7 +59,7 @@ public abstract class DataStore {
 	 *
 	 * @return numner of records in blocks table
 	 */
-	abstract int getTotalBlocks();
+	int getTotalBlocks();
 
 
 	/**
@@ -78,7 +68,7 @@ public abstract class DataStore {
 	 * @param chunk the chunk containing records to be returned
 	 * @return {@code Set} of {@code LocationRecords} for block records within the chunk
 	 */
-	abstract Collection<BlockRecord> selectRecordsInChunk(final Chunk chunk);
+	Collection<BlockRecord> selectRecordsInChunk(final Chunk chunk);
 
 
 	/**
@@ -88,26 +78,26 @@ public abstract class DataStore {
 	 * @param distance distance from origin to select blocks
 	 * @return Set of Locations that are within {@code distance} of {@code location}
 	 */
-	abstract Collection<Location> selectNearbyBlocks(final Location location, final int distance);
+	Collection<Location> selectNearbyBlocks(final Location location, final int distance);
 
 
 	/**
 	 * Close storage
 	 */
-	public abstract void close();
+	void close();
 
 
 	/**
 	 * Sync datastore to disk if supported
 	 */
-	abstract void sync();
+	void sync();
 
 
 	/**
 	 * Delete datastore
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	abstract boolean delete();
+	boolean delete();
 
 
 	/**
@@ -115,17 +105,7 @@ public abstract class DataStore {
 	 *
 	 * @return boolean
 	 */
-	abstract boolean exists();
-
-
-	/**
-	 * Get datastore filename or equivalent
-	 *
-	 * @return filename of this datastore type
-	 */
-	String getFilename() {
-		return this.filename;
-	}
+	boolean exists();
 
 
 	/**
@@ -133,9 +113,7 @@ public abstract class DataStore {
 	 *
 	 * @return DataStoreType of this datastore type
 	 */
-	DataStoreType getType() {
-		return this.type;
-	}
+	DataStoreType getType();
 
 
 	/**
@@ -143,20 +121,7 @@ public abstract class DataStore {
 	 *
 	 * @return display name of datastore
 	 */
-	String getDisplayName() {
-		return this.getType().toString();
-	}
-
-
-	/**
-	 * Get datastore name
-	 *
-	 * @return display name of datastore
-	 */
-	@Override
-	public String toString() {
-		return this.getType().toString();
-	}
+	String getDisplayName();
 
 
 	/**
@@ -164,19 +129,7 @@ public abstract class DataStore {
 	 *
 	 * @return boolean
 	 */
-	boolean isInitialized() {
-		return this.initialized;
-	}
-
-
-	/**
-	 * Set initialized field
-	 *
-	 * @param initialized boolean value to set field
-	 */
-	void setInitialized(final boolean initialized) {
-		this.initialized = initialized;
-	}
+	boolean isInitialized();
 
 
 	/**
@@ -185,14 +138,14 @@ public abstract class DataStore {
 	 *
 	 * @return new datastore of configured type
 	 */
-	public static DataStore create() {
+	static DataStore create(PluginMain plugin) {
 
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
 		if (dataStoreType == null) {
 			dataStoreType = DataStoreType.getDefaultType();
 		}
-		return create(dataStoreType, null);
+		return create(plugin, dataStoreType, null);
 	}
 
 
@@ -203,13 +156,13 @@ public abstract class DataStore {
 	 * @param dataStoreType datastore type to create
 	 * @return new datastore of configured type
 	 */
-	public static DataStore create(DataStoreType dataStoreType) {
+	static DataStore create(PluginMain plugin, DataStoreType dataStoreType) {
 
 		// if passed data store type is null, use default type
 		if (dataStoreType == null) {
 			dataStoreType = DataStoreType.getDefaultType();
 		}
-		return create(dataStoreType, null);
+		return create(plugin, dataStoreType, null);
 	}
 
 
@@ -221,7 +174,7 @@ public abstract class DataStore {
 	 * @param oldDataStore  the existing datastore to be converted to the new datastore
 	 * @return instance of newly initialized datastore
 	 */
-	static DataStore create(final DataStoreType dataStoreType, final DataStore oldDataStore) {
+	static DataStore create(final PluginMain plugin, final DataStoreType dataStoreType, final DataStore oldDataStore) {
 
 		// get new data store of specified type
 		final DataStore newDataStore = dataStoreType.create();
@@ -240,10 +193,10 @@ public abstract class DataStore {
 
 		// if old data store was passed, convert to new data store
 		if (oldDataStore != null) {
-			convertDataStore(oldDataStore, newDataStore);
+			convertDataStore(plugin, oldDataStore, newDataStore);
 		}
 		else {
-			convertAll(newDataStore);
+			convertAll(plugin, newDataStore);
 		}
 		// return initialized data store
 		return newDataStore;
@@ -256,7 +209,7 @@ public abstract class DataStore {
 	 * @param oldDataStore the old datastore to be converted from
 	 * @param newDataStore the new datastore to be converted to
 	 */
-	private static void convertDataStore(final DataStore oldDataStore, final DataStore newDataStore) {
+	static void convertDataStore(final PluginMain plugin, final DataStore oldDataStore, final DataStore newDataStore) {
 
 		// if datastores are same type, do not convert
 		if (oldDataStore.getType().equals(newDataStore.getType())) {
@@ -302,7 +255,7 @@ public abstract class DataStore {
 	 *
 	 * @param newDataStore the new datastore that all other existing datastores should be converted to
 	 */
-	private static void convertAll(final DataStore newDataStore) {
+	static void convertAll(final PluginMain plugin, final DataStore newDataStore) {
 
 		// get array list of all data store types
 		final ArrayList<DataStoreType> dataStores =
@@ -323,7 +276,7 @@ public abstract class DataStore {
 			// add additional datastore types here as they become available
 
 			if (oldDataStore != null) {
-				convertDataStore(oldDataStore, newDataStore);
+				convertDataStore(plugin, oldDataStore, newDataStore);
 			}
 		}
 	}
