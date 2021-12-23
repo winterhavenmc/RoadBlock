@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
-final class DataStoreSQLite extends AbstractDataStore implements DataStore, Listener {
+final class DataStoreSQLite extends DataStoreAbstract implements DataStore, Listener {
 
 	// reference to main class
 	private final PluginMain plugin;

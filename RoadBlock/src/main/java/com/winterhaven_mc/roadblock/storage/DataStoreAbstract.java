@@ -1,7 +1,7 @@
 package com.winterhaven_mc.roadblock.storage;
 
 
-public abstract class AbstractDataStore {
+public abstract class DataStoreAbstract {
 
 	private boolean initialized;
 
