@@ -7,7 +7,11 @@ import com.winterhaven_mc.roadblock.storage.BlockManager;
 
 import com.winterhaven_mc.util.*;
 
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
+
+import java.io.File;
 
 
 public final class PluginMain extends JavaPlugin {
@@ -18,8 +22,25 @@ public final class PluginMain extends JavaPlugin {
 	public BlockManager blockManager;
 	public HighlightManager highlightManager;
 
-	public Boolean debug = getConfig().getBoolean("debug");
+//	public Boolean debug = getConfig().getBoolean("debug");
 	public Boolean profile = getConfig().getBoolean("profile");
+
+
+	/**
+	 * Class constructor for testing
+	 */
+	public PluginMain() {
+		super();
+	}
+
+
+	/**
+	 * Class constructor for testing
+	 */
+	@SuppressWarnings("unused")
+	private PluginMain(JavaPluginLoader loader, PluginDescriptionFile descriptionFile, File dataFolder, File file) {
+		super(loader, descriptionFile, dataFolder, file);
+	}
 
 
 	@Override

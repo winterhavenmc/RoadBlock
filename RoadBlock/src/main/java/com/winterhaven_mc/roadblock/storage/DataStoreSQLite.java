@@ -209,7 +209,7 @@ final class DataStoreSQLite extends AbstractDataStore implements DataStore, List
 			plugin.getLogger().warning(e.getMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
@@ -264,7 +264,7 @@ final class DataStoreSQLite extends AbstractDataStore implements DataStore, List
 			blockCache.put(blockRecord, CacheStatus.PENDING_INSERT);
 			count++;
 		}
-		if (plugin.debug) {
+		if (plugin.getConfig().getBoolean("debug")) {
 			plugin.getLogger().info(count + " blocks marked PENDING_INSERT in cache.");
 		}
 
@@ -325,7 +325,7 @@ final class DataStoreSQLite extends AbstractDataStore implements DataStore, List
 							plugin.getLogger().warning(e.getLocalizedMessage());
 
 							// if debugging is enabled, output stack trace
-							if (plugin.debug) {
+							if (plugin.getConfig().getBoolean("debug")) {
 								e.printStackTrace();
 							}
 							continue;
@@ -343,7 +343,7 @@ final class DataStoreSQLite extends AbstractDataStore implements DataStore, List
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
 					// if debugging is enabled, output stack trace
-					if (plugin.debug) {
+					if (plugin.getConfig().getBoolean("debug")) {
 						e.printStackTrace();
 					}
 				}
@@ -375,7 +375,7 @@ final class DataStoreSQLite extends AbstractDataStore implements DataStore, List
 			blockCache.put(blockRecord, CacheStatus.PENDING_DELETE);
 			count++;
 		}
-		if (plugin.debug) {
+		if (plugin.getConfig().getBoolean("debug")) {
 			plugin.getLogger().info(count + " blocks marked PENDING_DELETE in cache.");
 		}
 
@@ -425,7 +425,7 @@ final class DataStoreSQLite extends AbstractDataStore implements DataStore, List
 							plugin.getLogger().warning(e.getLocalizedMessage());
 
 							// if debugging is enabled, output stack trace
-							if (plugin.debug) {
+							if (plugin.getConfig().getBoolean("debug")) {
 								e.printStackTrace();
 							}
 						}
@@ -442,7 +442,7 @@ final class DataStoreSQLite extends AbstractDataStore implements DataStore, List
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
 					// if debugging is enabled, output stack trace
-					if (plugin.debug) {
+					if (plugin.getConfig().getBoolean("debug")) {
 						e.printStackTrace();
 					}
 				}
@@ -524,7 +524,7 @@ final class DataStoreSQLite extends AbstractDataStore implements DataStore, List
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
@@ -612,7 +612,7 @@ final class DataStoreSQLite extends AbstractDataStore implements DataStore, List
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
@@ -681,7 +681,7 @@ final class DataStoreSQLite extends AbstractDataStore implements DataStore, List
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
@@ -708,7 +708,7 @@ final class DataStoreSQLite extends AbstractDataStore implements DataStore, List
 
 		chunkCache.add(chunk.getBlock(0, 0, 0).getLocation());
 
-		if (plugin.debug) {
+		if (plugin.getConfig().getBoolean("debug")) {
 			if (count > 0) {
 				plugin.getLogger().info(count + " blocks added to cache.");
 			}
@@ -758,7 +758,7 @@ final class DataStoreSQLite extends AbstractDataStore implements DataStore, List
 		final Location chunkLoc = location.getChunk().getBlock(0, 0, 0).getLocation();
 
 		if (chunkCache.contains(chunkLoc)) {
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				plugin.getLogger().info("Chunk is cached.");
 			}
 			return true;
@@ -792,7 +792,7 @@ final class DataStoreSQLite extends AbstractDataStore implements DataStore, List
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}

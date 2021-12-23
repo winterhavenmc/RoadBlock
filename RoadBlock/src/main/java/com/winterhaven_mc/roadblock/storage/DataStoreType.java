@@ -1,22 +1,18 @@
 package com.winterhaven_mc.roadblock.storage;
 
 import com.winterhaven_mc.roadblock.PluginMain;
-import org.bukkit.plugin.java.JavaPlugin;
 
 
 enum DataStoreType {
 
 	SQLITE("SQLite") {
 		@Override
-		public DataStore create() {
+		public DataStore create(PluginMain plugin) {
 
 			// create new sqlite datastore object
 			return new DataStoreSQLite(plugin);
 		}
 	};
-
-	// static reference to main class
-	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
 	// datastore type formatted display name
 	private final String displayName;
@@ -40,7 +36,7 @@ enum DataStoreType {
 	 *
 	 * @return instance of a DataStore
 	 */
-	public abstract DataStore create();
+	public abstract DataStore create(PluginMain plugin);
 
 	@Override
 	public final String toString() {

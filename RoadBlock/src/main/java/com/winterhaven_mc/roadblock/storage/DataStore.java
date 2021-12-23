@@ -177,7 +177,7 @@ public interface DataStore {
 	static DataStore create(final PluginMain plugin, final DataStoreType dataStoreType, final DataStore oldDataStore) {
 
 		// get new data store of specified type
-		final DataStore newDataStore = dataStoreType.create();
+		final DataStore newDataStore = dataStoreType.create(plugin);
 
 		// initialize new data store
 		try {
@@ -185,7 +185,7 @@ public interface DataStore {
 		}
 		catch (Exception e) {
 			plugin.getLogger().severe("Could not initialize " + newDataStore.getDisplayName() + " datastore!");
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 			return null;

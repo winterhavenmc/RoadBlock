@@ -49,7 +49,7 @@ public class StatusCommand extends AbstractSubcommand {
 				+ ChatColor.YELLOW + plugin.getName() + ChatColor.DARK_GRAY + "] "
 				+ ChatColor.AQUA + "Version: " + ChatColor.RESET + versionString);
 
-		if (plugin.debug) {
+		if (plugin.getConfig().getBoolean("debug")) {
 			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: true");
 		}
 

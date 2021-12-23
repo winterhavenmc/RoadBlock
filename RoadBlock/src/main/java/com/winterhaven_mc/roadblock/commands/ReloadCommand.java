@@ -50,9 +50,6 @@ public class ReloadCommand extends AbstractSubcommand {
 		// reload config file
 		plugin.reloadConfig();
 
-		// update debug field
-		plugin.debug = plugin.getConfig().getBoolean("debug");
-
 		// update profile field
 		plugin.profile = plugin.getConfig().getBoolean("profile");
 
