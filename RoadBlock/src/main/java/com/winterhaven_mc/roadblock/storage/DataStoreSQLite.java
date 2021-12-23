@@ -232,7 +232,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 		// check cache first
 		if (isChunkCached(location)) {
 			if (blockCache.containsKey(blockRecord)) {
-				return blockCache.get(blockRecord).equals(CacheStatus.TRUE)
+				return blockCache.get(blockRecord).equals(CacheStatus.RESIDENT)
 						|| blockCache.get(blockRecord).equals(CacheStatus.PENDING_INSERT);
 			}
 			return false;
@@ -243,7 +243,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 		// check cache again
 		if (blockCache.containsKey(blockRecord)) {
-			return blockCache.get(blockRecord).equals(CacheStatus.TRUE)
+			return blockCache.get(blockRecord).equals(CacheStatus.RESIDENT)
 					|| blockCache.get(blockRecord).equals(CacheStatus.PENDING_INSERT);
 		}
 		return false;
@@ -331,7 +331,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 							continue;
 						}
 						count++;
-						blockCache.put(blockRecord, CacheStatus.TRUE);
+						blockCache.put(blockRecord, CacheStatus.RESIDENT);
 					}
 					connection.commit();
 					connection.setAutoCommit(true);
@@ -702,7 +702,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 		int count = 0;
 
 		for (BlockRecord blockRecord : blockSet) {
-			blockCache.put(blockRecord, CacheStatus.TRUE);
+			blockCache.put(blockRecord, CacheStatus.RESIDENT);
 			count++;
 		}
 
