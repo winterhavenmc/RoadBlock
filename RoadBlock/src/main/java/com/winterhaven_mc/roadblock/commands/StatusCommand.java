@@ -53,7 +53,7 @@ public class StatusCommand extends AbstractSubcommand {
 			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: true");
 		}
 
-		if (plugin.profile) {
+		if (plugin.getConfig().getBoolean("profile")) {
 			sender.sendMessage(ChatColor.DARK_RED + "PROFILE: true");
 		}
 

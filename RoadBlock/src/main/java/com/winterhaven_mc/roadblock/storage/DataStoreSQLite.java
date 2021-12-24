@@ -349,7 +349,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				}
 
 				long elapsedTime = (System.nanoTime() - startTime);
-				if (plugin.profile) {
+				if (plugin.getConfig().getBoolean("profile")) {
 					if (count > 0) {
 						plugin.getLogger().info(count + " blocks inserted into " + getDisplayName() + " datastore in "
 								+ TimeUnit.NANOSECONDS.toMillis(elapsedTime) + " milliseconds.");
@@ -448,7 +448,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				}
 
 				long elapsedTime = (System.nanoTime() - startTime);
-				if (plugin.profile) {
+				if (plugin.getConfig().getBoolean("profile")) {
 					if (count > 0) {
 						plugin.getLogger().info(count + " blocks removed from " + getDisplayName() + " datastore in "
 								+ TimeUnit.NANOSECONDS.toMillis(elapsedTime) + " milliseconds.");
@@ -599,7 +599,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				count++;
 			}
 
-			if (plugin.profile) {
+			if (plugin.getConfig().getBoolean("profile")) {
 				plugin.getLogger().info("Fetched " + count + " blocks in chunk in "
 						+ TimeUnit.NANOSECONDS.toMicros(elapsedTime) + " microseconds.");
 			}
@@ -738,7 +738,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 		chunkCache.remove(chunk.getBlock(0, 0, 0).getLocation());
 
 		long elapsedTime = (System.nanoTime() - startTime);
-		if (plugin.profile) {
+		if (plugin.getConfig().getBoolean("profile")) {
 			if (count > 0) {
 				plugin.getLogger().info(count + " blocks removed from cache in "
 						+ TimeUnit.NANOSECONDS.toMicros(elapsedTime) + " microseconds.");

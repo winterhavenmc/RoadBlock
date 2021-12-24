@@ -50,9 +50,6 @@ public class ReloadCommand extends AbstractSubcommand {
 		// reload config file
 		plugin.reloadConfig();
 
-		// update profile field
-		plugin.profile = plugin.getConfig().getBoolean("profile");
-
 		// update road block materials list
 		plugin.blockManager.reload();
 
