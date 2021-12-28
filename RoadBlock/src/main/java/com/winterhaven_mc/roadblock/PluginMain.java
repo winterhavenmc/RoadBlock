@@ -3,10 +3,14 @@ package com.winterhaven_mc.roadblock;
 import com.winterhaven_mc.roadblock.commands.CommandManager;
 import com.winterhaven_mc.roadblock.highlights.HighlightManager;
 import com.winterhaven_mc.roadblock.listeners.EventListener;
+import com.winterhaven_mc.roadblock.messages.Macro;
+import com.winterhaven_mc.roadblock.messages.MessageId;
 import com.winterhaven_mc.roadblock.storage.BlockManager;
 
 import com.winterhaven_mc.util.*;
 
+import com.winterhavenmc.util.messagebuilder.LanguageHandler;
+import com.winterhavenmc.util.messagebuilder.MessageBuilder;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
@@ -17,6 +21,7 @@ import java.io.File;
 public final class PluginMain extends JavaPlugin {
 
 	public LanguageHandler languageHandler;
+	public MessageBuilder<MessageId, Macro> messageBuilder;
 	public WorldManager worldManager;
 	public SoundConfiguration soundConfig;
 	public BlockManager blockManager;
@@ -48,6 +53,7 @@ public final class PluginMain extends JavaPlugin {
 
 		// instantiate language manager
 		languageHandler = new LanguageHandler(this);
+		messageBuilder = new MessageBuilder<>();
 
 		// instantiate world manager
 		worldManager = new WorldManager(this);

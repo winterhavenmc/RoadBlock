@@ -2,7 +2,6 @@ package com.winterhaven_mc.roadblock.util;
 
 import com.winterhaven_mc.roadblock.PluginMain;
 
-import com.winterhaven_mc.util.LanguageHandler;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
@@ -63,15 +62,12 @@ public final class RoadBlockTool {
 		// get item stack metadata
 		final ItemMeta metaData = itemStack.getItemMeta();
 
-		// get language manager instance
-		LanguageHandler LanguageHandler = plugin.languageHandler;
-
 		// set display name to configured tool name
 		assert metaData != null;
-		metaData.setDisplayName(LanguageHandler.getItemName());
+		metaData.setDisplayName(plugin.languageHandler.getItemName());
 
 		// set lore to configured tool lore
-		metaData.setLore(LanguageHandler.getItemLore());
+		metaData.setLore(plugin.languageHandler.getItemLore());
 
 		// hide item stack attributes and enchants
 		metaData.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);

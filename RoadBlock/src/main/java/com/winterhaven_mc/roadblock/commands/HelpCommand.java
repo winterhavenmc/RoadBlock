@@ -1,7 +1,6 @@
 package com.winterhaven_mc.roadblock.commands;
 
 import com.winterhaven_mc.roadblock.PluginMain;
-import com.winterhaven_mc.roadblock.messages.Message;
 import com.winterhaven_mc.roadblock.sounds.SoundId;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -57,14 +56,14 @@ public class HelpCommand extends AbstractSubcommand {
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("roadblock.help")) {
-			Message.create(sender,  COMMAND_FAIL_HELP_PERMISSION).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender,  COMMAND_FAIL_HELP_PERMISSION).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (argsList.size() > getMaxArgs()) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -95,13 +94,13 @@ public class HelpCommand extends AbstractSubcommand {
 
 		// if subcommand found in map, display help message and usage
 		if (subcommand != null) {
-			Message.create(sender, subcommand.getDescription()).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, subcommand.getDescription()).send(plugin.languageHandler);
 			subcommand.displayUsage(sender);
 		}
 
 		// else display invalid command help message and usage for all commands
 		else {
-			Message.create(sender, COMMAND_HELP_INVALID).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_HELP_INVALID).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, COMMAND_INVALID);
 			displayUsageAll(sender);
 		}
@@ -114,7 +113,7 @@ public class HelpCommand extends AbstractSubcommand {
 	 */
 	void displayUsageAll(CommandSender sender) {
 
-		Message.create(sender, COMMAND_HELP_USAGE_HEADER).send(plugin.languageHandler);
+		plugin.messageBuilder.build(sender, COMMAND_HELP_USAGE_HEADER).send(plugin.languageHandler);
 
 		for (String subcommandName : subcommandMap.getKeys()) {
 			if (subcommandMap.getCommand(subcommandName) != null) {

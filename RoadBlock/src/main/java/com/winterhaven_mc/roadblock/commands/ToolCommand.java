@@ -1,7 +1,6 @@
 package com.winterhaven_mc.roadblock.commands;
 
 import com.winterhaven_mc.roadblock.PluginMain;
-import com.winterhaven_mc.roadblock.messages.Message;
 import com.winterhaven_mc.roadblock.sounds.SoundId;
 import com.winterhaven_mc.roadblock.util.RoadBlockTool;
 import org.bukkit.command.CommandSender;
@@ -33,7 +32,7 @@ public class ToolCommand extends AbstractSubcommand {
 
 		// sender must be player
 		if (!(sender instanceof Player)) {
-			Message.create(sender, COMMAND_FAIL_CONSOLE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_CONSOLE).send(plugin.languageHandler);
 			return true;
 		}
 
@@ -42,14 +41,14 @@ public class ToolCommand extends AbstractSubcommand {
 
 		// check player permissions
 		if (!player.hasPermission("roadblock.tool")) {
-			Message.create(sender, COMMAND_FAIL_TOOL_PERMISSION).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_TOOL_PERMISSION).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (argsList.size() > getMaxArgs()) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -63,7 +62,7 @@ public class ToolCommand extends AbstractSubcommand {
 
 		// if no room in inventory, send message
 		if (!noFit.isEmpty()) {
-			Message.create(sender, COMMAND_FAIL_TOOL_INVENTORY_FULL).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_TOOL_INVENTORY_FULL).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}

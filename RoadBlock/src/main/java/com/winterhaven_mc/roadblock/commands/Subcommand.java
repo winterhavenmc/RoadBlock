@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 
 
+@SuppressWarnings("unused")
 public interface Subcommand {
 
 	boolean onCommand(CommandSender sender, List<String> argsList);
