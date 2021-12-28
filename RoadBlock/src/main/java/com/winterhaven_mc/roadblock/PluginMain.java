@@ -53,6 +53,8 @@ public final class PluginMain extends JavaPlugin {
 
 		// instantiate language manager
 		languageHandler = new LanguageHandler(this);
+
+		// instantiate message builder
 		messageBuilder = new MessageBuilder<>();
 
 		// instantiate world manager
