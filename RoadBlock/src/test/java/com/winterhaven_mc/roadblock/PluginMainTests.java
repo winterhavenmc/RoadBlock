@@ -10,6 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.HashSet;
 import java.util.Set;
 
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PluginMainTests {
 
@@ -34,7 +35,7 @@ public class PluginMainTests {
 
 	@Nested
 	@DisplayName("Test mock objects.")
-	class Mocking {
+	class MockingTests {
 
 		@Test
 		@DisplayName("server is not null.")
@@ -63,12 +64,18 @@ public class PluginMainTests {
 
 	@Nested
 	@DisplayName("Test plugin main objects.")
-	class PluginMainObjects {
+	class PluginMainObjectTests {
 
 		@Test
 		@DisplayName("language handler not null.")
 		void LanguageHandlerNotNull() {
 			Assertions.assertNotNull(plugin.languageHandler, "language handler is null.");
+		}
+
+		@Test
+		@DisplayName("message builder not null.")
+		void MessageBuilderNotNull() {
+			Assertions.assertNotNull(plugin.messageBuilder, "message builder is null.");
 		}
 
 		@Test
@@ -82,18 +89,17 @@ public class PluginMainTests {
 		void SoundConfigNotNull() {
 			Assertions.assertNotNull(plugin.soundConfig,"sound config is null.");
 		}
-
 	}
 
 
 	@Nested
 	@DisplayName("Test plugin config.")
 	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-	class Config {
+	class ConfigTest {
 
 		Set<String> enumConfigKeyStrings = new HashSet<>();
 
-		public Config() {
+		public ConfigTest() {
 			for (ConfigSetting configSetting : ConfigSetting.values()) {
 				this.enumConfigKeyStrings.add(configSetting.getKey());
 			}
@@ -118,14 +124,14 @@ public class PluginMainTests {
 			return plugin.getConfig().getKeys(false);
 		}
 
-//		@ParameterizedTest
-//		@DisplayName("file config key is contained in ConfigSetting enum.")
-//		@MethodSource("ConfigFileKeys")
-//		void ConfigFileKeyNotNull(String key) {
-//			Assertions.assertNotNull(key);
-//			Assertions.assertTrue(enumConfigKeyStrings.contains(key),
-//					"file config key is not contained in ConfigSetting enum.");
-//		}
+		@ParameterizedTest
+		@DisplayName("file config key is contained in ConfigSetting enum.")
+		@MethodSource("ConfigFileKeys")
+		void ConfigFileKeyNotNull(String key) {
+			Assertions.assertNotNull(key);
+			Assertions.assertTrue(enumConfigKeyStrings.contains(key),
+					"file config key is not contained in ConfigSetting enum.");
+		}
 
 		@ParameterizedTest
 		@EnumSource(ConfigSetting.class)

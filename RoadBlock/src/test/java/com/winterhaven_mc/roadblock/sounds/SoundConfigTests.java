@@ -47,13 +47,13 @@ public class SoundConfigTests {
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
     @DisplayName("Test Sounds config.")
-    class Sounds {
+    class SoundTests {
 
         // collection of enum sound name strings
         Collection<String> enumSoundNames = new HashSet<>();
 
         // class constructor
-        Sounds() {
+        SoundTests() {
             // add all SoundId enum values to collection
             for (SoundId SoundId : SoundId.values()) {
                 enumSoundNames.add(SoundId.name());
@@ -98,11 +98,11 @@ public class SoundConfigTests {
 
         @Nested
         @DisplayName("Play all sounds.")
-        class PlaySounds {
+        class PlaySoundsTests {
 
             @Nested
             @DisplayName("Play all sounds in SoundId for player")
-            class PlayerSounds {
+            class PlayerSoundTests {
 
                 private final EnumMap<SoundId, Boolean> soundsPlayed = new EnumMap<>(SoundId.class);
 
@@ -118,7 +118,7 @@ public class SoundConfigTests {
 
             @Nested
             @DisplayName("Play all sounds in SoundId at world location")
-            class WorldSounds {
+            class WorldSoundTests {
 
                 private final EnumMap<SoundId, Boolean> soundsPlayed = new EnumMap<>(SoundId.class);
 
