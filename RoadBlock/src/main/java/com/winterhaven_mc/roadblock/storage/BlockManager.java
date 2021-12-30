@@ -1,12 +1,11 @@
 package com.winterhaven_mc.roadblock.storage;
 
-import com.winterhaven_mc.roadblock.PluginMain;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
@@ -14,7 +13,7 @@ import java.util.*;
 public final class BlockManager {
 
 	// reference to main class
-	private final PluginMain plugin;
+	private final JavaPlugin plugin;
 
 	// set of road block materials
 	private Set<Material> roadBlockMaterials;
@@ -27,7 +26,7 @@ public final class BlockManager {
 	 *
 	 * @param plugin reference to main class
 	 */
-	public BlockManager(final PluginMain plugin) {
+	public BlockManager(final JavaPlugin plugin) {
 
 		// set reference to main class
 		this.plugin = plugin;
@@ -36,7 +35,7 @@ public final class BlockManager {
 		updateMaterials();
 
 		// create data store using configured type
-		dataStore = DataStore.create(plugin, DataStoreType.match(plugin.getConfig().getString("storage-type")));
+		dataStore = DataStore.create(plugin, DataStoreType.match(plugin.getConfig().getString("storage-type")), null);
 	}
 
 

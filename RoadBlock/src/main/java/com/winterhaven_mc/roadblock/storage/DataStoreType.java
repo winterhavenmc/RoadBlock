@@ -1,6 +1,6 @@
 package com.winterhaven_mc.roadblock.storage;
 
-import com.winterhaven_mc.roadblock.PluginMain;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +12,7 @@ enum DataStoreType {
 
 	SQLITE("SQLite") {
 		@Override
-		public DataStore create(PluginMain plugin) {
+		public DataStore create(JavaPlugin plugin) {
 
 			// create new sqlite datastore object
 			return new DataStoreSQLite(plugin);
@@ -41,7 +41,7 @@ enum DataStoreType {
 	 *
 	 * @return instance of a DataStore
 	 */
-	public abstract DataStore create(PluginMain plugin);
+	public abstract DataStore create(JavaPlugin plugin);
 
 	@Override
 	public final String toString() {
@@ -77,7 +77,7 @@ enum DataStoreType {
 	 * @param oldDataStore the old datastore to be converted from
 	 * @param newDataStore the new datastore to be converted to
 	 */
-	static void convertDataStore(final PluginMain plugin, final DataStore oldDataStore, final DataStore newDataStore) {
+	static void convert(final JavaPlugin plugin, final DataStore oldDataStore, final DataStore newDataStore) {
 
 		// if datastores are same type, do not convert
 		if (oldDataStore.getType().equals(newDataStore.getType())) {
@@ -87,8 +87,8 @@ enum DataStoreType {
 		// if old datastore file exists, attempt to read all records
 		if (oldDataStore.exists()) {
 
-			plugin.getLogger().info("Converting existing " + oldDataStore.getDisplayName() + " datastore to "
-					+ newDataStore.getDisplayName() + " datastore...");
+			plugin.getLogger().info("Converting existing " + oldDataStore + " datastore to "
+					+ newDataStore + " datastore...");
 
 			// initialize old datastore if necessary
 			if (!oldDataStore.isInitialized()) {
@@ -97,7 +97,7 @@ enum DataStoreType {
 				}
 				catch (Exception e) {
 					plugin.getLogger().warning("Could not initialize "
-							+ oldDataStore.getDisplayName() + " datastore for conversion.");
+							+ oldDataStore + " datastore for conversion.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 					return;
 				}
@@ -108,7 +108,7 @@ enum DataStoreType {
 
 			int count = newDataStore.insertRecords(allRecords);
 			plugin.getLogger().info(count + " records converted to "
-					+ newDataStore.getDisplayName() + " datastore.");
+					+ newDataStore + " datastore.");
 
 			newDataStore.sync();
 
@@ -123,7 +123,7 @@ enum DataStoreType {
 	 *
 	 * @param newDataStore the new datastore that all other existing datastores should be converted to
 	 */
-	static void convertAll(final PluginMain plugin, final DataStore newDataStore) {
+	static void convertAll(final JavaPlugin plugin, final DataStore newDataStore) {
 
 		// get array list of all data store types
 		final ArrayList<DataStoreType> dataStores =
@@ -132,20 +132,9 @@ enum DataStoreType {
 		// remove newDataStore from list of types to convert
 		dataStores.remove(newDataStore.getType());
 
+		// convert each old datastore type to new datastore
 		for (DataStoreType type : dataStores) {
-
-			// create oldDataStore holder
-			DataStore oldDataStore = null;
-
-			if (type.equals(DataStoreType.SQLITE)) {
-				oldDataStore = new DataStoreSQLite(plugin);
-			}
-
-			// add additional datastore types here as they become available
-
-			if (oldDataStore != null) {
-				convertDataStore(plugin, oldDataStore, newDataStore);
-			}
+			convert(plugin, type.create(plugin), newDataStore);
 		}
 	}
 

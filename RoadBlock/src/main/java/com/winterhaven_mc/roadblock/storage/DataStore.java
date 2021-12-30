@@ -1,8 +1,8 @@
 package com.winterhaven_mc.roadblock.storage;
 
-import com.winterhaven_mc.roadblock.PluginMain;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
@@ -15,6 +15,14 @@ public interface DataStore {
 	 * @throws Exception initialization failed
 	 */
 	void initialize() throws Exception;
+
+
+	/**
+	 * Get datastore initialized field
+	 *
+	 * @return boolean
+	 */
+	boolean isInitialized();
 
 
 	/**
@@ -117,48 +125,15 @@ public interface DataStore {
 
 
 	/**
-	 * Get datastore name
-	 *
-	 * @return display name of datastore
-	 */
-	String getDisplayName();
-
-
-	/**
-	 * Get datastore initialized field
-	 *
-	 * @return boolean
-	 */
-	boolean isInitialized();
-
-
-	/**
 	 * Create new data store of configured type.<br>
 	 * No parameter version used when no current datastore exists
 	 *
 	 * @return new datastore of configured type
 	 */
-	static DataStore create(PluginMain plugin) {
+	static DataStore create(JavaPlugin plugin) {
 
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
-		if (dataStoreType == null) {
-			dataStoreType = DataStoreType.getDefaultType();
-		}
-		return create(plugin, dataStoreType, null);
-	}
-
-
-	/**
-	 * Create new data store of configured type.<br>
-	 * No parameter version used when no current datastore exists
-	 *
-	 * @param dataStoreType datastore type to create
-	 * @return new datastore of configured type
-	 */
-	static DataStore create(PluginMain plugin, DataStoreType dataStoreType) {
-
-		// if passed data store type is null, use default type
 		if (dataStoreType == null) {
 			dataStoreType = DataStoreType.getDefaultType();
 		}
@@ -174,7 +149,7 @@ public interface DataStore {
 	 * @param oldDataStore  the existing datastore to be converted to the new datastore
 	 * @return instance of newly initialized datastore
 	 */
-	static DataStore create(final PluginMain plugin, final DataStoreType dataStoreType, final DataStore oldDataStore) {
+	static DataStore create(final JavaPlugin plugin, final DataStoreType dataStoreType, final DataStore oldDataStore) {
 
 		// get new data store of specified type
 		final DataStore newDataStore = dataStoreType.create(plugin);
@@ -184,7 +159,7 @@ public interface DataStore {
 			newDataStore.initialize();
 		}
 		catch (Exception e) {
-			plugin.getLogger().severe("Could not initialize " + newDataStore.getDisplayName() + " datastore!");
+			plugin.getLogger().severe("Could not initialize " + newDataStore + " datastore!");
 			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
@@ -193,7 +168,7 @@ public interface DataStore {
 
 		// if old data store was passed, convert to new data store
 		if (oldDataStore != null) {
-			DataStoreType.convertDataStore(plugin, oldDataStore, newDataStore);
+			DataStoreType.convert(plugin, oldDataStore, newDataStore);
 		}
 		else {
 			DataStoreType.convertAll(plugin, newDataStore);

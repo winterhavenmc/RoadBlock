@@ -1,13 +1,12 @@
 package com.winterhaven_mc.roadblock.storage;
 
-import com.winterhaven_mc.roadblock.PluginMain;
-
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -19,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 final class DataStoreSQLite extends DataStoreAbstract implements DataStore, Listener {
 
 	// reference to main class
-	private final PluginMain plugin;
+	private final JavaPlugin plugin;
 
 	// block cache
 	private final BlockRecordCache blockCache;
@@ -39,7 +38,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 *
 	 * @param plugin reference to main class
 	 */
-	DataStoreSQLite(PluginMain plugin) {
+	DataStoreSQLite(JavaPlugin plugin) {
 
 		// reference to main class
 		this.plugin = plugin;
