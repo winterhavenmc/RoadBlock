@@ -66,10 +66,10 @@ public final class RoadBlockTool {
 
 		// set display name to configured tool name
 		assert metaData != null;
-		metaData.setDisplayName(plugin.languageHandler.getItemName());
+		metaData.setDisplayName(plugin.messageBuilder.getItemName());
 
 		// set lore to configured tool lore
-		metaData.setLore(plugin.languageHandler.getItemLore());
+		metaData.setLore(plugin.messageBuilder.getItemLore());
 
 		// hide item stack attributes and enchants
 		metaData.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);

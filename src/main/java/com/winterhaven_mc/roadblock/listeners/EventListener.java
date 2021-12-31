@@ -96,7 +96,7 @@ public final class EventListener implements Listener {
 			if (!plugin.worldManager.isEnabled(player.getWorld())) {
 				plugin.messageBuilder.build(player, TOOL_FAIL_WORLD_DISABLED)
 						.setMacro(WORLD, player.getWorld())
-						.send(plugin.languageHandler);
+						.send();
 				event.setCancelled(true);
 				return;
 			}
@@ -121,7 +121,7 @@ public final class EventListener implements Listener {
 
 			// if clicked block is air, the actual clicked block was too far away
 			if (clickedBlock.getType().equals(Material.AIR)) {
-				plugin.messageBuilder.build(player, TOOL_FAIL_DISTANCE_EXCEEDED).send(plugin.languageHandler);
+				plugin.messageBuilder.build(player, TOOL_FAIL_DISTANCE_EXCEEDED).send();
 				return;
 			}
 
@@ -130,7 +130,7 @@ public final class EventListener implements Listener {
 
 			// if player does not have roadblock.set permission, do nothing and return
 			if (!player.hasPermission("roadblock.set")) {
-				plugin.messageBuilder.build(player, TOOL_FAIL_USE_PERMISSION).send(plugin.languageHandler);
+				plugin.messageBuilder.build(player, TOOL_FAIL_USE_PERMISSION).send();
 				plugin.soundConfig.playSound(player, SoundId.TOOL_FAIL_USE_PERMISSION);
 				return;
 			}
@@ -139,7 +139,7 @@ public final class EventListener implements Listener {
 			if (!plugin.blockManager.getRoadBlockMaterials().contains(clickedBlock.getType())) {
 				plugin.messageBuilder.build(player, TOOL_FAIL_INVALID_MATERIAL)
 						.setMacro(MATERIAL, clickedBlock.getType())
-						.send(plugin.languageHandler);
+						.send();
 				plugin.soundConfig.playSound(player, SoundId.TOOL_FAIL_INVALID_MATERIAL);
 				return;
 			}
@@ -168,7 +168,7 @@ public final class EventListener implements Listener {
 				// send player successful protect message
 				plugin.messageBuilder.build(player, TOOL_SUCCESS_PROTECT)
 						.setMacro(QUANTITY, quantity)
-						.send(plugin.languageHandler);
+						.send();
 				plugin.soundConfig.playSound(player, SoundId.TOOL_SUCCESS_PROTECT);
 			}
 
@@ -184,7 +184,7 @@ public final class EventListener implements Listener {
 				// send player successful unprotect message
 				plugin.messageBuilder.build(player, TOOL_SUCCESS_UNPROTECT)
 						.setMacro(QUANTITY, quantity)
-						.send(plugin.languageHandler);
+						.send();
 				plugin.soundConfig.playSound(player, SoundId.TOOL_SUCCESS_UNPROTECT);
 			}
 		}
@@ -279,7 +279,7 @@ public final class EventListener implements Listener {
 		final Block blockBelow = placedBlock.getRelative(BlockFace.DOWN);
 		if (pathMaterialNames.contains(blockBelow.getType().toString()) && plugin.blockManager.isRoadBlock(blockBelow)) {
 			event.setCancelled(true);
-			plugin.messageBuilder.build(player, BLOCK_PLACE_FAIL_GRASS_PATH).send(plugin.languageHandler);
+			plugin.messageBuilder.build(player, BLOCK_PLACE_FAIL_GRASS_PATH).send();
 			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_GRASS_PATH);
 			return;
 		}
@@ -287,7 +287,7 @@ public final class EventListener implements Listener {
 		// check if block placed is configured distance above a road block
 		if (plugin.blockManager.isAboveRoad(placedBlock.getLocation(), height)) {
 			event.setCancelled(true);
-			plugin.messageBuilder.build(player, BLOCK_PLACE_FAIL_ABOVE_ROAD).send(plugin.languageHandler);
+			plugin.messageBuilder.build(player, BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
 			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_ABOVE_ROAD);
 		}
 	}
@@ -322,7 +322,7 @@ public final class EventListener implements Listener {
 			// if block is above a road block, cancel event and send player message
 			if (plugin.blockManager.isAboveRoad(blockState.getLocation(), height)) {
 				event.setCancelled(true);
-				plugin.messageBuilder.build(player, BLOCK_PLACE_FAIL_ABOVE_ROAD).send(plugin.languageHandler);
+				plugin.messageBuilder.build(player, BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
 				plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_ABOVE_ROAD);
 				break;
 			}
@@ -356,13 +356,13 @@ public final class EventListener implements Listener {
 			// if player does not have override permission, cancel event and send player message
 			if (!player.hasPermission("roadblock.break")) {
 				event.setCancelled(true);
-				plugin.messageBuilder.build(player, TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION).send(plugin.languageHandler);
+				plugin.messageBuilder.build(player, TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION).send();
 				return;
 			}
 
 			// player does have override permission; remove protection from block and send player message
 			plugin.blockManager.removeLocation(new BlockRecord(block.getLocation()));
-			plugin.messageBuilder.build(player, TOOL_SUCCESS_BREAK_BLOCK).send(plugin.languageHandler);
+			plugin.messageBuilder.build(player, TOOL_SUCCESS_BREAK_BLOCK).send();
 		}
 	}
 

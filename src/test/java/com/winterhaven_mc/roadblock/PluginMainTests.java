@@ -68,8 +68,8 @@ public class PluginMainTests {
 
 		@Test
 		@DisplayName("language handler not null.")
-		void LanguageHandlerNotNull() {
-			Assertions.assertNotNull(plugin.languageHandler, "language handler is null.");
+		void messageBuilderNotNull() {
+			Assertions.assertNotNull(plugin.messageBuilder, "language handler is null.");
 		}
 
 		@Test
