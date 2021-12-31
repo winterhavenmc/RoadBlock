@@ -35,7 +35,7 @@ public final class BlockManager {
 		updateMaterials();
 
 		// create data store using configured type
-		dataStore = DataStore.create(plugin, DataStoreType.match(plugin.getConfig().getString("storage-type")), null);
+		dataStore = DataStore.connect(plugin);
 	}
 
 
@@ -67,7 +67,7 @@ public final class BlockManager {
 		if (!currentType.equals(newType)) {
 
 			// create new datastore
-			dataStore = DataStore.create(plugin, newType, dataStore);
+			dataStore = DataStore.connect(plugin);
 		}
 	}
 

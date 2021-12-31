@@ -7,49 +7,6 @@ public abstract class DataStoreAbstract {
 
 	DataStoreType type;
 
-	String filename;
-
-
-	/**
-	 * Get datastore filename or equivalent
-	 *
-	 * @return filename of this datastore type
-	 */
-	public String getFilename() {
-		return this.filename;
-	}
-
-
-	/**
-	 * Get datastore type
-	 *
-	 * @return DataStoreType of this datastore type
-	 */
-	public DataStoreType getType() {
-		return this.type;
-	}
-
-
-	/**
-	 * Get datastore name
-	 *
-	 * @return display name of datastore
-	 */
-	public String getDisplayName() {
-		return this.getType().toString();
-	}
-
-
-	/**
-	 * Get datastore name
-	 *
-	 * @return display name of datastore
-	 */
-	@Override
-	public String toString() {
-		return this.getType().toString();
-	}
-
 
 	/**
 	 * Get datastore initialized field
@@ -68,6 +25,27 @@ public abstract class DataStoreAbstract {
 	 */
 	public void setInitialized(final boolean initialized) {
 		this.initialized = initialized;
+	}
+
+
+	/**
+	 * Get datastore type
+	 *
+	 * @return DataStoreType of this datastore type
+	 */
+	public DataStoreType getType() {
+		return this.type;
+	}
+
+
+	/**
+	 * Get datastore name
+	 *
+	 * @return display name of datastore
+	 */
+	@Override
+	public String toString() {
+		return this.getType().toString();
 	}
 
 }

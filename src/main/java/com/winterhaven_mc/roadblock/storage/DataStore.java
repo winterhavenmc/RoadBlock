@@ -26,6 +26,67 @@ public interface DataStore {
 
 
 	/**
+	 * Get datastore type
+	 *
+	 * @return DataStoreType of this datastore type
+	 */
+	DataStoreType getType();
+
+
+	/**
+	 * Close storage
+	 */
+	void close();
+
+
+	/**
+	 * Sync datastore to disk if supported
+	 */
+	void sync();
+
+
+	/**
+	 * Delete datastore
+	 */
+	@SuppressWarnings("UnusedReturnValue")
+	boolean delete();
+
+
+	/**
+	 * Create new data store of configured type.<br>
+	 * No parameter version used when no current datastore exists
+	 *
+	 * @return new datastore of configured type
+	 */
+	static DataStore connect(JavaPlugin plugin) {
+
+		// get data store type from config
+		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
+
+		// get new data store of specified type
+		final DataStore newDataStore = dataStoreType.connect(plugin);
+
+		// initialize new data store
+		try {
+			newDataStore.initialize();
+		}
+		catch (Exception e) {
+			plugin.getLogger().severe("Could not initialize " + newDataStore + " datastore!");
+			plugin.getLogger().severe(e.getLocalizedMessage());
+			if (plugin.getConfig().getBoolean("debug")) {
+				e.printStackTrace();
+			}
+		}
+
+		// convert any existing data stores to new type
+		DataStoreType.convertAll(plugin, newDataStore);
+
+		// return initialized data store
+		return newDataStore;
+	}
+
+
+	/**
 	 * Check that block at location is protected
 	 *
 	 * @param location block location to check for RoadBlock protection
@@ -87,94 +148,5 @@ public interface DataStore {
 	 * @return Set of Locations that are within {@code distance} of {@code location}
 	 */
 	Collection<Location> selectNearbyBlocks(final Location location, final int distance);
-
-
-	/**
-	 * Close storage
-	 */
-	void close();
-
-
-	/**
-	 * Sync datastore to disk if supported
-	 */
-	void sync();
-
-
-	/**
-	 * Delete datastore
-	 */
-	@SuppressWarnings("UnusedReturnValue")
-	boolean delete();
-
-
-	/**
-	 * Check that datastore exists
-	 *
-	 * @return boolean
-	 */
-	boolean exists();
-
-
-	/**
-	 * Get datastore type
-	 *
-	 * @return DataStoreType of this datastore type
-	 */
-	DataStoreType getType();
-
-
-	/**
-	 * Create new data store of configured type.<br>
-	 * No parameter version used when no current datastore exists
-	 *
-	 * @return new datastore of configured type
-	 */
-	static DataStore create(JavaPlugin plugin) {
-
-		// get data store type from config
-		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
-		if (dataStoreType == null) {
-			dataStoreType = DataStoreType.getDefaultType();
-		}
-		return create(plugin, dataStoreType, null);
-	}
-
-
-	/**
-	 * Create new data store of given type and convert old data store.<br>
-	 * Two parameter version used when a datastore instance already exists
-	 *
-	 * @param dataStoreType the datastore type to be created
-	 * @param oldDataStore  the existing datastore to be converted to the new datastore
-	 * @return instance of newly initialized datastore
-	 */
-	static DataStore create(final JavaPlugin plugin, final DataStoreType dataStoreType, final DataStore oldDataStore) {
-
-		// get new data store of specified type
-		final DataStore newDataStore = dataStoreType.create(plugin);
-
-		// initialize new data store
-		try {
-			newDataStore.initialize();
-		}
-		catch (Exception e) {
-			plugin.getLogger().severe("Could not initialize " + newDataStore + " datastore!");
-			if (plugin.getConfig().getBoolean("debug")) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		// if old data store was passed, convert to new data store
-		if (oldDataStore != null) {
-			DataStoreType.convert(plugin, oldDataStore, newDataStore);
-		}
-		else {
-			DataStoreType.convertAll(plugin, newDataStore);
-		}
-		// return initialized data store
-		return newDataStore;
-	}
 
 }

@@ -2,25 +2,37 @@ package com.winterhaven_mc.roadblock.storage;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
 
 
 enum DataStoreType {
 
-	SQLITE("SQLite") {
+	SQLITE("SQLite", "roadblocks.db") {
+
 		@Override
-		public DataStore create(JavaPlugin plugin) {
+		public DataStore connect(JavaPlugin plugin) {
 
 			// create new sqlite datastore object
 			return new DataStoreSQLite(plugin);
 		}
+
+
+		@Override
+		boolean storageObjectExists(JavaPlugin plugin) {
+			// get path name to data store file
+			File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getStorageName());
+			return dataStoreFile.exists();
+		}
 	};
+
 
 	// datastore type formatted display name
 	private final String displayName;
+
+	// datastore object name
+	private final String storageName;
 
 	// default datastore type
 	private final static DataStoreType defaultType = DataStoreType.SQLITE;
@@ -31,8 +43,9 @@ enum DataStoreType {
 	 *
 	 * @param displayName the display name of the DataStoreType
 	 */
-	DataStoreType(final String displayName) {
+	DataStoreType(final String displayName, final String storageName) {
 		this.displayName = displayName;
+		this.storageName = storageName;
 	}
 
 
@@ -41,7 +54,7 @@ enum DataStoreType {
 	 *
 	 * @return instance of a DataStore
 	 */
-	public abstract DataStore create(JavaPlugin plugin);
+	public abstract DataStore connect(JavaPlugin plugin);
 
 	@Override
 	public final String toString() {
@@ -49,9 +62,23 @@ enum DataStoreType {
 	}
 
 
-	public static DataStoreType getDefaultType() {
-		return defaultType;
+	/**
+	 * Getter for storage object name.
+	 *
+	 * @return the name of the backing store object for a data store type
+	 */
+	String getStorageName() {
+		return storageName;
 	}
+
+
+	/**
+	 * Test if datastore backing object (file, database) exists
+	 *
+	 * @param plugin reference to plugin main class
+	 * @return true if backing object exists, false if not
+	 */
+	abstract boolean storageObjectExists(JavaPlugin plugin);
 
 
 	/**
@@ -85,7 +112,7 @@ enum DataStoreType {
 		}
 
 		// if old datastore file exists, attempt to read all records
-		if (oldDataStore.exists()) {
+		if (oldDataStore.getType().storageObjectExists(plugin)) {
 
 			plugin.getLogger().info("Converting existing " + oldDataStore + " datastore to "
 					+ newDataStore + " datastore...");
@@ -103,16 +130,20 @@ enum DataStoreType {
 				}
 			}
 
-			// get set of all location records in old datastore
-			Collection<BlockRecord> allRecords = new HashSet<>(oldDataStore.selectAllRecords());
+			// get count of records inserted in new datastore from old datastore
+			int count = newDataStore.insertRecords(oldDataStore.selectAllRecords());
 
-			int count = newDataStore.insertRecords(allRecords);
+			// log record count message
 			plugin.getLogger().info(count + " records converted to "
 					+ newDataStore + " datastore.");
 
+			// flush new datastore to disk if applicable
 			newDataStore.sync();
 
+			// close old datastore
 			oldDataStore.close();
+
+			// delete old datastore
 			oldDataStore.delete();
 		}
 	}
@@ -134,7 +165,7 @@ enum DataStoreType {
 
 		// convert each old datastore type to new datastore
 		for (DataStoreType type : dataStores) {
-			convert(plugin, type.create(plugin), newDataStore);
+			convert(plugin, type.connect(plugin), newDataStore);
 		}
 	}
 

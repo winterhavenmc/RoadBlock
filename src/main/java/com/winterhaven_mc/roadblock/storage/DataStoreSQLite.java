@@ -29,6 +29,9 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	// database connection object
 	private Connection connection;
 
+	// file path for datastore file
+	private final String dataFilePath;
+
 	// schema version
 	private int schemaVersion;
 
@@ -46,8 +49,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 		// set datastore type
 		this.type = DataStoreType.SQLITE;
 
-		// set datastore filename
-		this.filename = "roadblocks.db";
+		// set file path for datastore file
+		this.dataFilePath = plugin.getDataFolder() + File.separator + type.getStorageName();
 
 		// create empty block cache
 		this.blockCache = BlockRecordCache.getInstance();
@@ -69,7 +72,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 		// if data store is already initialized, do nothing and return
 		if (this.isInitialized()) {
-			plugin.getLogger().info(this.getDisplayName() + " datastore already initialized.");
+			plugin.getLogger().info(this + " datastore already initialized.");
 			return;
 		}
 
@@ -79,9 +82,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 		Class.forName(jdbcDriverName);
 
 		// create database url
-		String destinationsDb = plugin.getDataFolder() + File.separator + filename;
-		String jdbc = "jdbc:sqlite";
-		String dbUrl = jdbc + ":" + destinationsDb;
+		final String dbUrl = "jdbc:sqlite" + ":" + dataFilePath;
 
 		// create a database connection
 		connection = DriverManager.getConnection(dbUrl);
@@ -91,7 +92,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 		// set initialized true
 		setInitialized(true);
-		plugin.getLogger().info(getDisplayName() + " datastore initialized.");
+		plugin.getLogger().info(this + " datastore initialized.");
 	}
 
 
@@ -160,13 +161,38 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 
 	/**
+	 * Close SQLite datastore connection
+	 */
+	@Override
+	public void close() {
+
+		try {
+			connection.close();
+			plugin.getLogger().info(this + " datastore connection closed.");
+		}
+		catch (Exception e) {
+
+			// output simple error message
+			plugin.getLogger().warning("An error occurred while closing the " + this + " datastore.");
+			plugin.getLogger().warning(e.getMessage());
+
+			// if debugging is enabled, output stack trace
+			if (plugin.getConfig().getBoolean("debug")) {
+				e.printStackTrace();
+			}
+		}
+		setInitialized(false);
+	}
+
+
+	/**
 	 * Delete the SQLite datastore file
 	 */
 	@Override
 	public boolean delete() {
 
 		// get reference to dataStore file in file system
-		File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getFilename());
+		File dataStoreFile = new File(dataFilePath);
 
 		// if file exists, delete file
 		boolean result = false;
@@ -176,43 +202,6 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 		// return result
 		return result;
-	}
-
-
-	/**
-	 * Check that SQLite datastore file exists on disk
-	 */
-	@Override
-	public boolean exists() {
-
-		// get path name to data store file
-		final File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getFilename());
-		return dataStoreFile.exists();
-	}
-
-
-	/**
-	 * Close SQLite datastore connection
-	 */
-	@Override
-	public void close() {
-
-		try {
-			connection.close();
-			plugin.getLogger().info(getDisplayName() + " datastore connection closed.");
-		}
-		catch (Exception e) {
-
-			// output simple error message
-			plugin.getLogger().warning("An error occurred while closing the " + getDisplayName() + " datastore.");
-			plugin.getLogger().warning(e.getMessage());
-
-			// if debugging is enabled, output stack trace
-			if (plugin.getConfig().getBoolean("debug")) {
-				e.printStackTrace();
-			}
-		}
-		setInitialized(false);
 	}
 
 
@@ -290,7 +279,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 						// test that world in location is valid, otherwise skip to next location
 						if (plugin.getServer().getWorld(blockRecord.getWorldUid()) == null) {
 							plugin.getLogger().warning("An error occured while inserting"
-									+ " a record in the " + getDisplayName() + " datastore. World invalid!");
+									+ " a record in the " + this + " datastore. World invalid!");
 							blockCache.remove(blockRecord);
 							continue;
 						}
@@ -320,7 +309,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 							// output simple error message
 							plugin.getLogger().warning("An error occurred while inserting a location "
-									+ "into the " + getDisplayName() + " datastore.");
+									+ "into the " + this + " datastore.");
 							plugin.getLogger().warning(e.getLocalizedMessage());
 
 							// if debugging is enabled, output stack trace
@@ -338,7 +327,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				catch (SQLException e) {
 					// output simple error message
 					plugin.getLogger().warning("An error occurred while attempting to "
-							+ "insert a block in the " + getDisplayName() + " datastore.");
+							+ "insert a block in the " + this + " datastore.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
 					// if debugging is enabled, output stack trace
@@ -350,7 +339,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				long elapsedTime = (System.nanoTime() - startTime);
 				if (plugin.getConfig().getBoolean("profile")) {
 					if (count > 0) {
-						plugin.getLogger().info(count + " blocks inserted into " + getDisplayName() + " datastore in "
+						plugin.getLogger().info(count + " blocks inserted into " + this + " datastore in "
 								+ TimeUnit.NANOSECONDS.toMillis(elapsedTime) + " milliseconds.");
 					}
 				}
@@ -420,7 +409,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 							// output simple error message
 							plugin.getLogger().warning("An error occurred while attempting to "
-									+ "delete a block from the " + getDisplayName() + " datastore.");
+									+ "delete a block from the " + this + " datastore.");
 							plugin.getLogger().warning(e.getLocalizedMessage());
 
 							// if debugging is enabled, output stack trace
@@ -437,7 +426,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				catch (SQLException e) {
 					// output simple error message
 					plugin.getLogger().warning("An error occurred while attempting to "
-							+ "delete a block from the " + getDisplayName() + " datastore.");
+							+ "delete a block from the " + this + " datastore.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
 					// if debugging is enabled, output stack trace
@@ -449,7 +438,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				long elapsedTime = (System.nanoTime() - startTime);
 				if (plugin.getConfig().getBoolean("profile")) {
 					if (count > 0) {
-						plugin.getLogger().info(count + " blocks removed from " + getDisplayName() + " datastore in "
+						plugin.getLogger().info(count + " blocks removed from " + this + " datastore in "
 								+ TimeUnit.NANOSECONDS.toMillis(elapsedTime) + " milliseconds.");
 					}
 				}
@@ -519,7 +508,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
-					+ "fetch all records from the " + getDisplayName() + " datastore.");
+					+ "fetch all records from the " + this + " datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
@@ -607,7 +596,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
-					+ "fetch records from the " + getDisplayName() + " datastore.");
+					+ "fetch records from the " + this + " datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
@@ -676,7 +665,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
-					+ "select nearby block records from the " + getDisplayName() + " datastore.");
+					+ "select nearby block records from the " + this + " datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
@@ -787,7 +776,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
-					+ "count all records from the " + getDisplayName() + " datastore.");
+					+ "count all records from the " + this + " datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
