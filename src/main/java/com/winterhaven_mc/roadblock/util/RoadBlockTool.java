@@ -22,6 +22,8 @@ public final class RoadBlockTool {
 	public final static Set<Material> toolTransparentMaterials =
 			Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
 					Material.AIR,
+					Material.CAVE_AIR,
+					Material.VOID_AIR,
 					Material.SNOW,
 					Material.TALL_GRASS
 			)));
