@@ -2,17 +2,19 @@ package com.winterhaven_mc.roadblock;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
+import com.winterhaven_mc.roadblock.sounds.SoundId;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class PluginMainTests {
+public class RoadBlockPluginTests {
 
 	private ServerMock server;
 	private PluginMain plugin;
@@ -139,6 +141,61 @@ public class PluginMainTests {
 		void ConfigFileKeysContainsEnumKey(ConfigSetting configSetting) {
 			Assertions.assertEquals(configSetting.getValue(), plugin.getConfig().getString(configSetting.getKey()),
 					"ConfigSetting enum key '" + configSetting.getKey() + "' does not match config file key/value pair.");
+		}
+	}
+
+
+
+	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+	@Nested
+	@DisplayName("Test Sounds config.")
+	class SoundTests {
+
+		// collection of enum sound name strings
+		Collection<String> enumSoundNames = new HashSet<>();
+
+		// class constructor
+		SoundTests() {
+			// add all SoundId enum values to collection
+			for (com.winterhaven_mc.roadblock.sounds.SoundId SoundId : SoundId.values()) {
+				enumSoundNames.add(SoundId.name());
+			}
+		}
+
+		@Test
+		@DisplayName("Sounds config is not null.")
+		void SoundConfigNotNull() {
+			Assertions.assertNotNull(plugin.soundConfig);
+		}
+
+		@SuppressWarnings("unused")
+		Collection<String> GetConfigFileKeys() {
+			return plugin.soundConfig.getSoundConfigKeys();
+		}
+
+		@ParameterizedTest
+		@EnumSource(SoundId.class)
+		@DisplayName("enum member soundId is contained in getConfig() keys.")
+		void FileKeysContainsEnumValue(SoundId soundId) {
+			Assertions.assertTrue(plugin.soundConfig.isValidSoundConfigKey(soundId.name()),
+					"Enum value '" + soundId.name() + "' does not have matching key in sounds.yml.");
+		}
+
+		@ParameterizedTest
+		@MethodSource("GetConfigFileKeys")
+		@DisplayName("config file key has matching key in enum sound names")
+		void SoundConfigEnumContainsAllFileSounds(String key) {
+			Assertions.assertTrue(enumSoundNames.contains(key),
+					"File key does not have matching key in enum sound names.");
+		}
+
+		@ParameterizedTest
+		@MethodSource("GetConfigFileKeys")
+		@DisplayName("sound file key has valid bukkit sound name")
+		void SoundConfigFileHasValidBukkitSound(String key) {
+			String bukkitSoundName = plugin.soundConfig.getBukkitSoundName(key);
+			Assertions.assertTrue(plugin.soundConfig.isValidBukkitSoundName(bukkitSoundName),
+					"File key '" + key + "' has invalid bukkit sound name: " + bukkitSoundName);
 		}
 	}
 
