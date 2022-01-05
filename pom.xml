@@ -199,7 +199,7 @@
 							<relocations>
 								<relocation>
 									<pattern>com.winterhavenmc.util</pattern>
-									<shadedPattern>com.winterhaven_mc.roadblock.shaded</shadedPattern>
+									<shadedPattern>com.winterhavenmc.roadblock.shaded</shadedPattern>
 								</relocation>
 							</relocations>
 						</configuration>

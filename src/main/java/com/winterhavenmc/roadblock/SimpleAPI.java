@@ -1,16 +1,11 @@
-package com.winterhaven_mc.roadblock;
+package com.winterhavenmc.roadblock;
 
-import com.winterhavenmc.roadblock.PluginMain;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-/**
- * Simple API for RoadBlock Plugin
- * @deprecated relocated to renamed package com.winterhavenmc.roadblock
- */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public final class SimpleAPI {
 
