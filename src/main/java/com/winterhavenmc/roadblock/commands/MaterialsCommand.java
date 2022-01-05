@@ -24,7 +24,7 @@ public class MaterialsCommand extends AbstractSubcommand {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, List<String> argsList) {
+	public boolean onCommand(final CommandSender sender, final List<String> argsList) {
 
 		// check that sender has permission for status command
 		if (!sender.hasPermission("roadblock.materials")) {

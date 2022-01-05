@@ -30,7 +30,7 @@ public class ShowCommand extends AbstractSubcommand {
 
 
 	@Override
-	public boolean onCommand(CommandSender sender, List<String> argsList) {
+	public boolean onCommand(final CommandSender sender, final List<String> argsList) {
 
 		// sender must be player
 		if (!(sender instanceof Player)) {

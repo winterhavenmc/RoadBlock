@@ -41,7 +41,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 *
 	 * @param plugin reference to main class
 	 */
-	DataStoreSQLite(JavaPlugin plugin) {
+	DataStoreSQLite(final JavaPlugin plugin) {
 
 		// reference to main class
 		this.plugin = plugin;
@@ -661,7 +661,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			}
 
 		}
-		catch (SQLException e) {
+		catch (final SQLException e) {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
@@ -772,7 +772,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			}
 
 		}
-		catch (SQLException e) {
+		catch (final SQLException e) {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "

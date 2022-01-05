@@ -24,7 +24,7 @@ public class ReloadCommand extends AbstractSubcommand {
 
 
 	@Override
-	public boolean onCommand(CommandSender sender, List<String> argsList) {
+	public boolean onCommand(final CommandSender sender, final List<String> argsList) {
 
 		// check that sender has permission for reload command
 		if (!sender.hasPermission("roadblock.reload")) {

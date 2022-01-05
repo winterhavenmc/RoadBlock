@@ -58,7 +58,7 @@ public interface DataStore {
 	 *
 	 * @return new datastore of configured type
 	 */
-	static DataStore connect(JavaPlugin plugin) {
+	static DataStore connect(final JavaPlugin plugin) {
 
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));

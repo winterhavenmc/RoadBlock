@@ -12,7 +12,7 @@ enum DataStoreType {
 	SQLITE("SQLite", "roadblocks.db") {
 
 		@Override
-		public DataStore connect(JavaPlugin plugin) {
+		public DataStore connect(final JavaPlugin plugin) {
 
 			// create new sqlite datastore object
 			return new DataStoreSQLite(plugin);
@@ -20,7 +20,7 @@ enum DataStoreType {
 
 
 		@Override
-		boolean storageObjectExists(JavaPlugin plugin) {
+		boolean storageObjectExists(final JavaPlugin plugin) {
 			// get path name to data store file
 			File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getStorageName());
 			return dataStoreFile.exists();
@@ -54,7 +54,7 @@ enum DataStoreType {
 	 *
 	 * @return instance of a DataStore
 	 */
-	public abstract DataStore connect(JavaPlugin plugin);
+	public abstract DataStore connect(final JavaPlugin plugin);
 
 	@Override
 	public final String toString() {
@@ -78,7 +78,7 @@ enum DataStoreType {
 	 * @param plugin reference to plugin main class
 	 * @return true if backing object exists, false if not
 	 */
-	abstract boolean storageObjectExists(JavaPlugin plugin);
+	abstract boolean storageObjectExists(final JavaPlugin plugin);
 
 
 	/**

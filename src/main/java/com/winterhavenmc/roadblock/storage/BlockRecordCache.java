@@ -35,19 +35,19 @@ public class BlockRecordCache {
 	}
 
 
-	CacheStatus get(BlockRecord key) {
+	CacheStatus get(final BlockRecord key) {
 		return blockMap.get(key);
 	}
 
-	CacheStatus put(BlockRecord key, CacheStatus value) {
+	CacheStatus put(final BlockRecord key, final CacheStatus value) {
 		return blockMap.put(key, value);
 	}
 
-	CacheStatus remove(BlockRecord key) {
+	CacheStatus remove(final BlockRecord key) {
 		return blockMap.remove(key);
 	}
 
-	boolean containsKey(BlockRecord key) {
+	boolean containsKey(final BlockRecord key) {
 		return blockMap.containsKey(key);
 	}
 
