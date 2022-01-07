@@ -57,11 +57,11 @@ public final class PluginMain extends JavaPlugin {
 		// instantiate message builder
 		messageBuilder = new MessageBuilder<>(this);
 
-		// instantiate world manager
-		worldManager = new WorldManager(this);
-
 		// instantiate sound configuration
 		soundConfig = new YamlSoundConfiguration(this);
+
+		// instantiate world manager
+		worldManager = new WorldManager(this);
 
 		// instantiate block manager
 		blockManager = new BlockManager(this);
