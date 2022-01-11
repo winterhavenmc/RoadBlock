@@ -6,13 +6,10 @@ import com.winterhavenmc.roadblock.listeners.EventListener;
 import com.winterhavenmc.roadblock.messages.Macro;
 import com.winterhavenmc.roadblock.messages.MessageId;
 import com.winterhavenmc.roadblock.storage.BlockManager;
-
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
 import com.winterhavenmc.util.soundconfig.SoundConfiguration;
 import com.winterhavenmc.util.soundconfig.YamlSoundConfiguration;
 import com.winterhavenmc.util.worldmanager.WorldManager;
-
-import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
@@ -32,6 +29,7 @@ public final class PluginMain extends JavaPlugin {
 	/**
 	 * Class constructor for testing
 	 */
+	@SuppressWarnings("unused")
 	public PluginMain() {
 		super();
 	}
@@ -51,11 +49,6 @@ public final class PluginMain extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-
-		// bstats
-		final int pluginId = 13919; // <-- Replace with the id of your plugin!
-		@SuppressWarnings("unused")
-		Metrics metrics = new Metrics(this, pluginId);
 
 		// install default config.yml if not present
 		saveDefaultConfig();
