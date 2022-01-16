@@ -7,47 +7,47 @@ public enum SubcommandType {
 
 	HELP() {
 		@Override
-		void register(final PluginMain plugin, final SubcommandMap subcommandMap) {
-			subcommandMap.register(new HelpCommand(plugin, subcommandMap));
+		void register(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
+			subcommandRegistry.register(new HelpCommand(plugin, subcommandRegistry));
 		}
 	},
 
 	MATERIALS() {
 		@Override
-		void register(final PluginMain plugin, final SubcommandMap subcommandMap) {
-			subcommandMap.register(new MaterialsCommand(plugin));
+		void register(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
+			subcommandRegistry.register(new MaterialsCommand(plugin));
 		}
 	},
 
 	RELOAD() {
 		@Override
-		void register(final PluginMain plugin, final SubcommandMap subcommandMap) {
-			subcommandMap.register(new ReloadCommand(plugin));
+		void register(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
+			subcommandRegistry.register(new ReloadCommand(plugin));
 		}
 	},
 
 	SHOW() {
 		@Override
-		void register(final PluginMain plugin, final SubcommandMap subcommandMap) {
-			subcommandMap.register(new ShowCommand(plugin));
+		void register(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
+			subcommandRegistry.register(new ShowCommand(plugin));
 		}
 	},
 
 	STATUS() {
 		@Override
-		void register(final PluginMain plugin, final SubcommandMap subcommandMap) {
-			subcommandMap.register(new StatusCommand(plugin));
+		void register(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
+			subcommandRegistry.register(new StatusCommand(plugin));
 		}
 	},
 
 	TOOL() {
 		@Override
-		void register(final PluginMain plugin, final SubcommandMap subcommandMap) {
-			subcommandMap.register(new ToolCommand(plugin));
+		void register(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
+			subcommandRegistry.register(new ToolCommand(plugin));
 		}
 	};
 
 
-	abstract void register(final PluginMain plugin, final SubcommandMap subcommandMap);
+	abstract void register(final PluginMain plugin, final SubcommandRegistry subcommandRegistry);
 
 }
