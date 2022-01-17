@@ -15,7 +15,7 @@ import java.util.Objects;
 import static com.winterhavenmc.roadblock.messages.MessageId.*;
 
 
-class ShowCommand extends AbstractSubcommand {
+final class ShowCommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 

@@ -14,7 +14,7 @@ import java.util.Objects;
 import static com.winterhavenmc.roadblock.messages.MessageId.*;
 
 
-class ToolCommand extends AbstractSubcommand {
+final class ToolCommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 

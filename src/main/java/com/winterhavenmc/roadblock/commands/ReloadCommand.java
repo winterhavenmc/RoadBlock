@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-class ReloadCommand extends AbstractSubcommand {
+final class ReloadCommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 
