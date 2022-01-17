@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @SuppressWarnings("unused")
-public interface Subcommand {
+interface Subcommand {
 
 	boolean onCommand(final CommandSender sender, final List<String> argsList);
 

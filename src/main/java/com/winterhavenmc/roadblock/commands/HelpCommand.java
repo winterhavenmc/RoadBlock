@@ -13,7 +13,7 @@ import static com.winterhavenmc.roadblock.messages.MessageId.*;
 import static com.winterhavenmc.roadblock.sounds.SoundId.COMMAND_INVALID;
 
 
-public class HelpCommand extends AbstractSubcommand {
+class HelpCommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 	private final SubcommandRegistry subcommandRegistry;

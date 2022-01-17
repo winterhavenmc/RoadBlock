@@ -3,7 +3,7 @@ package com.winterhavenmc.roadblock.commands;
 import com.winterhavenmc.roadblock.PluginMain;
 
 
-public enum SubcommandType {
+enum SubcommandType {
 
 	MATERIALS() {
 		@Override

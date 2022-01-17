@@ -19,14 +19,12 @@ public final class RoadBlockTool {
 
 	private final static NamespacedKey PERSISTENT_KEY = new NamespacedKey(plugin, "isTool");
 
-	public final static Set<Material> toolTransparentMaterials =
-			Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+	public final static Set<Material> toolTransparentMaterials = Set.of(
 					Material.AIR,
 					Material.CAVE_AIR,
 					Material.VOID_AIR,
 					Material.SNOW,
-					Material.TALL_GRASS
-			)));
+					Material.TALL_GRASS );
 
 
 	/**

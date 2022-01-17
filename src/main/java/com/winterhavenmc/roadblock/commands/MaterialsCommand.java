@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import java.util.*;
 
 
-public class MaterialsCommand extends AbstractSubcommand {
+class MaterialsCommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 
