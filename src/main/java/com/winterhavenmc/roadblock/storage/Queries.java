@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 
-class Queries {
+final class Queries {
 
 	private final static String propFileName = "queries.properties";
 

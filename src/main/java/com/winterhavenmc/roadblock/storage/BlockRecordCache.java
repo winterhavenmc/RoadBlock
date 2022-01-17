@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 @SuppressWarnings("UnusedReturnValue")
-public class BlockRecordCache {
+final class BlockRecordCache {
 
 	// block cache
 	private final Map<BlockRecord, CacheStatus> blockMap = new ConcurrentHashMap<>();

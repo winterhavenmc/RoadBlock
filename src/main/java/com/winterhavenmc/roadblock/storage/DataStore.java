@@ -7,7 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.*;
 
 
-public interface DataStore {
+interface DataStore {
 
 	/**
 	 * Initialize storage
