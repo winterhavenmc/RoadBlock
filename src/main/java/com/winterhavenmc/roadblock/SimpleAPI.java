@@ -96,8 +96,8 @@ public final class SimpleAPI {
 	public static boolean canPlace(final Location location, final int height) {
 
 		// return result of: block is a protected road block or block is within passed height above a road block
-		return plugin.blockManager.isRoadBlock(location.getBlock())
-				|| plugin.blockManager.isAboveRoad(location, height);
+		return !(plugin.blockManager.isRoadBlock(location.getBlock())
+				|| plugin.blockManager.isAboveRoad(location, height));
 	}
 
 }
