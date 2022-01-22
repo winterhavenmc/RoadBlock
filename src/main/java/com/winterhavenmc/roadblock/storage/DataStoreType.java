@@ -3,8 +3,9 @@ package com.winterhavenmc.roadblock.storage;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
 
 enum DataStoreType {
@@ -156,9 +157,9 @@ enum DataStoreType {
 	 */
 	static void convertAll(final JavaPlugin plugin, final DataStore newDataStore) {
 
-		// get array list of all data store types
-		final ArrayList<DataStoreType> dataStores =
-				new ArrayList<>(Arrays.asList(DataStoreType.values()));
+		// get collection of all data store types
+		final Collection<DataStoreType> dataStores =
+				new HashSet<>(Arrays.asList(DataStoreType.values()));
 
 		// remove newDataStore from list of types to convert
 		dataStores.remove(newDataStore.getType());

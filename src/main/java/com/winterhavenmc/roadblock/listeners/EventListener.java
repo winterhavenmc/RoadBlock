@@ -101,7 +101,7 @@ public final class EventListener implements Listener {
 			// if clicked block is tool transparent material, try to find non-air block along line of sight
 			if (clickedBlock == null || RoadBlockTool.toolTransparentMaterials.contains(clickedBlock.getType())) {
 
-				// RH says this can sometimes throw an exception, so using try..catch block
+				// RH says this can sometimes throw an exception, so using try...catch block
 				try {
 					clickedBlock = player.getTargetBlock(RoadBlockTool.toolTransparentMaterials, 100);
 				}
@@ -378,8 +378,8 @@ public final class EventListener implements Listener {
 			return;
 		}
 
-		// get list of exploded blocks
-		final List<Block> blocks = new ArrayList<>(event.blockList());
+		// get collection of exploded blocks
+		final Collection<Block> blocks = new ArrayList<>(event.blockList());
 
 		// remove any road blocks from event block list
 		for (Block block : blocks) {
@@ -404,8 +404,8 @@ public final class EventListener implements Listener {
 			return;
 		}
 
-		// get list of exploded blocks
-		final List<Block> blocks = new ArrayList<>(event.blockList());
+		// get collection of exploded blocks
+		final Collection<Block> blocks = new ArrayList<>(event.blockList());
 
 		// remove any road blocks from event block list
 		for (Block block : blocks) {
@@ -500,7 +500,7 @@ public final class EventListener implements Listener {
 		}
 
 		// get list of blocks affected by piston
-		final ArrayList<Block> blocks = new ArrayList<>(event.getBlocks());
+		final Collection<Block> blocks = new ArrayList<>(event.getBlocks());
 
 		// iterate through block list checking for road blocks
 		for (Block block : blocks) {
@@ -530,8 +530,8 @@ public final class EventListener implements Listener {
 			return;
 		}
 
-		// get list of blocks affected by piston
-		final ArrayList<Block> blocks = new ArrayList<>(event.getBlocks());
+		// get collection of blocks affected by piston
+		final Collection<Block> blocks = new ArrayList<>(event.getBlocks());
 
 		// iterate through block list checking for road blocks
 		for (Block block : blocks) {

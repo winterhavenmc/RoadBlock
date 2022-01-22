@@ -281,8 +281,8 @@ public final class BlockManager {
 	 */
 	public void updateMaterials() {
 
-		final ArrayList<String> materialStringList =
-				new ArrayList<>(plugin.getConfig().getStringList("materials"));
+		final Collection<String> materialStringList =
+				new HashSet<>(plugin.getConfig().getStringList("materials"));
 
 		final HashSet<Material> returnSet = new HashSet<>();
 
