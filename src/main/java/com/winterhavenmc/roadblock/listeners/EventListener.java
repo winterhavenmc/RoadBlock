@@ -225,13 +225,8 @@ public final class EventListener implements Listener {
 	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	void onPlayerDropItem(final PlayerDropItemEvent event) {
-
-		// if event is already cancelled, do nothing and return
-		if (event.isCancelled()) {
-			return;
-		}
 
 		// get dropped item
 		final ItemStack droppedItem = event.getItemDrop().getItemStack();
@@ -255,13 +250,8 @@ public final class EventListener implements Listener {
 	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	void onBlockPlace(final BlockPlaceEvent event) {
-
-		// if event is already cancelled, do nothing and return
-		if (event.isCancelled()) {
-			return;
-		}
 
 		// get configured no-place-height
 		final int height = plugin.getConfig().getInt("no-place-height");
@@ -296,13 +286,8 @@ public final class EventListener implements Listener {
 	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	void onBlockMultiPlace(final BlockMultiPlaceEvent event) {
-
-		// if event is already cancelled, do nothing and return
-		if (event.isCancelled()) {
-			return;
-		}
 
 		// get configured no-place-height
 		final int height = plugin.getConfig().getInt("no-place-height");
@@ -333,13 +318,8 @@ public final class EventListener implements Listener {
 	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	void onBlockBreak(final BlockBreakEvent event) {
-
-		// if event is already cancelled, do nothing and return
-		if (event.isCancelled()) {
-			return;
-		}
 
 		// get block being broken
 		final Block block = event.getBlock();
@@ -370,13 +350,8 @@ public final class EventListener implements Listener {
 	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	void onBlockExplode(final BlockExplodeEvent event) {
-
-		// if event is already cancelled, do nothing and return
-		if (event.isCancelled()) {
-			return;
-		}
 
 		// get collection of exploded blocks
 		final Collection<Block> blocks = new ArrayList<>(event.blockList());
@@ -396,13 +371,8 @@ public final class EventListener implements Listener {
 	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	void onEntityExplode(final EntityExplodeEvent event) {
-
-		// if event is already cancelled, do nothing and return
-		if (event.isCancelled()) {
-			return;
-		}
 
 		// get collection of exploded blocks
 		final Collection<Block> blocks = new ArrayList<>(event.blockList());
@@ -420,13 +390,8 @@ public final class EventListener implements Listener {
 	 * Event handler for EntityChangeBlockEvent;
 	 * stops entities from changing protected road blocks
 	 */
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	void onEntityChangeBlock(final EntityChangeBlockEvent event) {
-
-		// if event is already cancelled, do nothing and return
-		if (event.isCancelled()) {
-			return;
-		}
 
 		// if event block is a RoadBlock, cancel event
 		if (plugin.blockManager.isRoadBlock(event.getBlock())) {
@@ -442,13 +407,8 @@ public final class EventListener implements Listener {
 	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	void onEntityTargetLivingEntity(final EntityTargetLivingEntityEvent event) {
-
-		// if event is already cancelled, do nothing and return
-		if (event.isCancelled()) {
-			return;
-		}
 
 		// if configured target distance is zero or negative, do nothing and return (feature is disabled)
 		if (plugin.getConfig().getInt("target-distance") <= 0) {
@@ -491,13 +451,8 @@ public final class EventListener implements Listener {
 	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	void onPistonExtend(final BlockPistonExtendEvent event) {
-
-		// if event is already cancelled, do nothing and return
-		if (event.isCancelled()) {
-			return;
-		}
 
 		// get list of blocks affected by piston
 		final Collection<Block> blocks = new ArrayList<>(event.getBlocks());
@@ -522,13 +477,8 @@ public final class EventListener implements Listener {
 	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	void onPistonRetract(final BlockPistonRetractEvent event) {
-
-		// if event is already cancelled, do nothing and return
-		if (event.isCancelled()) {
-			return;
-		}
 
 		// get collection of blocks affected by piston
 		final Collection<Block> blocks = new ArrayList<>(event.getBlocks());
@@ -553,13 +503,8 @@ public final class EventListener implements Listener {
 	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	void onBlockForm(final BlockFormEvent event) {
-
-		// if event is already cancelled, do nothing and return
-		if (event.isCancelled()) {
-			return;
-		}
 
 		// if configured false, do nothing and return
 		if (!plugin.getConfig().getBoolean("snow-plow")) {
