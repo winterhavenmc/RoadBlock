@@ -52,10 +52,8 @@ public final class PluginMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
-		// bstats
-		final int pluginId = 13919; // <-- Replace with the id of your plugin!
-		@SuppressWarnings("unused")
-		Metrics metrics = new Metrics(this, pluginId);
+		// bStats
+		new Metrics(this, 13919);
 
 		// install default config.yml if not present
 		saveDefaultConfig();
