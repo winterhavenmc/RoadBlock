@@ -40,7 +40,7 @@ public final class EventListener implements Listener {
 	private final PluginMain plugin;
 
 	// static set of entity target cancel reasons
-	private static final Set<EntityTargetEvent.TargetReason> cancelReasons = Set.of(
+	private final Set<EntityTargetEvent.TargetReason> cancelReasons = Set.of(
 					EntityTargetEvent.TargetReason.CLOSEST_PLAYER,
 					EntityTargetEvent.TargetReason.RANDOM_TARGET,
 					EntityTargetEvent.TargetReason.UNKNOWN );
