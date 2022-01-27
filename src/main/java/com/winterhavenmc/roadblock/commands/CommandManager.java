@@ -13,6 +13,9 @@ import static com.winterhavenmc.roadblock.messages.MessageId.COMMAND_FAIL_INVALI
 import static com.winterhavenmc.roadblock.sounds.SoundId.COMMAND_INVALID;
 
 
+/**
+ * A class that handles the execution of commands
+ */
 public final class CommandManager implements CommandExecutor, TabCompleter {
 
 	// reference to main class instance
