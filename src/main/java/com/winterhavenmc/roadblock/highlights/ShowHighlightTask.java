@@ -11,6 +11,9 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.Collection;
 
 
+/**
+ * A class that applies highlighting to blocks for a player and creates a task to remove the highlighting after a delay
+ */
 final class ShowHighlightTask extends BukkitRunnable {
 
 	private final PluginMain plugin;
@@ -18,6 +21,14 @@ final class ShowHighlightTask extends BukkitRunnable {
 	private final Collection<Location> locationSet;
 	private final Material material;
 
+
+	/**
+	 * Class constructor
+	 * @param plugin reference to the plugin main class
+	 * @param player the player for whom to highlight blocks
+	 * @param locationSet Set of Location of blocks to be highlighted
+	 * @param material the material to use for the highlighting
+	 */
 	ShowHighlightTask(final PluginMain plugin,
 					  final Player player,
 					  final Collection<Location> locationSet,
