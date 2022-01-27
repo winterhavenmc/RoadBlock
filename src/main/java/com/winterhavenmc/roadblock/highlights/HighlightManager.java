@@ -170,6 +170,12 @@ public final class HighlightManager implements Listener {
 	}
 
 
+	/**
+	 * Get a task from the pending remove map
+	 *
+	 * @param player the player whose task will be retrieved from the map
+	 * @return BukkitTask - the task retrieved
+	 */
 	BukkitTask getPendingRemoveTask(final Player player) {
 
 		// check for null parameter
@@ -179,6 +185,12 @@ public final class HighlightManager implements Listener {
 	}
 
 
+	/**
+	 * Insert a task into the pending remove task map
+	 *
+	 * @param player the player whose task will be inserted in the map
+	 * @param task the task to be inserted in the map
+	 */
 	void setPendingRemoveTask(final Player player, final BukkitTask task) {
 
 		// check for null parameters
@@ -189,6 +201,11 @@ public final class HighlightManager implements Listener {
 	}
 
 
+	/**
+	 * Remove a task from the pending remove task map
+	 *
+	 * @param player the player whose task will be removed from the map
+	 */
 	void unsetPendingRemoveTask(final Player player) {
 
 		// check for null parameter
