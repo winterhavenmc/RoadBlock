@@ -1,17 +1,17 @@
 package com.winterhavenmc.roadblock.commands;
 
 import com.winterhavenmc.roadblock.PluginMain;
+import com.winterhavenmc.roadblock.messages.MessageId;
 import com.winterhavenmc.roadblock.sounds.SoundId;
 import com.winterhavenmc.roadblock.util.RoadBlockTool;
+
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-
-import static com.winterhavenmc.roadblock.messages.MessageId.*;
 
 
 /**
@@ -31,7 +31,7 @@ final class ToolCommand extends AbstractSubcommand {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.setName("tool");
 		this.setUsage("/roadblock tool");
-		this.setDescription(COMMAND_HELP_TOOL);
+		this.setDescription(MessageId.COMMAND_HELP_TOOL);
 		this.setMaxArgs(0);
 	}
 
@@ -40,7 +40,7 @@ final class ToolCommand extends AbstractSubcommand {
 
 		// sender must be player
 		if (!(sender instanceof Player)) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_CONSOLE).send();
+			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
 
@@ -49,14 +49,14 @@ final class ToolCommand extends AbstractSubcommand {
 
 		// check player permissions
 		if (!player.hasPermission("roadblock.tool")) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_TOOL_PERMISSION).send();
+			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_TOOL_PERMISSION).send();
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (argsList.size() > getMaxArgs()) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -70,7 +70,7 @@ final class ToolCommand extends AbstractSubcommand {
 
 		// if no room in inventory, send message
 		if (!noFit.isEmpty()) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_TOOL_INVENTORY_FULL).send();
+			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_TOOL_INVENTORY_FULL).send();
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
