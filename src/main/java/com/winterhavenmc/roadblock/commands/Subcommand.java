@@ -26,6 +26,7 @@ interface Subcommand {
 
 	/**
 	 * Requests a list of possible completions for a command argument.
+	 *
 	 * @param sender The command sender (player or console) who issued the command
 	 * @param command Command which was executed
 	 * @param alias The alias used
@@ -54,6 +55,7 @@ interface Subcommand {
 
 	/**
 	 * Get subcommand aliases
+	 *
 	 * @return Collection of String - the subcommand aliases
 	 */
 	Collection<String> getAliases();
