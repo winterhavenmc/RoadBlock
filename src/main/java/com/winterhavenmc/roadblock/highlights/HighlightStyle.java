@@ -29,6 +29,11 @@ public enum HighlightStyle {
 	}
 
 
+	/**
+	 * Get a matching material type for the configured string
+	 *
+	 * @return the material type that matches the configured string
+	 */
 	final Material getMaterial() {
 
 		// get configured material
