@@ -424,8 +424,7 @@ public final class EventListener implements Listener {
 			// check that player is above a road block
 			if (plugin.blockManager.isAboveRoad(player)) {
 
-				// if entity to target distance is less than 
-				// configured target distance,
+				// if entity to target distance is less than configured target distance,
 				// do nothing and return, allowing player to be targeted 
 				if (event.getEntity().getLocation()
 						.distanceSquared(player.getLocation()) < Math.pow(plugin
