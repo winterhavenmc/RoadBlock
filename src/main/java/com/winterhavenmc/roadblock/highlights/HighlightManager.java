@@ -15,6 +15,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 
+/**
+ * A class that manages the highlighting of blocks to show the protected status of blocks
+ */
 public final class HighlightManager implements Listener {
 
 	// reference to main class
