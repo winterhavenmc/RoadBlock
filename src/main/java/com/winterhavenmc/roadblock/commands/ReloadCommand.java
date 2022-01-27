@@ -9,11 +9,19 @@ import java.util.List;
 import java.util.Objects;
 
 
+/**
+ * A class that implements the reload subcommand
+ */
 final class ReloadCommand extends AbstractSubcommand {
 
+	// reference to the plugin main class
 	private final PluginMain plugin;
 
 
+	/**
+	 * Class constructor
+	 * @param plugin reference to the plugin main class
+	 */
 	ReloadCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.setName("reload");

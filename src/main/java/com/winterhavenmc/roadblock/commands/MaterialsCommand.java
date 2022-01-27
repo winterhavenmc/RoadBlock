@@ -10,11 +10,19 @@ import org.bukkit.command.CommandSender;
 import java.util.*;
 
 
+/**
+ * A class that implements the materials subcommand
+ */
 final class MaterialsCommand extends AbstractSubcommand {
 
+	// reference to the plugin main class
 	private final PluginMain plugin;
 
 
+	/**
+	 * Class constructor
+	 * @param plugin reference to the plugin main class
+	 */
 	MaterialsCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.setName("materials");

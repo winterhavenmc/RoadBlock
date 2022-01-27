@@ -13,12 +13,20 @@ import static com.winterhavenmc.roadblock.messages.MessageId.*;
 import static com.winterhavenmc.roadblock.sounds.SoundId.COMMAND_INVALID;
 
 
+/**
+ * A class that implements the help subcommand
+ */
 final class HelpCommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 	private final SubcommandRegistry subcommandRegistry;
 
 
+	/**
+	 * Class constructor
+	 * @param plugin a reference to the plugin main class
+	 * @param subcommandRegistry a reference to the subcommand registry
+	 */
 	HelpCommand(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.subcommandRegistry = Objects.requireNonNull(subcommandRegistry);

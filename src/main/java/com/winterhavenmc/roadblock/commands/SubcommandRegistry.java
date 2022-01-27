@@ -3,6 +3,9 @@ package com.winterhavenmc.roadblock.commands;
 import java.util.*;
 
 
+/**
+ * A class that implements a registry for the subcommands of the plugin
+ */
 final class SubcommandRegistry {
 
 	Map<String, Subcommand> subcommandMap = new LinkedHashMap<>();

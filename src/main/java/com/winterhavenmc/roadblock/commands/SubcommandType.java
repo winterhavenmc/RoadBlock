@@ -40,6 +40,13 @@ enum SubcommandType {
 		}
 	};
 
+
+	/**
+	 * Create an instance of the subcommand
+	 *
+	 * @param plugin reference to the plugin main class
+	 * @return an instance of the subcommand
+	 */
 	abstract Subcommand create(final PluginMain plugin);
 
 }

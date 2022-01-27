@@ -14,11 +14,19 @@ import java.util.Objects;
 import static com.winterhavenmc.roadblock.messages.MessageId.*;
 
 
+/**
+ * A class that implements the tool subcommand
+ */
 final class ToolCommand extends AbstractSubcommand {
 
+	// reference to the plugin main class
 	private final PluginMain plugin;
 
 
+	/**
+	 * Class constructor
+	 * @param plugin reference to the plugin main class
+	 */
 	ToolCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.setName("tool");

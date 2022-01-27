@@ -15,11 +15,20 @@ import java.util.Objects;
 import static com.winterhavenmc.roadblock.messages.MessageId.*;
 
 
+/**
+ * A class that implements the show subcommand
+ */
 final class ShowCommand extends AbstractSubcommand {
 
+	// reference to plugin main class
 	private final PluginMain plugin;
 
 
+	/**
+	 * Class constructor
+	 *
+	 * @param plugin reference to the plugin main class
+	 */
 	ShowCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.setName("show");
