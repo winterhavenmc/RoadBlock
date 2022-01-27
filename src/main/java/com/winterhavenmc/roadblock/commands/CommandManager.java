@@ -45,9 +45,6 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	}
 
 
-	/**
-	 * Tab completer for RoadBlock commands
-	 */
 	@Override
 	public List<String> onTabComplete(final @Nonnull CommandSender sender,
 									  final @Nonnull Command command,
