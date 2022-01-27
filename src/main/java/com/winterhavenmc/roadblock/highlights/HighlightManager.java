@@ -153,7 +153,7 @@ public final class HighlightManager implements Listener {
 	/**
 	 * Remove player from highlight map
 	 *
-	 * @param player the player whoise UUID to remove from the highlight map
+	 * @param player the player whose UUID to remove from the highlight map
 	 */
 	private void removePlayerFromMap(final Player player) {
 
