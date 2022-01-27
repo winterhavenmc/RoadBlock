@@ -11,7 +11,7 @@ public enum HighlightStyle {
 	PROTECT(Material.EMERALD_BLOCK, "protect-material"),
 	UNPROTECT(Material.REDSTONE_BLOCK, "unprotect-material");
 
-	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
+	private final static JavaPlugin plugin = JavaPlugin.getPlugin(PluginMain.class);
 
 	private final Material defaultMaterial;
 	private final String configString;
