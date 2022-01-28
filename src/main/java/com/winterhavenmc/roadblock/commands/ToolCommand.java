@@ -63,10 +63,10 @@ final class ToolCommand extends AbstractSubcommand {
 		}
 
 		// create road block tool itemStack
-		final ItemStack rbTool = RoadBlockTool.create();
+		final ItemStack roadBlockTool = RoadBlockTool.create();
 
 		// put tool in player's inventory
-		final HashMap<Integer, ItemStack> noFit = player.getInventory().addItem(rbTool);
+		final HashMap<Integer, ItemStack> noFit = player.getInventory().addItem(roadBlockTool);
 
 		// if no room in inventory, send message
 		if (!noFit.isEmpty()) {
