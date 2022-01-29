@@ -24,10 +24,10 @@ final class ReloadCommand extends SubcommandAbstract {
 	 */
 	ReloadCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("reload");
-		this.setUsage("/roadblock reload");
-		this.setDescription(MessageId.COMMAND_HELP_RELOAD);
-		this.setMaxArgs(0);
+		this.name = "reload";
+		this.usageString = "/roadblock reload";
+		this.description = MessageId.COMMAND_HELP_RELOAD;
+		this.maxArgs = 0;
 	}
 
 

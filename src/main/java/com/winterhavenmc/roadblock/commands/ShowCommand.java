@@ -31,10 +31,10 @@ final class ShowCommand extends SubcommandAbstract {
 	 */
 	ShowCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("show");
-		this.setUsage("/roadblock show <distance>");
-		this.setDescription(MessageId.COMMAND_HELP_SHOW);
-		this.setMaxArgs(1);
+		this.name = "show";
+		this.usageString = "/roadblock show <distance>";
+		this.description = MessageId.COMMAND_HELP_SHOW;
+		this.maxArgs = 1;
 	}
 
 

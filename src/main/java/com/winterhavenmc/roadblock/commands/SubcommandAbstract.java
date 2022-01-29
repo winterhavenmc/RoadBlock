@@ -9,12 +9,12 @@ import java.util.*;
 
 abstract class SubcommandAbstract implements Subcommand {
 
-	private String name;
-	private Collection<String> aliases = new LinkedHashSet<>();
-	private String usageString;
-	private MessageId description;
-	private int minArgs;
-	private int maxArgs;
+	protected String name;
+	protected Collection<String> aliases = new LinkedHashSet<>();
+	protected String usageString;
+	protected MessageId description;
+	protected int minArgs;
+	protected int maxArgs;
 
 
 	@Override

@@ -54,14 +54,6 @@ interface Subcommand {
 
 
 	/**
-	 * Add an alias to a subcommand
-	 *
-	 * @param alias the alias to add to a subcommand
-	 */
-	void addAlias(final String alias);
-
-
-	/**
 	 * Retrieve the usage string for a subcommand
 	 *
 	 * @return the usage string retrieved for a subcommand

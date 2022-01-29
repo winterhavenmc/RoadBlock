@@ -18,10 +18,10 @@ final class StatusCommand extends SubcommandAbstract {
 
 	StatusCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("status");
-		this.setUsage("/roadblock status");
-		this.setDescription(MessageId.COMMAND_HELP_STATUS);
-		this.setMaxArgs(0);
+		this.name = "status";
+		this.usageString = "/roadblock status";
+		this.description = MessageId.COMMAND_HELP_STATUS;
+		this.maxArgs = 0;
 	}
 
 	@Override

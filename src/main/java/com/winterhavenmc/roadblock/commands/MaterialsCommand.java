@@ -25,10 +25,10 @@ final class MaterialsCommand extends SubcommandAbstract {
 	 */
 	MaterialsCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("materials");
-		this.setUsage("/roadblock materials");
-		this.setDescription(MessageId.COMMAND_HELP_MATERIALS);
-		this.setMaxArgs(0);
+		this.name = "materials";
+		this.usageString = "/roadblock materials";
+		this.description = MessageId.COMMAND_HELP_MATERIALS;
+		this.maxArgs = 0;
 	}
 
 	@Override

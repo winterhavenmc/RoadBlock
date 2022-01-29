@@ -29,10 +29,10 @@ final class ToolCommand extends SubcommandAbstract {
 	 */
 	ToolCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("tool");
-		this.setUsage("/roadblock tool");
-		this.setDescription(MessageId.COMMAND_HELP_TOOL);
-		this.setMaxArgs(0);
+		this.name = "tool";
+		this.usageString = "/roadblock tool";
+		this.description = MessageId.COMMAND_HELP_TOOL;
+		this.maxArgs = 0;
 	}
 
 	@Override
