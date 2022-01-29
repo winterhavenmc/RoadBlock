@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-final class StatusCommand extends AbstractSubcommand {
+final class StatusCommand extends SubcommandAbstract {
 
 	private final PluginMain plugin;
 

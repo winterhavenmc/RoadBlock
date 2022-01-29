@@ -17,7 +17,7 @@ import java.util.Objects;
 /**
  * A class that implements the tool subcommand
  */
-final class ToolCommand extends AbstractSubcommand {
+final class ToolCommand extends SubcommandAbstract {
 
 	// reference to the plugin main class
 	private final PluginMain plugin;

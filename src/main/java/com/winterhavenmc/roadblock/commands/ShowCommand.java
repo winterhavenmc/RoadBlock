@@ -18,7 +18,7 @@ import java.util.Objects;
 /**
  * A class that implements the show subcommand
  */
-final class ShowCommand extends AbstractSubcommand {
+final class ShowCommand extends SubcommandAbstract {
 
 	// reference to plugin main class
 	private final PluginMain plugin;

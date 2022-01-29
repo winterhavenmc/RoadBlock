@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * A class that implements the materials subcommand
  */
-final class MaterialsCommand extends AbstractSubcommand {
+final class MaterialsCommand extends SubcommandAbstract {
 
 	// reference to the plugin main class
 	private final PluginMain plugin;
