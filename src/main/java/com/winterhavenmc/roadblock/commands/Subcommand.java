@@ -46,27 +46,11 @@ interface Subcommand {
 
 
 	/**
-	 * Set a subcommand name
-	 *
-	 * @param name the name to set for a subcommand
-	 */
-	void setName(final String name);
-
-
-	/**
 	 * Get subcommand aliases
 	 *
 	 * @return Collection of String - the subcommand aliases
 	 */
 	Collection<String> getAliases();
-
-
-	/**
-	 * Set subcommand aliases
-	 *
-	 * @param aliases a Collection of String of the aliases to set for a subcommand
-	 */
-	void setAliases(final Collection<String> aliases);
 
 
 	/**
@@ -86,14 +70,6 @@ interface Subcommand {
 
 
 	/**
-	 * Set the usage string for a subcommand
-	 *
-	 * @param usageString the usage string to set for a subcommand
-	 */
-	void setUsage(final String usageString);
-
-
-	/**
 	 * Display a subcommand usage string to a command sender (player or console)
 	 *
 	 * @param sender the command sender for whom to display message
@@ -110,14 +86,6 @@ interface Subcommand {
 
 
 	/**
-	 * Set the message identifier for the help message to associate with the subcommand
-	 *
-	 * @param messageId the message identifier for the help message to associate with the subcommand
-	 */
-	void setDescription(final MessageId messageId);
-
-
-	/**
 	 * Retrieve the minimum number of arguments required for the subcommand
 	 *
 	 * @return int - the minimum number of arguments required for the subcommand
@@ -126,26 +94,10 @@ interface Subcommand {
 
 
 	/**
-	 * Set the minimum number of arguments required for the subcommand
-	 *
-	 * @param minArgs the minimum number of arguments required for the subcommand
-	 */
-	void setMinArgs(final int minArgs);
-
-
-	/**
 	 * Retrieve the maximum number of arguments allowed for the subcommand
 	 *
 	 * @return int - the maximum number of arguments allowed for the subcommand
 	 */
 	int getMaxArgs();
-
-
-	/**
-	 * Set the maximum number of arguments allowed for the subcommand
-	 *
-	 * @param maxArgs the maximum number of arguments allowed for the subcommand
-	 */
-	void setMaxArgs(final int maxArgs);
 
 }
