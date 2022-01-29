@@ -15,6 +15,13 @@ COMMAND_INVALID:
   pitch: 1
 
 
+COMMAND_RELOAD_SUCCESS:
+  enabled: true
+  player-only: true
+  sound: BLOCK_NOTE_BLOCK_CHIME
+  volume: 1
+  pitch: 1
+
 COMMAND_SUCCESS_TOOL:
   enabled: true
   player-only: true

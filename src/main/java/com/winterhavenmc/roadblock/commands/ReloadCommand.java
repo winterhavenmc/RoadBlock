@@ -70,6 +70,9 @@ final class ReloadCommand extends SubcommandAbstract {
 		// send player success message
 		plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_RELOAD).send();
 
+		// play reload success sound for player
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_RELOAD_SUCCESS);
+
 		return true;
 	}
 
