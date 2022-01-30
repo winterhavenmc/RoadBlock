@@ -2,7 +2,7 @@ package com.winterhavenmc.roadblock;
 
 import com.winterhavenmc.roadblock.commands.CommandManager;
 import com.winterhavenmc.roadblock.highlights.HighlightManager;
-import com.winterhavenmc.roadblock.listeners.EventListener;
+import com.winterhavenmc.roadblock.listeners.BlockEventListener;
 import com.winterhavenmc.roadblock.messages.Macro;
 import com.winterhavenmc.roadblock.messages.MessageId;
 import com.winterhavenmc.roadblock.storage.BlockManager;
@@ -72,7 +72,7 @@ public final class PluginMain extends JavaPlugin {
 		new CommandManager(this);
 
 		// instantiate event listener
-		new EventListener(this);
+		new BlockEventListener(this);
 	}
 
 

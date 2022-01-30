@@ -135,6 +135,16 @@ public final class BlockManager {
 	}
 
 
+	public Collection<BlockRecord> getBlockRecords(final Collection<Location> locationSet) {
+		// create set of block records from locationSet
+		Collection<BlockRecord> blockRecordSet = new HashSet<>();
+		for (Location location : locationSet) {
+			blockRecordSet.add(new BlockRecord(location));
+		}
+		return blockRecordSet;
+	}
+
+
 	/**
 	 * Check if block below player is a protected road block
 	 *
@@ -253,8 +263,8 @@ public final class BlockManager {
 	/**
 	 * Check if a material is a valid road block material
 	 *
-	 * @param material the material type to test for valid configured road block material
-	 * @return {@code true} if the material is a valid configured road block material, {@code false} if it is not
+	 * @param material the material type to test for valid road block material
+	 * @return {@code true} if the material is a configured road block material, {@code false} if it is not
 	 */
 	public boolean isRoadBlockMaterial(final Material material) {
 		return material != null && roadBlockMaterials.contains(material);
@@ -264,32 +274,20 @@ public final class BlockManager {
 	/**
 	 * Insert block location records into datastore
 	 *
-	 * @param blockRecords a Collection of Locations to be inserted into the datastore
+	 * @param locations a Collection of Locations to be inserted into the datastore
 	 */
-	public void storeLocations(final Collection<BlockRecord> blockRecords) {
-		dataStore.insertRecords(blockRecords);
+	public int storeBlockLocations(final Collection<Location> locations) {
+		return dataStore.insertRecords(getBlockRecords(locations));
 	}
 
 
 	/**
 	 * Remove block locations from datastore
 	 *
-	 * @param blockRecords a Collection of Locations to be deleted from the datastore
+	 * @param locations a Collection of Locations to be deleted from the datastore
 	 */
-	public void removeLocations(final Collection<BlockRecord> blockRecords) {
-		dataStore.deleteRecords(blockRecords);
-	}
-
-
-	/**
-	 * Remove a block location from datastore
-	 *
-	 * @param blockRecord the location to be removed from the datastore
-	 */
-	public void removeLocation(final BlockRecord blockRecord) {
-		Set<BlockRecord> blockRecords = new HashSet<>();
-		blockRecords.add(blockRecord);
-		dataStore.deleteRecords(blockRecords);
+	public int removeBlockLocations(final Collection<Location> locations) {
+		return dataStore.deleteRecords(getBlockRecords(locations));
 	}
 
 
