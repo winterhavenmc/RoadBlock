@@ -299,6 +299,11 @@ public class EntityEventListener implements Listener {
 	}
 
 
+	/**
+	 * Protect a collection of blocks
+	 * @param player the player invoking the protection of blocks
+	 * @param locations Collection of Location of blocks to be protected
+	 */
 	void protectBlocks(final Player player, final Collection<Location> locations) {
 
 		// highlight blocks
@@ -315,6 +320,11 @@ public class EntityEventListener implements Listener {
 	}
 
 
+	/**
+	 * Unprotect a collection of blocks
+	 * @param player the player invoking the unprotection of blocks
+	 * @param locations Collection of Location of blocks to be unprotected
+	 */
 	void unprotectBlocks(final Player player, final Collection<Location> locations) {
 
 		// highlight blocks
