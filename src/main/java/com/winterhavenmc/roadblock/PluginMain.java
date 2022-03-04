@@ -25,6 +25,7 @@ import com.winterhavenmc.roadblock.messages.Macro;
 import com.winterhavenmc.roadblock.messages.MessageId;
 import com.winterhavenmc.roadblock.storage.BlockManager;
 
+import com.winterhavenmc.roadblock.util.MetricsHandler;
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
 import com.winterhavenmc.util.soundconfig.SoundConfiguration;
 import com.winterhavenmc.util.soundconfig.YamlSoundConfiguration;
@@ -45,9 +46,6 @@ public final class PluginMain extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-
-		// bStats
-		new Metrics(this, 13919);
 
 		// install default config.yml if not present
 		saveDefaultConfig();
@@ -73,6 +71,9 @@ public final class PluginMain extends JavaPlugin {
 		// instantiate event listeners
 		new BlockEventListener(this);
 		new EntityEventListener(this);
+
+		// bStats
+		new MetricsHandler(this);
 	}
 
 
