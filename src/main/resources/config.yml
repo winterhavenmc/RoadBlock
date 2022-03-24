@@ -47,6 +47,9 @@ snow-plow: true
 # Enable sound effects
 sound-effects: true
 
+# give players a speed boost effect when on roads
+speed-boost: true
+
 # materials to be considered road blocks (material types documented here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html)
 materials:
   - DIRT_PATH

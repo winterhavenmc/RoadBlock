@@ -35,11 +35,10 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -296,6 +295,44 @@ public class EntityEventListener implements Listener {
 				unprotectBlocks(player, locations);
 			}
 		}
+	}
+
+
+	@EventHandler
+	final void onPlayerMove(final PlayerMoveEvent event) {
+
+		// if speed boost is configured false, do nothing and return
+		if (!plugin.getConfig().getBoolean("speed-boost")) {
+			return;
+		}
+
+		// get player for event
+		final Player player = event.getPlayer();
+
+		// if player is not above road, do nothing and return
+		if (!plugin.blockManager.isAboveRoad(player)) {
+			return;
+		}
+
+		// speed boost attributes
+		boolean ambient = false;
+		boolean particles = false;
+		boolean icon = false;
+
+		// if player already has speed boost, get existing attributes
+		if (player.hasPotionEffect(PotionEffectType.SPEED)) {
+			PotionEffect currentEffect = player.getPotionEffect(PotionEffectType.SPEED);
+			assert currentEffect != null;
+			ambient = currentEffect.isAmbient();
+			particles = currentEffect.hasParticles();
+			icon = currentEffect.hasIcon();
+		}
+
+		// speed boost potion effect
+		PotionEffect speedBoost = new PotionEffect(PotionEffectType.SPEED, 10, 1, ambient, particles, icon);
+
+		// apply speed boost to player
+		player.addPotionEffect(speedBoost);
 	}
 
 
