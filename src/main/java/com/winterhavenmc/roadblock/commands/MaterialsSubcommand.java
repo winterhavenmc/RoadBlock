@@ -20,16 +20,17 @@ package com.winterhavenmc.roadblock.commands;
 import com.winterhavenmc.roadblock.PluginMain;
 import com.winterhavenmc.roadblock.sounds.SoundId;
 import com.winterhavenmc.roadblock.messages.MessageId;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
- * A class that implements the reload subcommand
+ * A class that implements the materials subcommand
  */
-final class ReloadCommand extends SubcommandAbstract {
+final class MaterialsSubcommand extends AbstrtactSubcommand {
 
 	// reference to the plugin main class
 	private final PluginMain plugin;
@@ -39,11 +40,12 @@ final class ReloadCommand extends SubcommandAbstract {
 	 * Class constructor
 	 * @param plugin reference to the plugin main class
 	 */
-	ReloadCommand(final PluginMain plugin) {
+	MaterialsSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.name = "reload";
-		this.usageString = "/roadblock reload";
-		this.description = MessageId.COMMAND_HELP_RELOAD;
+		this.name = "materials";
+		this.usageString = "/roadblock materials";
+		this.description = MessageId.COMMAND_HELP_MATERIALS;
+		this.permissionNode = "roadblock.materials";
 		this.maxArgs = 0;
 	}
 
@@ -51,9 +53,9 @@ final class ReloadCommand extends SubcommandAbstract {
 	@Override
 	public boolean onCommand(final CommandSender sender, final List<String> argsList) {
 
-		// check that sender has permission for reload command
-		if (!sender.hasPermission("roadblock.reload")) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_RELOAD_PERMISSION).send();
+		// check that sender has permission for status command
+		if (!sender.hasPermission(permissionNode)) {
+			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_MATERIALS_PERMISSION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -66,31 +68,13 @@ final class ReloadCommand extends SubcommandAbstract {
 			return true;
 		}
 
-		// re-install config file if necessary
-		plugin.saveDefaultConfig();
+		List<Material> materialsSorted = new ArrayList<>(plugin.blockManager.getRoadBlockMaterials());
 
-		// reload config file
-		plugin.reloadConfig();
+		materialsSorted.sort(Comparator.comparing(Enum::toString));
 
-		// update road block materials list
-		plugin.blockManager.reload();
-
-		// reload messages
-		plugin.messageBuilder.reload();
-
-		// reload sounds
-		plugin.soundConfig.reload();
-
-		// reload enabled worlds
-		plugin.worldManager.reload();
-
-		// send player success message
-		plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_RELOAD).send();
-
-		// play reload success sound for player
-		plugin.soundConfig.playSound(sender, SoundId.COMMAND_RELOAD_SUCCESS);
+		sender.sendMessage(ChatColor.GREEN + "Configured materials: "
+				+ ChatColor.RESET + materialsSorted);
 
 		return true;
 	}
-
 }

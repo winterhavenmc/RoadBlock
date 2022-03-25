@@ -35,7 +35,7 @@ import java.util.Objects;
 /**
  * A class that implements the show subcommand
  */
-final class ShowCommand extends SubcommandAbstract {
+final class ShowSubcommand extends AbstrtactSubcommand {
 
 	// reference to plugin main class
 	private final PluginMain plugin;
@@ -46,11 +46,12 @@ final class ShowCommand extends SubcommandAbstract {
 	 *
 	 * @param plugin reference to the plugin main class
 	 */
-	ShowCommand(final PluginMain plugin) {
+	ShowSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "show";
 		this.usageString = "/roadblock show <distance>";
 		this.description = MessageId.COMMAND_HELP_SHOW;
+		this.permissionNode = "roadblock.show";
 		this.maxArgs = 1;
 	}
 
@@ -68,7 +69,7 @@ final class ShowCommand extends SubcommandAbstract {
 		final Player player = (Player) sender;
 
 		// check player permissions
-		if (!player.hasPermission("roadblock.show")) {
+		if (!player.hasPermission(permissionNode)) {
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_SHOW_PERMISSION).send();
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;

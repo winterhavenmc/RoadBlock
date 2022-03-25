@@ -24,12 +24,13 @@ import org.bukkit.command.CommandSender;
 import java.util.*;
 
 
-abstract class SubcommandAbstract implements Subcommand {
+abstract class AbstrtactSubcommand implements Subcommand {
 
 	protected String name;
 	protected Collection<String> aliases = new LinkedHashSet<>();
 	protected String usageString;
 	protected MessageId description;
+	protected String permissionNode;
 	protected int minArgs;
 	protected int maxArgs;
 
@@ -57,6 +58,11 @@ abstract class SubcommandAbstract implements Subcommand {
 	@Override
 	public MessageId getDescription() {
 		return description;
+	}
+
+	@Override
+	public String getPermissionNode() {
+		return this.permissionNode;
 	}
 
 	@Override

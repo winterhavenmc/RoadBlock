@@ -25,35 +25,35 @@ enum SubcommandType {
 	MATERIALS() {
 		@Override
 		Subcommand create(final PluginMain plugin) {
-			return new MaterialsCommand(plugin);
+			return new MaterialsSubcommand(plugin);
 		}
 	},
 
 	RELOAD() {
 		@Override
 		Subcommand create(final PluginMain plugin) {
-			return new ReloadCommand(plugin);
+			return new ReloadSubcommand(plugin);
 		}
 	},
 
 	SHOW() {
 		@Override
 		Subcommand create(final PluginMain plugin) {
-			return new ShowCommand(plugin);
+			return new ShowSubcommand(plugin);
 		}
 	},
 
 	STATUS() {
 		@Override
 		Subcommand create(final PluginMain plugin) {
-			return new StatusCommand(plugin);
+			return new StatusSubcommand(plugin);
 		}
 	},
 
 	TOOL() {
 		@Override
 		Subcommand create(final PluginMain plugin) {
-			return new ToolCommand(plugin);
+			return new ToolSubcommand(plugin);
 		}
 	};
 

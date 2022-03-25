@@ -94,6 +94,9 @@ interface Subcommand {
 	MessageId getDescription();
 
 
+	String getPermissionNode();
+
+
 	/**
 	 * Retrieve the minimum number of arguments required for the subcommand
 	 *
