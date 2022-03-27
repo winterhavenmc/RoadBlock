@@ -21,7 +21,6 @@ import com.winterhavenmc.roadblock.PluginMain;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -81,9 +80,9 @@ public final class HighlightManager implements Listener {
 	                            final HighlightStyle highlightStyle) {
 
 		// check for null parameters
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(locationSet);
-		Objects.requireNonNull(highlightStyle);
+		if (player == null || locationSet == null || highlightStyle == null) {
+			return;
+		}
 
 		// if player uuid not in map, insert with locationSet
 		if (!highlightMap.containsKey(player.getUniqueId())) {
@@ -95,7 +94,7 @@ public final class HighlightManager implements Listener {
 		}
 
 		// run showHighlight task with small delay
-		new ShowHighlightTask(plugin, player, locationSet, highlightStyle.getMaterial())
+		new ShowHighlightTask(plugin, player, locationSet, highlightStyle.getMaterial(plugin.getConfig()))
 				.runTaskLaterAsynchronously(plugin, 2L);
 	}
 
@@ -108,14 +107,16 @@ public final class HighlightManager implements Listener {
 	public void unHighlightBlocks(final Player player) {
 
 		// check for null parameters
-		Objects.requireNonNull(player);
+		if (player == null) {
+			return;
+		}
 
 		if (highlightMap.containsKey(player.getUniqueId())) {
 			HashSet<Location> locationSet = highlightMap.get(player.getUniqueId());
 
 			removeHighlight(player, locationSet);
 
-			highlightMap.get(player.getUniqueId()).clear();
+			highlightMap.remove(player.getUniqueId());
 		}
 	}
 
@@ -130,19 +131,12 @@ public final class HighlightManager implements Listener {
 	void showHighlight(final Player player, final Collection<Location> locationSet, final Material material) {
 
 		// check for null parameters
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(locationSet);
-		Objects.requireNonNull(material);
-
-		// iterate through all location in set
-		for (Location location : locationSet) {
-
-			// create block data with passed material
-			BlockData blockData = plugin.getServer().createBlockData(material);
-
-			// send player block change with highlight material
-			player.sendBlockChange(location, blockData);
+		if (player == null || locationSet == null || material ==  null) {
+			return;
 		}
+
+		// send player block change with highlight material for each location in set
+		locationSet.forEach(location -> player.sendBlockChange(location, plugin.getServer().createBlockData(material)));
 	}
 
 
@@ -155,18 +149,12 @@ public final class HighlightManager implements Listener {
 	void removeHighlight(final Player player, final Collection<Location> locationSet) {
 
 		// check for null parameters
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(locationSet);
-
-		// iterate through all location in set
-		for (Location location : locationSet) {
-
-			// get block data at location
-			BlockData blockData = location.getBlock().getBlockData();
-
-			// send player block change with existing block type and data
-			player.sendBlockChange(location, blockData);
+		if (player == null || locationSet == null) {
+			return;
 		}
+
+		// send player block change with existing block type and data
+		locationSet.forEach(location -> player.sendBlockChange(location, location.getBlock().getBlockData()));
 	}
 
 
@@ -178,12 +166,12 @@ public final class HighlightManager implements Listener {
 	private void removePlayerFromMap(final Player player) {
 
 		// check for null parameters
-		Objects.requireNonNull(player);
-
-		if (highlightMap.containsKey(player.getUniqueId())) {
-			highlightMap.get(player.getUniqueId()).clear();
-			highlightMap.remove(player.getUniqueId());
+		if (player == null) {
+			return;
 		}
+
+		// remove player entry from map
+		highlightMap.remove(player.getUniqueId());
 	}
 
 
@@ -196,7 +184,9 @@ public final class HighlightManager implements Listener {
 	BukkitTask getPendingRemoveTask(final Player player) {
 
 		// check for null parameter
-		Objects.requireNonNull(player);
+		if (player == null) {
+			return null;
+		}
 
 		return pendingRemoveTask.get(player.getUniqueId());
 	}
@@ -211,8 +201,9 @@ public final class HighlightManager implements Listener {
 	void setPendingRemoveTask(final Player player, final BukkitTask task) {
 
 		// check for null parameters
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(task);
+		if (player == null || task == null) {
+			return;
+		}
 
 		pendingRemoveTask.put(player.getUniqueId(), task);
 	}
@@ -226,7 +217,9 @@ public final class HighlightManager implements Listener {
 	void unsetPendingRemoveTask(final Player player) {
 
 		// check for null parameter
-		Objects.requireNonNull(player);
+		if (player == null) {
+			return;
+		}
 
 		pendingRemoveTask.remove(player.getUniqueId());
 	}
@@ -240,6 +233,11 @@ public final class HighlightManager implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerQuit(final PlayerQuitEvent event) {
+
+		// check for null parameter
+		if (event == null) {
+			return;
+		}
 
 		// remove player from highlight map
 		plugin.highlightManager.removePlayerFromMap(event.getPlayer());
