@@ -47,6 +47,9 @@ snow-plow: true
 # Enable sound effects
 sound-effects: true
 
+# display titles
+titles-enabled: true
+
 # give players a speed boost effect when on roads
 speed-boost: true
 
