@@ -314,6 +314,11 @@ public class EntityEventListener implements Listener {
 			return;
 		}
 
+		// if player movement is head movement only, do nothing and return
+		if (event.getFrom().equals(event.getTo())) {
+			return;
+		}
+
 		// speed boost attributes
 		boolean ambient = false;
 		boolean particles = false;
