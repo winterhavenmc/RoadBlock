@@ -47,7 +47,6 @@ final class RemoveHighlightTask extends BukkitRunnable {
 	@Override
 	public void run() {
 		plugin.highlightManager.unHighlightBlocks(player);
-		plugin.highlightManager.unsetPendingRemoveTask(player);
 	}
 
 }

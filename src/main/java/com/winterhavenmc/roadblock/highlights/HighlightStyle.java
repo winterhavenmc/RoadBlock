@@ -18,7 +18,7 @@
 package com.winterhavenmc.roadblock.highlights;
 
 import org.bukkit.Material;
-import org.bukkit.configuration.Configuration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 
 public enum HighlightStyle {
@@ -43,25 +43,28 @@ public enum HighlightStyle {
 
 
 	/**
-	 * Get a matching material type for the configured string
+	 * Get configured material type or default if not configured
 	 *
 	 * @return the material type that matches the configured string
 	 */
-	final Material getMaterial(final Configuration configuration) {
+	final Material getMaterial(final JavaPlugin plugin) {
 
 		// get configured material
-		String materialString = configuration.getString(this.configString);
+		String materialString = plugin.getConfig().getString(this.configString);
+
+		// if no configured material, return default material
 		if (materialString == null) {
 			return this.defaultMaterial;
 		}
 
-		// try to match configured material
+		// try to match material from configured string
 		Material material = Material.matchMaterial(materialString);
 
-		// if no matching material, use default material
+		// if no matching material, return default material
 		if (material == null) {
 			material = this.defaultMaterial;
 		}
+
 		return material;
 	}
 

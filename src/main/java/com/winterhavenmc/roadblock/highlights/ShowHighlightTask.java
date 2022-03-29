@@ -20,12 +20,14 @@ package com.winterhavenmc.roadblock.highlights;
 import com.winterhavenmc.roadblock.PluginMain;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collection;
+
+import static com.winterhavenmc.util.TimeUnit.SECONDS;
 
 
 /**
@@ -36,7 +38,7 @@ final class ShowHighlightTask extends BukkitRunnable {
 	private final PluginMain plugin;
 	private final Player player;
 	private final Collection<Location> locationSet;
-	private final Material material;
+	private final HighlightStyle highlightStyle;
 
 
 	/**
@@ -44,38 +46,37 @@ final class ShowHighlightTask extends BukkitRunnable {
 	 * @param plugin reference to the plugin main class
 	 * @param player the player for whom to highlight blocks
 	 * @param locationSet Set of Location of blocks to be highlighted
-	 * @param material the material to use for the highlighting
+	 * @param highlightStyle the highlight style to use
 	 */
 	ShowHighlightTask(final PluginMain plugin,
 					  final Player player,
 					  final Collection<Location> locationSet,
-					  final Material material) {
+					  final HighlightStyle highlightStyle) {
 
 		this.plugin = plugin;
 		this.player = player;
 		this.locationSet = locationSet;
-		this.material = material;
+		this.highlightStyle = highlightStyle;
 	}
 
 
 	@Override
 	public void run() {
 
+		// create block data for highlight style material
+		BlockData blockData = plugin.getServer().createBlockData(highlightStyle.getMaterial(plugin));
+
 		// highlight blocks
-		plugin.highlightManager.showHighlight(player, locationSet, material);
+		locationSet.forEach(location -> player.sendBlockChange(location, blockData));
 
 		// create task to unhighlight locationSet in 30 seconds
-		final BukkitTask task = new RemoveHighlightTask(plugin, player).runTaskLaterAsynchronously(plugin, 30 * 20L);
+		final BukkitTask task = new RemoveHighlightTask(plugin, player).runTaskLaterAsynchronously(plugin, SECONDS.toTicks(30));
 
-		// if pending remove highlight task exists, cancel and replace with this task
-		final BukkitTask previousTask = plugin.highlightManager.getPendingRemoveTask(player);
+		// if pending remove highlight task exists, cancel task
+		plugin.highlightManager.cancelUnhighlightTask(player);
 
-		if (previousTask != null) {
-			previousTask.cancel();
-		}
-
-		// put taskId in pending remove map
-		plugin.highlightManager.setPendingRemoveTask(player, task);
+		// put new task in pending remove map
+		plugin.highlightManager.putUnhighlightTask(player, task);
 	}
 
 }
