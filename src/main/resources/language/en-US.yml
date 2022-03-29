@@ -134,13 +134,15 @@ MESSAGES:
   TOOL_SUCCESS_PROTECT:
     enabled: true
     repeat-delay: 1
-    message: '&8[&eRoadBlock&8] &7Protected %QUANTITY% blocks.'
+    # uncomment following line to display chat message
+    #message: '&8[&eRoadBlock&8] &7Protected %QUANTITY% blocks.'
     subtitle: '&7Protected %QUANTITY% blocks.'
 
   TOOL_SUCCESS_UNPROTECT:
     enabled: true
     repeat-delay: 1
-    message: '&8[&eRoadBlock&8] &7Unprotected %QUANTITY% blocks.'
+    # uncomment following line to display chat message
+    #message: '&8[&eRoadBlock&8] &7Unprotected %QUANTITY% blocks.'
     subtitle: '&7Unprotected %QUANTITY% blocks.'
 
   TOOL_SUCCESS_BREAK_BLOCK:
