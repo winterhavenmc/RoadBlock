@@ -38,11 +38,10 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
@@ -533,6 +532,29 @@ public final class EventListener implements Listener {
 		if (plugin.blockManager.isAboveRoad(block.getLocation(), 1)) {
 			event.setCancelled(true);
 		}
+	}
+
+	@EventHandler
+	final void onPlayerMove(final PlayerMoveEvent event) {
+		if (plugin.getConfig().getBoolean("enable-potion")) {
+			// get block being broken
+			final Block block = event.getTo().getBlock();
+			// get player
+			final Player player = event.getPlayer();
+			final int speed_level = plugin.getConfig().getInt("potion-level") - 1;
+			// check if block is a protected road block
+			if (plugin.blockManager.isRoadBlock(block)) {
+				if (player.getPotionEffect(PotionEffectType.SPEED) != null) {
+					if (player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() == speed_level) {
+						player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10, speed_level));
+					}
+				} else {
+					player.removePotionEffect(PotionEffectType.SPEED);
+					player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10, speed_level));
+				}
+			}
+		}
+
 	}
 
 }
