@@ -95,6 +95,13 @@ final class StatusCommand extends SubcommandAbstract {
 		sender.sendMessage(ChatColor.GREEN + "Snow plow: "
 				+ ChatColor.RESET + plugin.getConfig().getString("snow-plow"));
 
+		sender.sendMessage(ChatColor.GREEN + "Potion Speed Effect: "
+				+ ChatColor.RESET + plugin.getConfig().getString("enable-potion"));
+
+		if (plugin.getConfig().getBoolean("enable-potion")) {
+			sender.sendMessage(ChatColor.GREEN + "Potion Speed Effect Level: " + ChatColor.RESET + plugin.getConfig().getInt("potion-level"));
+		}
+
 		sender.sendMessage(ChatColor.GREEN + "Enabled worlds: "
 				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());
 

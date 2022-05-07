@@ -63,3 +63,8 @@ materials:
   - MOSSY_STONE_BRICKS
   - MOSSY_STONE_BRICK_SLAB
   - MOSSY_STONE_BRICK_STAIRS
+
+# Add Speed potion effect on player when running on road
+enable-potion: true
+# Setup potion effect level
+potion-level: 1.0
