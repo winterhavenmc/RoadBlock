@@ -52,7 +52,7 @@ final class SubcommandRegistry {
 	 * @param name the command to retrieve from the map
 	 * @return Subcommand - the subcommand instance, or null if no matching name
 	 */
-	Subcommand getCommand(final String name) {
+	Optional<Subcommand> getSubcommand(final String name) {
 
 		String key = name;
 
@@ -60,7 +60,7 @@ final class SubcommandRegistry {
 			key = aliasMap.get(key);
 		}
 
-		return (subcommandMap.get(key));
+		return Optional.ofNullable(subcommandMap.get(key));
 	}
 
 

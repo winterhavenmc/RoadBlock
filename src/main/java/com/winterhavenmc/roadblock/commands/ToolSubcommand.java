@@ -34,7 +34,7 @@ import java.util.Objects;
 /**
  * A class that implements the tool subcommand
  */
-final class ToolCommand extends SubcommandAbstract {
+final class ToolSubcommand extends AbstrtactSubcommand {
 
 	// reference to the plugin main class
 	private final PluginMain plugin;
@@ -44,11 +44,12 @@ final class ToolCommand extends SubcommandAbstract {
 	 * Class constructor
 	 * @param plugin reference to the plugin main class
 	 */
-	ToolCommand(final PluginMain plugin) {
+	ToolSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "tool";
 		this.usageString = "/roadblock tool";
 		this.description = MessageId.COMMAND_HELP_TOOL;
+		this.permissionNode = "roadblock.tool";
 		this.maxArgs = 0;
 	}
 
@@ -65,7 +66,7 @@ final class ToolCommand extends SubcommandAbstract {
 		final Player player = (Player) sender;
 
 		// check player permissions
-		if (!player.hasPermission("roadblock.tool")) {
+		if (!player.hasPermission(permissionNode)) {
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_TOOL_PERMISSION).send();
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;

@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.winterhaven-mc</groupId>
 	<artifactId>RoadBlock</artifactId>
-	<version>1.18.4</version>
+	<version>1.19.0-SNAPSHOT</version>
 	<name>RoadBlock</name>
 
 	<url>https://github.com/tim-savage/RoadBlock</url>
@@ -14,7 +14,7 @@
 	<properties>
 		<project.author>Tim Savage</project.author>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.release>17</maven.compiler.release>
 	</properties>
 
 	<licenses>
@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.18.1-R0.1-SNAPSHOT</version>
+			<version>1.19.2-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -67,7 +67,7 @@
 		<dependency>
 			<groupId>org.bstats</groupId>
 			<artifactId>bstats-bukkit</artifactId>
-			<version>2.2.1</version>
+			<version>3.0.0</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -75,14 +75,14 @@
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>message-builder-lib</artifactId>
-			<version>1.11.1</version>
+			<version>1.11.5</version>
 		</dependency>
 
 		<!-- SoundConfigLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>sound-config-lib</artifactId>
-			<version>1.11.0</version>
+			<version>1.11.1</version>
 		</dependency>
 
 		<!-- WorldManagerLib -->
@@ -104,16 +104,16 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.8.2</version>
+			<version>5.9.0</version>
 			<scope>test</scope>
 		</dependency>
 
 		<!-- Mock Bukkit Framework -->
 		<dependency>
 			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.18</artifactId>
-			<version>1.15.0</version>
-			<scope>test</scope>
+			<artifactId>MockBukkit-v1.19</artifactId>
+			<version>2.112.0</version>
+		<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -174,7 +174,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.2.4</version>
+				<version>3.3.0</version>
 				<executions>
 					<execution>
 						<phase>package</phase>

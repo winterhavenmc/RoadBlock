@@ -20,8 +20,6 @@ package com.winterhavenmc.roadblock.highlights;
 import com.winterhavenmc.roadblock.PluginMain;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,10 +39,10 @@ public final class HighlightManager implements Listener {
 	private final PluginMain plugin;
 
 	// Map of highlighted block locations for players
-	private final Map<UUID, HashSet<Location>> highlightMap;
+	private final Map<UUID, HashSet<Location>> highlightLocationMap;
 
-	// Map of last player pending remove tasks
-	private final Map<UUID, BukkitTask> pendingRemoveTask;
+	// Map of unhighlight tasks for player
+	private final Map<UUID, BukkitTask> unHighlightTaskMap;
 
 
 	/**
@@ -58,10 +56,10 @@ public final class HighlightManager implements Listener {
 		this.plugin = plugin;
 
 		// initialize highlight map
-		highlightMap = new ConcurrentHashMap<>();
+		highlightLocationMap = new ConcurrentHashMap<>();
 
 		// initialize timestamp map
-		pendingRemoveTask = new ConcurrentHashMap<>();
+		unHighlightTaskMap = new ConcurrentHashMap<>();
 
 		// register events in this class
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -81,22 +79,22 @@ public final class HighlightManager implements Listener {
 	                            final HighlightStyle highlightStyle) {
 
 		// check for null parameters
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(locationSet);
-		Objects.requireNonNull(highlightStyle);
+		if (player == null || locationSet == null || highlightStyle == null) {
+			return;
+		}
 
 		// if player uuid not in map, insert with locationSet
-		if (!highlightMap.containsKey(player.getUniqueId())) {
-			highlightMap.put(player.getUniqueId(), new HashSet<>(locationSet));
+		if (!highlightLocationMap.containsKey(player.getUniqueId())) {
+			highlightLocationMap.put(player.getUniqueId(), new HashSet<>(locationSet));
 		}
 		// else add locationSet to existing player highlighted blocks in highlight map
 		else {
-			highlightMap.get(player.getUniqueId()).addAll(locationSet);
+			highlightLocationMap.get(player.getUniqueId()).addAll(locationSet);
 		}
 
 		// run showHighlight task with small delay
-		new ShowHighlightTask(plugin, player, locationSet, highlightStyle.getMaterial())
-				.runTaskLaterAsynchronously(plugin, 5L);
+		new ShowHighlightTask(plugin, player, locationSet, highlightStyle)
+				.runTaskLaterAsynchronously(plugin, 2L);
 	}
 
 
@@ -107,82 +105,25 @@ public final class HighlightManager implements Listener {
 	 */
 	public void unHighlightBlocks(final Player player) {
 
-		// check for null parameters
-		Objects.requireNonNull(player);
-
-		if (highlightMap.containsKey(player.getUniqueId())) {
-			HashSet<Location> locationSet = highlightMap.get(player.getUniqueId());
-
-			removeHighlight(player, locationSet);
-
-			highlightMap.get(player.getUniqueId()).clear();
+		// check for null parameter
+		if (player == null) {
+			return;
 		}
-	}
 
+		// check if player has entry in highlight map
+		if (highlightLocationMap.containsKey(player.getUniqueId())) {
 
-	/**
-	 * Send block change to player with highlight material
-	 *
-	 * @param player      the player for whom to show highlighted blocks
-	 * @param locationSet a Collection of Location of block locations to highlight
-	 * @param material    the material type to use as a highlight
-	 */
-	void showHighlight(final Player player, final Collection<Location> locationSet, final Material material) {
+			// get block locations from highlight map for player
+			HashSet<Location> locationSet = highlightLocationMap.get(player.getUniqueId());
 
-		// check for null parameters
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(locationSet);
-		Objects.requireNonNull(material);
+			// send block change to player for each block location in highlight map for player
+			locationSet.forEach(location -> player.sendBlockChange(location, location.getBlock().getBlockData()));
 
-		// iterate through all location in set
-		for (Location location : locationSet) {
+			// remove player from highlight map
+			highlightLocationMap.remove(player.getUniqueId());
 
-			// create block data with passed material
-			BlockData blockData = plugin.getServer().createBlockData(material);
-
-			// send player block change with highlight material
-			player.sendBlockChange(location, blockData);
-		}
-	}
-
-
-	/**
-	 * Send block change to player with highlight material
-	 *
-	 * @param player      the player for whom to remove highlights
-	 * @param locationSet a Collection of Location of block locations to remove highlight
-	 */
-	void removeHighlight(final Player player, final Collection<Location> locationSet) {
-
-		// check for null parameters
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(locationSet);
-
-		// iterate through all location in set
-		for (Location location : locationSet) {
-
-			// get block data at location
-			BlockData blockData = location.getBlock().getBlockData();
-
-			// send player block change with existing block type and data
-			player.sendBlockChange(location, blockData);
-		}
-	}
-
-
-	/**
-	 * Remove player from highlight map
-	 *
-	 * @param player the player whose UUID to remove from the highlight map
-	 */
-	private void removePlayerFromMap(final Player player) {
-
-		// check for null parameters
-		Objects.requireNonNull(player);
-
-		if (highlightMap.containsKey(player.getUniqueId())) {
-			highlightMap.get(player.getUniqueId()).clear();
-			highlightMap.remove(player.getUniqueId());
+			// cancel unhighlight task for player
+			cancelUnhighlightTask(player);
 		}
 	}
 
@@ -193,12 +134,15 @@ public final class HighlightManager implements Listener {
 	 * @param player the player whose task will be retrieved from the map
 	 * @return BukkitTask - the task retrieved
 	 */
-	BukkitTask getPendingRemoveTask(final Player player) {
+	private Optional<BukkitTask> getUnhighlightTask(final Player player) {
 
 		// check for null parameter
-		Objects.requireNonNull(player);
+		if (player == null) {
+			return Optional.empty();
+		}
 
-		return pendingRemoveTask.get(player.getUniqueId());
+		// get task for player from pending remove task map
+		return Optional.ofNullable(unHighlightTaskMap.get(player.getUniqueId()));
 	}
 
 
@@ -208,27 +152,35 @@ public final class HighlightManager implements Listener {
 	 * @param player the player whose task will be inserted in the map
 	 * @param task the task to be inserted in the map
 	 */
-	void setPendingRemoveTask(final Player player, final BukkitTask task) {
+	void putUnhighlightTask(final Player player, final BukkitTask task) {
 
 		// check for null parameters
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(task);
+		if (player == null || task == null) {
+			return;
+		}
 
-		pendingRemoveTask.put(player.getUniqueId(), task);
+		// insert entry for player in pending remove task map
+		unHighlightTaskMap.put(player.getUniqueId(), task);
 	}
 
 
 	/**
-	 * Remove a task from the pending remove task map
+	 * Cancel task for player and remove from the unhighlight task map
 	 *
 	 * @param player the player whose task will be removed from the map
 	 */
-	void unsetPendingRemoveTask(final Player player) {
+	void cancelUnhighlightTask(final Player player) {
 
 		// check for null parameter
-		Objects.requireNonNull(player);
+		if (player == null) {
+			return;
+		}
 
-		pendingRemoveTask.remove(player.getUniqueId());
+		// cancel pending unhighlight task for player
+		getUnhighlightTask(player).ifPresent(BukkitTask::cancel);
+
+		// remove entry for player from unhighlight task map
+		unHighlightTaskMap.remove(player.getUniqueId());
 	}
 
 
@@ -241,8 +193,16 @@ public final class HighlightManager implements Listener {
 	@EventHandler
 	public void onPlayerQuit(final PlayerQuitEvent event) {
 
-		// remove player from highlight map
-		plugin.highlightManager.removePlayerFromMap(event.getPlayer());
+		// check for null parameter
+		if (event == null) {
+			return;
+		}
+
+		// remove any entry for player from highlight map
+		highlightLocationMap.remove(event.getPlayer().getUniqueId());
+
+		// cancel any pending unhighlight task for player
+		cancelUnhighlightTask(event.getPlayer());
 	}
 
 }

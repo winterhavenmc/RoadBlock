@@ -78,7 +78,7 @@ public final class RoadBlockTool {
 
 		// set display name to configured tool name
 		assert metaData != null;
-		metaData.setDisplayName(plugin.messageBuilder.getItemName());
+		metaData.setDisplayName(plugin.messageBuilder.getItemName().orElse("RoadBlock Tool"));
 
 		// set lore to configured tool lore
 		metaData.setLore(plugin.messageBuilder.getItemLore());
