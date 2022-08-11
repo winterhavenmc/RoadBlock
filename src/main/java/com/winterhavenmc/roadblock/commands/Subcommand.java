@@ -38,6 +38,7 @@ interface Subcommand {
 	 * @param argsList List of String - the arguments passed
 	 * @return true if command was executed successfully, false if not
 	 */
+	@SuppressWarnings("UnusedReturnValue")
 	boolean onCommand(final CommandSender sender, final List<String> argsList);
 
 
