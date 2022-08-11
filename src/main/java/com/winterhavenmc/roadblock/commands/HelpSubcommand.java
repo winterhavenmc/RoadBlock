@@ -128,9 +128,11 @@ final class HelpSubcommand extends AbstrtactSubcommand {
 	 */
 	void displayUsageAll(final CommandSender sender) {
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_USAGE_HEADER).send();
-		for (String subcommandName : subcommandRegistry.getKeys()) {
-			subcommandRegistry.getSubcommand(subcommandName).ifPresent(subcommand -> subcommand.displayUsage(sender));
-		}
+		subcommandRegistry.getKeys().stream()
+				.map(subcommandRegistry::getSubcommand)
+				.filter(Optional::isPresent)
+				.filter(subcommand -> sender.hasPermission(subcommand.get().getPermissionNode()))
+				.forEach(subcommand -> subcommand.get().displayUsage(sender));
 	}
 
 }
