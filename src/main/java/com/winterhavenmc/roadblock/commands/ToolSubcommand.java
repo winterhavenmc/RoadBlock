@@ -57,13 +57,10 @@ final class ToolSubcommand extends AbstrtactSubcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> argsList) {
 
 		// sender must be player
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof final Player player)) {
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
-
-		// cast sender to player
-		final Player player = (Player) sender;
 
 		// check player permissions
 		if (!player.hasPermission(permissionNode)) {
