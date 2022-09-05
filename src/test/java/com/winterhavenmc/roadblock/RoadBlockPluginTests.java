@@ -99,7 +99,7 @@ public class RoadBlockPluginTests {
 	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 	class ConfigTest {
 
-		Set<String> enumConfigKeyStrings = new HashSet<>();
+		final Set<String> enumConfigKeyStrings = new HashSet<>();
 
 		public ConfigTest() {
 			for (ConfigSetting configSetting : ConfigSetting.values()) {
@@ -152,7 +152,7 @@ public class RoadBlockPluginTests {
 	class SoundTests {
 
 		// collection of enum sound name strings
-		Collection<String> enumSoundNames = new HashSet<>();
+		final Collection<String> enumSoundNames = new HashSet<>();
 
 		// class constructor
 		SoundTests() {

@@ -25,8 +25,8 @@ import java.util.*;
  */
 final class SubcommandRegistry {
 
-	Map<String, Subcommand> subcommandMap = new LinkedHashMap<>();
-	Map<String, String> aliasMap = new HashMap<>();
+	final Map<String, Subcommand> subcommandMap = new LinkedHashMap<>();
+	final Map<String, String> aliasMap = new HashMap<>();
 
 
 	/**
