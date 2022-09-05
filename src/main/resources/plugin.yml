@@ -3,7 +3,7 @@ main: com.winterhavenmc.roadblock.PluginMain
 author: ${project.author}
 version: ${project.version}
 api-version: 1.18
-softdepend: [Multiverse-Core]
+softdepend: [ Iris, Multiverse-Core, My_Worlds ]
 
 commands:
   roadblock:
