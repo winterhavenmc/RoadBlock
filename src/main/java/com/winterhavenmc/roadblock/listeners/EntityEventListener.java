@@ -123,10 +123,7 @@ public class EntityEventListener implements Listener {
 		}
 
 		// check that target is a player
-		if (event.getTarget() != null && event.getTarget() instanceof Player) {
-
-			// get targeted player
-			final Player player = (Player) event.getTarget();
+		if (event.getTarget() != null && event.getTarget() instanceof final Player player) {
 
 			// check that player is above a road block
 			if (plugin.blockManager.isAboveRoad(player)) {
