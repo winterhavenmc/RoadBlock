@@ -41,25 +41,25 @@ public class RoadBlockPluginTests {
 
 		@Test
 		@DisplayName("server is not null.")
-		void ServerNotNull() {
+		void serverNotNull() {
 			Assertions.assertNotNull(server, "server is null.");
 		}
 
 		@Test
 		@DisplayName("plugin not null.")
-		void PluginNotNull() {
+		void pluginNotNull() {
 			Assertions.assertNotNull(plugin, "plugin is null.");
 		}
 
 		@Test
 		@DisplayName("plugin enabled.")
-		void PluginEnabled() {
+		void pluginEnabled() {
 			Assertions.assertTrue(plugin.isEnabled(), "plugin not enabled.");
 		}
 
 		@Test
 		@DisplayName("plugin data folder not null.")
-		void PluginDataFolderNotNull() {
+		void pluginDataFolderNotNull() {
 			Assertions.assertNotNull(plugin.getDataFolder(),"data folder is null.");
 		}
 	}
@@ -82,13 +82,13 @@ public class RoadBlockPluginTests {
 
 		@Test
 		@DisplayName("world manager not null.")
-		void WorldManagerNotNull() {
+		void worldManagerNotNull() {
 			Assertions.assertNotNull(plugin.worldManager, "world manager is null.");
 		}
 
 		@Test
 		@DisplayName("sound config not null.")
-		void SoundConfigNotNull() {
+		void soundConfigNotNull() {
 			Assertions.assertNotNull(plugin.soundConfig,"sound config is null.");
 		}
 	}
@@ -109,27 +109,27 @@ public class RoadBlockPluginTests {
 
 		@Test
 		@DisplayName("config not null.")
-		void ConfigNotNull() {
+		void configNotNull() {
 			Assertions.assertNotNull(plugin.getConfig(),
 					"plugin config is null.");
 		}
 
 		@Test
 		@DisplayName("test configured language.")
-		void GetLanguage() {
+		void getLanguage() {
 			Assertions.assertEquals("en-US", plugin.getConfig().getString("language"),
 					"language does not equal 'en-US'");
 		}
 
 		@SuppressWarnings("unused")
-		Set<String> ConfigFileKeys() {
+		Set<String> configFileKeys() {
 			return plugin.getConfig().getKeys(false);
 		}
 
 		@ParameterizedTest
 		@DisplayName("file config key is contained in ConfigSetting enum.")
-		@MethodSource("ConfigFileKeys")
-		void ConfigFileKeyNotNull(String key) {
+		@MethodSource("configFileKeys")
+		void configFileKeyNotNull(String key) {
 			Assertions.assertNotNull(key);
 			Assertions.assertTrue(enumConfigKeyStrings.contains(key),
 					"file config key is not contained in ConfigSetting enum.");
@@ -138,7 +138,7 @@ public class RoadBlockPluginTests {
 		@ParameterizedTest
 		@EnumSource(ConfigSetting.class)
 		@DisplayName("ConfigSetting enum matches config file key/value pairs.")
-		void ConfigFileKeysContainsEnumKey(ConfigSetting configSetting) {
+		void configFileKeysContainsEnumKey(ConfigSetting configSetting) {
 			Assertions.assertEquals(configSetting.getValue(), plugin.getConfig().getString(configSetting.getKey()),
 					"ConfigSetting enum key '" + configSetting.getKey() + "' does not match config file key/value pair.");
 		}
@@ -164,35 +164,35 @@ public class RoadBlockPluginTests {
 
 		@Test
 		@DisplayName("Sounds config is not null.")
-		void SoundConfigNotNull() {
+		void soundConfigNotNull() {
 			Assertions.assertNotNull(plugin.soundConfig);
 		}
 
 		@SuppressWarnings("unused")
-		Collection<String> GetConfigFileKeys() {
+		Collection<String> getConfigFileKeys() {
 			return plugin.soundConfig.getSoundConfigKeys();
 		}
 
 		@ParameterizedTest
 		@EnumSource(SoundId.class)
 		@DisplayName("enum member soundId is contained in getConfig() keys.")
-		void FileKeysContainsEnumValue(SoundId soundId) {
+		void fileKeysContainsEnumValue(SoundId soundId) {
 			Assertions.assertTrue(plugin.soundConfig.isValidSoundConfigKey(soundId.name()),
 					"Enum value '" + soundId.name() + "' does not have matching key in sounds.yml.");
 		}
 
 		@ParameterizedTest
-		@MethodSource("GetConfigFileKeys")
+		@MethodSource("getConfigFileKeys")
 		@DisplayName("config file key has matching key in enum sound names")
-		void SoundConfigEnumContainsAllFileSounds(String key) {
+		void soundConfigEnumContainsAllFileSounds(String key) {
 			Assertions.assertTrue(enumSoundNames.contains(key),
 					"File key does not have matching key in enum sound names.");
 		}
 
 		@ParameterizedTest
-		@MethodSource("GetConfigFileKeys")
+		@MethodSource("getConfigFileKeys")
 		@DisplayName("sound file key has valid bukkit sound name")
-		void SoundConfigFileHasValidBukkitSound(String key) {
+		void soundConfigFileHasValidBukkitSound(String key) {
 			String bukkitSoundName = plugin.soundConfig.getBukkitSoundName(key);
 			Assertions.assertTrue(plugin.soundConfig.isValidBukkitSoundName(bukkitSoundName),
 					"File key '" + key + "' has invalid bukkit sound name: " + bukkitSoundName);
