@@ -69,14 +69,8 @@ public class RoadBlockPluginTests {
 	class PluginMainObjectTests {
 
 		@Test
-		@DisplayName("language handler not null.")
-		void messageBuilderNotNull() {
-			Assertions.assertNotNull(plugin.messageBuilder, "language handler is null.");
-		}
-
-		@Test
 		@DisplayName("message builder not null.")
-		void MessageBuilderNotNull() {
+		void messageBuilderNotNull() {
 			Assertions.assertNotNull(plugin.messageBuilder, "message builder is null.");
 		}
 
@@ -157,7 +151,7 @@ public class RoadBlockPluginTests {
 		// class constructor
 		SoundTests() {
 			// add all SoundId enum values to collection
-			for (com.winterhavenmc.roadblock.sounds.SoundId SoundId : SoundId.values()) {
+			for (SoundId SoundId : SoundId.values()) {
 				enumSoundNames.add(SoundId.name());
 			}
 		}
