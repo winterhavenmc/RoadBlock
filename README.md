@@ -1,3 +1,5 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/b6e83ae8142445aa80273401fbdaac04)](https://www.codacy.com/gh/tim-savage/RoadBlock/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tim-savage/RoadBlock&amp;utm_campaign=Badge_Grade)
+
 ### RoadBlock
 This plugin allows you to protect roads you create on your server from being broken by players. Each individual block that your road is made of is marked as protected, so your roads can twist and turn and meander through the landscape, and still be protected from breakage. Selecting blocks from protection (or de-protection) is simple and efficient. Simply give yourself the custom tool via command, then right or left click to protect or unprotect blocks of the configured materials.
 
