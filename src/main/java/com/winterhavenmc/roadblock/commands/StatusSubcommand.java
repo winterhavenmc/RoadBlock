@@ -71,6 +71,7 @@ final class StatusSubcommand extends AbstrtactSubcommand {
 		displayPlayerOnRoadHeightSetting(sender);
 		displayMobTargetDistanceSetting(sender);
 		displaySnowPlowSetting(sender);
+		displaySpeedBoostSetting(sender);
 		displayEnabledWorlds(sender);
 
 		return true;
@@ -140,6 +141,12 @@ final class StatusSubcommand extends AbstrtactSubcommand {
 	private void displaySnowPlowSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Snow plow: "
 				+ ChatColor.RESET + plugin.getConfig().getString("snow-plow"));
+	}
+
+
+	private void displaySpeedBoostSetting(final CommandSender sender) {
+		sender.sendMessage(ChatColor.GREEN + "Speed boost: "
+				+ ChatColor.RESET + plugin.getConfig().getString("speed-boost"));
 	}
 
 
