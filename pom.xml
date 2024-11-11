@@ -5,7 +5,7 @@
 	<version>1.19.2-SNAPSHOT</version>
 	<name>RoadBlock</name>
 
-	<url>https://github.com/tim-savage/RoadBlock</url>
+	<url>https://github.com/winterhavenmc/RoadBlock</url>
 
 	<description>
 		A minecraft plugin that prevents breaking of blocks that have been designated as roads.
