@@ -39,7 +39,7 @@ public final class HighlightManager implements Listener {
 	private final PluginMain plugin;
 
 	// Map of highlighted block locations for players
-	private final Map<UUID, HashSet<Location>> highlightLocationMap;
+	private final Map<UUID, Set<Location>> highlightLocationMap;
 
 	// Map of unhighlight tasks for player
 	private final Map<UUID, BukkitTask> unHighlightTaskMap;
@@ -114,7 +114,7 @@ public final class HighlightManager implements Listener {
 		if (highlightLocationMap.containsKey(player.getUniqueId())) {
 
 			// get block locations from highlight map for player
-			HashSet<Location> locationSet = highlightLocationMap.get(player.getUniqueId());
+			Set<Location> locationSet = highlightLocationMap.get(player.getUniqueId());
 
 			// send block change to player for each block location in highlight map for player
 			locationSet.forEach(location -> player.sendBlockChange(location, location.getBlock().getBlockData()));
