@@ -104,7 +104,7 @@ public final class CommandManager implements TabExecutor {
 		String subcommandName;
 
 		// get subcommand, remove from front of list
-		if (argsList.size() > 0) {
+		if (!argsList.isEmpty()) {
 			subcommandName = argsList.remove(0);
 		}
 
