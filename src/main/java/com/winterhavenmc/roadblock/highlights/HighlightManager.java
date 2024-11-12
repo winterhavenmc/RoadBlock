@@ -50,8 +50,8 @@ public final class HighlightManager implements Listener {
 	 *
 	 * @param plugin reference to main class
 	 */
-	public HighlightManager(final PluginMain plugin) {
-
+	public HighlightManager(final PluginMain plugin)
+	{
 		// set reference to main class
 		this.plugin = plugin;
 
@@ -76,9 +76,9 @@ public final class HighlightManager implements Listener {
 	 */
 	public void highlightBlocks(final Player player,
 	                            final Collection<Location> locationSet,
-	                            final HighlightStyle highlightStyle) {
-
-		// check for null parameters
+	                            final HighlightStyle highlightStyle)
+	{
+		// null parameter check
 		if (player == null || locationSet == null || highlightStyle == null) {
 			return;
 		}
@@ -103,9 +103,9 @@ public final class HighlightManager implements Listener {
 	 *
 	 * @param player the player for whom to remove all block highlighting
 	 */
-	public void unHighlightBlocks(final Player player) {
-
-		// check for null parameter
+	public void unHighlightBlocks(final Player player)
+	{
+		// null parameter check
 		if (player == null) {
 			return;
 		}
@@ -134,9 +134,9 @@ public final class HighlightManager implements Listener {
 	 * @param player the player whose task will be retrieved from the map
 	 * @return BukkitTask - the task retrieved
 	 */
-	private Optional<BukkitTask> getUnhighlightTask(final Player player) {
-
-		// check for null parameter
+	private Optional<BukkitTask> getUnhighlightTask(final Player player)
+	{
+		// null parameter check
 		if (player == null) {
 			return Optional.empty();
 		}
@@ -152,9 +152,9 @@ public final class HighlightManager implements Listener {
 	 * @param player the player whose task will be inserted in the map
 	 * @param task the task to be inserted in the map
 	 */
-	void putUnhighlightTask(final Player player, final BukkitTask task) {
-
-		// check for null parameters
+	void putUnhighlightTask(final Player player, final BukkitTask task)
+	{
+		// null parameter check
 		if (player == null || task == null) {
 			return;
 		}
@@ -169,9 +169,9 @@ public final class HighlightManager implements Listener {
 	 *
 	 * @param player the player whose task will be removed from the map
 	 */
-	void cancelUnhighlightTask(final Player player) {
-
-		// check for null parameter
+	void cancelUnhighlightTask(final Player player)
+	{
+		// null parameter check
 		if (player == null) {
 			return;
 		}
@@ -191,9 +191,9 @@ public final class HighlightManager implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	public void onPlayerQuit(final PlayerQuitEvent event) {
-
-		// check for null parameter
+	public void onPlayerQuit(final PlayerQuitEvent event)
+	{
+		// null parameter check
 		if (event == null) {
 			return;
 		}
