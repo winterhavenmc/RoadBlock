@@ -1,6 +1,6 @@
-package com.winterhavenmc.roadblock;
+package com.winterhavenmc.roadblock.util;
 
-public enum ConfigSetting {
+public enum DefaultConfig {
 	LANGUAGE("en-US"),
 	ENABLED_WORLDS("[]"),
 	DISABLED_WORLDS("[disabled_world1, disabled_world2]"),
@@ -26,16 +26,20 @@ public enum ConfigSetting {
 
 	private final String value;
 
-	ConfigSetting(String value) {
+	DefaultConfig(String value) {
 		this.value = value;
 	}
 
 	public String getKey() {
-		return this.name().toLowerCase().replace('_', '-');
+		return this.toLowerKebabCase();
 	}
 
 	public String getValue() {
 		return this.value;
 	}
 
+	private String toLowerKebabCase() {
+		return this.name().toLowerCase().replace('_', '-');
 	}
+
+}
