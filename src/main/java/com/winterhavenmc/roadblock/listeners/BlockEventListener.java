@@ -248,7 +248,7 @@ public final class BlockEventListener implements Listener {
 	void onBlockForm(final BlockFormEvent event) {
 
 		// if configured false, do nothing and return
-		if (!plugin.getConfig().getBoolean("snow-plow")) {
+		if (!plugin.getConfig().getBoolean(DefaultConfig.SNOW_PLOW.getKey())) {
 			return;
 		}
 
