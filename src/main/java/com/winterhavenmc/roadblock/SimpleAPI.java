@@ -92,7 +92,7 @@ public final class SimpleAPI {
 	public static boolean canPlace(final Location location) {
 
 		// get configured no-place-height
-		int height = plugin.getConfig().getInt("no-place-height");
+		int height = plugin.getConfig().getInt(DefaultConfig.NO_PLACE_HEIGHT.getKey());
 
 		// check location with configured no-place-height
 		return canPlace(location, height);
