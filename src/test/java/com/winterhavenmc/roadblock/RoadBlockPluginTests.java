@@ -3,6 +3,7 @@ package com.winterhavenmc.roadblock;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.roadblock.sounds.SoundId;
+import com.winterhavenmc.roadblock.util.DefaultConfig;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -96,7 +97,7 @@ public class RoadBlockPluginTests {
 		final Set<String> enumConfigKeyStrings = new HashSet<>();
 
 		public ConfigTest() {
-			for (ConfigSetting configSetting : ConfigSetting.values()) {
+			for (DefaultConfig configSetting : DefaultConfig.values()) {
 				this.enumConfigKeyStrings.add(configSetting.getKey());
 			}
 		}
@@ -130,9 +131,9 @@ public class RoadBlockPluginTests {
 		}
 
 		@ParameterizedTest
-		@EnumSource(ConfigSetting.class)
+		@EnumSource(DefaultConfig.class)
 		@DisplayName("ConfigSetting enum matches config file key/value pairs.")
-		void configFileKeysContainsEnumKey(ConfigSetting configSetting) {
+		void configFileKeysContainsEnumKey(DefaultConfig configSetting) {
 			Assertions.assertEquals(configSetting.getValue(), plugin.getConfig().getString(configSetting.getKey()),
 					"ConfigSetting enum key '" + configSetting.getKey() + "' does not match config file key/value pair.");
 		}
