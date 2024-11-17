@@ -23,6 +23,7 @@ import com.winterhavenmc.roadblock.messages.Macro;
 import com.winterhavenmc.roadblock.messages.MessageId;
 import com.winterhavenmc.roadblock.sounds.SoundId;
 
+import com.winterhavenmc.roadblock.util.DefaultConfig;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -81,7 +82,7 @@ final class ShowSubcommand extends AbstrtactSubcommand {
 		}
 
 		// get show distance from config
-		int distance = plugin.getConfig().getInt("show-distance");
+		int distance = plugin.getConfig().getInt(DefaultConfig.SHOW_DISTANCE.getKey());
 
 		// if argument passed, try to parse string to int
 		if (argsList.size() == 1) {
