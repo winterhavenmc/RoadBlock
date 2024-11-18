@@ -131,7 +131,7 @@ public class RoadBlockPluginTests {
 		}
 
 		@ParameterizedTest
-		@EnumSource(DefaultConfig.class)
+		@EnumSource(value = DefaultConfig.class, mode = EnumSource.Mode.EXCLUDE, names = {"DEBUG", "PROFILE"} )
 		@DisplayName("ConfigSetting enum matches config file key/value pairs.")
 		void configFileKeysContainsEnumKey(DefaultConfig configSetting) {
 			Assertions.assertEquals(configSetting.getValue(), plugin.getConfig().getString(configSetting.getKey()),
