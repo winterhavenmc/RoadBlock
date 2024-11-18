@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.roadblock.storage;
 
+import com.winterhavenmc.roadblock.util.DefaultConfig;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -90,7 +91,7 @@ interface DataStore {
 		catch (Exception e) {
 			plugin.getLogger().severe("Could not initialize " + newDataStore + " datastore!");
 			plugin.getLogger().severe(e.getLocalizedMessage());
-			if (plugin.getConfig().getBoolean("debug")) {
+			if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
 				e.printStackTrace();
 			}
 		}

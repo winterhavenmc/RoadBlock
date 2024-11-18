@@ -88,14 +88,14 @@ final class StatusSubcommand extends AbstrtactSubcommand {
 
 
 	private void displayDebugSetting(final CommandSender sender) {
-		if (plugin.getConfig().getBoolean("debug")) {
+		if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
 			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: true");
 		}
 	}
 
 
 	private void displayProfileSetting(final CommandSender sender) {
-		if (plugin.getConfig().getBoolean("profile")) {
+		if (plugin.getConfig().getBoolean(DefaultConfig.PROFILE.getKey())) {
 			sender.sendMessage(ChatColor.DARK_RED + "PROFILE: true");
 		}
 	}
