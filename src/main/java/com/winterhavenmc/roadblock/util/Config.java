@@ -1,7 +1,6 @@
 package com.winterhavenmc.roadblock.util;
 
 import org.bukkit.Material;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
