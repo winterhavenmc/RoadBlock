@@ -36,6 +36,8 @@ public final class RoadBlockTool {
 
 	private final static NamespacedKey PERSISTENT_KEY = new NamespacedKey(plugin, "isTool");
 
+	public static final Material DEFAULT_MATERIAL = Material.GOLDEN_PICKAXE;
+
 	public final static Set<Material> toolTransparentMaterials = Set.of(
 			Material.AIR, Material.CAVE_AIR, Material.VOID_AIR, Material.SNOW,
 			Material.GRASS, Material.TALL_GRASS, Material.VINE );
@@ -65,9 +67,9 @@ public final class RoadBlockTool {
 			material = Material.matchMaterial(materialString);
 		}
 
-		// if no matching material found, use default GOLDEN_PICKAXE
+		// if no matching material found, use default material
 		if (material == null) {
-			material = Material.GOLDEN_PICKAXE;
+			material = DEFAULT_MATERIAL;
 		}
 
 		// create item stack of configured tool material
