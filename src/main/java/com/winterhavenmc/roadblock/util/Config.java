@@ -1,10 +1,11 @@
 package com.winterhavenmc.roadblock.util;
 
-import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.bukkit.Material.*;
 
 
 public enum Config {
@@ -27,53 +28,89 @@ public enum Config {
 	SPEED_BOOST("true"),
 	TITLES_ENABLED("true"),
 	MATERIALS(Arrays.toString(List.of(
-			Material.DIRT_PATH,
-			Material.COBBLESTONE,
-			Material.COBBLESTONE_SLAB,
-			Material.COBBLESTONE_STAIRS,
-			Material.MOSSY_COBBLESTONE,
-			Material.MOSSY_COBBLESTONE_SLAB,
-			Material.MOSSY_COBBLESTONE_STAIRS,
-			Material.STONE_BRICKS,
-			Material.STONE_BRICK_SLAB,
-			Material.STONE_BRICK_STAIRS,
-			Material.CRACKED_STONE_BRICKS,
-			Material.MOSSY_STONE_BRICKS,
-			Material.MOSSY_STONE_BRICK_SLAB,
-			Material.MOSSY_STONE_BRICK_STAIRS
+			DIRT_PATH,
+			COBBLESTONE,
+			COBBLESTONE_SLAB,
+			COBBLESTONE_STAIRS,
+			MOSSY_COBBLESTONE,
+			MOSSY_COBBLESTONE_SLAB,
+			MOSSY_COBBLESTONE_STAIRS,
+			STONE_BRICKS,
+			STONE_BRICK_SLAB,
+			STONE_BRICK_STAIRS,
+			CRACKED_STONE_BRICKS,
+			MOSSY_STONE_BRICKS,
+			MOSSY_STONE_BRICK_SLAB,
+			MOSSY_STONE_BRICK_STAIRS
 		).toArray()));
-
 
 	private final String defaultValue;
 
+
+	/**
+	 * Class constructor for Enum members
+	 * @param defaultValue {@code String} default value referenced by corresponding key as found in config.yml file
+	 */
 	Config(String defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 
+	/**
+	 * Get corresponding key for Enum member, formatted for style used in config.yml file
+	 * @return {@code String} the key as formatted in config.yml file
+	 */
 	public String getKey() {
 		return this.toLowerKebabCase();
 	}
 
+	/**
+	 * Get default value for key, matching exactly the corresponding string in the default config.yml file
+	 * @return {@code String} the value for the corresponding key
+	 */
 	public String getDefaultValue() {
 		return this.defaultValue;
 	}
 
-	public Boolean getBoolean(JavaPlugin plugin) {
+	/**
+	 * Get value as boolean for corresponding key in current configuration
+	 * @param plugin {@code JavaPlugin} reference to the plugin instance
+	 * @return {@code boolean} the referenced value in the current configuration
+	 */
+	public boolean getBoolean(JavaPlugin plugin) {
 		return plugin.getConfig().getBoolean(getKey());
 	}
 
+	/**
+	 * Get value as int for corresponding key in current configuration
+	 * @param plugin {@code JavaPlugin} reference to the plugin instance
+	 * @return {@code int} the referenced value in the current configuration
+	 */
 	public int getInt(final JavaPlugin plugin) {
 		return plugin.getConfig().getInt(getKey());
 	}
 
+	/**
+	 * Get value as String for corresponding key in current configuration
+	 * @param plugin {@code JavaPlugin} reference to the plugin instance
+	 * @return {@code String} the referenced value in the current configuration
+	 */
 	public String getString(final JavaPlugin plugin) {
 		return plugin.getConfig().getString(getKey());
 	}
 
+	/**
+	 * Get value as List of String for corresponding key in current configuration
+	 * @param plugin {@code JavaPlugin} reference to the plugin instance
+	 * @return {@code List<String>} the referenced value in the current configuration
+	 */
 	public List<String> getStringList(final JavaPlugin plugin) {
 		return plugin.getConfig().getStringList(getKey());
 	}
 
+	/**
+	 * Convert Enum member name to lower kebab case
+	 * @return {@code String} the Enum member name as lower kebab case
+	 */
 	private String toLowerKebabCase() {
 		return this.name().toLowerCase().replace('_', '-');
 	}
