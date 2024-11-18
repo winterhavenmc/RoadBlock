@@ -1,6 +1,8 @@
 package com.winterhavenmc.roadblock.util;
 
 public enum DefaultConfig {
+	DEBUG("false"),
+	PROFILE("false"),
 	LANGUAGE("en-US"),
 	ENABLED_WORLDS("[]"),
 	DISABLED_WORLDS("[disabled_world1, disabled_world2]"),
