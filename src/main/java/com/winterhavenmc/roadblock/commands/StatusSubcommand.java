@@ -89,14 +89,14 @@ final class StatusSubcommand extends AbstrtactSubcommand {
 
 	private void displayDebugSetting(final CommandSender sender) {
 		if (Config.DEBUG.getBoolean(plugin)) {
-			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: true");
+			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: " + Config.DEBUG.getBoolean(plugin));
 		}
 	}
 
 
 	private void displayProfileSetting(final CommandSender sender) {
 		if (Config.PROFILE.getBoolean(plugin)) {
-			sender.sendMessage(ChatColor.DARK_RED + "PROFILE: true");
+			sender.sendMessage(ChatColor.DARK_RED + "PROFILE: " + Config.PROFILE.getBoolean(plugin));
 		}
 	}
 
@@ -141,13 +141,13 @@ final class StatusSubcommand extends AbstrtactSubcommand {
 
 	private void displaySnowPlowSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Snow plow: "
-				+ ChatColor.RESET + Config.SNOW_PLOW.getString(plugin));
+				+ ChatColor.RESET + Config.SNOW_PLOW.getBoolean(plugin));
 	}
 
 
 	private void displaySpeedBoostSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Speed boost: "
-				+ ChatColor.RESET + Config.SPEED_BOOST.getString(plugin));
+				+ ChatColor.RESET + Config.SPEED_BOOST.getBoolean(plugin));
 	}
 
 
