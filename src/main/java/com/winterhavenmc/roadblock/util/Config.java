@@ -1,7 +1,8 @@
 package com.winterhavenmc.roadblock.util;
 
-import com.winterhavenmc.roadblock.PluginMain;
 import org.bukkit.Material;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,10 +45,10 @@ public enum Config {
 		).toArray()));
 
 
-	private final String value;
+	private final String defaultValue;
 
-	Config(String value) {
-		this.value = value;
+	Config(String defaultValue) {
+		this.defaultValue = defaultValue;
 	}
 
 	public String getKey() {
@@ -55,23 +56,23 @@ public enum Config {
 	}
 
 	public String getDefaultValue() {
-		return this.value;
+		return this.defaultValue;
 	}
 
-	public Boolean getBoolean() {
-		return PluginMain.getProvidingPlugin(PluginMain.class).getConfig().getBoolean(getKey());
+	public Boolean getBoolean(JavaPlugin plugin) {
+		return plugin.getConfig().getBoolean(getKey());
 	}
 
-	public int getInt() {
-		return PluginMain.getProvidingPlugin(PluginMain.class).getConfig().getInt(getKey());
+	public int getInt(final JavaPlugin plugin) {
+		return plugin.getConfig().getInt(getKey());
 	}
 
-	public String getString() {
-		return PluginMain.getProvidingPlugin(PluginMain.class).getConfig().getString(getKey());
+	public String getString(final JavaPlugin plugin) {
+		return plugin.getConfig().getString(getKey());
 	}
 
-	public List<String> getStringList() {
-		return PluginMain.getProvidingPlugin(PluginMain.class).getConfig().getStringList(getKey());
+	public List<String> getStringList(final JavaPlugin plugin) {
+		return plugin.getConfig().getStringList(getKey());
 	}
 
 	private String toLowerKebabCase() {

@@ -75,7 +75,7 @@ public final class BlockEventListener implements Listener {
 	void onBlockPlace(final BlockPlaceEvent event) {
 
 		// get configured no-place-height
-		final int height = Config.NO_PLACE_HEIGHT.getInt();
+		final int height = Config.NO_PLACE_HEIGHT.getInt(plugin);
 
 		// get block placed
 		final Block placedBlock = event.getBlockPlaced();
@@ -111,7 +111,7 @@ public final class BlockEventListener implements Listener {
 	void onBlockMultiPlace(final BlockMultiPlaceEvent event) {
 
 		// get configured no-place-height
-		final int height = Config.NO_PLACE_HEIGHT.getInt();
+		final int height = Config.NO_PLACE_HEIGHT.getInt(plugin);
 
 		// get list of blocks that will be replaced
 		final List<BlockState> replacedBlocks = event.getReplacedBlockStates();
@@ -248,7 +248,7 @@ public final class BlockEventListener implements Listener {
 	void onBlockForm(final BlockFormEvent event) {
 
 		// if configured false, do nothing and return
-		if (!Config.SNOW_PLOW.getBoolean()) {
+		if (!Config.SNOW_PLOW.getBoolean(plugin)) {
 			return;
 		}
 

@@ -120,7 +120,7 @@ public final class BlockManager {
 
 			// if location is not in return set and is a road block material and is not too far from start...
 			if (!returnSet.contains(loc) && roadBlockMaterials.contains(loc.getBlock().getType())
-					&& loc.distanceSquared(startLocation) < Math.pow(Config.SPREAD_DISTANCE.getInt(), 2)) {
+					&& loc.distanceSquared(startLocation) < Math.pow(Config.SPREAD_DISTANCE.getInt(plugin), 2)) {
 
 				// add location to return set
 				returnSet.add(loc);
@@ -160,7 +160,7 @@ public final class BlockManager {
 		}
 
 		// get configured height above road
-		final int distance = Config.ON_ROAD_HEIGHT.getInt();
+		final int distance = Config.ON_ROAD_HEIGHT.getInt(plugin);
 
 		// if distance is less than one, return false
 		if (distance < 1) {
@@ -298,7 +298,7 @@ public final class BlockManager {
 	public void updateMaterials() {
 
 		final Collection<String> materialStringList =
-				new HashSet<>(Config.MATERIALS.getStringList());
+				new HashSet<>(Config.MATERIALS.getStringList(plugin));
 
 		final HashSet<Material> returnSet = new HashSet<>();
 
