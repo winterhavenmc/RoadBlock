@@ -51,7 +51,7 @@ public enum Config {
 	 * Class constructor for Enum members
 	 * @param defaultValue {@code String} default value referenced by corresponding key as found in config.yml file
 	 */
-	Config(String defaultValue) {
+	Config(final String defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 
@@ -76,7 +76,7 @@ public enum Config {
 	 * @param plugin {@code JavaPlugin} reference to the plugin instance
 	 * @return {@code boolean} the referenced value in the current configuration
 	 */
-	public boolean getBoolean(JavaPlugin plugin) {
+	public boolean getBoolean(final JavaPlugin plugin) {
 		return plugin.getConfig().getBoolean(getKey());
 	}
 
