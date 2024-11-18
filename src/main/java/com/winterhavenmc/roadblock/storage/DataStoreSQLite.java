@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.roadblock.storage;
 
-import com.winterhavenmc.roadblock.util.DefaultConfig;
+import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -195,7 +195,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			plugin.getLogger().warning(e.getMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
+			if (Config.DEBUG.getBoolean()) {
 				e.printStackTrace();
 			}
 		}
@@ -270,7 +270,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			blockCache.put(blockRecord, CacheStatus.PENDING_INSERT);
 			count++;
 		}
-		if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
+		if (Config.DEBUG.getBoolean()) {
 			plugin.getLogger().info(count + " blocks marked PENDING_INSERT in cache.");
 		}
 
@@ -331,7 +331,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 							plugin.getLogger().warning(e.getLocalizedMessage());
 
 							// if debugging is enabled, output stack trace
-							if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
+							if (Config.DEBUG.getBoolean()) {
 								e.printStackTrace();
 							}
 							continue;
@@ -349,13 +349,13 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
 					// if debugging is enabled, output stack trace
-					if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
+					if (Config.DEBUG.getBoolean()) {
 						e.printStackTrace();
 					}
 				}
 
 				long elapsedTime = (System.nanoTime() - startTime);
-				if (plugin.getConfig().getBoolean(DefaultConfig.PROFILE.getKey())) {
+				if (Config.PROFILE.getBoolean()) {
 					if (count > 0) {
 						plugin.getLogger().info(count + " blocks inserted into " + this + " datastore in "
 								+ TimeUnit.NANOSECONDS.toMillis(elapsedTime) + " milliseconds.");
@@ -381,7 +381,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			blockCache.put(blockRecord, CacheStatus.PENDING_DELETE);
 			count++;
 		}
-		if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
+		if (Config.DEBUG.getBoolean()) {
 			plugin.getLogger().info(count + " blocks marked PENDING_DELETE in cache.");
 		}
 
@@ -431,7 +431,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 							plugin.getLogger().warning(e.getLocalizedMessage());
 
 							// if debugging is enabled, output stack trace
-							if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
+							if (Config.DEBUG.getBoolean()) {
 								e.printStackTrace();
 							}
 						}
@@ -448,13 +448,13 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
 					// if debugging is enabled, output stack trace
-					if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
+					if (Config.DEBUG.getBoolean()) {
 						e.printStackTrace();
 					}
 				}
 
 				long elapsedTime = (System.nanoTime() - startTime);
-				if (plugin.getConfig().getBoolean(DefaultConfig.PROFILE.getKey())) {
+				if (Config.PROFILE.getBoolean()) {
 					if (count > 0) {
 						plugin.getLogger().info(count + " blocks removed from " + this + " datastore in "
 								+ TimeUnit.NANOSECONDS.toMillis(elapsedTime) + " milliseconds.");
@@ -530,7 +530,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
+			if (Config.DEBUG.getBoolean()) {
 				e.printStackTrace();
 			}
 		}
@@ -605,7 +605,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				count++;
 			}
 
-			if (plugin.getConfig().getBoolean(DefaultConfig.PROFILE.getKey())) {
+			if (Config.PROFILE.getBoolean()) {
 				plugin.getLogger().info("Fetched " + count + " blocks in chunk in "
 						+ TimeUnit.NANOSECONDS.toMicros(elapsedTime) + " microseconds.");
 			}
@@ -618,7 +618,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
+			if (Config.DEBUG.getBoolean()) {
 				e.printStackTrace();
 			}
 		}
@@ -687,7 +687,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
+			if (Config.DEBUG.getBoolean()) {
 				e.printStackTrace();
 			}
 		}
@@ -714,7 +714,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 		chunkCache.add(chunk.getBlock(0, 0, 0).getLocation());
 
-		if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
+		if (Config.DEBUG.getBoolean()) {
 			if (count > 0) {
 				plugin.getLogger().info(count + " blocks added to cache.");
 			}
@@ -744,7 +744,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 		chunkCache.remove(chunk.getBlock(0, 0, 0).getLocation());
 
 		long elapsedTime = (System.nanoTime() - startTime);
-		if (plugin.getConfig().getBoolean(DefaultConfig.PROFILE.getKey())) {
+		if (Config.PROFILE.getBoolean()) {
 			if (count > 0) {
 				plugin.getLogger().info(count + " blocks removed from cache in "
 						+ TimeUnit.NANOSECONDS.toMicros(elapsedTime) + " microseconds.");
@@ -764,7 +764,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 		final Location chunkLoc = location.getChunk().getBlock(0, 0, 0).getLocation();
 
 		if (chunkCache.contains(chunkLoc)) {
-			if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
+			if (Config.DEBUG.getBoolean()) {
 				plugin.getLogger().info("Chunk is cached.");
 			}
 			return true;
@@ -798,7 +798,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
+			if (Config.DEBUG.getBoolean()) {
 				e.printStackTrace();
 			}
 		}

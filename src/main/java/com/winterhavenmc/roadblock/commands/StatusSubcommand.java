@@ -21,7 +21,7 @@ import com.winterhavenmc.roadblock.PluginMain;
 import com.winterhavenmc.roadblock.sounds.SoundId;
 
 import com.winterhavenmc.roadblock.messages.MessageId;
-import com.winterhavenmc.roadblock.util.DefaultConfig;
+import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -88,21 +88,21 @@ final class StatusSubcommand extends AbstrtactSubcommand {
 
 
 	private void displayDebugSetting(final CommandSender sender) {
-		if (plugin.getConfig().getBoolean(DefaultConfig.DEBUG.getKey())) {
+		if (Config.DEBUG.getBoolean()) {
 			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: true");
 		}
 	}
 
 
 	private void displayProfileSetting(final CommandSender sender) {
-		if (plugin.getConfig().getBoolean(DefaultConfig.PROFILE.getKey())) {
+		if (Config.PROFILE.getBoolean()) {
 			sender.sendMessage(ChatColor.DARK_RED + "PROFILE: true");
 		}
 	}
 
 
 	private void displayTotalBlocksProtected(final CommandSender sender) {
-		if (plugin.getConfig().getBoolean(DefaultConfig.DISPLAY_TOTAL.getKey())) {
+		if (Config.DISPLAY_TOTAL.getBoolean()) {
 			sender.sendMessage(ChatColor.GREEN + "Total blocks protected: "
 					+ ChatColor.RESET + plugin.blockManager.getBlockTotal() + " blocks");
 		}
@@ -111,43 +111,43 @@ final class StatusSubcommand extends AbstrtactSubcommand {
 
 	private void displaySpreadDistanceSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Spread distance: "
-				+ ChatColor.RESET + plugin.getConfig().getInt(DefaultConfig.SPREAD_DISTANCE.getKey()) + " blocks");
+				+ ChatColor.RESET + Config.SPREAD_DISTANCE.getInt() + " blocks");
 	}
 
 
 	private void displayShowDistanceSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Show distance: "
-				+ ChatColor.RESET + plugin.getConfig().getInt(DefaultConfig.SHOW_DISTANCE.getKey()) + " blocks");
+				+ ChatColor.RESET + Config.SHOW_DISTANCE.getInt() + " blocks");
 	}
 
 
 	private void displayNoPlaceHeightSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "No place height: "
-				+ ChatColor.RESET + plugin.getConfig().getInt(DefaultConfig.NO_PLACE_HEIGHT.getKey()) + " blocks");
+				+ ChatColor.RESET + Config.NO_PLACE_HEIGHT.getInt() + " blocks");
 	}
 
 
 	private void displayPlayerOnRoadHeightSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Player on road height: "
-				+ ChatColor.RESET + plugin.getConfig().getInt(DefaultConfig.ON_ROAD_HEIGHT.getKey()) + " blocks");
+				+ ChatColor.RESET + Config.ON_ROAD_HEIGHT.getInt() + " blocks");
 	}
 
 
 	private void displayMobTargetDistanceSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Mob targeting distance: "
-				+ ChatColor.RESET + plugin.getConfig().getInt(DefaultConfig.TARGET_DISTANCE.getKey()) + " blocks");
+				+ ChatColor.RESET + Config.TARGET_DISTANCE.getInt() + " blocks");
 	}
 
 
 	private void displaySnowPlowSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Snow plow: "
-				+ ChatColor.RESET + plugin.getConfig().getString(DefaultConfig.SNOW_PLOW.getKey()));
+				+ ChatColor.RESET + Config.SNOW_PLOW.getString());
 	}
 
 
 	private void displaySpeedBoostSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Speed boost: "
-				+ ChatColor.RESET + plugin.getConfig().getString(DefaultConfig.SPEED_BOOST.getKey()));
+				+ ChatColor.RESET + Config.SPEED_BOOST.getString());
 	}
 
 

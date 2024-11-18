@@ -23,7 +23,7 @@ import com.winterhavenmc.roadblock.messages.Macro;
 import com.winterhavenmc.roadblock.messages.MessageId;
 import com.winterhavenmc.roadblock.sounds.SoundId;
 
-import com.winterhavenmc.roadblock.util.DefaultConfig;
+import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -82,7 +82,7 @@ final class ShowSubcommand extends AbstrtactSubcommand {
 		}
 
 		// get show distance from config
-		int distance = plugin.getConfig().getInt(DefaultConfig.SHOW_DISTANCE.getKey());
+		int distance = Config.SHOW_DISTANCE.getInt();
 
 		// if argument passed, try to parse string to int
 		if (argsList.size() == 1) {
@@ -110,7 +110,7 @@ final class ShowSubcommand extends AbstrtactSubcommand {
 		plugin.messageBuilder.build(player, MessageId.COMMAND_SUCCESS_SHOW).setMacro(Macro.QUANTITY, locations.size()).send();
 
 		// if any blocks highlighted, play sound
-		if (locations.size() > 0) {
+		if (!locations.isEmpty()) {
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_SHOW);
 		}
 

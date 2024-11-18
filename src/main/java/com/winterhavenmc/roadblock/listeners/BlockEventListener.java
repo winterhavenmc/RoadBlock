@@ -21,7 +21,7 @@ import com.winterhavenmc.roadblock.PluginMain;
 import com.winterhavenmc.roadblock.messages.MessageId;
 import com.winterhavenmc.roadblock.sounds.SoundId;
 
-import com.winterhavenmc.roadblock.util.DefaultConfig;
+import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -75,7 +75,7 @@ public final class BlockEventListener implements Listener {
 	void onBlockPlace(final BlockPlaceEvent event) {
 
 		// get configured no-place-height
-		final int height = plugin.getConfig().getInt(DefaultConfig.NO_PLACE_HEIGHT.getKey());
+		final int height = Config.NO_PLACE_HEIGHT.getInt();
 
 		// get block placed
 		final Block placedBlock = event.getBlockPlaced();
@@ -111,7 +111,7 @@ public final class BlockEventListener implements Listener {
 	void onBlockMultiPlace(final BlockMultiPlaceEvent event) {
 
 		// get configured no-place-height
-		final int height = plugin.getConfig().getInt(DefaultConfig.NO_PLACE_HEIGHT.getKey());
+		final int height = Config.NO_PLACE_HEIGHT.getInt();
 
 		// get list of blocks that will be replaced
 		final List<BlockState> replacedBlocks = event.getReplacedBlockStates();
@@ -248,7 +248,7 @@ public final class BlockEventListener implements Listener {
 	void onBlockForm(final BlockFormEvent event) {
 
 		// if configured false, do nothing and return
-		if (!plugin.getConfig().getBoolean(DefaultConfig.SNOW_PLOW.getKey())) {
+		if (!Config.SNOW_PLOW.getBoolean()) {
 			return;
 		}
 

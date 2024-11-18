@@ -3,7 +3,7 @@ package com.winterhavenmc.roadblock;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.roadblock.sounds.SoundId;
-import com.winterhavenmc.roadblock.util.DefaultConfig;
+import com.winterhavenmc.roadblock.util.Config;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -97,7 +97,7 @@ public class RoadBlockPluginTests {
 		final Set<String> enumConfigKeyStrings = new HashSet<>();
 
 		public ConfigTest() {
-			for (DefaultConfig configSetting : DefaultConfig.values()) {
+			for (Config configSetting : Config.values()) {
 				this.enumConfigKeyStrings.add(configSetting.getKey());
 			}
 		}
@@ -131,10 +131,10 @@ public class RoadBlockPluginTests {
 		}
 
 		@ParameterizedTest
-		@EnumSource(value = DefaultConfig.class, mode = EnumSource.Mode.EXCLUDE, names = {"DEBUG", "PROFILE"} )
+		@EnumSource(value = Config.class, mode = EnumSource.Mode.EXCLUDE, names = {"DEBUG", "PROFILE"} )
 		@DisplayName("ConfigSetting enum matches config file key/value pairs.")
-		void configFileKeysContainsEnumKey(DefaultConfig configSetting) {
-			Assertions.assertEquals(configSetting.getValue(), plugin.getConfig().getString(configSetting.getKey()),
+		void configFileKeysContainsEnumKey(Config configSetting) {
+			Assertions.assertEquals(configSetting.getDefaultValue(), plugin.getConfig().getString(configSetting.getKey()),
 					"ConfigSetting enum key '" + configSetting.getKey() + "' does not match config file key/value pair.");
 		}
 	}

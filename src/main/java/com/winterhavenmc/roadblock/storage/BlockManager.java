@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.roadblock.storage;
 
-import com.winterhavenmc.roadblock.util.DefaultConfig;
+import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -120,7 +120,7 @@ public final class BlockManager {
 
 			// if location is not in return set and is a road block material and is not too far from start...
 			if (!returnSet.contains(loc) && roadBlockMaterials.contains(loc.getBlock().getType())
-					&& loc.distanceSquared(startLocation) < Math.pow(plugin.getConfig().getInt(DefaultConfig.SPREAD_DISTANCE.getKey()), 2)) {
+					&& loc.distanceSquared(startLocation) < Math.pow(Config.SPREAD_DISTANCE.getInt(), 2)) {
 
 				// add location to return set
 				returnSet.add(loc);
@@ -160,7 +160,7 @@ public final class BlockManager {
 		}
 
 		// get configured height above road
-		final int distance = plugin.getConfig().getInt(DefaultConfig.ON_ROAD_HEIGHT.getKey());
+		final int distance = Config.ON_ROAD_HEIGHT.getInt();
 
 		// if distance is less than one, return false
 		if (distance < 1) {
@@ -298,7 +298,7 @@ public final class BlockManager {
 	public void updateMaterials() {
 
 		final Collection<String> materialStringList =
-				new HashSet<>(plugin.getConfig().getStringList(DefaultConfig.MATERIALS.getKey()));
+				new HashSet<>(Config.MATERIALS.getStringList());
 
 		final HashSet<Material> returnSet = new HashSet<>();
 

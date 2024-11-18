@@ -62,7 +62,7 @@ public final class RoadBlockTool {
 		Material material = null;
 
 		// get configured material
-		String materialString = plugin.getConfig().getString(DefaultConfig.TOOL_MATERIAL.getKey());
+		String materialString = Config.TOOL_MATERIAL.getString();
 		if (materialString != null) {
 			material = Material.matchMaterial(materialString);
 		}

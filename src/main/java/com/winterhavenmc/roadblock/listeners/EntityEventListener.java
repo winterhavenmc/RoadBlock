@@ -22,7 +22,7 @@ import com.winterhavenmc.roadblock.highlights.HighlightStyle;
 import com.winterhavenmc.roadblock.messages.Macro;
 import com.winterhavenmc.roadblock.messages.MessageId;
 import com.winterhavenmc.roadblock.sounds.SoundId;
-import com.winterhavenmc.roadblock.util.DefaultConfig;
+import com.winterhavenmc.roadblock.util.Config;
 import com.winterhavenmc.roadblock.util.RoadBlockTool;
 
 import org.bukkit.Location;
@@ -119,7 +119,7 @@ public class EntityEventListener implements Listener {
 	void onEntityTargetLivingEntity(final EntityTargetLivingEntityEvent event) {
 
 		// if configured target distance is zero or negative, do nothing and return (feature is disabled)
-		if (plugin.getConfig().getInt(DefaultConfig.TARGET_DISTANCE.getKey()) <= 0) {
+		if (Config.TARGET_DISTANCE.getInt() <= 0) {
 			return;
 		}
 
@@ -132,8 +132,7 @@ public class EntityEventListener implements Listener {
 				// if entity to target distance is less than configured target distance,
 				// do nothing and return, allowing player to be targeted
 				if (event.getEntity().getLocation()
-						.distanceSquared(player.getLocation()) < Math.pow(plugin
-						.getConfig().getInt(DefaultConfig.TARGET_DISTANCE.getKey()), 2)) {
+						.distanceSquared(player.getLocation()) < Math.pow(Config.TARGET_DISTANCE.getInt(), 2)) {
 					return;
 				}
 
@@ -300,7 +299,7 @@ public class EntityEventListener implements Listener {
 	final void onPlayerMove(final PlayerMoveEvent event) {
 
 		// if speed boost is configured false, do nothing and return
-		if (!plugin.getConfig().getBoolean(DefaultConfig.SPEED_BOOST.getKey())) {
+		if (!Config.SPEED_BOOST.getBoolean()) {
 			return;
 		}
 

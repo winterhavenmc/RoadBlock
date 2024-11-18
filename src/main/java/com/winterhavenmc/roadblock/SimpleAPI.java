@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.roadblock;
 
-import com.winterhavenmc.roadblock.util.DefaultConfig;
+import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -67,7 +67,7 @@ public final class SimpleAPI {
 	 * @return {@code true} if block is within configured no-place-height above a road block, else {@code false}
 	 */
 	public static boolean isAboveRoad(final Location location) {
-		return plugin.blockManager.isAboveRoad(location, plugin.getConfig().getInt(DefaultConfig.NO_PLACE_HEIGHT.getKey()));
+		return plugin.blockManager.isAboveRoad(location, Config.NO_PLACE_HEIGHT.getInt());
 	}
 
 
@@ -92,7 +92,7 @@ public final class SimpleAPI {
 	public static boolean canPlace(final Location location) {
 
 		// get configured no-place-height
-		int height = plugin.getConfig().getInt(DefaultConfig.NO_PLACE_HEIGHT.getKey());
+		int height = Config.NO_PLACE_HEIGHT.getInt();
 
 		// check location with configured no-place-height
 		return canPlace(location, height);
