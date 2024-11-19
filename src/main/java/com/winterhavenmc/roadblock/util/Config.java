@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
 public enum Config {
 	DEBUG(Boolean.FALSE),
 	PROFILE(Boolean.FALSE),
-	LANGUAGE("en-US"),
+	LANGUAGE(Locale.US.toLanguageTag()),
 	ENABLED_WORLDS(List.of()),
 	DISABLED_WORLDS(List.of("disabled_world1", "disabled_world2")),
 	TOOL_MATERIAL(Material.GOLDEN_PICKAXE),
@@ -45,48 +46,16 @@ public enum Config {
 			Material.MOSSY_STONE_BRICKS,
 			Material.MOSSY_STONE_BRICK_SLAB,
 			Material.MOSSY_STONE_BRICK_STAIRS
-		));
+	));
 
 	private final String defaultValue;
 
 
 	/**
 	 * Class constructor for Enum members
-	 * @param defaultValue {@code String} default value referenced by corresponding key as found in config.yml file
+	 * @param defaultValue {@code Object} default value referenced by corresponding key as found in config.yml file
 	 */
-	Config(final String defaultValue) {
-		this.defaultValue = defaultValue;
-	}
-
-	/**
-	 * Class constructor for Enum members
-	 * @param defaultValue {@code String} default value referenced by corresponding key as found in config.yml file
-	 */
-	Config(final Boolean defaultValue) {
-		this.defaultValue = defaultValue.toString();
-	}
-
-	/**
-	 * Class constructor for Enum members
-	 * @param defaultValue {@code String} default value referenced by corresponding key as found in config.yml file
-	 */
-	Config(final Integer defaultValue) {
-		this.defaultValue = defaultValue.toString();
-	}
-
-	/**
-	 * Class constructor for Enum members
-	 * @param defaultValue {@code String} default value referenced by corresponding key as found in config.yml file
-	 */
-	Config(final Material defaultValue) {
-		this.defaultValue = defaultValue.toString();
-	}
-
-	/**
-	 * Class constructor for Enum members
-	 * @param defaultValue {@code String} default value referenced by corresponding key as found in config.yml file
-	 */
-	Config(final List<?> defaultValue) {
+	<T>Config(final T defaultValue) {
 		this.defaultValue = defaultValue.toString();
 	}
 
