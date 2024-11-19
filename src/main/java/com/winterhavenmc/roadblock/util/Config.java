@@ -45,7 +45,7 @@ public enum Config {
 			Material.MOSSY_STONE_BRICKS,
 			Material.MOSSY_STONE_BRICK_SLAB,
 			Material.MOSSY_STONE_BRICK_STAIRS
-		).toString());
+		));
 
 	private final String defaultValue;
 
