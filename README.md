@@ -1,3 +1,5 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9cc37fae1da64772b1f2bafef3b5663b)](https://app.codacy.com/gh/winterhavenmc/RoadBlock/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 ### RoadBlock
 This plugin allows you to protect roads you create on your server from being broken by players. Each individual block that your road is made of is marked as protected, so your roads can twist and turn and meander through the landscape, and still be protected from breakage. Selecting blocks from protection (or de-protection) is simple and efficient. Simply give yourself the custom tool via command, then right or left click to protect or unprotect blocks of the configured materials.
 
