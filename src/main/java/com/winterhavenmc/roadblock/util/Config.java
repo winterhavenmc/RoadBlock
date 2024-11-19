@@ -3,7 +3,6 @@ package com.winterhavenmc.roadblock.util;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -13,25 +12,25 @@ import java.util.List;
  * Parameter values are used solely for testing validity of default config.yml file.
  */
 public enum Config {
-	DEBUG(Boolean.FALSE.toString()),
-	PROFILE(Boolean.FALSE.toString()),
+	DEBUG(Boolean.FALSE),
+	PROFILE(Boolean.FALSE),
 	LANGUAGE("en-US"),
-	ENABLED_WORLDS(Arrays.toString(new String[]{})),
-	DISABLED_WORLDS(Arrays.toString(new String[]{"disabled_world1", "disabled_world2"})),
-	TOOL_MATERIAL(Material.GOLDEN_PICKAXE.name()),
-	PROTECT_MATERIAL(Material.EMERALD_BLOCK.name()),
-	UNPROTECT_MATERIAL(Material.REDSTONE_BLOCK.name()),
-	DISPLAY_TOTAL(Boolean.TRUE.toString()),
-	SPREAD_DISTANCE("100"),
-	SHOW_DISTANCE("100"),
-	NO_PLACE_HEIGHT("3"),
-	TARGET_DISTANCE("5"),
-	ON_ROAD_HEIGHT("6"),
-	SNOW_PLOW(Boolean.TRUE.toString()),
-	SOUND_EFFECTS(Boolean.TRUE.toString()),
-	SPEED_BOOST(Boolean.TRUE.toString()),
-	TITLES_ENABLED(Boolean.TRUE.toString()),
-	MATERIALS(Arrays.toString(List.of(
+	ENABLED_WORLDS(List.of()),
+	DISABLED_WORLDS(List.of("disabled_world1", "disabled_world2")),
+	TOOL_MATERIAL(Material.GOLDEN_PICKAXE),
+	PROTECT_MATERIAL(Material.EMERALD_BLOCK),
+	UNPROTECT_MATERIAL(Material.REDSTONE_BLOCK),
+	DISPLAY_TOTAL(Boolean.TRUE),
+	SPREAD_DISTANCE(100),
+	SHOW_DISTANCE(100),
+	NO_PLACE_HEIGHT(3),
+	TARGET_DISTANCE(5),
+	ON_ROAD_HEIGHT(6),
+	SNOW_PLOW(Boolean.TRUE),
+	SOUND_EFFECTS(Boolean.TRUE),
+	SPEED_BOOST(Boolean.TRUE),
+	TITLES_ENABLED(Boolean.TRUE),
+	MATERIALS(List.of(
 			Material.DIRT_PATH,
 			Material.COBBLESTONE,
 			Material.COBBLESTONE_SLAB,
@@ -46,7 +45,7 @@ public enum Config {
 			Material.MOSSY_STONE_BRICKS,
 			Material.MOSSY_STONE_BRICK_SLAB,
 			Material.MOSSY_STONE_BRICK_STAIRS
-		).toArray()));
+		).toString());
 
 	private final String defaultValue;
 
@@ -57,6 +56,38 @@ public enum Config {
 	 */
 	Config(final String defaultValue) {
 		this.defaultValue = defaultValue;
+	}
+
+	/**
+	 * Class constructor for Enum members
+	 * @param defaultValue {@code String} default value referenced by corresponding key as found in config.yml file
+	 */
+	Config(final Boolean defaultValue) {
+		this.defaultValue = defaultValue.toString();
+	}
+
+	/**
+	 * Class constructor for Enum members
+	 * @param defaultValue {@code String} default value referenced by corresponding key as found in config.yml file
+	 */
+	Config(final Integer defaultValue) {
+		this.defaultValue = defaultValue.toString();
+	}
+
+	/**
+	 * Class constructor for Enum members
+	 * @param defaultValue {@code String} default value referenced by corresponding key as found in config.yml file
+	 */
+	Config(final Material defaultValue) {
+		this.defaultValue = defaultValue.toString();
+	}
+
+	/**
+	 * Class constructor for Enum members
+	 * @param defaultValue {@code String} default value referenced by corresponding key as found in config.yml file
+	 */
+	Config(final List<?> defaultValue) {
+		this.defaultValue = defaultValue.toString();
 	}
 
 	/**
