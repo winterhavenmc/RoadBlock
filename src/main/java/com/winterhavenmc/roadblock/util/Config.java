@@ -123,16 +123,6 @@ public enum Config {
 	}
 
 	/**
-	 * Get value as Object for corresponding key in current configuration
-	 *
-	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
-	 * @return {@code Object} the referenced value in the current configuration instance
-	 */
-	public Object get(final Configuration configuration) {
-		return configuration.get(this.asFileKey());
-	}
-
-	/**
 	 * Get value as List of String for corresponding key in current configuration
 	 *
 	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
@@ -140,6 +130,16 @@ public enum Config {
 	 */
 	public List<String> getStringList(final Configuration configuration) {
 		return configuration.getStringList(this.asFileKey());
+	}
+
+	/**
+	 * Get value as Object for corresponding key in current configuration
+	 *
+	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
+	 * @return {@code Object} the referenced value in the current configuration instance
+	 */
+	public Object get(final Configuration configuration) {
+		return configuration.get(this.asFileKey());
 	}
 
 }
