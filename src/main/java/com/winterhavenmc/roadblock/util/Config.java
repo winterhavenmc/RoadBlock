@@ -76,8 +76,8 @@ public enum Config {
 	}
 
 	/**
-	 * Convert Enum member name to upper kebab case (used for testing)
-	 * @return {@code String} the Enum member name as lower kebab case
+	 * Convert Enum member name to upper snake case (used for testing)
+	 * @return {@code String} the Enum member name converted to upper snake case
 	 */
 	public String toUpperSnakeCase() {
 		return this.name().toUpperCase().replace('-', '_');
