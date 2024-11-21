@@ -131,6 +131,14 @@ public class RoadBlockPluginTests {
 					"file config key is not contained in Config enum.");
 		}
 
+		@ParameterizedTest
+		@EnumSource(Config.class)
+		@DisplayName("Checking Enum members conform to Java constant naming convention (upper snake case).")
+		void configEnumStringNamingConvention(Config config) {
+			Assertions.assertEquals(config.name(), config.name().toUpperCase().replace('-', '_'),
+					"Enum member name does not conform to Java constant naming convention (upper snake case).");
+		}
+
 		/**
 		 * Test that Config enum members exist as keys in default config.yml.
 		 * Note: Add any config settings that do not exist in default config.yml file to EXCLUDED names
