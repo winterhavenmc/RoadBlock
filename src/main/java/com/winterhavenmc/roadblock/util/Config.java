@@ -76,6 +76,14 @@ public enum Config {
 	}
 
 	/**
+	 * Convert Enum member name to upper kebab case (used for testing)
+	 * @return {@code String} the Enum member name as lower kebab case
+	 */
+	public String toUpperSnakeCase() {
+		return this.name().toUpperCase().replace('-', '_');
+	}
+
+	/**
 	 * Get default value for key, matching exactly the corresponding string in the default config.yml file
 	 * @return {@code String} the value for the corresponding key
 	 */

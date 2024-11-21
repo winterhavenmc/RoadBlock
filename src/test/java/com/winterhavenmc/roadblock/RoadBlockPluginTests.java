@@ -135,7 +135,7 @@ public class RoadBlockPluginTests {
 		@EnumSource(Config.class)
 		@DisplayName("Checking Enum members conform to Java constant naming convention (upper snake case).")
 		void configEnumStringNamingConvention(Config config) {
-			Assertions.assertEquals(config.name(), config.name().toUpperCase().replace('-', '_'),
+			Assertions.assertEquals(config.name(), config.toUpperSnakeCase(),
 					"Enum member name does not conform to Java constant naming convention (upper snake case).");
 		}
 
