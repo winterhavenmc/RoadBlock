@@ -88,21 +88,21 @@ final class StatusSubcommand extends AbstrtactSubcommand {
 
 
 	private void displayDebugSetting(final CommandSender sender) {
-		if (Config.DEBUG.getBoolean(plugin)) {
-			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: " + Config.DEBUG.getBoolean(plugin));
+		if (Config.DEBUG.getBoolean(plugin.getConfig())) {
+			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: " + Config.DEBUG.getBoolean(plugin.getConfig()));
 		}
 	}
 
 
 	private void displayProfileSetting(final CommandSender sender) {
-		if (Config.PROFILE.getBoolean(plugin)) {
-			sender.sendMessage(ChatColor.DARK_RED + "PROFILE: " + Config.PROFILE.getBoolean(plugin));
+		if (Config.PROFILE.getBoolean(plugin.getConfig())) {
+			sender.sendMessage(ChatColor.DARK_RED + "PROFILE: " + Config.PROFILE.getBoolean(plugin.getConfig()));
 		}
 	}
 
 
 	private void displayTotalBlocksProtected(final CommandSender sender) {
-		if (Config.DISPLAY_TOTAL.getBoolean(plugin)) {
+		if (Config.DISPLAY_TOTAL.getBoolean(plugin.getConfig())) {
 			sender.sendMessage(ChatColor.GREEN + "Total blocks protected: "
 					+ ChatColor.RESET + plugin.blockManager.getBlockTotal() + " blocks");
 		}
@@ -111,43 +111,43 @@ final class StatusSubcommand extends AbstrtactSubcommand {
 
 	private void displaySpreadDistanceSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Spread distance: "
-				+ ChatColor.RESET + Config.SPREAD_DISTANCE.getInt(plugin) + " blocks");
+				+  ChatColor.RESET + Config.SPREAD_DISTANCE.getInt(plugin.getConfig()) + " blocks");
 	}
 
 
 	private void displayShowDistanceSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Show distance: "
-				+ ChatColor.RESET + Config.SHOW_DISTANCE.getInt(plugin) + " blocks");
+				+ ChatColor.RESET + Config.SHOW_DISTANCE.getInt(plugin.getConfig()) + " blocks");
 	}
 
 
 	private void displayNoPlaceHeightSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "No place height: "
-				+ ChatColor.RESET + Config.NO_PLACE_HEIGHT.getInt(plugin) + " blocks");
+				+ ChatColor.RESET + Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig()) + " blocks");
 	}
 
 
 	private void displayPlayerOnRoadHeightSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Player on road height: "
-				+ ChatColor.RESET + Config.ON_ROAD_HEIGHT.getInt(plugin) + " blocks");
+				+ ChatColor.RESET + Config.ON_ROAD_HEIGHT.getInt(plugin.getConfig()) + " blocks");
 	}
 
 
 	private void displayMobTargetDistanceSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Mob targeting distance: "
-				+ ChatColor.RESET + Config.TARGET_DISTANCE.getInt(plugin) + " blocks");
+				+ ChatColor.RESET + Config.TARGET_DISTANCE.getInt(plugin.getConfig()) + " blocks");
 	}
 
 
 	private void displaySnowPlowSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Snow plow: "
-				+ ChatColor.RESET + Config.SNOW_PLOW.getBoolean(plugin));
+				+ ChatColor.RESET + Config.SNOW_PLOW.getBoolean(plugin.getConfig()));
 	}
 
 
 	private void displaySpeedBoostSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Speed boost: "
-				+ ChatColor.RESET + Config.SPEED_BOOST.getBoolean(plugin));
+				+ ChatColor.RESET + Config.SPEED_BOOST.getBoolean(plugin.getConfig()));
 	}
 
 

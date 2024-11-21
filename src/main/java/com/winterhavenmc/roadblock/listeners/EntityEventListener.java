@@ -119,7 +119,7 @@ public class EntityEventListener implements Listener {
 	void onEntityTargetLivingEntity(final EntityTargetLivingEntityEvent event) {
 
 		// if configured target distance is zero or negative, do nothing and return (feature is disabled)
-		if (Config.TARGET_DISTANCE.getInt(plugin) <= 0) {
+		if (Config.TARGET_DISTANCE.getInt(plugin.getConfig()) <= 0) {
 			return;
 		}
 
@@ -132,7 +132,7 @@ public class EntityEventListener implements Listener {
 				// if entity to target distance is less than configured target distance,
 				// do nothing and return, allowing player to be targeted
 				if (event.getEntity().getLocation()
-						.distanceSquared(player.getLocation()) < Math.pow(Config.TARGET_DISTANCE.getInt(plugin), 2)) {
+						.distanceSquared(player.getLocation()) < Math.pow(Config.TARGET_DISTANCE.getInt(plugin.getConfig()), 2)) {
 					return;
 				}
 
@@ -299,7 +299,7 @@ public class EntityEventListener implements Listener {
 	final void onPlayerMove(final PlayerMoveEvent event) {
 
 		// if speed boost is configured false, do nothing and return
-		if (!Config.SPEED_BOOST.getBoolean(plugin)) {
+		if (!Config.SPEED_BOOST.getBoolean(plugin.getConfig())) {
 			return;
 		}
 

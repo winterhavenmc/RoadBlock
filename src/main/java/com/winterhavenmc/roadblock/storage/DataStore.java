@@ -91,7 +91,7 @@ interface DataStore {
 		catch (Exception e) {
 			plugin.getLogger().severe("Could not initialize " + newDataStore + " datastore!");
 			plugin.getLogger().severe(e.getLocalizedMessage());
-			if (Config.DEBUG.getBoolean(plugin)) {
+			if (Config.DEBUG.getBoolean(plugin.getConfig())) {
 				e.printStackTrace();
 			}
 		}

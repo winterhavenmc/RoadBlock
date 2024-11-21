@@ -67,7 +67,7 @@ public final class SimpleAPI {
 	 * @return {@code true} if block is within configured no-place-height above a road block, else {@code false}
 	 */
 	public static boolean isAboveRoad(final Location location) {
-		return plugin.blockManager.isAboveRoad(location, Config.NO_PLACE_HEIGHT.getInt(plugin));
+		return plugin.blockManager.isAboveRoad(location, Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig()));
 	}
 
 
@@ -92,7 +92,7 @@ public final class SimpleAPI {
 	public static boolean canPlace(final Location location) {
 
 		// get configured no-place-height
-		int height = Config.NO_PLACE_HEIGHT.getInt(plugin);
+		int height = Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig());
 
 		// check location with configured no-place-height
 		return canPlace(location, height);

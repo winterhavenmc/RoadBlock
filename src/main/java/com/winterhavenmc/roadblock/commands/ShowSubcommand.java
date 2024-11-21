@@ -82,7 +82,7 @@ final class ShowSubcommand extends AbstrtactSubcommand {
 		}
 
 		// get show distance from config
-		int distance = Config.SHOW_DISTANCE.getInt(plugin);
+		int distance = Config.SHOW_DISTANCE.getInt(plugin.getConfig());
 
 		// if argument passed, try to parse string to int
 		if (argsList.size() == 1) {

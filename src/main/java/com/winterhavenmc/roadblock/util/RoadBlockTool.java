@@ -58,14 +58,8 @@ public final class RoadBlockTool {
 	 */
 	public static ItemStack create() {
 
-		// initialize material
-		Material material = null;
-
 		// get configured material
-		String materialString = Config.TOOL_MATERIAL.getString(plugin);
-		if (materialString != null) {
-			material = Material.matchMaterial(materialString);
-		}
+		Material material = Material.matchMaterial(Config.TOOL_MATERIAL.getString(plugin.getConfig()));
 
 		// if no matching material found, use default material
 		if (material == null) {

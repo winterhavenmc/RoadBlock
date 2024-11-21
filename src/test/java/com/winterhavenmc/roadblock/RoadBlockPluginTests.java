@@ -2,6 +2,7 @@ package com.winterhavenmc.roadblock;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
+
 import com.winterhavenmc.roadblock.sounds.SoundId;
 import com.winterhavenmc.roadblock.util.Config;
 import org.junit.jupiter.api.*;
@@ -97,8 +98,8 @@ public class RoadBlockPluginTests {
 		final Set<String> enumConfigKeyStrings = new HashSet<>();
 
 		public ConfigTest() {
-			for (Config configSetting : Config.values()) {
-				this.enumConfigKeyStrings.add(configSetting.getKey());
+			for (Config config : Config.values()) {
+				this.enumConfigKeyStrings.add(config.asFileKey());
 			}
 		}
 
@@ -122,20 +123,25 @@ public class RoadBlockPluginTests {
 		}
 
 		@ParameterizedTest
-		@DisplayName("file config key is contained in ConfigSetting enum.")
+		@DisplayName("file config key is contained in Config enum.")
 		@MethodSource("configFileKeys")
 		void configFileKeyNotNull(String key) {
 			Assertions.assertNotNull(key);
 			Assertions.assertTrue(enumConfigKeyStrings.contains(key),
-					"file config key is not contained in ConfigSetting enum.");
+					"file config key is not contained in Config enum.");
 		}
 
+		/**
+		 * Test that Config enum members exist as keys in default config.yml.
+		 * Note: Add any config settings that do not exist in default config.yml file to EXCLUDED names
+		 * @param configSetting Config enum member
+		 */
 		@ParameterizedTest
 		@EnumSource(value = Config.class, mode = EnumSource.Mode.EXCLUDE, names = {"DEBUG", "PROFILE"} )
 		@DisplayName("ConfigSetting enum matches config file key/value pairs.")
 		void configFileKeysContainsEnumKey(Config configSetting) {
-			Assertions.assertEquals(configSetting.getDefaultValue(), plugin.getConfig().getString(configSetting.getKey()),
-					"ConfigSetting enum key '" + configSetting.getKey() + "' does not match config file key/value pair.");
+			Assertions.assertEquals(configSetting.getDefaultString(), plugin.getConfig().getString(configSetting.asFileKey()),
+					"ConfigSetting enum key '" + configSetting.asFileKey() + "' does not match config file key/value pair.");
 		}
 	}
 

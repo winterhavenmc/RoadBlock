@@ -1,7 +1,7 @@
 package com.winterhavenmc.roadblock.util;
 
 import org.bukkit.Material;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.configuration.Configuration;
 
 import java.util.List;
 import java.util.Locale;
@@ -13,6 +13,7 @@ import java.util.Locale;
  * Parameter values are used solely for testing validity of default config.yml file.
  */
 public enum Config {
+
 	DEBUG(Boolean.FALSE),
 	PROFILE(Boolean.FALSE),
 	LANGUAGE(Locale.US.toLanguageTag()),
@@ -48,67 +49,22 @@ public enum Config {
 			Material.MOSSY_STONE_BRICK_STAIRS
 	));
 
-	private final String defaultValue;
-
+	private final Object defaultObject;
 
 	/**
 	 * Class constructor for Enum members
 	 * @param defaultValue {@code Object} default value referenced by corresponding key as found in config.yml file
 	 */
-	<T>Config(final T defaultValue) {
-		this.defaultValue = defaultValue.toString();
+	Config(final Object defaultValue) {
+		this.defaultObject = defaultValue;
 	}
 
 	/**
 	 * Get corresponding key for Enum member, formatted for style used in config.yml file
 	 * @return {@code String} the key as formatted in config.yml file
 	 */
-	public String getKey() {
+	public String asFileKey() {
 		return this.toLowerKebabCase();
-	}
-
-	/**
-	 * Get default value for key, matching exactly the corresponding string in the default config.yml file
-	 * @return {@code String} the value for the corresponding key
-	 */
-	public String getDefaultValue() {
-		return this.defaultValue;
-	}
-
-	/**
-	 * Get value as boolean for corresponding key in current configuration
-	 * @param plugin {@code JavaPlugin} reference to the plugin instance
-	 * @return {@code boolean} the referenced value in the current configuration
-	 */
-	public boolean getBoolean(final JavaPlugin plugin) {
-		return plugin.getConfig().getBoolean(getKey());
-	}
-
-	/**
-	 * Get value as int for corresponding key in current configuration
-	 * @param plugin {@code JavaPlugin} reference to the plugin instance
-	 * @return {@code int} the referenced value in the current configuration
-	 */
-	public int getInt(final JavaPlugin plugin) {
-		return plugin.getConfig().getInt(getKey());
-	}
-
-	/**
-	 * Get value as String for corresponding key in current configuration
-	 * @param plugin {@code JavaPlugin} reference to the plugin instance
-	 * @return {@code String} the referenced value in the current configuration
-	 */
-	public String getString(final JavaPlugin plugin) {
-		return plugin.getConfig().getString(getKey());
-	}
-
-	/**
-	 * Get value as List of String for corresponding key in current configuration
-	 * @param plugin {@code JavaPlugin} reference to the plugin instance
-	 * @return {@code List<String>} the referenced value in the current configuration
-	 */
-	public List<String> getStringList(final JavaPlugin plugin) {
-		return plugin.getConfig().getStringList(getKey());
 	}
 
 	/**
@@ -117,6 +73,73 @@ public enum Config {
 	 */
 	private String toLowerKebabCase() {
 		return this.name().toLowerCase().replace('_', '-');
+	}
+
+	/**
+	 * Get default value for key, matching exactly the corresponding string in the default config.yml file
+	 * @return {@code String} the value for the corresponding key
+	 */
+	public String getDefaultString() {
+		return this.defaultObject.toString();
+	}
+
+	/**
+	 * Get default object for key
+	 * @return {@code Object} the default object
+	 */
+	@SuppressWarnings("unused")
+	public Object getDefaultObject() {
+		return this.defaultObject;
+	}
+
+	/**
+	 * Get value as boolean for corresponding key in current configuration
+	 *
+	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
+	 * @return {@code boolean} the referenced value in the current configuration instance
+	 */
+	public boolean getBoolean(final Configuration configuration) {
+		return configuration.getBoolean(this.asFileKey());
+	}
+
+	/**
+	 * Get value as int for corresponding key in current configuration
+	 *
+	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
+	 * @return {@code int} the referenced value in the current configuration instance
+	 */
+	public int getInt(final Configuration configuration) {
+		return configuration.getInt(this.asFileKey());
+	}
+
+	/**
+	 * Get value as String for corresponding key in current configuration
+	 *
+	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
+	 * @return {@code String} the referenced value in the current configuration instance
+	 */
+	public String getString(final Configuration configuration) {
+		return configuration.getString(this.asFileKey());
+	}
+
+	/**
+	 * Get value as Object for corresponding key in current configuration
+	 *
+	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
+	 * @return {@code Object} the referenced value in the current configuration instance
+	 */
+	public Object get(final Configuration configuration) {
+		return configuration.get(this.asFileKey());
+	}
+
+	/**
+	 * Get value as List of String for corresponding key in current configuration
+	 *
+	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
+	 * @return {@code List<String>} the referenced value in the current configuration instance
+	 */
+	public List<String> getStringList(final Configuration configuration) {
+		return configuration.getStringList(this.asFileKey());
 	}
 
 }

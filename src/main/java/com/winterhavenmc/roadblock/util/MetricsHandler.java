@@ -17,7 +17,7 @@ public class MetricsHandler {
 		metrics.addCustomChart(new SingleLineChart("protected_blocks", () -> plugin.blockManager.getBlockTotal()));
 
 		// pie chart of configured language
-		metrics.addCustomChart(new SimplePie("language", () -> Config.LANGUAGE.getString(plugin)));
+		metrics.addCustomChart(new SimplePie("language", () -> Config.LANGUAGE.getString(plugin.getConfig())));
 	}
 
 }
