@@ -30,7 +30,7 @@ public enum DataStoreType {
 	SQLITE("SQLite", "roadblocks.db") {
 
 		@Override
-		public DataStore connect(final JavaPlugin plugin) {
+		DataStore connect(final JavaPlugin plugin) {
 
 			// create new sqlite datastore object
 			return new DataStoreSQLite(plugin);
@@ -72,7 +72,7 @@ public enum DataStoreType {
 	 *
 	 * @return instance of a DataStore
 	 */
-	public abstract DataStore connect(final JavaPlugin plugin);
+	abstract DataStore connect(final JavaPlugin plugin);
 
 	@Override
 	public final String toString() {
