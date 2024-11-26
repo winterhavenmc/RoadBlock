@@ -20,6 +20,7 @@ package com.winterhavenmc.roadblock.commands;
 import com.winterhavenmc.roadblock.PluginMain;
 import com.winterhavenmc.roadblock.sounds.SoundId;
 import com.winterhavenmc.roadblock.messages.MessageId;
+import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -71,7 +72,8 @@ final class ReloadSubcommand extends AbstrtactSubcommand {
 		plugin.saveDefaultConfig();
 
 		// reload config file
-		plugin.reloadConfig();
+//		plugin.reloadConfig();
+		Config.reload(plugin);
 
 		// update road block materials list
 		plugin.blockManager.reload();

@@ -26,7 +26,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
-import java.util.Objects;
 
 
 final class StatusSubcommand extends AbstrtactSubcommand {
@@ -35,7 +34,7 @@ final class StatusSubcommand extends AbstrtactSubcommand {
 
 
 	StatusSubcommand(final PluginMain plugin) {
-		this.plugin = Objects.requireNonNull(plugin);
+		this.plugin = plugin;
 		this.name = "status";
 		this.usageString = "/roadblock status";
 		this.description = MessageId.COMMAND_HELP_STATUS;

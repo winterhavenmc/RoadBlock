@@ -79,7 +79,7 @@ public final class BlockManager {
 		final DataStoreType currentType = dataStore.getType();
 
 		// get configured datastore type
-		final DataStoreType newType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
+		final DataStoreType newType = DataStoreType.match(Config.STORAGE_TYPE.getString(plugin.getConfig()));
 
 		// if current datastore type does not match configured datastore type, create new datastore
 		if (!currentType.equals(newType)) {
@@ -296,32 +296,7 @@ public final class BlockManager {
 	 * Parse valid road block materials from config file
 	 */
 	public void updateMaterials() {
-
-		final Collection<String> materialStringList =
-				new HashSet<>(Config.MATERIALS.getStringList(plugin.getConfig()));
-
-		final HashSet<Material> returnSet = new HashSet<>();
-
-		Material matchMaterial = null;
-
-		for (String string : materialStringList) {
-
-			// try to split on colon
-			if (!string.isEmpty()) {
-				String[] materialElements = string.split("\\s*:\\s*");
-
-				// try to match material
-				if (materialElements.length > 0) {
-					matchMaterial = Material.matchMaterial(materialElements[0]);
-				}
-			}
-
-			// if matching material found, add to returnSet
-			if (matchMaterial != null) {
-				returnSet.add(matchMaterial);
-			}
-		}
-		this.roadBlockMaterials = returnSet;
+		this.roadBlockMaterials = Config.MATERIALS.getMaterialSet(plugin.getConfig());
 	}
 
 

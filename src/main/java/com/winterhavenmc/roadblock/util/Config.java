@@ -1,10 +1,13 @@
 package com.winterhavenmc.roadblock.util;
 
+import com.winterhavenmc.roadblock.storage.DataStoreType;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+
+import static org.bukkit.Material.matchMaterial;
 
 
 /**
@@ -16,6 +19,7 @@ public enum Config {
 
 	DEBUG(Boolean.FALSE),
 	PROFILE(Boolean.FALSE),
+	STORAGE_TYPE(DataStoreType.SQLITE),
 	LANGUAGE(Locale.US.toLanguageTag()),
 	ENABLED_WORLDS(List.of()),
 	DISABLED_WORLDS(List.of("disabled_world1", "disabled_world2")),
@@ -50,6 +54,43 @@ public enum Config {
 	));
 
 	private final Object defaultObject;
+	private static Set<Material> materialSetCache;
+
+
+	/**
+	 * A nested Enum that provides routines to convert between key naming conventions. The members of
+	 * this Enum use upper snake case, because they are constants, while the yaml file uses
+	 * lower kebab case for the key naming convention.
+	 * <P>
+	 * There are overloaded methods providing for passing a String or an Enum member. All methods return {@code String}.
+	 * <p>
+	 * <i>examples:</i>
+	 * <p>
+	 * <pre>
+	 * {@code
+	 * String fileKey = Case.LOWER_KEBAB.convert(Config.SAFETY_TIME); // safety-time
+	 * String enumKey = Case.UPPER_SNAKE.convert(fileKey); // SAFETY_TIME }
+	 * </pre>
+	 */
+	public enum Case {
+		UPPER_SNAKE() {
+			public String convert(final String string) {
+				return string.toUpperCase().replace('-','_');
+			}
+		},
+		LOWER_KEBAB() {
+			public String convert(final String string) {
+				return string.toLowerCase().replace('_','-');
+			}
+		};
+
+		public abstract String convert(final String string);
+
+		String convert(final Config config) {
+			return convert(config.name());
+		}
+	}
+
 
 	/**
 	 * Class constructor for Enum members
@@ -71,8 +112,8 @@ public enum Config {
 	 * Convert Enum member name to lower kebab case
 	 * @return {@code String} the Enum member name as lower kebab case
 	 */
-	private String toLowerKebabCase() {
-		return this.name().toLowerCase().replace('_', '-');
+	public String toLowerKebabCase() {
+		return Case.LOWER_KEBAB.convert(this);
 	}
 
 	/**
@@ -80,7 +121,7 @@ public enum Config {
 	 * @return {@code String} the Enum member name converted to upper snake case
 	 */
 	public String toUpperSnakeCase() {
-		return this.name().toUpperCase().replace('-', '_');
+		return Case.UPPER_SNAKE.convert(this);
 	}
 
 	/**
@@ -95,14 +136,12 @@ public enum Config {
 	 * Get default object for key
 	 * @return {@code Object} the default object
 	 */
-	@SuppressWarnings("unused")
 	public Object getDefaultObject() {
 		return this.defaultObject;
 	}
 
 	/**
 	 * Get value as boolean for corresponding key in current configuration
-	 *
 	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
 	 * @return {@code boolean} the referenced value in the current configuration instance
 	 */
@@ -112,7 +151,6 @@ public enum Config {
 
 	/**
 	 * Get value as int for corresponding key in current configuration
-	 *
 	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
 	 * @return {@code int} the referenced value in the current configuration instance
 	 */
@@ -122,7 +160,6 @@ public enum Config {
 
 	/**
 	 * Get value as String for corresponding key in current configuration
-	 *
 	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
 	 * @return {@code String} the referenced value in the current configuration instance
 	 */
@@ -132,22 +169,64 @@ public enum Config {
 
 	/**
 	 * Get value as List of String for corresponding key in current configuration
-	 *
 	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
 	 * @return {@code List<String>} the referenced value in the current configuration instance
 	 */
+	@SuppressWarnings("unused")
 	public List<String> getStringList(final Configuration configuration) {
 		return configuration.getStringList(this.asFileKey());
 	}
 
 	/**
+	 * Get value as Set of Material for corresponding key in current configuration
+	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
+	 * @return {@code Set<Material>} a set of matching materials from a list of strings in the current configuration instance
+ 	 */
+	public Set<Material> getMaterialSet(final Configuration configuration) {
+
+		// if cached set is not null, return set as result
+		if (materialSetCache != null) {
+			return materialSetCache;
+		}
+
+		// initialize result set
+		Set<Material> resultSet = new HashSet<>();
+
+		// get list of material names from config
+		List<String> materialNameList = configuration.getStringList(this.asFileKey());
+
+		// validate materials in config list and add to result set
+		for (String materialName : materialNameList) {
+			if (matchMaterial(materialName) != null) {
+				resultSet.add(matchMaterial(materialName));
+			}
+		}
+
+		// cache result set and return as result
+		materialSetCache = resultSet;
+		return resultSet;
+	}
+
+	/**
 	 * Get value as Object for corresponding key in current configuration
-	 *
 	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
 	 * @return {@code Object} the referenced value in the current configuration instance
 	 */
 	public Object get(final Configuration configuration) {
 		return configuration.get(this.asFileKey());
+	}
+
+	public static void reload(final JavaPlugin plugin) {
+		// clear cache
+		materialSetCache = null;
+
+		// reload plugin config
+		plugin.reloadConfig();
+	}
+
+	// for testing
+	public static boolean materialCacheNull() {
+		return (materialSetCache == null);
 	}
 
 }

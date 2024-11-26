@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 
-enum DataStoreType {
+public enum DataStoreType {
 
 	SQLITE("SQLite", "roadblocks.db") {
 
