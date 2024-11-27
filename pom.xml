@@ -297,6 +297,45 @@
 					<trimStackTrace>false</trimStackTrace>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.jetbrains.kotlinx</groupId>
+				<artifactId>kover-maven-plugin</artifactId>
+				<version>0.8.3</version>
+				<executions>
+					<!-- instrument test tasks -->
+					<execution>
+						<id>instr</id>
+						<goals>
+							<goal>instrumentation</goal>
+						</goals>
+					</execution>
+
+					<!-- generate XML report in verify phase -->
+					<execution>
+						<id>kover-xml</id>
+						<goals>
+							<goal>report-xml</goal>
+						</goals>
+					</execution>
+
+					<!-- generate HTML report in verify phase -->
+					<execution>
+						<id>kover-html</id>
+						<goals>
+							<goal>report-html</goal>
+						</goals>
+					</execution>
+
+					<!-- check coverage rules in verify phase -->
+					<execution>
+						<id>kover-verify</id>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>
