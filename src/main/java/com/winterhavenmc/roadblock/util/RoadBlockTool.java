@@ -108,7 +108,7 @@ public final class RoadBlockTool {
 			return false;
 		}
 
-		// if item stack does not have meta data, return false
+		// if item stack does not have metadata, return false
 		if (!itemStack.hasItemMeta()) {
 			return false;
 		}
