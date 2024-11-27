@@ -1,0 +1,183 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > MessageId</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock.messages</a>
+</div>
+
+<h1>Coverage Summary for Class: MessageId (com.winterhavenmc.roadblock.messages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">MessageId</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (33/33)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (324/324)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock.messages;
+&nbsp;
+&nbsp;/**
+&nbsp; * Enum with entries for all player messages in language configuration files
+&nbsp; */
+<b class="fc">&nbsp;public enum MessageId {</b>
+&nbsp;
+<b class="fc">&nbsp;	COMMAND_HELP_INVALID,</b>
+<b class="fc">&nbsp;	COMMAND_HELP_HELP,</b>
+<b class="fc">&nbsp;	COMMAND_HELP_MATERIALS,</b>
+<b class="fc">&nbsp;	COMMAND_HELP_RELOAD,</b>
+<b class="fc">&nbsp;	COMMAND_HELP_SHOW,</b>
+<b class="fc">&nbsp;	COMMAND_HELP_STATUS,</b>
+<b class="fc">&nbsp;	COMMAND_HELP_TOOL,</b>
+<b class="fc">&nbsp;	COMMAND_HELP_USAGE_HEADER,</b>
+&nbsp;
+<b class="fc">&nbsp;	COMMAND_SUCCESS_RELOAD,</b>
+<b class="fc">&nbsp;	COMMAND_SUCCESS_SHOW,</b>
+&nbsp;
+<b class="fc">&nbsp;	COMMAND_FAIL_ARGS_COUNT_UNDER,</b>
+<b class="fc">&nbsp;	COMMAND_FAIL_ARGS_COUNT_OVER,</b>
+<b class="fc">&nbsp;	COMMAND_FAIL_CONSOLE,</b>
+<b class="fc">&nbsp;	COMMAND_FAIL_INVALID_COMMAND,</b>
+<b class="fc">&nbsp;	COMMAND_FAIL_TOOL_INVENTORY_FULL,</b>
+<b class="fc">&nbsp;	COMMAND_FAIL_TOOL_PERMISSION,</b>
+<b class="fc">&nbsp;	COMMAND_FAIL_HELP_PERMISSION,</b>
+<b class="fc">&nbsp;	COMMAND_FAIL_RELOAD_PERMISSION,</b>
+<b class="fc">&nbsp;	COMMAND_FAIL_MATERIALS_PERMISSION,</b>
+<b class="fc">&nbsp;	COMMAND_FAIL_SHOW_PERMISSION,</b>
+<b class="fc">&nbsp;	COMMAND_FAIL_STATUS_PERMISSION,</b>
+<b class="fc">&nbsp;	COMMAND_FAIL_SET_INVALID_INTEGER,</b>
+&nbsp;
+<b class="fc">&nbsp;	TOOL_SUCCESS_PROTECT,</b>
+<b class="fc">&nbsp;	TOOL_SUCCESS_UNPROTECT,</b>
+<b class="fc">&nbsp;	TOOL_SUCCESS_BREAK_BLOCK,</b>
+<b class="fc">&nbsp;	TOOL_FAIL_DISTANCE_EXCEEDED,</b>
+<b class="fc">&nbsp;	TOOL_FAIL_WORLD_DISABLED,</b>
+<b class="fc">&nbsp;	TOOL_FAIL_USE_PERMISSION,</b>
+<b class="fc">&nbsp;	TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION,</b>
+<b class="fc">&nbsp;	TOOL_FAIL_INVALID_MATERIAL,</b>
+&nbsp;
+<b class="fc">&nbsp;	BLOCK_PLACE_FAIL_GRASS_PATH,</b>
+<b class="fc">&nbsp;	BLOCK_PLACE_FAIL_ABOVE_ROAD,</b>
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

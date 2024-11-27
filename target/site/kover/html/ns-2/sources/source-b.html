@@ -1,0 +1,189 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > Subcommand</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock.commands</a>
+</div>
+
+<h1>Coverage Summary for Class: Subcommand (com.winterhavenmc.roadblock.commands)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+</tr>
+<tr>
+  <td class="name">Subcommand</td>
+    <td class="coverageStat"/>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock.commands;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.messages.MessageId;
+&nbsp;import org.bukkit.command.Command;
+&nbsp;import org.bukkit.command.CommandSender;
+&nbsp;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * An interface that declares the methods required to implement a subcommand
+&nbsp; */
+&nbsp;@SuppressWarnings(&quot;unused&quot;)
+&nbsp;interface Subcommand {
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Executes the given command, returning its success.
+&nbsp;	 *
+&nbsp;	 * @param sender the command sender (player or console) who issued the command
+&nbsp;	 * @param argsList List of String - the arguments passed
+&nbsp;	 * @return true if command was executed successfully, false if not
+&nbsp;	 */
+&nbsp;	@SuppressWarnings(&quot;UnusedReturnValue&quot;)
+&nbsp;	boolean onCommand(final CommandSender sender, final List&lt;String&gt; argsList);
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Requests a list of possible completions for a command argument.
+&nbsp;	 *
+&nbsp;	 * @param sender The command sender (player or console) who issued the command
+&nbsp;	 * @param command Command which was executed
+&nbsp;	 * @param alias The alias used
+&nbsp;	 * @param args The arguments passed to the command, including final partial argument to be completed
+&nbsp;	 * @return A List of possible completions for the final argument
+&nbsp;	 */
+&nbsp;	List&lt;String&gt; onTabComplete(final CommandSender sender, final Command command,
+&nbsp;							   final String alias, final String[] args);
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get a subcommand name
+&nbsp;	 *
+&nbsp;	 * @return String - the name of the subcommand
+&nbsp;	 */
+&nbsp;	String getName();
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get subcommand aliases
+&nbsp;	 *
+&nbsp;	 * @return Collection of String - the subcommand aliases
+&nbsp;	 */
+&nbsp;	Collection&lt;String&gt; getAliases();
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Retrieve the usage string for a subcommand
+&nbsp;	 *
+&nbsp;	 * @return the usage string retrieved for a subcommand
+&nbsp;	 */
+&nbsp;	String getUsage();
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Display a subcommand usage string to a command sender (player or console)
+&nbsp;	 *
+&nbsp;	 * @param sender the command sender for whom to display message
+&nbsp;	 */
+&nbsp;	void displayUsage(final CommandSender sender);
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Retrieve the message identifier that is associated with the subcommand help message
+&nbsp;	 *
+&nbsp;	 * @return MessageId - the message identifier that is associated with the subcommand description
+&nbsp;	 */
+&nbsp;	MessageId getDescription();
+&nbsp;
+&nbsp;
+&nbsp;	String getPermissionNode();
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Retrieve the minimum number of arguments required for the subcommand
+&nbsp;	 *
+&nbsp;	 * @return int - the minimum number of arguments required for the subcommand
+&nbsp;	 */
+&nbsp;	int getMinArgs();
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Retrieve the maximum number of arguments allowed for the subcommand
+&nbsp;	 *
+&nbsp;	 * @return int - the maximum number of arguments allowed for the subcommand
+&nbsp;	 */
+&nbsp;	int getMaxArgs();
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

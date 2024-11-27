@@ -1,0 +1,247 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > ShowSubcommand</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock.commands</a>
+</div>
+
+<h1>Coverage Summary for Class: ShowSubcommand (com.winterhavenmc.roadblock.commands)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">ShowSubcommand</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    21.9%
+  </span>
+  <span class="absValue">
+    (7/32)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.9%
+  </span>
+  <span class="absValue">
+    (22/148)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock.commands;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.PluginMain;
+&nbsp;import com.winterhavenmc.roadblock.highlights.HighlightStyle;
+&nbsp;import com.winterhavenmc.roadblock.messages.Macro;
+&nbsp;import com.winterhavenmc.roadblock.messages.MessageId;
+&nbsp;import com.winterhavenmc.roadblock.sounds.SoundId;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.util.Config;
+&nbsp;import org.bukkit.Location;
+&nbsp;import org.bukkit.command.CommandSender;
+&nbsp;import org.bukkit.entity.Player;
+&nbsp;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * A class that implements the show subcommand
+&nbsp; */
+&nbsp;final class ShowSubcommand extends AbstrtactSubcommand {
+&nbsp;
+&nbsp;	// reference to plugin main class
+&nbsp;	private final PluginMain plugin;
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Class constructor
+&nbsp;	 *
+&nbsp;	 * @param plugin reference to the plugin main class
+&nbsp;	 */
+<b class="fc">&nbsp;	ShowSubcommand(final PluginMain plugin) {</b>
+<b class="fc">&nbsp;		this.plugin = Objects.requireNonNull(plugin);</b>
+<b class="fc">&nbsp;		this.name = &quot;show&quot;;</b>
+<b class="fc">&nbsp;		this.usageString = &quot;/roadblock show &lt;distance&gt;&quot;;</b>
+<b class="fc">&nbsp;		this.description = MessageId.COMMAND_HELP_SHOW;</b>
+<b class="fc">&nbsp;		this.permissionNode = &quot;roadblock.show&quot;;</b>
+<b class="fc">&nbsp;		this.maxArgs = 1;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public boolean onCommand(final CommandSender sender, final List&lt;String&gt; argsList) {
+&nbsp;
+&nbsp;		// sender must be player
+<b class="nc">&nbsp;		if (!(sender instanceof final Player player)) {</b>
+<b class="nc">&nbsp;			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_CONSOLE).send();</b>
+<b class="nc">&nbsp;			return true;</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// check player permissions
+<b class="nc">&nbsp;		if (!player.hasPermission(permissionNode)) {</b>
+<b class="nc">&nbsp;			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_SHOW_PERMISSION).send();</b>
+<b class="nc">&nbsp;			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);</b>
+<b class="nc">&nbsp;			return true;</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// check max arguments
+<b class="nc">&nbsp;		if (argsList.size() &gt; getMaxArgs()) {</b>
+<b class="nc">&nbsp;			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();</b>
+<b class="nc">&nbsp;			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);</b>
+<b class="nc">&nbsp;			displayUsage(sender);</b>
+<b class="nc">&nbsp;			return true;</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// get show distance from config
+<b class="nc">&nbsp;		int distance = Config.SHOW_DISTANCE.getInt(plugin.getConfig());</b>
+&nbsp;
+&nbsp;		// if argument passed, try to parse string to int
+<b class="nc">&nbsp;		if (argsList.size() == 1) {</b>
+&nbsp;			try {
+<b class="nc">&nbsp;				distance = Integer.parseInt(argsList.get(0));</b>
+&nbsp;			}
+&nbsp;			catch (NumberFormatException nfe) {
+&nbsp;				// send player integer parse error message and return
+<b class="nc">&nbsp;				plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_SET_INVALID_INTEGER).send();</b>
+<b class="nc">&nbsp;				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);</b>
+&nbsp;
+&nbsp;				// display usage message for player
+<b class="nc">&nbsp;				displayUsage(player);</b>
+<b class="nc">&nbsp;				return true;</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;
+&nbsp;		// get set of block locations within distance of player location
+<b class="nc">&nbsp;		Collection&lt;Location&gt; locations = plugin.blockManager.selectNearbyBlocks(player.getLocation(), distance);</b>
+&nbsp;
+&nbsp;		// highlight blocks
+<b class="nc">&nbsp;		plugin.highlightManager.highlightBlocks(player, locations, HighlightStyle.PROTECT);</b>
+&nbsp;
+&nbsp;		// send player success message
+<b class="nc">&nbsp;		plugin.messageBuilder.build(player, MessageId.COMMAND_SUCCESS_SHOW).setMacro(Macro.QUANTITY, locations.size()).send();</b>
+&nbsp;
+&nbsp;		// if any blocks highlighted, play sound
+<b class="nc">&nbsp;		if (!locations.isEmpty()) {</b>
+<b class="nc">&nbsp;			plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_SHOW);</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		return true;</b>
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

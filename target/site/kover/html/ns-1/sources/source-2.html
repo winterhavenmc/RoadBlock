@@ -1,0 +1,244 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > SimpleAPI</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock</a>
+</div>
+
+<h1>Coverage Summary for Class: SimpleAPI (com.winterhavenmc.roadblock)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">SimpleAPI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/45)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.util.Config;
+&nbsp;import org.bukkit.Location;
+&nbsp;import org.bukkit.Material;
+&nbsp;import org.bukkit.entity.Player;
+&nbsp;import org.bukkit.plugin.java.JavaPlugin;
+&nbsp;
+&nbsp;
+&nbsp;@SuppressWarnings({&quot;unused&quot;, &quot;WeakerAccess&quot;})
+&nbsp;public final class SimpleAPI {
+&nbsp;
+<b class="nc">&nbsp;	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);</b>
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Private constructor to prevent instantiation of this utility class
+&nbsp;	 */
+&nbsp;	private SimpleAPI() {
+&nbsp;		throw new AssertionError();
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check if a material is in the configured list of RoadBlock materials
+&nbsp;	 *
+&nbsp;	 * @param material the material to check
+&nbsp;	 * @return {@code true} if the material is in the configured list of RoadBlock materials, else {@code false}
+&nbsp;	 */
+&nbsp;	public static boolean isRoadBlockMaterial(final Material material) {
+<b class="nc">&nbsp;		return plugin.blockManager.isRoadBlockMaterial(material);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check if player location is within configured on-road-height distance above a road block
+&nbsp;	 *
+&nbsp;	 * @param player the player to check for road block proximity
+&nbsp;	 * @return {@code true} if player is configured height or less above a road block, else {@code false}
+&nbsp;	 */
+&nbsp;	public static boolean isAboveRoad(final Player player) {
+<b class="nc">&nbsp;		return plugin.blockManager.isAboveRoad(player);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check if location is above a protected road block, using configured no-place-height
+&nbsp;	 *
+&nbsp;	 * @param location the location to check road block proximity
+&nbsp;	 * @return {@code true} if block is within configured no-place-height above a road block, else {@code false}
+&nbsp;	 */
+&nbsp;	public static boolean isAboveRoad(final Location location) {
+<b class="nc">&nbsp;		return plugin.blockManager.isAboveRoad(location, Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig()));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check if location is above a protected road block, overriding configured no-place-height with passed height
+&nbsp;	 *
+&nbsp;	 * @param location the location to test
+&nbsp;	 * @param height   the number of blocks above a road block to consider
+&nbsp;	 * @return {@code true} if block is within {@code height} above a road block, else {@code false}
+&nbsp;	 */
+&nbsp;	public static boolean isAboveRoad(final Location location, final int height) {
+<b class="nc">&nbsp;		return plugin.blockManager.isAboveRoad(location, height);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check if a block can be placed at a location, using configured no-place-height
+&nbsp;	 *
+&nbsp;	 * @param location the location to check
+&nbsp;	 * @return {@code true} if block can be placed at location, else {@code false}
+&nbsp;	 */
+&nbsp;	public static boolean canPlace(final Location location) {
+&nbsp;
+&nbsp;		// get configured no-place-height
+<b class="nc">&nbsp;		int height = Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig());</b>
+&nbsp;
+&nbsp;		// check location with configured no-place-height
+<b class="nc">&nbsp;		return canPlace(location, height);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check if a block can be placed at a location, overriding configured no-place-height with passed height
+&nbsp;	 *
+&nbsp;	 * @param location the location to check
+&nbsp;	 * @param height   the height above road to consider not placeable
+&nbsp;	 * @return {@code true} if the block can be place at location, else {@code false}
+&nbsp;	 */
+&nbsp;	public static boolean canPlace(final Location location, final int height) {
+&nbsp;
+&nbsp;		// return result of: block is a protected road block or block is within passed height above a road block
+<b class="nc">&nbsp;		return !(plugin.blockManager.isRoadBlock(location.getBlock())</b>
+<b class="nc">&nbsp;				|| plugin.blockManager.isAboveRoad(location, height));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

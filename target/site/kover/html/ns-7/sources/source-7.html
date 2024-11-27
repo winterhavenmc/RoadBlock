@@ -1,0 +1,1042 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > DataStoreSQLite</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock.storage</a>
+</div>
+
+<h1>Coverage Summary for Class: DataStoreSQLite (com.winterhavenmc.roadblock.storage)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">DataStoreSQLite</td>
+<td class="coverageStat">
+  <span class="percent">
+    27.8%
+  </span>
+  <span class="absValue">
+    (5/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    6.2%
+  </span>
+  <span class="absValue">
+    (5/80)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    15.3%
+  </span>
+  <span class="absValue">
+    (33/216)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    13.6%
+  </span>
+  <span class="absValue">
+    (126/925)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">DataStoreSQLite$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/39)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/202)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">DataStoreSQLite$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/34)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/170)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    22.7%
+  </span>
+  <span class="absValue">
+    (5/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    4.7%
+  </span>
+  <span class="absValue">
+    (5/106)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11.4%
+  </span>
+  <span class="absValue">
+    (33/289)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    9.7%
+  </span>
+  <span class="absValue">
+    (126/1297)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock.storage;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.util.Config;
+&nbsp;import org.bukkit.Chunk;
+&nbsp;import org.bukkit.Location;
+&nbsp;import org.bukkit.World;
+&nbsp;import org.bukkit.event.EventHandler;
+&nbsp;import org.bukkit.event.Listener;
+&nbsp;import org.bukkit.event.world.ChunkUnloadEvent;
+&nbsp;import org.bukkit.plugin.java.JavaPlugin;
+&nbsp;import org.bukkit.scheduler.BukkitRunnable;
+&nbsp;
+&nbsp;import java.io.File;
+&nbsp;import java.sql.*;
+&nbsp;import java.util.*;
+&nbsp;import java.util.concurrent.TimeUnit;
+&nbsp;
+&nbsp;
+&nbsp;final class DataStoreSQLite extends DataStoreAbstract implements DataStore, Listener {
+&nbsp;
+&nbsp;	// reference to main class
+&nbsp;	private final JavaPlugin plugin;
+&nbsp;
+&nbsp;	// block cache
+&nbsp;	private final BlockRecordCache blockCache;
+&nbsp;
+&nbsp;	// chunk cache
+&nbsp;	private final Collection&lt;Location&gt; chunkCache;
+&nbsp;
+&nbsp;	// database connection object
+&nbsp;	private Connection connection;
+&nbsp;
+&nbsp;	// file path for datastore file
+&nbsp;	private final String dataFilePath;
+&nbsp;
+&nbsp;	// schema version
+&nbsp;	private int schemaVersion;
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Class constructor
+&nbsp;	 *
+&nbsp;	 * @param plugin reference to main class
+&nbsp;	 */
+<b class="fc">&nbsp;	DataStoreSQLite(final JavaPlugin plugin) {</b>
+&nbsp;
+&nbsp;		// reference to main class
+<b class="fc">&nbsp;		this.plugin = plugin;</b>
+&nbsp;
+&nbsp;		// set datastore type
+<b class="fc">&nbsp;		this.type = DataStoreType.SQLITE;</b>
+&nbsp;
+&nbsp;		// set file path for datastore file
+<b class="fc">&nbsp;		this.dataFilePath = plugin.getDataFolder() + File.separator + type.getStorageName();</b>
+&nbsp;
+&nbsp;		// create empty block cache
+<b class="fc">&nbsp;		this.blockCache = BlockRecordCache.getInstance();</b>
+&nbsp;
+&nbsp;		// create empty chunk location cache
+<b class="fc">&nbsp;		this.chunkCache = new HashSet&lt;&gt;();</b>
+&nbsp;
+&nbsp;		// register event handlers in this class
+<b class="fc">&nbsp;		plugin.getServer().getPluginManager().registerEvents(this, plugin);</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Initialize SQLite datastore
+&nbsp;	 */
+&nbsp;	@Override
+&nbsp;	public void initialize() throws SQLException, ClassNotFoundException {
+&nbsp;
+&nbsp;		// if data store is already initialized, do nothing and return
+<b class="pc">&nbsp;		if (this.isInitialized()) {</b>
+<b class="nc">&nbsp;			plugin.getLogger().info(this + &quot; datastore already initialized.&quot;);</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// register the driver 
+<b class="fc">&nbsp;		final String jdbcDriverName = &quot;org.sqlite.JDBC&quot;;</b>
+&nbsp;
+<b class="fc">&nbsp;		Class.forName(jdbcDriverName);</b>
+&nbsp;
+&nbsp;		// create database url
+<b class="fc">&nbsp;		final String dbUrl = &quot;jdbc:sqlite&quot; + &quot;:&quot; + dataFilePath;</b>
+&nbsp;
+&nbsp;		// create a database connection
+<b class="fc">&nbsp;		connection = DriverManager.getConnection(dbUrl);</b>
+&nbsp;
+&nbsp;		// update database schema if necessary
+<b class="fc">&nbsp;		updateSchema();</b>
+&nbsp;
+&nbsp;		// set initialized true
+<b class="fc">&nbsp;		setInitialized(true);</b>
+<b class="fc">&nbsp;		plugin.getLogger().info(this + &quot; datastore initialized.&quot;);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private int getSchemaVersion() {
+&nbsp;
+<b class="fc">&nbsp;		int version = -1;</b>
+&nbsp;
+&nbsp;		try {
+<b class="fc">&nbsp;			final Statement statement = connection.createStatement();</b>
+&nbsp;
+<b class="fc">&nbsp;			ResultSet rs = statement.executeQuery(Queries.getQuery(&quot;GetUserVersion&quot;));</b>
+&nbsp;
+<b class="fc">&nbsp;			while (rs.next()) {</b>
+<b class="fc">&nbsp;				version = rs.getInt(1);</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;		catch (SQLException e) {
+<b class="nc">&nbsp;			plugin.getLogger().warning(&quot;Could not get schema version!&quot;);</b>
+&nbsp;		}
+<b class="fc">&nbsp;		return version;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private void updateSchema() throws SQLException {
+&nbsp;
+<b class="fc">&nbsp;		schemaVersion = getSchemaVersion();</b>
+&nbsp;
+<b class="fc">&nbsp;		final Statement statement = connection.createStatement();</b>
+&nbsp;
+<b class="pc">&nbsp;		if (schemaVersion == 0) {</b>
+&nbsp;			int count;
+<b class="fc">&nbsp;			ResultSet rs = statement.executeQuery(Queries.getQuery(&quot;SelectBlockTable&quot;));</b>
+<b class="pc">&nbsp;			if (rs.next()) {</b>
+<b class="nc">&nbsp;				Collection&lt;BlockRecord&gt; existingRecords = selectAllRecords();</b>
+<b class="nc">&nbsp;				statement.executeUpdate(Queries.getQuery(&quot;DropBlockTable&quot;));</b>
+<b class="nc">&nbsp;				statement.executeUpdate(Queries.getQuery(&quot;DropChunkIndex&quot;));</b>
+<b class="nc">&nbsp;				statement.executeUpdate(Queries.getQuery(&quot;CreateBlockTable&quot;));</b>
+<b class="nc">&nbsp;				statement.executeUpdate(Queries.getQuery(&quot;CreateChunkIndex&quot;));</b>
+<b class="nc">&nbsp;				count = insertRecords(existingRecords);</b>
+<b class="nc">&nbsp;				plugin.getLogger().info(count + &quot; block records migrated to schema v1&quot;);</b>
+&nbsp;			}
+&nbsp;
+&nbsp;			// update schema version in database
+<b class="fc">&nbsp;			statement.executeUpdate(&quot;PRAGMA user_version = 1&quot;);</b>
+&nbsp;
+&nbsp;			// update schema version field
+<b class="fc">&nbsp;			schemaVersion = 1;</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// execute table creation statement
+<b class="fc">&nbsp;		statement.executeUpdate(Queries.getQuery(&quot;CreateBlockTable&quot;));</b>
+&nbsp;
+&nbsp;		// execute index creation statement
+<b class="fc">&nbsp;		statement.executeUpdate(Queries.getQuery(&quot;CreateChunkIndex&quot;));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Sync in memory datastore to disk&lt;br&gt;
+&nbsp;	 * (unused for SQLite datastore)
+&nbsp;	 */
+&nbsp;	@Override
+&nbsp;	public void sync() {
+&nbsp;		// no action necessary for this storage type
+<b class="nc">&nbsp;	}</b>
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Close SQLite datastore connection
+&nbsp;	 */
+&nbsp;	@Override
+&nbsp;	public void close() {
+&nbsp;
+&nbsp;		try {
+<b class="fc">&nbsp;			connection.close();</b>
+<b class="fc">&nbsp;			plugin.getLogger().info(this + &quot; datastore connection closed.&quot;);</b>
+&nbsp;		}
+&nbsp;		catch (Exception e) {
+&nbsp;
+&nbsp;			// output simple error message
+<b class="nc">&nbsp;			plugin.getLogger().warning(&quot;An error occurred while closing the &quot; + this + &quot; datastore.&quot;);</b>
+<b class="nc">&nbsp;			plugin.getLogger().warning(e.getMessage());</b>
+&nbsp;
+&nbsp;			// if debugging is enabled, output stack trace
+<b class="nc">&nbsp;			if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;				e.printStackTrace();</b>
+&nbsp;			}
+&nbsp;		}
+<b class="fc">&nbsp;		setInitialized(false);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Delete the SQLite datastore file
+&nbsp;	 */
+&nbsp;	@Override
+&nbsp;	public boolean delete() {
+&nbsp;
+&nbsp;		// get reference to dataStore file in file system
+<b class="nc">&nbsp;		File dataStoreFile = new File(dataFilePath);</b>
+&nbsp;
+&nbsp;		// if file exists, delete file
+<b class="nc">&nbsp;		boolean result = false;</b>
+<b class="nc">&nbsp;		if (dataStoreFile.exists()) {</b>
+<b class="nc">&nbsp;			result = dataStoreFile.delete();</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// return result
+<b class="nc">&nbsp;		return result;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check if a location is a protected road block
+&nbsp;	 *
+&nbsp;	 * @param location the location key to check for protected status
+&nbsp;	 * @return {@code true} if the location is protected, {@code false} if it is not
+&nbsp;	 */
+&nbsp;	@Override
+&nbsp;	public boolean isProtected(final Location location) {
+&nbsp;
+&nbsp;		// get LocationRecord for location
+<b class="nc">&nbsp;		BlockRecord blockRecord = new BlockRecord(location);</b>
+&nbsp;
+&nbsp;		// check cache first
+<b class="nc">&nbsp;		if (isChunkCached(location)) {</b>
+<b class="nc">&nbsp;			if (blockCache.containsKey(blockRecord)) {</b>
+<b class="nc">&nbsp;				return blockCache.get(blockRecord).equals(CacheStatus.RESIDENT)</b>
+<b class="nc">&nbsp;						|| blockCache.get(blockRecord).equals(CacheStatus.PENDING_INSERT);</b>
+&nbsp;			}
+<b class="nc">&nbsp;			return false;</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// add chunk to cache
+<b class="nc">&nbsp;		cacheChunk(location.getChunk());</b>
+&nbsp;
+&nbsp;		// check cache again
+<b class="nc">&nbsp;		if (blockCache.containsKey(blockRecord)) {</b>
+<b class="nc">&nbsp;			return blockCache.get(blockRecord).equals(CacheStatus.RESIDENT)</b>
+<b class="nc">&nbsp;					|| blockCache.get(blockRecord).equals(CacheStatus.PENDING_INSERT);</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return false;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Insert records into the SQLite datastore
+&nbsp;	 *
+&nbsp;	 * @param blockRecords Collection of records to insert
+&nbsp;	 */
+&nbsp;	@Override
+&nbsp;	synchronized public int insertRecords(final Collection&lt;BlockRecord&gt; blockRecords) {
+&nbsp;
+&nbsp;		// set cache for all records in list to pending insert
+<b class="nc">&nbsp;		int count = 0;</b>
+<b class="nc">&nbsp;		for (BlockRecord blockRecord : blockRecords) {</b>
+<b class="nc">&nbsp;			blockCache.put(blockRecord, CacheStatus.PENDING_INSERT);</b>
+<b class="nc">&nbsp;			count++;</b>
+&nbsp;		}
+<b class="nc">&nbsp;		if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;			plugin.getLogger().info(count + &quot; blocks marked PENDING_INSERT in cache.&quot;);</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// asynchronously insert all locations in hash set
+<b class="nc">&nbsp;		new BukkitRunnable() {</b>
+&nbsp;			@Override
+&nbsp;			public void run() {
+&nbsp;
+<b class="nc">&nbsp;				int count = 0;</b>
+<b class="nc">&nbsp;				long startTime = System.nanoTime();</b>
+&nbsp;
+&nbsp;				try {
+&nbsp;
+&nbsp;					// set connection to transaction mode
+<b class="nc">&nbsp;					connection.setAutoCommit(false);</b>
+&nbsp;
+<b class="nc">&nbsp;					for (BlockRecord blockRecord : blockRecords) {</b>
+&nbsp;
+&nbsp;						// if location is null, skip to next location
+<b class="nc">&nbsp;						if (blockRecord == null) {</b>
+&nbsp;							continue;
+&nbsp;						}
+&nbsp;
+&nbsp;						// test that world in location is valid, otherwise skip to next location
+<b class="nc">&nbsp;						if (plugin.getServer().getWorld(blockRecord.getWorldUid()) == null) {</b>
+<b class="nc">&nbsp;							plugin.getLogger().warning(&quot;An error occured while inserting&quot;</b>
+&nbsp;									+ &quot; a record in the &quot; + this + &quot; datastore. World invalid!&quot;);
+<b class="nc">&nbsp;							blockCache.remove(blockRecord);</b>
+&nbsp;							continue;
+&nbsp;						}
+&nbsp;
+&nbsp;						try {
+&nbsp;							// synchronize on database connection
+<b class="nc">&nbsp;							synchronized (this) {</b>
+&nbsp;
+&nbsp;								// create prepared statement
+<b class="nc">&nbsp;								PreparedStatement preparedStatement =</b>
+<b class="nc">&nbsp;										connection.prepareStatement(Queries.getQuery(&quot;InsertOrIgnoreBlock&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;								preparedStatement.setString(1, blockRecord.getWorldName());</b>
+<b class="nc">&nbsp;								preparedStatement.setLong(2, blockRecord.getWorldUid().getMostSignificantBits());</b>
+<b class="nc">&nbsp;								preparedStatement.setLong(3, blockRecord.getWorldUid().getLeastSignificantBits());</b>
+<b class="nc">&nbsp;								preparedStatement.setInt(4, blockRecord.getBlockX());</b>
+<b class="nc">&nbsp;								preparedStatement.setInt(5, blockRecord.getBlockY());</b>
+<b class="nc">&nbsp;								preparedStatement.setInt(6, blockRecord.getBlockZ());</b>
+<b class="nc">&nbsp;								preparedStatement.setInt(7, blockRecord.getChunkX());</b>
+<b class="nc">&nbsp;								preparedStatement.setInt(8, blockRecord.getChunkZ());</b>
+&nbsp;
+&nbsp;								// execute prepared statement
+<b class="nc">&nbsp;								preparedStatement.executeUpdate();</b>
+<b class="nc">&nbsp;							}</b>
+&nbsp;						}
+&nbsp;						catch (SQLException e) {
+&nbsp;
+&nbsp;							// output simple error message
+<b class="nc">&nbsp;							plugin.getLogger().warning(&quot;An error occurred while inserting a location &quot;</b>
+&nbsp;									+ &quot;into the &quot; + this + &quot; datastore.&quot;);
+<b class="nc">&nbsp;							plugin.getLogger().warning(e.getLocalizedMessage());</b>
+&nbsp;
+&nbsp;							// if debugging is enabled, output stack trace
+<b class="nc">&nbsp;							if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;								e.printStackTrace();</b>
+&nbsp;							}
+&nbsp;							continue;
+&nbsp;						}
+<b class="nc">&nbsp;						count++;</b>
+<b class="nc">&nbsp;						blockCache.put(blockRecord, CacheStatus.RESIDENT);</b>
+&nbsp;					}
+<b class="nc">&nbsp;					connection.commit();</b>
+<b class="nc">&nbsp;					connection.setAutoCommit(true);</b>
+&nbsp;				}
+&nbsp;				catch (SQLException e) {
+&nbsp;					// output simple error message
+<b class="nc">&nbsp;					plugin.getLogger().warning(&quot;An error occurred while attempting to &quot;</b>
+&nbsp;							+ &quot;insert a block in the &quot; + this + &quot; datastore.&quot;);
+<b class="nc">&nbsp;					plugin.getLogger().warning(e.getLocalizedMessage());</b>
+&nbsp;
+&nbsp;					// if debugging is enabled, output stack trace
+<b class="nc">&nbsp;					if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;						e.printStackTrace();</b>
+&nbsp;					}
+&nbsp;				}
+&nbsp;
+<b class="nc">&nbsp;				long elapsedTime = (System.nanoTime() - startTime);</b>
+<b class="nc">&nbsp;				if (Config.PROFILE.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;					if (count &gt; 0) {</b>
+<b class="nc">&nbsp;						plugin.getLogger().info(count + &quot; blocks inserted into &quot; + this + &quot; datastore in &quot;</b>
+<b class="nc">&nbsp;								+ TimeUnit.NANOSECONDS.toMillis(elapsedTime) + &quot; milliseconds.&quot;);</b>
+&nbsp;					}
+&nbsp;				}
+&nbsp;			}
+<b class="nc">&nbsp;		}.runTaskAsynchronously(plugin);</b>
+<b class="nc">&nbsp;		return count;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Delete a list of locations from the SQLite datastore
+&nbsp;	 *
+&nbsp;	 * @param blockRecords Collection of locations
+&nbsp;	 */
+&nbsp;	@Override
+&nbsp;	synchronized public int deleteRecords(final Collection&lt;BlockRecord&gt; blockRecords) {
+&nbsp;
+&nbsp;		// set cache for all records in list to pending delete
+<b class="nc">&nbsp;		int count = 0;</b>
+<b class="nc">&nbsp;		for (BlockRecord blockRecord : blockRecords) {</b>
+<b class="nc">&nbsp;			blockCache.put(blockRecord, CacheStatus.PENDING_DELETE);</b>
+<b class="nc">&nbsp;			count++;</b>
+&nbsp;		}
+<b class="nc">&nbsp;		if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;			plugin.getLogger().info(count + &quot; blocks marked PENDING_DELETE in cache.&quot;);</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// asynchronously delete all locations
+<b class="nc">&nbsp;		new BukkitRunnable() {</b>
+&nbsp;			@Override
+&nbsp;			public void run() {
+&nbsp;
+<b class="nc">&nbsp;				int count = 0;</b>
+<b class="nc">&nbsp;				long startTime = System.nanoTime();</b>
+&nbsp;
+&nbsp;				try {
+<b class="nc">&nbsp;					connection.setAutoCommit(false);</b>
+&nbsp;
+<b class="nc">&nbsp;					int rowsAffected = 0;</b>
+&nbsp;
+<b class="nc">&nbsp;					for (final BlockRecord blockRecord : blockRecords) {</b>
+&nbsp;
+&nbsp;						// if key is null return, skip to next location
+<b class="nc">&nbsp;						if (blockRecord == null) {</b>
+&nbsp;							continue;
+&nbsp;						}
+&nbsp;
+&nbsp;						try {
+&nbsp;							// synchronize on database connection
+<b class="nc">&nbsp;							synchronized (this) {</b>
+&nbsp;
+&nbsp;								// create prepared statement
+<b class="nc">&nbsp;								PreparedStatement preparedStatement =</b>
+<b class="nc">&nbsp;										connection.prepareStatement(Queries.getQuery(&quot;DeleteBlock&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;								preparedStatement.setLong(1, blockRecord.getWorldUid().getMostSignificantBits());</b>
+<b class="nc">&nbsp;								preparedStatement.setLong(2, blockRecord.getWorldUid().getLeastSignificantBits());</b>
+<b class="nc">&nbsp;								preparedStatement.setInt(3, blockRecord.getBlockX());</b>
+<b class="nc">&nbsp;								preparedStatement.setInt(4, blockRecord.getBlockY());</b>
+<b class="nc">&nbsp;								preparedStatement.setInt(5, blockRecord.getBlockZ());</b>
+&nbsp;
+&nbsp;								// execute prepared statement
+<b class="nc">&nbsp;								rowsAffected = preparedStatement.executeUpdate();</b>
+<b class="nc">&nbsp;							}</b>
+&nbsp;						}
+&nbsp;						catch (SQLException e) {
+&nbsp;
+&nbsp;							// output simple error message
+<b class="nc">&nbsp;							plugin.getLogger().warning(&quot;An error occurred while attempting to &quot;</b>
+&nbsp;									+ &quot;delete a block from the &quot; + this + &quot; datastore.&quot;);
+<b class="nc">&nbsp;							plugin.getLogger().warning(e.getLocalizedMessage());</b>
+&nbsp;
+&nbsp;							// if debugging is enabled, output stack trace
+<b class="nc">&nbsp;							if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;								e.printStackTrace();</b>
+&nbsp;							}
+&nbsp;						}
+<b class="nc">&nbsp;						blockCache.remove(blockRecord);</b>
+<b class="nc">&nbsp;						count = count + rowsAffected;</b>
+&nbsp;					}
+<b class="nc">&nbsp;					connection.commit();</b>
+<b class="nc">&nbsp;					connection.setAutoCommit(true);</b>
+&nbsp;				}
+&nbsp;				catch (SQLException e) {
+&nbsp;					// output simple error message
+<b class="nc">&nbsp;					plugin.getLogger().warning(&quot;An error occurred while attempting to &quot;</b>
+&nbsp;							+ &quot;delete a block from the &quot; + this + &quot; datastore.&quot;);
+<b class="nc">&nbsp;					plugin.getLogger().warning(e.getLocalizedMessage());</b>
+&nbsp;
+&nbsp;					// if debugging is enabled, output stack trace
+<b class="nc">&nbsp;					if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;						e.printStackTrace();</b>
+&nbsp;					}
+&nbsp;				}
+&nbsp;
+<b class="nc">&nbsp;				long elapsedTime = (System.nanoTime() - startTime);</b>
+<b class="nc">&nbsp;				if (Config.PROFILE.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;					if (count &gt; 0) {</b>
+<b class="nc">&nbsp;						plugin.getLogger().info(count + &quot; blocks removed from &quot; + this + &quot; datastore in &quot;</b>
+<b class="nc">&nbsp;								+ TimeUnit.NANOSECONDS.toMillis(elapsedTime) + &quot; milliseconds.&quot;);</b>
+&nbsp;					}
+&nbsp;				}
+&nbsp;			}
+<b class="nc">&nbsp;		}.runTaskAsynchronously(plugin);</b>
+<b class="nc">&nbsp;		return count;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Retrieve all road block location records from SQLite datastore
+&nbsp;	 *
+&nbsp;	 * @return List of location records
+&nbsp;	 */
+&nbsp;	synchronized public Collection&lt;BlockRecord&gt; selectAllRecords() {
+&nbsp;
+<b class="nc">&nbsp;		final Collection&lt;BlockRecord&gt; returnSet = new HashSet&lt;&gt;();</b>
+&nbsp;
+&nbsp;		try {
+<b class="nc">&nbsp;			PreparedStatement preparedStatement =</b>
+<b class="nc">&nbsp;					connection.prepareStatement(Queries.getQuery(&quot;SelectAllBlocks&quot;));</b>
+&nbsp;
+&nbsp;			// execute sql query
+<b class="nc">&nbsp;			ResultSet rs = preparedStatement.executeQuery();</b>
+&nbsp;
+<b class="nc">&nbsp;			while (rs.next()) {</b>
+&nbsp;
+&nbsp;				final World world;
+&nbsp;				final long worldUidMsb;
+&nbsp;				final long worldUidLsb;
+&nbsp;
+<b class="nc">&nbsp;				final String worldName = rs.getString(&quot;worldname&quot;);</b>
+<b class="nc">&nbsp;				final int blockX = rs.getInt(&quot;x&quot;);</b>
+<b class="nc">&nbsp;				final int blockY = rs.getInt(&quot;y&quot;);</b>
+<b class="nc">&nbsp;				final int blockZ = rs.getInt(&quot;z&quot;);</b>
+<b class="nc">&nbsp;				final int chunkX = rs.getInt(&quot;chunk_x&quot;);</b>
+<b class="nc">&nbsp;				final int chunkZ = rs.getInt(&quot;chunk_z&quot;);</b>
+&nbsp;
+&nbsp;				// if schema version 0, get world object from stored world name
+<b class="nc">&nbsp;				if (schemaVersion == 0) {</b>
+<b class="nc">&nbsp;					world = plugin.getServer().getWorld(worldName);</b>
+&nbsp;				}
+&nbsp;				// else get world object from stored world uuid
+&nbsp;				else {
+<b class="nc">&nbsp;					worldUidMsb = rs.getLong(&quot;worlduidmsb&quot;);</b>
+<b class="nc">&nbsp;					worldUidLsb = rs.getLong(&quot;worlduidlsb&quot;);</b>
+<b class="nc">&nbsp;					UUID worldUid = new UUID(worldUidMsb, worldUidLsb);</b>
+<b class="nc">&nbsp;					world = plugin.getServer().getWorld(worldUid);</b>
+&nbsp;				}
+&nbsp;
+&nbsp;				// if world is null, skip adding record to return set
+<b class="nc">&nbsp;				if (world == null) {</b>
+<b class="nc">&nbsp;					plugin.getLogger().warning(&quot;Stored block has unloaded world: &quot;</b>
+&nbsp;							+ worldName + &quot;. Skipping record.&quot;);
+&nbsp;					continue;
+&nbsp;				}
+&nbsp;
+&nbsp;				// create block record object from retrieved record
+<b class="nc">&nbsp;				BlockRecord blockRecord = new BlockRecord(world.getName(), world.getUID(),</b>
+&nbsp;						blockX, blockY, blockZ, chunkX, chunkZ);
+&nbsp;
+&nbsp;				// add block record to return set
+<b class="nc">&nbsp;				returnSet.add(blockRecord);</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;		catch (SQLException e) {
+&nbsp;
+&nbsp;			// output simple error message
+<b class="nc">&nbsp;			plugin.getLogger().warning(&quot;An error occurred while trying to &quot;</b>
+&nbsp;					+ &quot;fetch all records from the &quot; + this + &quot; datastore.&quot;);
+<b class="nc">&nbsp;			plugin.getLogger().warning(e.getLocalizedMessage());</b>
+&nbsp;
+&nbsp;			// if debugging is enabled, output stack trace
+<b class="nc">&nbsp;			if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;				e.printStackTrace();</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;
+&nbsp;		// return results in an unmodifiable set
+<b class="nc">&nbsp;		return returnSet;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Retrieve all road block locations in chunk from the SQLite datastore
+&nbsp;	 *
+&nbsp;	 * @param chunk the chunk for which to retrieve all road block locations from the datastore
+&nbsp;	 * @return Collection of locations
+&nbsp;	 */
+&nbsp;	@Override
+&nbsp;	synchronized public Collection&lt;BlockRecord&gt; selectRecordsInChunk(final Chunk chunk) {
+&nbsp;
+&nbsp;		// create new set for results
+<b class="nc">&nbsp;		final Collection&lt;BlockRecord&gt; returnSet = new HashSet&lt;&gt;();</b>
+&nbsp;
+&nbsp;		try {
+<b class="nc">&nbsp;			PreparedStatement preparedStatement =</b>
+<b class="nc">&nbsp;					connection.prepareStatement(Queries.getQuery(&quot;SelectBlocksInChunk&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;			long worldUidMsb = chunk.getWorld().getUID().getMostSignificantBits();</b>
+<b class="nc">&nbsp;			long worldUidLsb = chunk.getWorld().getUID().getLeastSignificantBits();</b>
+&nbsp;
+<b class="nc">&nbsp;			preparedStatement.setLong(1, worldUidMsb);</b>
+<b class="nc">&nbsp;			preparedStatement.setLong(2, worldUidLsb);</b>
+<b class="nc">&nbsp;			preparedStatement.setInt(3, chunk.getX());</b>
+<b class="nc">&nbsp;			preparedStatement.setInt(4, chunk.getZ());</b>
+&nbsp;
+&nbsp;			// execute sql query
+<b class="nc">&nbsp;			long startTime = System.nanoTime();</b>
+<b class="nc">&nbsp;			ResultSet rs = preparedStatement.executeQuery();</b>
+&nbsp;
+<b class="nc">&nbsp;			long elapsedTime = System.nanoTime() - startTime;</b>
+&nbsp;
+<b class="nc">&nbsp;			int count = 0;</b>
+&nbsp;
+<b class="nc">&nbsp;			while (rs.next()) {</b>
+&nbsp;
+<b class="nc">&nbsp;				final long worldUidMSB = rs.getLong(&quot;worlduidmsb&quot;);</b>
+<b class="nc">&nbsp;				final long worldUidLSB = rs.getLong(&quot;worlduidlsb&quot;);</b>
+<b class="nc">&nbsp;				String worldName = rs.getString(&quot;worldname&quot;);</b>
+<b class="nc">&nbsp;				int blockX = rs.getInt(&quot;x&quot;);</b>
+<b class="nc">&nbsp;				int blockY = rs.getInt(&quot;y&quot;);</b>
+<b class="nc">&nbsp;				int blockZ = rs.getInt(&quot;z&quot;);</b>
+<b class="nc">&nbsp;				int chunkX = rs.getInt(&quot;chunk_x&quot;);</b>
+<b class="nc">&nbsp;				int chunkZ = rs.getInt(&quot;chunk_z&quot;);</b>
+&nbsp;
+&nbsp;				// reconstitute world uid from components
+<b class="nc">&nbsp;				UUID worldUid = new UUID(worldUidMSB,worldUidLSB);</b>
+&nbsp;
+&nbsp;				// get world by uid
+<b class="nc">&nbsp;				World world = plugin.getServer().getWorld(worldUid);</b>
+&nbsp;
+&nbsp;				// if world is null, skip to next record
+<b class="nc">&nbsp;				if (world == null) {</b>
+<b class="nc">&nbsp;					plugin.getLogger().warning(&quot;Stored location has invalid world: &quot;</b>
+&nbsp;							+ worldName + &quot;. Skipping record.&quot;);
+&nbsp;					continue;
+&nbsp;				}
+&nbsp;
+&nbsp;				// get current world name
+<b class="nc">&nbsp;				worldName = world.getName();</b>
+&nbsp;
+&nbsp;				// create block record from stored location
+<b class="nc">&nbsp;				BlockRecord record = new BlockRecord(worldName, worldUid, blockX, blockY, blockZ, chunkX, chunkZ);</b>
+<b class="nc">&nbsp;				returnSet.add(record);</b>
+<b class="nc">&nbsp;				count++;</b>
+&nbsp;			}
+&nbsp;
+<b class="nc">&nbsp;			if (Config.PROFILE.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;				plugin.getLogger().info(&quot;Fetched &quot; + count + &quot; blocks in chunk in &quot;</b>
+<b class="nc">&nbsp;						+ TimeUnit.NANOSECONDS.toMicros(elapsedTime) + &quot; microseconds.&quot;);</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;		catch (SQLException e) {
+&nbsp;
+&nbsp;			// output simple error message
+<b class="nc">&nbsp;			plugin.getLogger().warning(&quot;An error occurred while trying to &quot;</b>
+&nbsp;					+ &quot;fetch records from the &quot; + this + &quot; datastore.&quot;);
+<b class="nc">&nbsp;			plugin.getLogger().warning(e.getLocalizedMessage());</b>
+&nbsp;
+&nbsp;			// if debugging is enabled, output stack trace
+<b class="nc">&nbsp;			if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;				e.printStackTrace();</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;
+&nbsp;		// return result set
+<b class="nc">&nbsp;		return returnSet;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public Collection&lt;Location&gt; selectNearbyBlocks(final Location location, final int distance) {
+&nbsp;
+&nbsp;		// if passed location is null, return empty set
+<b class="nc">&nbsp;		if (location == null) {</b>
+<b class="nc">&nbsp;			return Collections.emptySet();</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// get world for location
+<b class="nc">&nbsp;		World world = location.getWorld();</b>
+&nbsp;
+&nbsp;		// if world is null, return empty set
+<b class="nc">&nbsp;		if (world == null) {</b>
+<b class="nc">&nbsp;			return Collections.emptySet();</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		final int minX = location.getBlockX() - distance;</b>
+<b class="nc">&nbsp;		final int maxX = location.getBlockX() + distance;</b>
+<b class="nc">&nbsp;		final int minZ = location.getBlockZ() - distance;</b>
+<b class="nc">&nbsp;		final int maxZ = location.getBlockZ() + distance;</b>
+&nbsp;
+<b class="nc">&nbsp;		Collection&lt;Location&gt; resultSet = new HashSet&lt;&gt;();</b>
+&nbsp;
+&nbsp;		try {
+<b class="nc">&nbsp;			PreparedStatement preparedStatement =</b>
+<b class="nc">&nbsp;					connection.prepareStatement(Queries.getQuery(&quot;SelectNearbyBlocks&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;			preparedStatement.setLong(1, world.getUID().getMostSignificantBits());</b>
+<b class="nc">&nbsp;			preparedStatement.setLong(2, world.getUID().getLeastSignificantBits());</b>
+<b class="nc">&nbsp;			preparedStatement.setInt(3, minX);</b>
+<b class="nc">&nbsp;			preparedStatement.setInt(4, maxX);</b>
+<b class="nc">&nbsp;			preparedStatement.setInt(5, minZ);</b>
+<b class="nc">&nbsp;			preparedStatement.setInt(6, maxZ);</b>
+&nbsp;
+&nbsp;			// execute sql query
+<b class="nc">&nbsp;			ResultSet rs = preparedStatement.executeQuery();</b>
+&nbsp;
+<b class="nc">&nbsp;			while (rs.next()) {</b>
+&nbsp;
+<b class="nc">&nbsp;				final double x = rs.getDouble(&quot;x&quot;);</b>
+<b class="nc">&nbsp;				final double y = rs.getDouble(&quot;y&quot;);</b>
+<b class="nc">&nbsp;				final double z = rs.getDouble(&quot;z&quot;);</b>
+&nbsp;
+&nbsp;				// get location for stored record
+<b class="nc">&nbsp;				Location newLocation = new Location(world, x, y, z);</b>
+&nbsp;
+&nbsp;				// add location to result set
+<b class="nc">&nbsp;				resultSet.add(newLocation);</b>
+&nbsp;			}
+&nbsp;
+&nbsp;		}
+&nbsp;		catch (final SQLException e) {
+&nbsp;
+&nbsp;			// output simple error message
+<b class="nc">&nbsp;			plugin.getLogger().warning(&quot;An error occurred while trying to &quot;</b>
+&nbsp;					+ &quot;select nearby block records from the &quot; + this + &quot; datastore.&quot;);
+<b class="nc">&nbsp;			plugin.getLogger().warning(e.getLocalizedMessage());</b>
+&nbsp;
+&nbsp;			// if debugging is enabled, output stack trace
+<b class="nc">&nbsp;			if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;				e.printStackTrace();</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		return resultSet;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Add all road block locations within chunk to cache
+&nbsp;	 *
+&nbsp;	 * @param chunk the chunk for which to load all road block locations into cache
+&nbsp;	 */
+&nbsp;	private void cacheChunk(final Chunk chunk) {
+&nbsp;
+<b class="nc">&nbsp;		final Collection&lt;BlockRecord&gt; blockSet = selectRecordsInChunk(chunk);</b>
+&nbsp;
+<b class="nc">&nbsp;		int count = 0;</b>
+&nbsp;
+<b class="nc">&nbsp;		for (BlockRecord blockRecord : blockSet) {</b>
+<b class="nc">&nbsp;			blockCache.put(blockRecord, CacheStatus.RESIDENT);</b>
+<b class="nc">&nbsp;			count++;</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		chunkCache.add(chunk.getBlock(0, 0, 0).getLocation());</b>
+&nbsp;
+<b class="nc">&nbsp;		if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;			if (count &gt; 0) {</b>
+<b class="nc">&nbsp;				plugin.getLogger().info(count + &quot; blocks added to cache.&quot;);</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Remove all road block locations within chunk from cache&lt;br&gt;
+&nbsp;	 * called on chunk unload event
+&nbsp;	 *
+&nbsp;	 * @param chunk the chunk for which to remove all road block locations from cache
+&nbsp;	 */
+&nbsp;	private void flushCache(final Chunk chunk) {
+&nbsp;
+<b class="nc">&nbsp;		int count = 0;</b>
+<b class="nc">&nbsp;		long startTime = System.nanoTime();</b>
+<b class="nc">&nbsp;		for (BlockRecord blockRecord : blockCache.keySet()) {</b>
+<b class="nc">&nbsp;			if (blockRecord.getWorldUid().equals(chunk.getWorld().getUID())</b>
+<b class="nc">&nbsp;					&amp;&amp; blockRecord.getChunkX() == chunk.getX()</b>
+<b class="nc">&nbsp;					&amp;&amp; blockRecord.getChunkZ() == chunk.getZ()) {</b>
+<b class="nc">&nbsp;				blockCache.remove(blockRecord);</b>
+<b class="nc">&nbsp;				count++;</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		chunkCache.remove(chunk.getBlock(0, 0, 0).getLocation());</b>
+&nbsp;
+<b class="nc">&nbsp;		long elapsedTime = (System.nanoTime() - startTime);</b>
+<b class="nc">&nbsp;		if (Config.PROFILE.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;			if (count &gt; 0) {</b>
+<b class="nc">&nbsp;				plugin.getLogger().info(count + &quot; blocks removed from cache in &quot;</b>
+<b class="nc">&nbsp;						+ TimeUnit.NANOSECONDS.toMicros(elapsedTime) + &quot; microseconds.&quot;);</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check if road block locations for a chunk are loaded in the cache
+&nbsp;	 *
+&nbsp;	 * @param location the location to test to determine if all chunk road blocks are cached
+&nbsp;	 * @return {@code true} if chunk is cached, {@code false} if not
+&nbsp;	 */
+&nbsp;	private boolean isChunkCached(final Location location) {
+&nbsp;
+<b class="nc">&nbsp;		final Location chunkLoc = location.getChunk().getBlock(0, 0, 0).getLocation();</b>
+&nbsp;
+<b class="nc">&nbsp;		if (chunkCache.contains(chunkLoc)) {</b>
+<b class="nc">&nbsp;			if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;				plugin.getLogger().info(&quot;Chunk is cached.&quot;);</b>
+&nbsp;			}
+<b class="nc">&nbsp;			return true;</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return false;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	synchronized public int getTotalBlocks() {
+&nbsp;
+<b class="nc">&nbsp;		int total = 0;</b>
+&nbsp;
+&nbsp;		try {
+<b class="nc">&nbsp;			PreparedStatement preparedStatement =</b>
+<b class="nc">&nbsp;					connection.prepareStatement(Queries.getQuery(&quot;CountAllBlocks&quot;));</b>
+&nbsp;
+&nbsp;			// execute sql query
+<b class="nc">&nbsp;			ResultSet rs = preparedStatement.executeQuery();</b>
+&nbsp;
+<b class="nc">&nbsp;			while (rs.next()) {</b>
+<b class="nc">&nbsp;				total = rs.getInt(&quot;rowcount&quot;);</b>
+&nbsp;			}
+&nbsp;
+&nbsp;		}
+&nbsp;		catch (final SQLException e) {
+&nbsp;
+&nbsp;			// output simple error message
+<b class="nc">&nbsp;			plugin.getLogger().warning(&quot;An error occurred while trying to &quot;</b>
+&nbsp;					+ &quot;count all records from the &quot; + this + &quot; datastore.&quot;);
+<b class="nc">&nbsp;			plugin.getLogger().warning(e.getLocalizedMessage());</b>
+&nbsp;
+&nbsp;			// if debugging is enabled, output stack trace
+<b class="nc">&nbsp;			if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;				e.printStackTrace();</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;
+&nbsp;		// return result
+<b class="nc">&nbsp;		return total;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event listener for chunk unload event
+&nbsp;	 *
+&nbsp;	 * @param event the event being handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler
+&nbsp;	public void onChunkUnload(final ChunkUnloadEvent event) {
+<b class="nc">&nbsp;		flushCache(event.getChunk());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

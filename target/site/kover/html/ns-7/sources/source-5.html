@@ -1,0 +1,298 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > DataStore</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock.storage</a>
+</div>
+
+<h1>Coverage Summary for Class: DataStore (com.winterhavenmc.roadblock.storage)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">DataStore</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.6%
+  </span>
+  <span class="absValue">
+    (5/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    48.5%
+  </span>
+  <span class="absValue">
+    (16/33)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock.storage;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.util.Config;
+&nbsp;import org.bukkit.Chunk;
+&nbsp;import org.bukkit.Location;
+&nbsp;import org.bukkit.plugin.java.JavaPlugin;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;
+&nbsp;interface DataStore {
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Initialize storage
+&nbsp;	 *
+&nbsp;	 * @throws Exception initialization failed
+&nbsp;	 */
+&nbsp;	void initialize() throws Exception;
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get datastore initialized field
+&nbsp;	 *
+&nbsp;	 * @return boolean
+&nbsp;	 */
+&nbsp;	boolean isInitialized();
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get datastore type
+&nbsp;	 *
+&nbsp;	 * @return DataStoreType of this datastore type
+&nbsp;	 */
+&nbsp;	DataStoreType getType();
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Close storage
+&nbsp;	 */
+&nbsp;	void close();
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Sync datastore to disk if supported
+&nbsp;	 */
+&nbsp;	void sync();
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Delete datastore
+&nbsp;	 */
+&nbsp;	@SuppressWarnings(&quot;UnusedReturnValue&quot;)
+&nbsp;	boolean delete();
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Create new data store of configured type.&lt;br&gt;
+&nbsp;	 * No parameter version used when no current datastore exists
+&nbsp;	 *
+&nbsp;	 * @return new datastore of configured type
+&nbsp;	 */
+&nbsp;	static DataStore connect(final JavaPlugin plugin) {
+&nbsp;
+&nbsp;		// get data store type from config
+<b class="fc">&nbsp;		DataStoreType dataStoreType = DataStoreType.match(Config.STORAGE_TYPE.getString(plugin.getConfig()));</b>
+&nbsp;
+&nbsp;		// get new data store of specified type
+<b class="fc">&nbsp;		final DataStore newDataStore = dataStoreType.connect(plugin);</b>
+&nbsp;
+&nbsp;		// initialize new data store
+&nbsp;		try {
+<b class="fc">&nbsp;			newDataStore.initialize();</b>
+&nbsp;		}
+&nbsp;		catch (Exception e) {
+<b class="nc">&nbsp;			plugin.getLogger().severe(&quot;Could not initialize &quot; + newDataStore + &quot; datastore!&quot;);</b>
+<b class="nc">&nbsp;			plugin.getLogger().severe(e.getLocalizedMessage());</b>
+<b class="nc">&nbsp;			if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;				e.printStackTrace();</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;
+&nbsp;		// convert any existing data stores to new type
+<b class="fc">&nbsp;		DataStoreType.convertAll(plugin, newDataStore);</b>
+&nbsp;
+&nbsp;		// return initialized data store
+<b class="fc">&nbsp;		return newDataStore;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check that block at location is protected
+&nbsp;	 *
+&nbsp;	 * @param location block location to check for RoadBlock protection
+&nbsp;	 * @return {@code true} if block at location is protected, otherwise {@code false}
+&nbsp;	 */
+&nbsp;	boolean isProtected(final Location location);
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Store list of records
+&nbsp;	 *
+&nbsp;	 * @param blockRecords a {@code Collection} of {@code Location}
+&nbsp;	 *                  for block locations to be inserted into the datastore
+&nbsp;	 */
+&nbsp;	@SuppressWarnings(&quot;UnusedReturnValue&quot;)
+&nbsp;	int insertRecords(final Collection&lt;BlockRecord&gt; blockRecords);
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * delete list of records
+&nbsp;	 *
+&nbsp;	 * @param blockRecords {@code Collection} of {@code Location}
+&nbsp;	 *                    containing unique composite keys of records to delete
+&nbsp;	 */
+&nbsp;	@SuppressWarnings(&quot;UnusedReturnValue&quot;)
+&nbsp;	int deleteRecords(final Collection&lt;BlockRecord&gt; blockRecords);
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * get all records
+&nbsp;	 *
+&nbsp;	 * @return Set of {@code Location} for all block records
+&nbsp;	 */
+&nbsp;	Collection&lt;BlockRecord&gt; selectAllRecords();
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * count records in blocks table
+&nbsp;	 *
+&nbsp;	 * @return numner of records in blocks table
+&nbsp;	 */
+&nbsp;	int getTotalBlocks();
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get block records for locations within a chunk
+&nbsp;	 *
+&nbsp;	 * @param chunk the chunk containing records to be returned
+&nbsp;	 * @return {@code Set} of {@code LocationRecords} for block records within the chunk
+&nbsp;	 */
+&nbsp;	Collection&lt;BlockRecord&gt; selectRecordsInChunk(final Chunk chunk);
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get block records for locations within {@code distance} of {@code location}
+&nbsp;	 *
+&nbsp;	 * @param location origin location
+&nbsp;	 * @param distance distance from origin to select blocks
+&nbsp;	 * @return Set of Locations that are within {@code distance} of {@code location}
+&nbsp;	 */
+&nbsp;	Collection&lt;Location&gt; selectNearbyBlocks(final Location location, final int distance);
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,467 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > Config</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock.util</a>
+</div>
+
+<h1>Coverage Summary for Class: Config (com.winterhavenmc.roadblock.util)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">Config</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (16/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (45/45)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (372/372)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Config$Case</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (28/28)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">Config$Case$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">Config$Case$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (23/23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (53/53)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (418/418)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.winterhavenmc.roadblock.util;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.storage.DataStoreType;
+&nbsp;import org.bukkit.Material;
+&nbsp;import org.bukkit.configuration.Configuration;
+&nbsp;import org.bukkit.plugin.java.JavaPlugin;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;import static org.bukkit.Material.matchMaterial;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * Enum that defines config keys as members and default values as constructor parameter {@code String}.
+&nbsp; * &lt;p&gt;Provides method to fetch configuration setting using Enum member name as key.
+&nbsp; * Parameter values are used solely for testing validity of default config.yml file.
+&nbsp; */
+<b class="fc">&nbsp;public enum Config {</b>
+&nbsp;
+<b class="fc">&nbsp;	DEBUG(Boolean.FALSE),</b>
+<b class="fc">&nbsp;	PROFILE(Boolean.FALSE),</b>
+<b class="fc">&nbsp;	STORAGE_TYPE(DataStoreType.SQLITE),</b>
+<b class="fc">&nbsp;	LANGUAGE(Locale.US.toLanguageTag()),</b>
+<b class="fc">&nbsp;	ENABLED_WORLDS(List.of()),</b>
+<b class="fc">&nbsp;	DISABLED_WORLDS(List.of(&quot;disabled_world1&quot;, &quot;disabled_world2&quot;)),</b>
+<b class="fc">&nbsp;	TOOL_MATERIAL(Material.GOLDEN_PICKAXE),</b>
+<b class="fc">&nbsp;	PROTECT_MATERIAL(Material.EMERALD_BLOCK),</b>
+<b class="fc">&nbsp;	UNPROTECT_MATERIAL(Material.REDSTONE_BLOCK),</b>
+<b class="fc">&nbsp;	DISPLAY_TOTAL(Boolean.TRUE),</b>
+<b class="fc">&nbsp;	SPREAD_DISTANCE(100),</b>
+<b class="fc">&nbsp;	SHOW_DISTANCE(100),</b>
+<b class="fc">&nbsp;	NO_PLACE_HEIGHT(3),</b>
+<b class="fc">&nbsp;	TARGET_DISTANCE(5),</b>
+<b class="fc">&nbsp;	ON_ROAD_HEIGHT(6),</b>
+<b class="fc">&nbsp;	SNOW_PLOW(Boolean.TRUE),</b>
+<b class="fc">&nbsp;	SOUND_EFFECTS(Boolean.TRUE),</b>
+<b class="fc">&nbsp;	SPEED_BOOST(Boolean.TRUE),</b>
+<b class="fc">&nbsp;	TITLES_ENABLED(Boolean.TRUE),</b>
+<b class="fc">&nbsp;	MATERIALS(List.of(</b>
+&nbsp;			Material.DIRT_PATH,
+&nbsp;			Material.COBBLESTONE,
+&nbsp;			Material.COBBLESTONE_SLAB,
+&nbsp;			Material.COBBLESTONE_STAIRS,
+&nbsp;			Material.MOSSY_COBBLESTONE,
+&nbsp;			Material.MOSSY_COBBLESTONE_SLAB,
+&nbsp;			Material.MOSSY_COBBLESTONE_STAIRS,
+&nbsp;			Material.STONE_BRICKS,
+&nbsp;			Material.STONE_BRICK_SLAB,
+&nbsp;			Material.STONE_BRICK_STAIRS,
+&nbsp;			Material.CRACKED_STONE_BRICKS,
+&nbsp;			Material.MOSSY_STONE_BRICKS,
+&nbsp;			Material.MOSSY_STONE_BRICK_SLAB,
+&nbsp;			Material.MOSSY_STONE_BRICK_STAIRS
+&nbsp;	));
+&nbsp;
+&nbsp;	private final Object defaultObject;
+&nbsp;	private static Set&lt;Material&gt; materialSetCache;
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * A nested Enum that provides routines to convert between key naming conventions. The members of
+&nbsp;	 * this Enum use upper snake case, because they are constants, while the yaml file uses
+&nbsp;	 * lower kebab case for the key naming convention.
+&nbsp;	 * &lt;P&gt;
+&nbsp;	 * There are overloaded methods providing for passing a String or an Enum member. All methods return {@code String}.
+&nbsp;	 * &lt;p&gt;
+&nbsp;	 * &lt;i&gt;examples:&lt;/i&gt;
+&nbsp;	 * &lt;p&gt;
+&nbsp;	 * &lt;pre&gt;
+&nbsp;	 * {@code
+&nbsp;	 * String fileKey = Case.LOWER_KEBAB.convert(Config.SAFETY_TIME); // safety-time
+&nbsp;	 * String enumKey = Case.UPPER_SNAKE.convert(fileKey); // SAFETY_TIME }
+&nbsp;	 * &lt;/pre&gt;
+&nbsp;	 */
+<b class="fc">&nbsp;	public enum Case {</b>
+<b class="fc">&nbsp;		UPPER_SNAKE() {</b>
+&nbsp;			public String convert(final String string) {
+<b class="fc">&nbsp;				return string.toUpperCase().replace(&#39;-&#39;,&#39;_&#39;);</b>
+&nbsp;			}
+&nbsp;		},
+<b class="fc">&nbsp;		LOWER_KEBAB() {</b>
+&nbsp;			public String convert(final String string) {
+<b class="fc">&nbsp;				return string.toLowerCase().replace(&#39;_&#39;,&#39;-&#39;);</b>
+&nbsp;			}
+&nbsp;		};
+&nbsp;
+&nbsp;		public abstract String convert(final String string);
+&nbsp;
+&nbsp;		String convert(final Config config) {
+<b class="fc">&nbsp;			return convert(config.name());</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Class constructor for Enum members
+&nbsp;	 * @param defaultValue {@code Object} default value referenced by corresponding key as found in config.yml file
+&nbsp;	 */
+<b class="fc">&nbsp;	Config(final Object defaultValue) {</b>
+<b class="fc">&nbsp;		this.defaultObject = defaultValue;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get corresponding key for Enum member, formatted for style used in config.yml file
+&nbsp;	 * @return {@code String} the key as formatted in config.yml file
+&nbsp;	 */
+&nbsp;	public String asFileKey() {
+<b class="fc">&nbsp;		return this.toLowerKebabCase();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Convert Enum member name to lower kebab case
+&nbsp;	 * @return {@code String} the Enum member name as lower kebab case
+&nbsp;	 */
+&nbsp;	public String toLowerKebabCase() {
+<b class="fc">&nbsp;		return Case.LOWER_KEBAB.convert(this);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Convert Enum member name to upper snake case (used for testing)
+&nbsp;	 * @return {@code String} the Enum member name converted to upper snake case
+&nbsp;	 */
+&nbsp;	public String toUpperSnakeCase() {
+<b class="fc">&nbsp;		return Case.UPPER_SNAKE.convert(this);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get default value for key, matching exactly the corresponding string in the default config.yml file
+&nbsp;	 * @return {@code String} the value for the corresponding key
+&nbsp;	 */
+&nbsp;	public String getDefaultString() {
+<b class="fc">&nbsp;		return this.defaultObject.toString();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get default object for key
+&nbsp;	 * @return {@code Object} the default object
+&nbsp;	 */
+&nbsp;	public Object getDefaultObject() {
+<b class="fc">&nbsp;		return this.defaultObject;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get value as boolean for corresponding key in current configuration
+&nbsp;	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
+&nbsp;	 * @return {@code boolean} the referenced value in the current configuration instance
+&nbsp;	 */
+&nbsp;	public boolean getBoolean(final Configuration configuration) {
+<b class="fc">&nbsp;		return configuration.getBoolean(this.asFileKey());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get value as int for corresponding key in current configuration
+&nbsp;	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
+&nbsp;	 * @return {@code int} the referenced value in the current configuration instance
+&nbsp;	 */
+&nbsp;	public int getInt(final Configuration configuration) {
+<b class="fc">&nbsp;		return configuration.getInt(this.asFileKey());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get value as String for corresponding key in current configuration
+&nbsp;	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
+&nbsp;	 * @return {@code String} the referenced value in the current configuration instance
+&nbsp;	 */
+&nbsp;	public String getString(final Configuration configuration) {
+<b class="fc">&nbsp;		return configuration.getString(this.asFileKey());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get value as List of String for corresponding key in current configuration
+&nbsp;	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
+&nbsp;	 * @return {@code List&lt;String&gt;} the referenced value in the current configuration instance
+&nbsp;	 */
+&nbsp;	@SuppressWarnings(&quot;unused&quot;)
+&nbsp;	public List&lt;String&gt; getStringList(final Configuration configuration) {
+<b class="fc">&nbsp;		return configuration.getStringList(this.asFileKey());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get value as Set of Material for corresponding key in current configuration
+&nbsp;	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
+&nbsp;	 * @return {@code Set&lt;Material&gt;} a set of matching materials from a list of strings in the current configuration instance
+&nbsp; 	 */
+&nbsp;	public Set&lt;Material&gt; getMaterialSet(final Configuration configuration) {
+&nbsp;
+&nbsp;		// if cached set is not null, return set as result
+<b class="fc">&nbsp;		if (materialSetCache != null) {</b>
+<b class="fc">&nbsp;			return materialSetCache;</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// initialize result set
+<b class="fc">&nbsp;		Set&lt;Material&gt; resultSet = new HashSet&lt;&gt;();</b>
+&nbsp;
+&nbsp;		// get list of material names from config
+<b class="fc">&nbsp;		List&lt;String&gt; materialNameList = configuration.getStringList(this.asFileKey());</b>
+&nbsp;
+&nbsp;		// validate materials in config list and add to result set
+<b class="fc">&nbsp;		for (String materialName : materialNameList) {</b>
+<b class="pc">&nbsp;			if (matchMaterial(materialName) != null) {</b>
+<b class="fc">&nbsp;				resultSet.add(matchMaterial(materialName));</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;
+&nbsp;		// cache result set and return as result
+<b class="fc">&nbsp;		materialSetCache = resultSet;</b>
+<b class="fc">&nbsp;		return resultSet;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get value as Object for corresponding key in current configuration
+&nbsp;	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
+&nbsp;	 * @return {@code Object} the referenced value in the current configuration instance
+&nbsp;	 */
+&nbsp;	public Object get(final Configuration configuration) {
+<b class="fc">&nbsp;		return configuration.get(this.asFileKey());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	public static void reload(final JavaPlugin plugin) {
+&nbsp;		// clear cache
+<b class="fc">&nbsp;		materialSetCache = null;</b>
+&nbsp;
+&nbsp;		// reload plugin config
+<b class="fc">&nbsp;		plugin.reloadConfig();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	// for testing
+&nbsp;	public static boolean materialCacheNull() {
+<b class="fc">&nbsp;		return (materialSetCache == null);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

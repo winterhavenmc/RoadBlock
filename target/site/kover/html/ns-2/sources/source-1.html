@@ -1,0 +1,203 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > AbstrtactSubcommand</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock.commands</a>
+</div>
+
+<h1>Coverage Summary for Class: AbstrtactSubcommand (com.winterhavenmc.roadblock.commands)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstrtactSubcommand</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    30%
+  </span>
+  <span class="absValue">
+    (3/10)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    36.4%
+  </span>
+  <span class="absValue">
+    (4/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    42.3%
+  </span>
+  <span class="absValue">
+    (11/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock.commands;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.messages.MessageId;
+&nbsp;import org.bukkit.command.Command;
+&nbsp;import org.bukkit.command.CommandSender;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;abstract class AbstrtactSubcommand implements Subcommand {</b>
+&nbsp;
+&nbsp;	protected String name;
+<b class="fc">&nbsp;	protected Collection&lt;String&gt; aliases = new LinkedHashSet&lt;&gt;();</b>
+&nbsp;	protected String usageString;
+&nbsp;	protected MessageId description;
+&nbsp;	protected String permissionNode;
+&nbsp;	protected int minArgs;
+&nbsp;	protected int maxArgs;
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public String getName() {
+<b class="fc">&nbsp;		return name;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public Collection&lt;String&gt; getAliases() {
+<b class="fc">&nbsp;		return aliases;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public String getUsage() {
+<b class="nc">&nbsp;		return usageString;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public void displayUsage(final CommandSender sender) {
+<b class="nc">&nbsp;		sender.sendMessage(usageString);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public MessageId getDescription() {
+<b class="nc">&nbsp;		return description;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public String getPermissionNode() {
+<b class="nc">&nbsp;		return this.permissionNode;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+<b class="nc">&nbsp;	public int getMinArgs() { return minArgs; }</b>
+&nbsp;
+&nbsp;	@Override
+<b class="nc">&nbsp;	public int getMaxArgs() { return maxArgs; }</b>
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public List&lt;String&gt; onTabComplete(final CommandSender sender, final Command command,
+&nbsp;									  final String alias, final String[] args) {
+&nbsp;
+<b class="nc">&nbsp;		return Collections.emptyList();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

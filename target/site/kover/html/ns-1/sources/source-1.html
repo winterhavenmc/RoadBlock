@@ -1,0 +1,207 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > PluginMain</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock</a>
+</div>
+
+<h1>Coverage Summary for Class: PluginMain (com.winterhavenmc.roadblock)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">PluginMain</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (10/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    22.8%
+  </span>
+  <span class="absValue">
+    (13/57)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.commands.CommandManager;
+&nbsp;import com.winterhavenmc.roadblock.highlights.HighlightManager;
+&nbsp;import com.winterhavenmc.roadblock.listeners.BlockEventListener;
+&nbsp;import com.winterhavenmc.roadblock.listeners.EntityEventListener;
+&nbsp;import com.winterhavenmc.roadblock.messages.Macro;
+&nbsp;import com.winterhavenmc.roadblock.messages.MessageId;
+&nbsp;import com.winterhavenmc.roadblock.storage.BlockManager;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.util.MetricsHandler;
+&nbsp;import com.winterhavenmc.util.messagebuilder.MessageBuilder;
+&nbsp;import com.winterhavenmc.util.soundconfig.SoundConfiguration;
+&nbsp;import com.winterhavenmc.util.soundconfig.YamlSoundConfiguration;
+&nbsp;import com.winterhavenmc.util.worldmanager.WorldManager;
+&nbsp;
+<b class="nc">&nbsp;import org.bukkit.plugin.java.JavaPlugin;</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;public final class PluginMain extends JavaPlugin {</b>
+&nbsp;
+&nbsp;	public MessageBuilder&lt;MessageId, Macro&gt; messageBuilder;
+&nbsp;	public WorldManager worldManager;
+&nbsp;	public SoundConfiguration soundConfig;
+&nbsp;	public BlockManager blockManager;
+&nbsp;	public HighlightManager highlightManager;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;	@Override</b>
+&nbsp;	public void onEnable() {
+&nbsp;
+&nbsp;		// install default config.yml if not present
+<b class="nc">&nbsp;		saveDefaultConfig();</b>
+&nbsp;
+&nbsp;		// instantiate message builder
+<b class="nc">&nbsp;		messageBuilder = new MessageBuilder&lt;&gt;(this);</b>
+<b class="fc">&nbsp;</b>
+&nbsp;		// instantiate sound configuration
+<b class="nc">&nbsp;		soundConfig = new YamlSoundConfiguration(this);</b>
+<b class="fc">&nbsp;</b>
+&nbsp;		// instantiate world manager
+<b class="nc">&nbsp;		worldManager = new WorldManager(this);</b>
+<b class="fc">&nbsp;</b>
+&nbsp;		// instantiate block manager
+<b class="nc">&nbsp;		blockManager = new BlockManager(this);</b>
+<b class="fc">&nbsp;</b>
+&nbsp;		// instantiate highlight manager
+<b class="nc">&nbsp;		highlightManager = new HighlightManager(this);</b>
+<b class="fc">&nbsp;</b>
+&nbsp;		// instantiate command manager
+<b class="nc">&nbsp;		new CommandManager(this);</b>
+<b class="fc">&nbsp;</b>
+&nbsp;		// instantiate event listeners
+<b class="nc">&nbsp;		new BlockEventListener(this);</b>
+<b class="fc">&nbsp;		new EntityEventListener(this);</b>
+&nbsp;
+&nbsp;		// bStats
+<b class="fc">&nbsp;		new MetricsHandler(this);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public void onDisable() {
+&nbsp;
+&nbsp;		// close datastore
+<b class="fc">&nbsp;		blockManager.close();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

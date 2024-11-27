@@ -1,0 +1,307 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > BlockRecord</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock.storage</a>
+</div>
+
+<h1>Coverage Summary for Class: BlockRecord (com.winterhavenmc.roadblock.storage)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">BlockRecord</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/35)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/145)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock.storage;
+&nbsp;
+&nbsp;import org.bukkit.Location;
+&nbsp;import org.bukkit.World;
+&nbsp;
+&nbsp;import java.util.Objects;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;
+&nbsp;public final class BlockRecord {
+&nbsp;
+&nbsp;	private final String worldName;
+&nbsp;	private final UUID worldUid;
+&nbsp;	private final int blockX;
+&nbsp;	private final int blockY;
+&nbsp;	private final int blockZ;
+&nbsp;	private final int chunkX;
+&nbsp;	private final int chunkZ;
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Class constructor
+&nbsp;	 *
+&nbsp;	 * @param location location to use for block record
+&nbsp;	 */
+<b class="nc">&nbsp;	public BlockRecord(final Location location) {</b>
+&nbsp;
+&nbsp;		// get location world
+<b class="nc">&nbsp;		World world = location.getWorld();</b>
+&nbsp;
+&nbsp;		// if world is null, set worldName and worldUid null
+<b class="nc">&nbsp;		if (world != null) {</b>
+<b class="nc">&nbsp;			this.worldName = location.getWorld().getName();</b>
+<b class="nc">&nbsp;			this.worldUid = location.getWorld().getUID();</b>
+&nbsp;		}
+&nbsp;		else {
+<b class="nc">&nbsp;			this.worldName = null;</b>
+<b class="nc">&nbsp;			this.worldUid = null;</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// set block and chunk coordinates
+<b class="nc">&nbsp;		this.blockX = location.getBlockX();</b>
+<b class="nc">&nbsp;		this.blockY = location.getBlockY();</b>
+<b class="nc">&nbsp;		this.blockZ = location.getBlockZ();</b>
+<b class="nc">&nbsp;		this.chunkX = location.getChunk().getX();</b>
+<b class="nc">&nbsp;		this.chunkZ = location.getChunk().getZ();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Class constructor
+&nbsp;	 *
+&nbsp;	 * @param worldName location world name
+&nbsp;	 * @param worldUid location world uid
+&nbsp;	 * @param blockX location block x coordinate
+&nbsp;	 * @param blockY location block y coordinate
+&nbsp;	 * @param blockZ location block z coordinate
+&nbsp;	 * @param chunkX location chunk x coordinate
+&nbsp;	 * @param chunkZ location chunk z coordinate
+&nbsp;	 */
+&nbsp;	public BlockRecord(final String worldName,
+&nbsp;					   final UUID worldUid,
+&nbsp;					   final int blockX,
+&nbsp;					   final int blockY,
+&nbsp;					   final int blockZ,
+&nbsp;					   final int chunkX,
+<b class="nc">&nbsp;					   final int chunkZ) {</b>
+&nbsp;
+<b class="nc">&nbsp;		this.worldName = worldName;</b>
+<b class="nc">&nbsp;		this.worldUid = worldUid;</b>
+<b class="nc">&nbsp;		this.blockX = blockX;</b>
+<b class="nc">&nbsp;		this.blockY = blockY;</b>
+<b class="nc">&nbsp;		this.blockZ = blockZ;</b>
+<b class="nc">&nbsp;		this.chunkX = chunkX;</b>
+<b class="nc">&nbsp;		this.chunkZ = chunkZ;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get world name in location record
+&nbsp;	 * @return String - world name in location record
+&nbsp;	 */
+&nbsp;	public String getWorldName() {
+<b class="nc">&nbsp;		return worldName;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * get world uid
+&nbsp;	 * @return UUID - the world uid in location record
+&nbsp;	 */
+&nbsp;	public UUID getWorldUid() {
+<b class="nc">&nbsp;		return worldUid;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * get block x coordinate for location
+&nbsp;	 * @return int - block x coordinate for location
+&nbsp;	 */
+&nbsp;	public int getBlockX() {
+<b class="nc">&nbsp;		return blockX;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * get block y coordinate for location
+&nbsp;	 * @return int - block y coordinate for location
+&nbsp;	 */
+&nbsp;	public int getBlockY() {
+<b class="nc">&nbsp;		return blockY;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * get block z coordinate for location
+&nbsp;	 * @return int - block z coordinate for location
+&nbsp;	 */
+&nbsp;	public int getBlockZ() {
+<b class="nc">&nbsp;		return blockZ;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * get chunk x coordinate for location
+&nbsp;	 * @return int - chunk x coordinate for location
+&nbsp;	 */
+&nbsp;	public int getChunkX() {
+<b class="nc">&nbsp;		return chunkX;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * get chunk z coordinate for location
+&nbsp;	 * @return int - chunk z coordinate for location
+&nbsp;	 */
+&nbsp;	public int getChunkZ() {
+<b class="nc">&nbsp;		return chunkZ;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public boolean equals(final Object o) {
+<b class="nc">&nbsp;		if (this == o) {</b>
+<b class="nc">&nbsp;			return true;</b>
+&nbsp;		}
+<b class="nc">&nbsp;		if (o == null || getClass() != o.getClass()) {</b>
+<b class="nc">&nbsp;			return false;</b>
+&nbsp;		}
+<b class="nc">&nbsp;		BlockRecord that = (BlockRecord) o;</b>
+<b class="nc">&nbsp;		return blockX == that.blockX &amp;&amp;</b>
+&nbsp;				blockY == that.blockY &amp;&amp;
+&nbsp;				blockZ == that.blockZ &amp;&amp;
+<b class="nc">&nbsp;				worldUid.equals(that.worldUid);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public int hashCode() {
+<b class="nc">&nbsp;		return Objects.hash(worldUid, blockX, blockY, blockZ);</b>
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

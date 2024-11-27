@@ -1,0 +1,336 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > HighlightManager</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock.highlights</a>
+</div>
+
+<h1>Coverage Summary for Class: HighlightManager (com.winterhavenmc.roadblock.highlights)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">HighlightManager</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (1/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    17.9%
+  </span>
+  <span class="absValue">
+    (5/28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (21/147)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock.highlights;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.PluginMain;
+&nbsp;
+&nbsp;import org.bukkit.Location;
+&nbsp;import org.bukkit.entity.Player;
+&nbsp;import org.bukkit.event.EventHandler;
+&nbsp;import org.bukkit.event.Listener;
+&nbsp;import org.bukkit.event.player.PlayerQuitEvent;
+&nbsp;import org.bukkit.scheduler.BukkitTask;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;import java.util.concurrent.ConcurrentHashMap;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * A class that manages the highlighting of blocks to show the protected status of blocks
+&nbsp; */
+&nbsp;public final class HighlightManager implements Listener {
+&nbsp;
+&nbsp;	// reference to main class
+&nbsp;	private final PluginMain plugin;
+&nbsp;
+&nbsp;	// Map of highlighted block locations for players
+&nbsp;	private final Map&lt;UUID, Set&lt;Location&gt;&gt; highlightLocationMap;
+&nbsp;
+&nbsp;	// Map of unhighlight tasks for player
+&nbsp;	private final Map&lt;UUID, BukkitTask&gt; unHighlightTaskMap;
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Class constructor
+&nbsp;	 *
+&nbsp;	 * @param plugin reference to main class
+&nbsp;	 */
+&nbsp;	public HighlightManager(final PluginMain plugin)
+<b class="fc">&nbsp;	{</b>
+&nbsp;		// set reference to main class
+<b class="fc">&nbsp;		this.plugin = plugin;</b>
+&nbsp;
+&nbsp;		// initialize highlight map
+<b class="fc">&nbsp;		highlightLocationMap = new ConcurrentHashMap&lt;&gt;();</b>
+&nbsp;
+&nbsp;		// initialize timestamp map
+<b class="fc">&nbsp;		unHighlightTaskMap = new ConcurrentHashMap&lt;&gt;();</b>
+&nbsp;
+&nbsp;		// register events in this class
+<b class="fc">&nbsp;		plugin.getServer().getPluginManager().registerEvents(this, plugin);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Highlight blocks in locationSet for player,
+&nbsp;	 * using blocks of {@code material} type as highlight
+&nbsp;	 *
+&nbsp;	 * @param player         the player for whom to display the highlighted blocks
+&nbsp;	 * @param locationSet    a collection of Locations of blocks to highlight
+&nbsp;	 * @param highlightStyle HighlightStyle enum value to use for highlighting
+&nbsp;	 */
+&nbsp;	public void highlightBlocks(final Player player,
+&nbsp;	                            final Collection&lt;Location&gt; locationSet,
+&nbsp;	                            final HighlightStyle highlightStyle)
+&nbsp;	{
+&nbsp;		// null parameter check
+<b class="nc">&nbsp;		if (player == null || locationSet == null || highlightStyle == null) {</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// if player uuid not in map, insert with locationSet
+<b class="nc">&nbsp;		if (!highlightLocationMap.containsKey(player.getUniqueId())) {</b>
+<b class="nc">&nbsp;			highlightLocationMap.put(player.getUniqueId(), new HashSet&lt;&gt;(locationSet));</b>
+&nbsp;		}
+&nbsp;		// else add locationSet to existing player highlighted blocks in highlight map
+&nbsp;		else {
+<b class="nc">&nbsp;			highlightLocationMap.get(player.getUniqueId()).addAll(locationSet);</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// run showHighlight task with small delay
+<b class="nc">&nbsp;		new ShowHighlightTask(plugin, player, locationSet, highlightStyle)</b>
+<b class="nc">&nbsp;				.runTaskLaterAsynchronously(plugin, 2L);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Remove highlighting from all blocks for player
+&nbsp;	 *
+&nbsp;	 * @param player the player for whom to remove all block highlighting
+&nbsp;	 */
+&nbsp;	public void unHighlightBlocks(final Player player)
+&nbsp;	{
+&nbsp;		// null parameter check
+<b class="nc">&nbsp;		if (player == null) {</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// check if player has entry in highlight map
+<b class="nc">&nbsp;		if (highlightLocationMap.containsKey(player.getUniqueId())) {</b>
+&nbsp;
+&nbsp;			// get block locations from highlight map for player
+<b class="nc">&nbsp;			Set&lt;Location&gt; locationSet = highlightLocationMap.get(player.getUniqueId());</b>
+&nbsp;
+&nbsp;			// send block change to player for each block location in highlight map for player
+<b class="nc">&nbsp;			locationSet.forEach(location -&gt; player.sendBlockChange(location, location.getBlock().getBlockData()));</b>
+&nbsp;
+&nbsp;			// remove player from highlight map
+<b class="nc">&nbsp;			highlightLocationMap.remove(player.getUniqueId());</b>
+&nbsp;
+&nbsp;			// cancel unhighlight task for player
+<b class="nc">&nbsp;			cancelUnhighlightTask(player);</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Get a task from the pending remove map
+&nbsp;	 *
+&nbsp;	 * @param player the player whose task will be retrieved from the map
+&nbsp;	 * @return BukkitTask - the task retrieved
+&nbsp;	 */
+&nbsp;	private Optional&lt;BukkitTask&gt; getUnhighlightTask(final Player player)
+&nbsp;	{
+&nbsp;		// null parameter check
+<b class="nc">&nbsp;		if (player == null) {</b>
+<b class="nc">&nbsp;			return Optional.empty();</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// get task for player from pending remove task map
+<b class="nc">&nbsp;		return Optional.ofNullable(unHighlightTaskMap.get(player.getUniqueId()));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Insert a task into the pending remove task map
+&nbsp;	 *
+&nbsp;	 * @param player the player whose task will be inserted in the map
+&nbsp;	 * @param task the task to be inserted in the map
+&nbsp;	 */
+&nbsp;	void putUnhighlightTask(final Player player, final BukkitTask task)
+&nbsp;	{
+&nbsp;		// null parameter check
+<b class="nc">&nbsp;		if (player == null || task == null) {</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// insert entry for player in pending remove task map
+<b class="nc">&nbsp;		unHighlightTaskMap.put(player.getUniqueId(), task);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Cancel task for player and remove from the unhighlight task map
+&nbsp;	 *
+&nbsp;	 * @param player the player whose task will be removed from the map
+&nbsp;	 */
+&nbsp;	void cancelUnhighlightTask(final Player player)
+&nbsp;	{
+&nbsp;		// null parameter check
+<b class="nc">&nbsp;		if (player == null) {</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// cancel pending unhighlight task for player
+<b class="nc">&nbsp;		getUnhighlightTask(player).ifPresent(BukkitTask::cancel);</b>
+&nbsp;
+&nbsp;		// remove entry for player from unhighlight task map
+<b class="nc">&nbsp;		unHighlightTaskMap.remove(player.getUniqueId());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for PlayerQuitEvent;
+&nbsp;	 * removes player from highlighted blocks hashmap
+&nbsp;	 *
+&nbsp;	 * @param event the event handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler
+&nbsp;	public void onPlayerQuit(final PlayerQuitEvent event)
+&nbsp;	{
+&nbsp;		// null parameter check
+<b class="nc">&nbsp;		if (event == null) {</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// remove any entry for player from highlight map
+<b class="nc">&nbsp;		highlightLocationMap.remove(event.getPlayer().getUniqueId());</b>
+&nbsp;
+&nbsp;		// cancel any pending unhighlight task for player
+<b class="nc">&nbsp;		cancelUnhighlightTask(event.getPlayer());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

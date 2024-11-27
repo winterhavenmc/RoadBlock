@@ -1,0 +1,392 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > BlockEventListener</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock.listeners</a>
+</div>
+
+<h1>Coverage Summary for Class: BlockEventListener (com.winterhavenmc.roadblock.listeners)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">BlockEventListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    12.5%
+  </span>
+  <span class="absValue">
+    (1/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    8%
+  </span>
+  <span class="absValue">
+    (4/50)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    6.1%
+  </span>
+  <span class="absValue">
+    (17/278)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock.listeners;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.PluginMain;
+&nbsp;import com.winterhavenmc.roadblock.messages.MessageId;
+&nbsp;import com.winterhavenmc.roadblock.sounds.SoundId;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.util.Config;
+&nbsp;import org.bukkit.block.Block;
+&nbsp;import org.bukkit.block.BlockFace;
+&nbsp;import org.bukkit.block.BlockState;
+&nbsp;import org.bukkit.entity.Player;
+&nbsp;import org.bukkit.event.EventHandler;
+&nbsp;import org.bukkit.event.Listener;
+&nbsp;import org.bukkit.event.block.*;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * Implements player event listeners for RoadBlock events.
+&nbsp; */
+&nbsp;public final class BlockEventListener implements Listener {
+&nbsp;
+&nbsp;	// reference to main class
+&nbsp;	private final PluginMain plugin;
+&nbsp;
+<b class="fc">&nbsp;	private final Set&lt;String&gt; pathMaterialNames = Set.of(</b>
+&nbsp;			&quot;GRASS_PATH&quot;,
+&nbsp;			&quot;LEGACY_GRASS_PATH&quot;,
+&nbsp;			&quot;DIRT_PATH&quot; );
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Class constructor for BlockEventListener class
+&nbsp;	 *
+&nbsp;	 * @param plugin reference to this plugin&#39;s main class
+&nbsp;	 */
+<b class="fc">&nbsp;	public BlockEventListener(final PluginMain plugin) {</b>
+&nbsp;
+&nbsp;		// reference to main
+<b class="fc">&nbsp;		this.plugin = plugin;</b>
+&nbsp;
+&nbsp;		// register events in this class
+<b class="fc">&nbsp;		plugin.getServer().getPluginManager().registerEvents(this, plugin);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for BlockPlaceEvent;
+&nbsp;	 * prevents placing blocks on top of road blocks
+&nbsp;	 *
+&nbsp;	 * @param event the event handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler(ignoreCancelled = true)
+&nbsp;	void onBlockPlace(final BlockPlaceEvent event) {
+&nbsp;
+&nbsp;		// get configured no-place-height
+<b class="nc">&nbsp;		final int height = Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig());</b>
+&nbsp;
+&nbsp;		// get block placed
+<b class="nc">&nbsp;		final Block placedBlock = event.getBlockPlaced();</b>
+&nbsp;
+&nbsp;		// get player
+<b class="nc">&nbsp;		final Player player = event.getPlayer();</b>
+&nbsp;
+&nbsp;		// check if block below placed block is protected grass path, to prevent converting to regular dirt
+<b class="nc">&nbsp;		final Block blockBelow = placedBlock.getRelative(BlockFace.DOWN);</b>
+<b class="nc">&nbsp;		if (pathMaterialNames.contains(blockBelow.getType().toString()) &amp;&amp; plugin.blockManager.isRoadBlock(blockBelow)) {</b>
+<b class="nc">&nbsp;			event.setCancelled(true);</b>
+<b class="nc">&nbsp;			plugin.messageBuilder.build(player, MessageId.BLOCK_PLACE_FAIL_GRASS_PATH).send();</b>
+<b class="nc">&nbsp;			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_GRASS_PATH);</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// check if block placed is configured distance above a road block
+<b class="nc">&nbsp;		if (plugin.blockManager.isAboveRoad(placedBlock.getLocation(), height)) {</b>
+<b class="nc">&nbsp;			event.setCancelled(true);</b>
+<b class="nc">&nbsp;			plugin.messageBuilder.build(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD).send();</b>
+<b class="nc">&nbsp;			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_ABOVE_ROAD);</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for BlockMultiPlaceEvent;
+&nbsp;	 * prevents placing blocks on top of road blocks
+&nbsp;	 *
+&nbsp;	 * @param event the event handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler(ignoreCancelled = true)
+&nbsp;	void onBlockMultiPlace(final BlockMultiPlaceEvent event) {
+&nbsp;
+&nbsp;		// get configured no-place-height
+<b class="nc">&nbsp;		final int height = Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig());</b>
+&nbsp;
+&nbsp;		// get list of blocks that will be replaced
+<b class="nc">&nbsp;		final List&lt;BlockState&gt; replacedBlocks = event.getReplacedBlockStates();</b>
+&nbsp;
+&nbsp;		// get event player
+<b class="nc">&nbsp;		final Player player = event.getPlayer();</b>
+&nbsp;
+&nbsp;		// iterate through blocks and check if any are above a road block
+<b class="nc">&nbsp;		for (BlockState blockState : replacedBlocks) {</b>
+&nbsp;
+&nbsp;			// if block is above a road block, cancel event and send player message
+<b class="nc">&nbsp;			if (plugin.blockManager.isAboveRoad(blockState.getLocation(), height)) {</b>
+<b class="nc">&nbsp;				event.setCancelled(true);</b>
+<b class="nc">&nbsp;				plugin.messageBuilder.build(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD).send();</b>
+<b class="nc">&nbsp;				plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_ABOVE_ROAD);</b>
+&nbsp;				break;
+&nbsp;			}
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for BlockBreakEvent;
+&nbsp;	 * prevents breaking protected road blocks
+&nbsp;	 *
+&nbsp;	 * @param event the event handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler(ignoreCancelled = true)
+&nbsp;	void onBlockBreak(final BlockBreakEvent event) {
+&nbsp;
+&nbsp;		// get block being broken
+<b class="nc">&nbsp;		final Block block = event.getBlock();</b>
+&nbsp;
+&nbsp;		// get player
+<b class="nc">&nbsp;		final Player player = event.getPlayer();</b>
+&nbsp;
+&nbsp;		// check if block is a protected road block
+<b class="nc">&nbsp;		if (plugin.blockManager.isRoadBlock(block)) {</b>
+&nbsp;
+&nbsp;			// if player does not have override permission, cancel event and send player message
+<b class="nc">&nbsp;			if (!player.hasPermission(&quot;roadblock.break&quot;)) {</b>
+<b class="nc">&nbsp;				event.setCancelled(true);</b>
+<b class="nc">&nbsp;				plugin.messageBuilder.build(player, MessageId.TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION).send();</b>
+&nbsp;				return;
+&nbsp;			}
+&nbsp;
+&nbsp;			// player does have override permission; remove protection from block and send player message
+<b class="nc">&nbsp;			plugin.blockManager.removeBlockLocations(Set.of(block.getLocation()));</b>
+<b class="nc">&nbsp;			plugin.messageBuilder.build(player, MessageId.TOOL_SUCCESS_BREAK_BLOCK).send();</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for BlockExplodeEvent;
+&nbsp;	 * prevents protected road blocks from being destroyed by block explosions
+&nbsp;	 *
+&nbsp;	 * @param event the event handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler(ignoreCancelled = true)
+&nbsp;	void onBlockExplode(final BlockExplodeEvent event) {
+&nbsp;
+&nbsp;		// get collection of exploded blocks
+<b class="nc">&nbsp;		final Collection&lt;Block&gt; blocks = new ArrayList&lt;&gt;(event.blockList());</b>
+&nbsp;
+&nbsp;		// remove any road blocks from event block list
+<b class="nc">&nbsp;		for (Block block : blocks) {</b>
+<b class="nc">&nbsp;			if (plugin.blockManager.isRoadBlock(block)) {</b>
+<b class="nc">&nbsp;				event.blockList().remove(block);</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for BlockPistonExtendEvent;
+&nbsp;	 * prevents extending pistons from effecting road blocks
+&nbsp;	 *
+&nbsp;	 * @param event the event handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler(ignoreCancelled = true)
+&nbsp;	void onPistonExtend(final BlockPistonExtendEvent event) {
+&nbsp;
+&nbsp;		// get list of blocks affected by piston
+<b class="nc">&nbsp;		final Collection&lt;Block&gt; blocks = new ArrayList&lt;&gt;(event.getBlocks());</b>
+&nbsp;
+&nbsp;		// iterate through block list checking for road blocks
+<b class="nc">&nbsp;		for (Block block : blocks) {</b>
+&nbsp;
+&nbsp;			// if block is a road block, cancel event and break piston
+<b class="nc">&nbsp;			if (plugin.blockManager.isRoadBlock(block)) {</b>
+<b class="nc">&nbsp;				event.setCancelled(true);</b>
+&nbsp;
+&nbsp;				// break the piston
+<b class="nc">&nbsp;				event.getBlock().breakNaturally();</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for BlockPistonRetractEvent;
+&nbsp;	 * Prevents retracting pistons from effecting road blocks
+&nbsp;	 *
+&nbsp;	 * @param event the event handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler(ignoreCancelled = true)
+&nbsp;	void onPistonRetract(final BlockPistonRetractEvent event) {
+&nbsp;
+&nbsp;		// get collection of blocks affected by piston
+<b class="nc">&nbsp;		final Collection&lt;Block&gt; blocks = new ArrayList&lt;&gt;(event.getBlocks());</b>
+&nbsp;
+&nbsp;		// iterate through block list checking for road blocks
+<b class="nc">&nbsp;		for (Block block : blocks) {</b>
+&nbsp;
+&nbsp;			// if block is a road block, cancel event and break piston
+<b class="nc">&nbsp;			if (plugin.blockManager.isRoadBlock(block)) {</b>
+<b class="nc">&nbsp;				event.setCancelled(true);</b>
+&nbsp;
+&nbsp;				// break the piston
+<b class="nc">&nbsp;				event.getBlock().breakNaturally();</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for BlockFormEvent;
+&nbsp;	 * prevents snow from forming on road blocks if configured
+&nbsp;	 *
+&nbsp;	 * @param event the event handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler(ignoreCancelled = true)
+&nbsp;	void onBlockForm(final BlockFormEvent event) {
+&nbsp;
+&nbsp;		// if configured false, do nothing and return
+<b class="nc">&nbsp;		if (!Config.SNOW_PLOW.getBoolean(plugin.getConfig())) {</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// get event block
+<b class="nc">&nbsp;		Block block = event.getBlock();</b>
+&nbsp;
+&nbsp;		// if formed block is above road block, cancel event
+<b class="nc">&nbsp;		if (plugin.blockManager.isAboveRoad(block.getLocation(), 1)) {</b>
+<b class="nc">&nbsp;			event.setCancelled(true);</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

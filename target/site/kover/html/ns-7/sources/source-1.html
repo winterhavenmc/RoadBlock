@@ -1,0 +1,445 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > BlockManager</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock.storage</a>
+</div>
+
+<h1>Coverage Summary for Class: BlockManager (com.winterhavenmc.roadblock.storage)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">BlockManager</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    17.6%
+  </span>
+  <span class="absValue">
+    (3/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    2.5%
+  </span>
+  <span class="absValue">
+    (1/40)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11.1%
+  </span>
+  <span class="absValue">
+    (7/63)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    9.1%
+  </span>
+  <span class="absValue">
+    (24/265)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock.storage;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.util.Config;
+&nbsp;import org.bukkit.Location;
+&nbsp;import org.bukkit.Material;
+&nbsp;import org.bukkit.block.Block;
+&nbsp;import org.bukkit.block.BlockFace;
+&nbsp;import org.bukkit.entity.Player;
+&nbsp;import org.bukkit.plugin.java.JavaPlugin;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;
+&nbsp;public final class BlockManager {
+&nbsp;
+&nbsp;	// reference to main class
+&nbsp;	private final JavaPlugin plugin;
+&nbsp;
+&nbsp;	// set of road block materials
+&nbsp;	private Set&lt;Material&gt; roadBlockMaterials;
+&nbsp;
+&nbsp;	// data store
+&nbsp;	DataStore dataStore;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Class constructor
+&nbsp;	 *
+&nbsp;	 * @param plugin reference to main class
+&nbsp;	 */
+<b class="fc">&nbsp;	public BlockManager(final JavaPlugin plugin) {</b>
+&nbsp;
+&nbsp;		// set reference to main class
+<b class="fc">&nbsp;		this.plugin = plugin;</b>
+&nbsp;
+&nbsp;		// get road block materials from config file
+<b class="fc">&nbsp;		updateMaterials();</b>
+&nbsp;
+&nbsp;		// create data store using configured type
+<b class="fc">&nbsp;		dataStore = DataStore.connect(plugin);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Close data store
+&nbsp;	 */
+&nbsp;	public void close() {
+<b class="pc">&nbsp;		if (dataStore != null) {</b>
+<b class="fc">&nbsp;			dataStore.close();</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * reload data store
+&nbsp;	 */
+&nbsp;	public void reload() {
+&nbsp;
+&nbsp;		// reload road block materials from config
+<b class="nc">&nbsp;		updateMaterials();</b>
+&nbsp;
+&nbsp;		// get current datastore type
+<b class="nc">&nbsp;		final DataStoreType currentType = dataStore.getType();</b>
+&nbsp;
+&nbsp;		// get configured datastore type
+<b class="nc">&nbsp;		final DataStoreType newType = DataStoreType.match(Config.STORAGE_TYPE.getString(plugin.getConfig()));</b>
+&nbsp;
+&nbsp;		// if current datastore type does not match configured datastore type, create new datastore
+<b class="nc">&nbsp;		if (!currentType.equals(newType)) {</b>
+&nbsp;
+&nbsp;			// create new datastore
+<b class="nc">&nbsp;			dataStore = DataStore.connect(plugin);</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Create Set of all blocks of valid road block material attached to location
+&nbsp;	 *
+&nbsp;	 * @param startLocation location to begin searching for attached road blocks
+&nbsp;	 * @return Set of Locations of attached road blocks
+&nbsp;	 */
+&nbsp;	public Set&lt;Location&gt; getFill(final Location startLocation) {
+&nbsp;
+&nbsp;		// if passed location is null, return empty set
+<b class="nc">&nbsp;		if (startLocation == null) {</b>
+<b class="nc">&nbsp;			return Collections.emptySet();</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// create HashSet for return values
+<b class="nc">&nbsp;		final Set&lt;Location&gt; returnSet = new HashSet&lt;&gt;();</b>
+&nbsp;
+&nbsp;		// create queue using linked list implementation
+<b class="nc">&nbsp;		final Queue&lt;Location&gt; queue = new LinkedList&lt;&gt;();</b>
+&nbsp;
+&nbsp;		// put start location in queue
+<b class="nc">&nbsp;		queue.add(startLocation);</b>
+&nbsp;
+&nbsp;		// loop until queue is empty
+<b class="nc">&nbsp;		while (!queue.isEmpty()) {</b>
+&nbsp;
+&nbsp;			// remove location at head of queue
+<b class="nc">&nbsp;			Location loc = queue.poll();</b>
+&nbsp;
+&nbsp;			// if location is not in return set and is a road block material and is not too far from start...
+<b class="nc">&nbsp;			if (!returnSet.contains(loc) &amp;&amp; roadBlockMaterials.contains(loc.getBlock().getType())</b>
+<b class="nc">&nbsp;					&amp;&amp; loc.distanceSquared(startLocation) &lt; Math.pow(Config.SPREAD_DISTANCE.getInt(plugin.getConfig()), 2)) {</b>
+&nbsp;
+&nbsp;				// add location to return set
+<b class="nc">&nbsp;				returnSet.add(loc);</b>
+&nbsp;
+&nbsp;				// add adjacent locations to queue
+<b class="nc">&nbsp;				queue.add(loc.clone().add(0, 0, 1));</b>
+<b class="nc">&nbsp;				queue.add(loc.clone().add(0, 0, -1));</b>
+<b class="nc">&nbsp;				queue.add(loc.clone().add(1, 0, 0));</b>
+<b class="nc">&nbsp;				queue.add(loc.clone().add(-1, 0, 0));</b>
+&nbsp;			}
+&nbsp;		}
+<b class="nc">&nbsp;		return returnSet;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	public Collection&lt;BlockRecord&gt; getBlockRecords(final Collection&lt;Location&gt; locationSet) {
+&nbsp;		// create set of block records from locationSet
+<b class="nc">&nbsp;		Collection&lt;BlockRecord&gt; blockRecordSet = new HashSet&lt;&gt;();</b>
+<b class="nc">&nbsp;		for (Location location : locationSet) {</b>
+<b class="nc">&nbsp;			blockRecordSet.add(new BlockRecord(location));</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return blockRecordSet;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check if block below player is a protected road block
+&nbsp;	 *
+&nbsp;	 * @param player the player to is above a road block
+&nbsp;	 * @return {@code true} if player is within three blocks above a road block, else {@code false}
+&nbsp;	 */
+&nbsp;	public boolean isAboveRoad(final Player player) {
+&nbsp;
+&nbsp;		// if player is null, return false
+<b class="nc">&nbsp;		if (player == null) {</b>
+<b class="nc">&nbsp;			return false;</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// get configured height above road
+<b class="nc">&nbsp;		final int distance = Config.ON_ROAD_HEIGHT.getInt(plugin.getConfig());</b>
+&nbsp;
+&nbsp;		// if distance is less than one, return false
+<b class="nc">&nbsp;		if (distance &lt; 1) {</b>
+<b class="nc">&nbsp;			return false;</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// return result of isAboveRoad for player location and configured height
+<b class="nc">&nbsp;		return isAboveRoad(player.getLocation(), distance);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check if block below location is a protected road block, searching down to maxDepth
+&nbsp;	 *
+&nbsp;	 * @param location the location to test if above a road block
+&nbsp;	 * @param distance the distance in blocks to test below location for road blocks
+&nbsp;	 * @return {@code true} if location is above a road block, else {@code false}
+&nbsp;	 */
+&nbsp;	public boolean isAboveRoad(final Location location, final int distance) {
+&nbsp;
+&nbsp;		// if passed location is null, return false
+<b class="nc">&nbsp;		if (location == null) {</b>
+<b class="nc">&nbsp;			return false;</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// if passed distance is less than one, return false
+<b class="nc">&nbsp;		if (distance &lt; 1) {</b>
+<b class="nc">&nbsp;			return false;</b>
+&nbsp;		}
+&nbsp;
+<b class="nc">&nbsp;		boolean result = false;</b>
+<b class="nc">&nbsp;		int checkDepth = distance;</b>
+&nbsp;
+&nbsp;		// iterate until maxDepth reached
+<b class="nc">&nbsp;		while (checkDepth &gt; 0) {</b>
+&nbsp;
+&nbsp;			// get block at checkDepth
+<b class="nc">&nbsp;			Block testBlock = location.getBlock().getRelative(BlockFace.DOWN, checkDepth);</b>
+&nbsp;
+&nbsp;			// don&#39;t check datastore unless testBlock is road block material
+<b class="nc">&nbsp;			if (isRoadBlockMaterial(testBlock)) {</b>
+<b class="nc">&nbsp;				if (dataStore.isProtected(testBlock.getLocation())) {</b>
+<b class="nc">&nbsp;					result = true;</b>
+&nbsp;					break;
+&nbsp;				}
+&nbsp;			}
+&nbsp;
+&nbsp;			// decrement checkDepth
+<b class="nc">&nbsp;			checkDepth--;</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return result;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check if block is a protected road block
+&nbsp;	 *
+&nbsp;	 * @param block the block to test
+&nbsp;	 * @return {@code true} if the block is a protected road block, else {@code false}
+&nbsp;	 */
+&nbsp;	public boolean isRoadBlock(final Block block) {
+&nbsp;
+&nbsp;		// if passed block is null, return false
+<b class="nc">&nbsp;		if (block == null) {</b>
+<b class="nc">&nbsp;			return false;</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// check if block is road block material
+<b class="nc">&nbsp;		if (!isRoadBlockMaterial(block)) {</b>
+<b class="nc">&nbsp;			return false;</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// check if block is in cache or datastore
+<b class="nc">&nbsp;		return dataStore.isProtected(block.getLocation());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check if block is a valid road block material
+&nbsp;	 *
+&nbsp;	 * @param block the block to test for valid configured road block material
+&nbsp;	 * @return {@code true} if the block material is a configured road block material, {@code false} if it is not
+&nbsp;	 */
+&nbsp;	private boolean isRoadBlockMaterial(final Block block) {
+<b class="nc">&nbsp;		return block != null &amp;&amp; roadBlockMaterials.contains(block.getType());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check if block at location is a valid road block material
+&nbsp;	 *
+&nbsp;	 * @param location the location of a block to test for valid road block material
+&nbsp;	 * @return {@code true} if the block at location is a configured road block material, {@code false} if it is not
+&nbsp;	 */
+&nbsp;	@SuppressWarnings(&quot;unused&quot;)
+&nbsp;	private boolean isRoadBlockMaterial(final Location location) {
+<b class="nc">&nbsp;		return location != null &amp;&amp; roadBlockMaterials.contains(location.getBlock().getType());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Check if a material is a valid road block material
+&nbsp;	 *
+&nbsp;	 * @param material the material type to test for valid road block material
+&nbsp;	 * @return {@code true} if the material is a configured road block material, {@code false} if it is not
+&nbsp;	 */
+&nbsp;	public boolean isRoadBlockMaterial(final Material material) {
+<b class="nc">&nbsp;		return material != null &amp;&amp; roadBlockMaterials.contains(material);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Insert block location records into datastore
+&nbsp;	 *
+&nbsp;	 * @param locations a Collection of Locations to be inserted into the datastore
+&nbsp;	 */
+&nbsp;	public int storeBlockLocations(final Collection&lt;Location&gt; locations) {
+<b class="nc">&nbsp;		return dataStore.insertRecords(getBlockRecords(locations));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Remove block locations from datastore
+&nbsp;	 *
+&nbsp;	 * @param locations a Collection of Locations to be deleted from the datastore
+&nbsp;	 */
+&nbsp;	public int removeBlockLocations(final Collection&lt;Location&gt; locations) {
+<b class="nc">&nbsp;		return dataStore.deleteRecords(getBlockRecords(locations));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Parse valid road block materials from config file
+&nbsp;	 */
+&nbsp;	public void updateMaterials() {
+<b class="fc">&nbsp;		this.roadBlockMaterials = Config.MATERIALS.getMaterialSet(plugin.getConfig());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	synchronized public int getBlockTotal() {
+<b class="nc">&nbsp;		return dataStore.getTotalBlocks();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	public Collection&lt;Location&gt; selectNearbyBlocks(final Location location, final int distance) {
+<b class="nc">&nbsp;		return dataStore.selectNearbyBlocks(location, distance);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	public Set&lt;Material&gt; getRoadBlockMaterials() {
+<b class="nc">&nbsp;		return roadBlockMaterials;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

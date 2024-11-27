@@ -1,0 +1,369 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > DataStoreType</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock.storage</a>
+</div>
+
+<h1>Coverage Summary for Class: DataStoreType (com.winterhavenmc.roadblock.storage)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">DataStoreType</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (4/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    53.6%
+  </span>
+  <span class="absValue">
+    (15/28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    54.6%
+  </span>
+  <span class="absValue">
+    (71/130)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">DataStoreType$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (2/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    45.5%
+  </span>
+  <span class="absValue">
+    (10/22)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    81.8%
+  </span>
+  <span class="absValue">
+    (9/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (4/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    53.1%
+  </span>
+  <span class="absValue">
+    (17/32)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    53.3%
+  </span>
+  <span class="absValue">
+    (81/152)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock.storage;
+&nbsp;
+&nbsp;import org.bukkit.plugin.java.JavaPlugin;
+&nbsp;
+&nbsp;import java.io.File;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.HashSet;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;public enum DataStoreType {</b>
+&nbsp;
+<b class="fc">&nbsp;	SQLITE(&quot;SQLite&quot;, &quot;roadblocks.db&quot;) {</b>
+&nbsp;
+&nbsp;		@Override
+&nbsp;		DataStore connect(final JavaPlugin plugin) {
+&nbsp;
+&nbsp;			// create new sqlite datastore object
+<b class="fc">&nbsp;			return new DataStoreSQLite(plugin);</b>
+&nbsp;		}
+&nbsp;
+&nbsp;
+&nbsp;		@Override
+&nbsp;		boolean storageObjectExists(final JavaPlugin plugin) {
+&nbsp;			// get path name to data store file
+<b class="nc">&nbsp;			File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getStorageName());</b>
+<b class="nc">&nbsp;			return dataStoreFile.exists();</b>
+&nbsp;		}
+&nbsp;	};
+&nbsp;
+&nbsp;
+&nbsp;	// datastore type formatted display name
+&nbsp;	private final String displayName;
+&nbsp;
+&nbsp;	// datastore object name
+&nbsp;	private final String storageName;
+&nbsp;
+&nbsp;	// default datastore type
+<b class="fc">&nbsp;	private final static DataStoreType defaultType = DataStoreType.SQLITE;</b>
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Class constructor
+&nbsp;	 *
+&nbsp;	 * @param displayName the display name of the DataStoreType
+&nbsp;	 */
+<b class="fc">&nbsp;	DataStoreType(final String displayName, final String storageName) {</b>
+<b class="fc">&nbsp;		this.displayName = displayName;</b>
+<b class="fc">&nbsp;		this.storageName = storageName;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Create instance of a DataStore
+&nbsp;	 *
+&nbsp;	 * @return instance of a DataStore
+&nbsp;	 */
+&nbsp;	abstract DataStore connect(final JavaPlugin plugin);
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public final String toString() {
+<b class="fc">&nbsp;		return displayName;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Getter for storage object name.
+&nbsp;	 *
+&nbsp;	 * @return the name of the backing store object for a data store type
+&nbsp;	 */
+&nbsp;	String getStorageName() {
+<b class="fc">&nbsp;		return storageName;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Test if datastore backing object (file, database) exists
+&nbsp;	 *
+&nbsp;	 * @param plugin reference to plugin main class
+&nbsp;	 * @return true if backing object exists, false if not
+&nbsp;	 */
+&nbsp;	abstract boolean storageObjectExists(final JavaPlugin plugin);
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Match datastore type from passed string; ignores case
+&nbsp;	 *
+&nbsp;	 * @param name A string to match to a DataStoreType
+&nbsp;	 * @return matching DataStoreType or default type if no match
+&nbsp;	 */
+&nbsp;	public static DataStoreType match(final String name) {
+<b class="fc">&nbsp;		for (DataStoreType type : DataStoreType.values()) {</b>
+<b class="pc">&nbsp;			if (type.toString().equalsIgnoreCase(name)) {</b>
+<b class="nc">&nbsp;				return type;</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;		// no match; return default type
+<b class="fc">&nbsp;		return defaultType;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * convert old data store to new data store
+&nbsp;	 *
+&nbsp;	 * @param oldDataStore the old datastore to be converted from
+&nbsp;	 * @param newDataStore the new datastore to be converted to
+&nbsp;	 */
+&nbsp;	static void convert(final JavaPlugin plugin, final DataStore oldDataStore, final DataStore newDataStore) {
+&nbsp;
+&nbsp;		// if datastores are same type, do not convert
+<b class="nc">&nbsp;		if (oldDataStore.getType().equals(newDataStore.getType())) {</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// if old datastore file exists, attempt to read all records
+<b class="nc">&nbsp;		if (oldDataStore.getType().storageObjectExists(plugin)) {</b>
+&nbsp;
+<b class="nc">&nbsp;			plugin.getLogger().info(&quot;Converting existing &quot; + oldDataStore + &quot; datastore to &quot;</b>
+&nbsp;					+ newDataStore + &quot; datastore...&quot;);
+&nbsp;
+&nbsp;			// initialize old datastore if necessary
+<b class="nc">&nbsp;			if (!oldDataStore.isInitialized()) {</b>
+&nbsp;				try {
+<b class="nc">&nbsp;					oldDataStore.initialize();</b>
+&nbsp;				}
+&nbsp;				catch (Exception e) {
+<b class="nc">&nbsp;					plugin.getLogger().warning(&quot;Could not initialize &quot;</b>
+&nbsp;							+ oldDataStore + &quot; datastore for conversion.&quot;);
+<b class="nc">&nbsp;					plugin.getLogger().warning(e.getLocalizedMessage());</b>
+&nbsp;					return;
+&nbsp;				}
+&nbsp;			}
+&nbsp;
+&nbsp;			// get count of records inserted in new datastore from old datastore
+<b class="nc">&nbsp;			int count = newDataStore.insertRecords(oldDataStore.selectAllRecords());</b>
+&nbsp;
+&nbsp;			// log record count message
+<b class="nc">&nbsp;			plugin.getLogger().info(count + &quot; records converted to &quot;</b>
+&nbsp;					+ newDataStore + &quot; datastore.&quot;);
+&nbsp;
+&nbsp;			// flush new datastore to disk if applicable
+<b class="nc">&nbsp;			newDataStore.sync();</b>
+&nbsp;
+&nbsp;			// close old datastore
+&nbsp;			oldDataStore.close();
+&nbsp;
+&nbsp;			// delete old datastore
+<b class="nc">&nbsp;			oldDataStore.delete();</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * convert all existing data stores to new data store
+&nbsp;	 *
+&nbsp;	 * @param newDataStore the new datastore that all other existing datastores should be converted to
+&nbsp;	 */
+&nbsp;	static void convertAll(final JavaPlugin plugin, final DataStore newDataStore) {
+&nbsp;
+&nbsp;		// get collection of all data store types
+<b class="fc">&nbsp;		final Collection&lt;DataStoreType&gt; dataStores =</b>
+<b class="fc">&nbsp;				new HashSet&lt;&gt;(Arrays.asList(DataStoreType.values()));</b>
+&nbsp;
+&nbsp;		// remove newDataStore from list of types to convert
+<b class="fc">&nbsp;		dataStores.remove(newDataStore.getType());</b>
+&nbsp;
+&nbsp;		// convert each old datastore type to new datastore
+<b class="pc">&nbsp;		for (DataStoreType type : dataStores) {</b>
+<b class="nc">&nbsp;			convert(plugin, type.connect(plugin), newDataStore);</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

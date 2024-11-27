@@ -53,7 +53,7 @@ fabric.properties
 
 
 ### Maven ###
-target/*
+target/**
 !target/site
 pom.xml.tag
 pom.xml.releaseBackup

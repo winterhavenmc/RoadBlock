@@ -1,0 +1,512 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > EntityEventListener</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock.listeners</a>
+</div>
+
+<h1>Coverage Summary for Class: EntityEventListener (com.winterhavenmc.roadblock.listeners)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">EntityEventListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/58)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/86)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/432)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock.listeners;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.PluginMain;
+&nbsp;import com.winterhavenmc.roadblock.highlights.HighlightStyle;
+&nbsp;import com.winterhavenmc.roadblock.messages.Macro;
+&nbsp;import com.winterhavenmc.roadblock.messages.MessageId;
+&nbsp;import com.winterhavenmc.roadblock.sounds.SoundId;
+&nbsp;import com.winterhavenmc.roadblock.util.Config;
+&nbsp;import com.winterhavenmc.roadblock.util.RoadBlockTool;
+&nbsp;
+&nbsp;import org.bukkit.Location;
+&nbsp;import org.bukkit.Material;
+&nbsp;import org.bukkit.block.Block;
+&nbsp;import org.bukkit.entity.Player;
+&nbsp;import org.bukkit.event.EventHandler;
+&nbsp;import org.bukkit.event.Listener;
+&nbsp;import org.bukkit.event.block.Action;
+&nbsp;import org.bukkit.event.entity.EntityChangeBlockEvent;
+&nbsp;import org.bukkit.event.entity.EntityExplodeEvent;
+&nbsp;import org.bukkit.event.entity.EntityTargetEvent;
+&nbsp;import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+&nbsp;import org.bukkit.event.player.*;
+&nbsp;import org.bukkit.inventory.ItemStack;
+&nbsp;import org.bukkit.potion.PotionEffect;
+&nbsp;import org.bukkit.potion.PotionEffectType;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.Set;
+&nbsp;
+<b class="nc">&nbsp;public class EntityEventListener implements Listener {</b>
+&nbsp;
+&nbsp;	// reference to main class
+&nbsp;	private final PluginMain plugin;
+&nbsp;
+&nbsp;	// set of entity target cancel reasons
+<b class="nc">&nbsp;	private final Set&lt;EntityTargetEvent.TargetReason&gt; cancelReasons = Set.of(</b>
+&nbsp;			EntityTargetEvent.TargetReason.CLOSEST_PLAYER,
+&nbsp;			EntityTargetEvent.TargetReason.RANDOM_TARGET,
+&nbsp;			EntityTargetEvent.TargetReason.UNKNOWN );
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Class constructor for EntityEventListener
+&nbsp;	 *
+&nbsp;	 * @param plugin reference to this plugin&#39;s main class
+&nbsp;	 */
+<b class="nc">&nbsp;	public EntityEventListener(final PluginMain plugin) {</b>
+&nbsp;
+&nbsp;		// reference to main
+<b class="nc">&nbsp;		this.plugin = plugin;</b>
+&nbsp;
+&nbsp;		// register events in this class
+<b class="nc">&nbsp;		plugin.getServer().getPluginManager().registerEvents(this, plugin);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for EntityExplodeEvent;
+&nbsp;	 * prevents protected road blocks from being destroyed by entity explosions
+&nbsp;	 *
+&nbsp;	 * @param event the event handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler(ignoreCancelled = true)
+&nbsp;	void onEntityExplode(final EntityExplodeEvent event) {
+&nbsp;
+&nbsp;		// get collection of exploded blocks
+<b class="nc">&nbsp;		final Collection&lt;Block&gt; blocks = new ArrayList&lt;&gt;(event.blockList());</b>
+&nbsp;
+&nbsp;		// remove any road blocks from event block list
+<b class="nc">&nbsp;		for (Block block : blocks) {</b>
+<b class="nc">&nbsp;			if (plugin.blockManager.isRoadBlock(block)) {</b>
+<b class="nc">&nbsp;				event.blockList().remove(block);</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for EntityChangeBlockEvent;
+&nbsp;	 * stops entities from changing protected road blocks
+&nbsp;	 */
+&nbsp;	@EventHandler(ignoreCancelled = true)
+&nbsp;	void onEntityChangeBlock(final EntityChangeBlockEvent event) {
+&nbsp;
+&nbsp;		// if event block is a RoadBlock, cancel event
+<b class="nc">&nbsp;		if (plugin.blockManager.isRoadBlock(event.getBlock())) {</b>
+<b class="nc">&nbsp;			event.setCancelled(true);</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for EntityTargetLivingEntityEvent;
+&nbsp;	 * cancels players being targeted by mobs if they are within configured height above a road block
+&nbsp;	 * and mob is further away than configured target-distance
+&nbsp;	 *
+&nbsp;	 * @param event the event handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler(ignoreCancelled = true)
+&nbsp;	void onEntityTargetLivingEntity(final EntityTargetLivingEntityEvent event) {
+&nbsp;
+&nbsp;		// if configured target distance is zero or negative, do nothing and return (feature is disabled)
+<b class="nc">&nbsp;		if (Config.TARGET_DISTANCE.getInt(plugin.getConfig()) &lt;= 0) {</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// check that target is a player
+<b class="nc">&nbsp;		if (event.getTarget() != null &amp;&amp; event.getTarget() instanceof final Player player) {</b>
+&nbsp;
+&nbsp;			// check that player is above a road block
+<b class="nc">&nbsp;			if (plugin.blockManager.isAboveRoad(player)) {</b>
+&nbsp;
+&nbsp;				// if entity to target distance is less than configured target distance,
+&nbsp;				// do nothing and return, allowing player to be targeted
+<b class="nc">&nbsp;				if (event.getEntity().getLocation()</b>
+<b class="nc">&nbsp;						.distanceSquared(player.getLocation()) &lt; Math.pow(Config.TARGET_DISTANCE.getInt(plugin.getConfig()), 2)) {</b>
+&nbsp;					return;
+&nbsp;				}
+&nbsp;
+&nbsp;				// get target reason
+<b class="nc">&nbsp;				final EntityTargetEvent.TargetReason reason = event.getReason();</b>
+&nbsp;
+&nbsp;				// if reason is in cancelReasons list, cancel event
+<b class="nc">&nbsp;				if (cancelReasons.contains(reason)) {</b>
+<b class="nc">&nbsp;					event.setCancelled(true);</b>
+&nbsp;				}
+&nbsp;			}
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for PlayerItemHeldEvent;
+&nbsp;	 * unhighlights blocks when player changes held item from road block tool
+&nbsp;	 *
+&nbsp;	 * @param event the event handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler
+&nbsp;	void onPlayerChangeItem(final PlayerItemHeldEvent event) {
+&nbsp;
+<b class="nc">&nbsp;		final Player player = event.getPlayer();</b>
+&nbsp;
+<b class="nc">&nbsp;		final ItemStack previousItem = player.getInventory().getItem(event.getPreviousSlot());</b>
+&nbsp;
+<b class="nc">&nbsp;		if (RoadBlockTool.isTool(previousItem)) {</b>
+<b class="nc">&nbsp;			plugin.highlightManager.unHighlightBlocks(player);</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for PlayerGameModeChangeEvent;
+&nbsp;	 * unhighlights blocks when player changes gamemode
+&nbsp;	 *
+&nbsp;	 * @param event the event handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler
+&nbsp;	void onPlayerChangeGameMode(final PlayerGameModeChangeEvent event) {
+<b class="nc">&nbsp;		plugin.highlightManager.unHighlightBlocks(event.getPlayer());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for PlayerDropItemEvent;
+&nbsp;	 * removes custom tool from game when dropped
+&nbsp;	 *
+&nbsp;	 * @param event the event handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler(ignoreCancelled = true)
+&nbsp;	void onPlayerDropItem(final PlayerDropItemEvent event) {
+&nbsp;
+&nbsp;		// get dropped item
+<b class="nc">&nbsp;		final ItemStack droppedItem = event.getItemDrop().getItemStack();</b>
+&nbsp;
+&nbsp;		// if dropped item is not a road block tool, do nothing and return
+<b class="nc">&nbsp;		if (!RoadBlockTool.isTool(droppedItem)) {</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// remove dropped item
+<b class="nc">&nbsp;		event.getItemDrop().remove();</b>
+&nbsp;
+&nbsp;		// play tool drop sound for player
+<b class="nc">&nbsp;		plugin.soundConfig.playSound(event.getPlayer(), SoundId.TOOL_DROP);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Event handler for PlayerInteractEvent;
+&nbsp;	 * handles blocks clicked with RoadBlock tool
+&nbsp;	 *
+&nbsp;	 * @param event the event handled by this method
+&nbsp;	 */
+&nbsp;	@EventHandler
+&nbsp;	void onPlayerInteract(final PlayerInteractEvent event) {
+&nbsp;
+&nbsp;		//NOTE: do not check for cancelled event here; long distance clicks are considered cancelled
+&nbsp;
+<b class="nc">&nbsp;		final Player player = event.getPlayer();</b>
+&nbsp;
+<b class="nc">&nbsp;		final ItemStack playerItem = event.getItem();</b>
+&nbsp;
+<b class="nc">&nbsp;		final Action action = event.getAction();</b>
+&nbsp;
+&nbsp;		// get clicked block
+<b class="nc">&nbsp;		Block clickedBlock = event.getClickedBlock();</b>
+&nbsp;
+&nbsp;		// if world is not enabled, send message and return
+<b class="nc">&nbsp;		if (!plugin.worldManager.isEnabled(player.getWorld())) {</b>
+<b class="nc">&nbsp;			plugin.messageBuilder.build(player, MessageId.TOOL_FAIL_WORLD_DISABLED)</b>
+<b class="nc">&nbsp;					.setMacro(Macro.WORLD, player.getWorld())</b>
+<b class="nc">&nbsp;					.send();</b>
+<b class="nc">&nbsp;			event.setCancelled(true);</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// if event is air/block click with RoadBlock tool, begin tool use procedure
+<b class="nc">&nbsp;		if (RoadBlockTool.isTool(playerItem) &amp;&amp; !action.equals(Action.PHYSICAL)) {</b>
+&nbsp;
+&nbsp;			// if clicked block is tool transparent material, try to find non-air block along line of sight
+<b class="nc">&nbsp;			if (clickedBlock == null || RoadBlockTool.toolTransparentMaterials.contains(clickedBlock.getType())) {</b>
+&nbsp;
+&nbsp;				// RH says this can sometimes throw an exception, so using try...catch block
+&nbsp;				try {
+<b class="nc">&nbsp;					clickedBlock = player.getTargetBlock(RoadBlockTool.toolTransparentMaterials, 100);</b>
+&nbsp;				}
+&nbsp;				catch (Exception e) {
+<b class="nc">&nbsp;					plugin.getLogger().info(&quot;player.getTargetBlock() threw an exception.&quot;);</b>
+<b class="nc">&nbsp;					plugin.getLogger().info(e.getLocalizedMessage());</b>
+&nbsp;				}
+&nbsp;			}
+&nbsp;
+&nbsp;			// if no clicked block detected, do nothing and return
+<b class="nc">&nbsp;			if (clickedBlock == null) {</b>
+&nbsp;				return;
+&nbsp;			}
+&nbsp;
+&nbsp;			// if clicked block is air, the actual clicked block was too far away
+<b class="nc">&nbsp;			if (clickedBlock.getType().equals(Material.AIR)) {</b>
+<b class="nc">&nbsp;				plugin.messageBuilder.build(player, MessageId.TOOL_FAIL_DISTANCE_EXCEEDED).send();</b>
+&nbsp;				return;
+&nbsp;			}
+&nbsp;
+&nbsp;			// cancel event to prevent breaking blocks with road block tool
+<b class="nc">&nbsp;			event.setCancelled(true);</b>
+&nbsp;
+&nbsp;			// if player does not have roadblock.set permission, do nothing and return
+<b class="nc">&nbsp;			if (!player.hasPermission(&quot;roadblock.set&quot;)) {</b>
+<b class="nc">&nbsp;				plugin.messageBuilder.build(player, MessageId.TOOL_FAIL_USE_PERMISSION).send();</b>
+<b class="nc">&nbsp;				plugin.soundConfig.playSound(player, SoundId.TOOL_FAIL_USE_PERMISSION);</b>
+&nbsp;				return;
+&nbsp;			}
+&nbsp;
+&nbsp;			// if block clicked is not in list of road block materials, send message and return
+<b class="nc">&nbsp;			if (!plugin.blockManager.getRoadBlockMaterials().contains(clickedBlock.getType())) {</b>
+<b class="nc">&nbsp;				plugin.messageBuilder.build(player, MessageId.TOOL_FAIL_INVALID_MATERIAL)</b>
+<b class="nc">&nbsp;						.setMacro(Macro.MATERIAL, clickedBlock.getType())</b>
+<b class="nc">&nbsp;						.send();</b>
+<b class="nc">&nbsp;				plugin.soundConfig.playSound(player, SoundId.TOOL_FAIL_INVALID_MATERIAL);</b>
+&nbsp;				return;
+&nbsp;			}
+&nbsp;
+&nbsp;			// get road block locations attached to clicked block
+<b class="nc">&nbsp;			final Collection&lt;Location&gt; locations = new HashSet&lt;&gt;(plugin.blockManager.getFill(clickedBlock.getLocation()));</b>
+&nbsp;
+&nbsp;			// if right click, protect blocks
+<b class="nc">&nbsp;			if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR)) {</b>
+<b class="nc">&nbsp;				protectBlocks(player, locations);</b>
+&nbsp;			}
+&nbsp;
+&nbsp;			// if left click, unprotect blocks
+<b class="nc">&nbsp;			else if (action.equals(Action.LEFT_CLICK_BLOCK) || action.equals(Action.LEFT_CLICK_AIR)) {</b>
+<b class="nc">&nbsp;				unprotectBlocks(player, locations);</b>
+&nbsp;			}
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@EventHandler
+&nbsp;	final void onPlayerMove(final PlayerMoveEvent event) {
+&nbsp;
+&nbsp;		// if speed boost is configured false, do nothing and return
+<b class="nc">&nbsp;		if (!Config.SPEED_BOOST.getBoolean(plugin.getConfig())) {</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// get player for event
+<b class="nc">&nbsp;		final Player player = event.getPlayer();</b>
+&nbsp;
+&nbsp;		// if player is not above road, do nothing and return
+<b class="nc">&nbsp;		if (!plugin.blockManager.isAboveRoad(player)) {</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// if player movement is head movement only, do nothing and return
+<b class="nc">&nbsp;		if (event.getFrom().equals(event.getTo())) {</b>
+&nbsp;			return;
+&nbsp;		}
+&nbsp;
+&nbsp;		// speed boost attributes
+<b class="nc">&nbsp;		boolean ambient = false;</b>
+<b class="nc">&nbsp;		boolean particles = false;</b>
+<b class="nc">&nbsp;		boolean icon = false;</b>
+&nbsp;
+&nbsp;		// if player already has speed boost, get existing attributes
+<b class="nc">&nbsp;		if (player.hasPotionEffect(PotionEffectType.SPEED)) {</b>
+<b class="nc">&nbsp;			PotionEffect currentEffect = player.getPotionEffect(PotionEffectType.SPEED);</b>
+<b class="nc">&nbsp;			assert currentEffect != null;</b>
+<b class="nc">&nbsp;			ambient = currentEffect.isAmbient();</b>
+<b class="nc">&nbsp;			particles = currentEffect.hasParticles();</b>
+<b class="nc">&nbsp;			icon = currentEffect.hasIcon();</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// speed boost potion effect
+<b class="nc">&nbsp;		PotionEffect speedBoost = new PotionEffect(PotionEffectType.SPEED, 10, 1, ambient, particles, icon);</b>
+&nbsp;
+&nbsp;		// apply speed boost to player
+<b class="nc">&nbsp;		player.addPotionEffect(speedBoost);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Protect a collection of blocks
+&nbsp;	 *
+&nbsp;	 * @param player the player invoking the protection of blocks
+&nbsp;	 * @param locations Collection of Location of blocks to be protected
+&nbsp;	 */
+&nbsp;	void protectBlocks(final Player player, final Collection&lt;Location&gt; locations) {
+&nbsp;
+&nbsp;		// highlight blocks
+<b class="nc">&nbsp;		plugin.highlightManager.highlightBlocks(player, locations, HighlightStyle.PROTECT);</b>
+&nbsp;
+&nbsp;		// store blocks
+<b class="nc">&nbsp;		int result = plugin.blockManager.storeBlockLocations(locations);</b>
+&nbsp;
+&nbsp;		// send player successful protect message
+<b class="nc">&nbsp;		plugin.messageBuilder.build(player, MessageId.TOOL_SUCCESS_PROTECT)</b>
+<b class="nc">&nbsp;				.setMacro(Macro.QUANTITY, result)</b>
+<b class="nc">&nbsp;				.send();</b>
+<b class="nc">&nbsp;		plugin.soundConfig.playSound(player, SoundId.TOOL_SUCCESS_PROTECT);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Unprotect a collection of blocks
+&nbsp;	 *
+&nbsp;	 * @param player the player invoking the unprotection of blocks
+&nbsp;	 * @param locations Collection of Location of blocks to be unprotected
+&nbsp;	 */
+&nbsp;	void unprotectBlocks(final Player player, final Collection&lt;Location&gt; locations) {
+&nbsp;
+&nbsp;		// highlight blocks
+<b class="nc">&nbsp;		plugin.highlightManager.highlightBlocks(player, locations, HighlightStyle.UNPROTECT);</b>
+&nbsp;
+&nbsp;		// remove blocks from storage
+<b class="nc">&nbsp;		int result = plugin.blockManager.removeBlockLocations(locations);</b>
+&nbsp;
+&nbsp;		// send player successful unprotect message
+<b class="nc">&nbsp;		plugin.messageBuilder.build(player, MessageId.TOOL_SUCCESS_UNPROTECT)</b>
+<b class="nc">&nbsp;				.setMacro(Macro.QUANTITY, result)</b>
+<b class="nc">&nbsp;				.send();</b>
+<b class="nc">&nbsp;		plugin.soundConfig.playSound(player, SoundId.TOOL_SUCCESS_UNPROTECT);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>

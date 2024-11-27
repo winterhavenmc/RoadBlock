@@ -1,0 +1,286 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>RoadBlock Coverage Report > StatusSubcommand</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: RoadBlock<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.winterhavenmc.roadblock.commands</a>
+</div>
+
+<h1>Coverage Summary for Class: StatusSubcommand (com.winterhavenmc.roadblock.commands)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">StatusSubcommand</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    7.1%
+  </span>
+  <span class="absValue">
+    (1/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    12.7%
+  </span>
+  <span class="absValue">
+    (7/55)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    8.3%
+  </span>
+  <span class="absValue">
+    (20/240)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2022 Tim Savage.
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, version 3.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful, but
+&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+&nbsp; * General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package com.winterhavenmc.roadblock.commands;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.PluginMain;
+&nbsp;import com.winterhavenmc.roadblock.sounds.SoundId;
+&nbsp;
+&nbsp;import com.winterhavenmc.roadblock.messages.MessageId;
+&nbsp;import com.winterhavenmc.roadblock.util.Config;
+&nbsp;import org.bukkit.ChatColor;
+&nbsp;import org.bukkit.command.CommandSender;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;
+&nbsp;final class StatusSubcommand extends AbstrtactSubcommand {
+&nbsp;
+&nbsp;	private final PluginMain plugin;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;	StatusSubcommand(final PluginMain plugin) {</b>
+<b class="fc">&nbsp;		this.plugin = plugin;</b>
+<b class="fc">&nbsp;		this.name = &quot;status&quot;;</b>
+<b class="fc">&nbsp;		this.usageString = &quot;/roadblock status&quot;;</b>
+<b class="fc">&nbsp;		this.description = MessageId.COMMAND_HELP_STATUS;</b>
+<b class="fc">&nbsp;		this.permissionNode = &quot;roadblock.status&quot;;</b>
+<b class="fc">&nbsp;		this.maxArgs = 0;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public boolean onCommand(final CommandSender sender, final List&lt;String&gt; argsList) {
+&nbsp;
+&nbsp;		// check that sender has permission for status command
+<b class="nc">&nbsp;		if (!sender.hasPermission(permissionNode)) {</b>
+<b class="nc">&nbsp;			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_STATUS_PERMISSION).send();</b>
+<b class="nc">&nbsp;			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);</b>
+<b class="nc">&nbsp;			return true;</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// check max arguments
+<b class="nc">&nbsp;		if (argsList.size() &gt; getMaxArgs()) {</b>
+<b class="nc">&nbsp;			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();</b>
+<b class="nc">&nbsp;			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);</b>
+<b class="nc">&nbsp;			displayUsage(sender);</b>
+<b class="nc">&nbsp;			return true;</b>
+&nbsp;		}
+&nbsp;
+&nbsp;		// display plugin info and config settings
+<b class="nc">&nbsp;		displayPluginVersion(sender);</b>
+<b class="nc">&nbsp;		displayDebugSetting(sender);</b>
+<b class="nc">&nbsp;		displayProfileSetting(sender);</b>
+<b class="nc">&nbsp;		displayTotalBlocksProtected(sender);</b>
+<b class="nc">&nbsp;		displaySpreadDistanceSetting(sender);</b>
+<b class="nc">&nbsp;		displayShowDistanceSetting(sender);</b>
+<b class="nc">&nbsp;		displayNoPlaceHeightSetting(sender);</b>
+<b class="nc">&nbsp;		displayPlayerOnRoadHeightSetting(sender);</b>
+<b class="nc">&nbsp;		displayMobTargetDistanceSetting(sender);</b>
+<b class="nc">&nbsp;		displaySnowPlowSetting(sender);</b>
+<b class="nc">&nbsp;		displaySpeedBoostSetting(sender);</b>
+<b class="nc">&nbsp;		displayEnabledWorlds(sender);</b>
+&nbsp;
+<b class="nc">&nbsp;		return true;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private void displayPluginVersion(final CommandSender sender) {
+<b class="nc">&nbsp;		String versionString = this.plugin.getDescription().getVersion();</b>
+<b class="nc">&nbsp;		sender.sendMessage(ChatColor.DARK_GRAY + &quot;[&quot;</b>
+<b class="nc">&nbsp;				+ ChatColor.YELLOW + plugin.getName() + ChatColor.DARK_GRAY + &quot;] &quot;</b>
+&nbsp;				+ ChatColor.AQUA + &quot;Version: &quot; + ChatColor.RESET + versionString);
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private void displayDebugSetting(final CommandSender sender) {
+<b class="nc">&nbsp;		if (Config.DEBUG.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;			sender.sendMessage(ChatColor.DARK_RED + &quot;DEBUG: &quot; + Config.DEBUG.getBoolean(plugin.getConfig()));</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private void displayProfileSetting(final CommandSender sender) {
+<b class="nc">&nbsp;		if (Config.PROFILE.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;			sender.sendMessage(ChatColor.DARK_RED + &quot;PROFILE: &quot; + Config.PROFILE.getBoolean(plugin.getConfig()));</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private void displayTotalBlocksProtected(final CommandSender sender) {
+<b class="nc">&nbsp;		if (Config.DISPLAY_TOTAL.getBoolean(plugin.getConfig())) {</b>
+<b class="nc">&nbsp;			sender.sendMessage(ChatColor.GREEN + &quot;Total blocks protected: &quot;</b>
+<b class="nc">&nbsp;					+ ChatColor.RESET + plugin.blockManager.getBlockTotal() + &quot; blocks&quot;);</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private void displaySpreadDistanceSetting(final CommandSender sender) {
+<b class="nc">&nbsp;		sender.sendMessage(ChatColor.GREEN + &quot;Spread distance: &quot;</b>
+<b class="nc">&nbsp;				+  ChatColor.RESET + Config.SPREAD_DISTANCE.getInt(plugin.getConfig()) + &quot; blocks&quot;);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private void displayShowDistanceSetting(final CommandSender sender) {
+<b class="nc">&nbsp;		sender.sendMessage(ChatColor.GREEN + &quot;Show distance: &quot;</b>
+<b class="nc">&nbsp;				+ ChatColor.RESET + Config.SHOW_DISTANCE.getInt(plugin.getConfig()) + &quot; blocks&quot;);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private void displayNoPlaceHeightSetting(final CommandSender sender) {
+<b class="nc">&nbsp;		sender.sendMessage(ChatColor.GREEN + &quot;No place height: &quot;</b>
+<b class="nc">&nbsp;				+ ChatColor.RESET + Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig()) + &quot; blocks&quot;);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private void displayPlayerOnRoadHeightSetting(final CommandSender sender) {
+<b class="nc">&nbsp;		sender.sendMessage(ChatColor.GREEN + &quot;Player on road height: &quot;</b>
+<b class="nc">&nbsp;				+ ChatColor.RESET + Config.ON_ROAD_HEIGHT.getInt(plugin.getConfig()) + &quot; blocks&quot;);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private void displayMobTargetDistanceSetting(final CommandSender sender) {
+<b class="nc">&nbsp;		sender.sendMessage(ChatColor.GREEN + &quot;Mob targeting distance: &quot;</b>
+<b class="nc">&nbsp;				+ ChatColor.RESET + Config.TARGET_DISTANCE.getInt(plugin.getConfig()) + &quot; blocks&quot;);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private void displaySnowPlowSetting(final CommandSender sender) {
+<b class="nc">&nbsp;		sender.sendMessage(ChatColor.GREEN + &quot;Snow plow: &quot;</b>
+<b class="nc">&nbsp;				+ ChatColor.RESET + Config.SNOW_PLOW.getBoolean(plugin.getConfig()));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private void displaySpeedBoostSetting(final CommandSender sender) {
+<b class="nc">&nbsp;		sender.sendMessage(ChatColor.GREEN + &quot;Speed boost: &quot;</b>
+<b class="nc">&nbsp;				+ ChatColor.RESET + Config.SPEED_BOOST.getBoolean(plugin.getConfig()));</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	private void displayEnabledWorlds(final CommandSender sender) {
+<b class="nc">&nbsp;		sender.sendMessage(ChatColor.GREEN + &quot;Enabled worlds: &quot;</b>
+<b class="nc">&nbsp;				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-27 03:56</div>
+</div>
+</body>
+</html>
