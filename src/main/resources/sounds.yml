@@ -3,14 +3,14 @@
 COMMAND_FAIL:
   enabled: true
   player-only: true
-  sound: ENTITY_VILLAGER_NO
+  sound: minecraft:entity.villager.no
   volume: 1
   pitch: 1
 
 COMMAND_INVALID:
   enabled: true
   player-only: true
-  sound: ENTITY_WANDERING_TRADER_AMBIENT
+  sound: minecraft:entity.wandering_trader.ambient
   volume: 1
   pitch: 1
 
@@ -18,69 +18,69 @@ COMMAND_INVALID:
 COMMAND_RELOAD_SUCCESS:
   enabled: true
   player-only: true
-  sound: BLOCK_NOTE_BLOCK_CHIME
+  sound: minecraft:block.note_block.chime
   volume: 1
   pitch: 1
 
 COMMAND_SUCCESS_TOOL:
   enabled: true
   player-only: true
-  sound: ENTITY_ITEM_PICKUP
+  sound: minecraft:entity.item.pickup
   volume: 1
   pitch: 1
 
 COMMAND_SUCCESS_SHOW:
   enabled: true
   player-only: true
-  sound: ENTITY_PLAYER_LEVELUP
+  sound: minecraft:entity.player.levelup
   volume: 1
   pitch: 1.5
 
 TOOL_DROP:
   enabled: true
   player-only: true
-  sound: ENTITY_ITEM_BREAK
+  sound: minecraft:entity.item.break
   volume: 1
   pitch: 1
 
 TOOL_FAIL_USE_PERMISSION:
   enabled: true
   player-only: true
-  sound: ENTITY_VILLAGER_NO
+  sound: minecraft:entity.villager.no
   volume: 1
   pitch: 1
 
 TOOL_FAIL_INVALID_MATERIAL:
   enabled: true
   player-only: true
-  sound: ENTITY_VILLAGER_NO
+  sound: minecraft:entity.villager.no
   volume: 1
   pitch: 1
 
 TOOL_SUCCESS_PROTECT:
     enabled: true
     player-only: true
-    sound: BLOCK_NOTE_BLOCK_PLING
+    sound: minecraft:block.note_block.pling
     volume: 1
     pitch: 1
 
 TOOL_SUCCESS_UNPROTECT:
     enabled: true
     player-only: true
-    sound: BLOCK_NOTE_BLOCK_BASS
+    sound: minecraft:block.note_block.bass
     volume: 1
     pitch: 1
 
 BLOCK_PLACE_FAIL_GRASS_PATH:
     enabled: true
     player-only: true
-    sound: ENTITY_VILLAGER_NO
+    sound: minecraft:entity.villager.no
     volume: 1
     pitch: 1
 
 BLOCK_PLACE_FAIL_ABOVE_ROAD:
     enabled: true
     player-only: true
-    sound: ENTITY_VILLAGER_NO
+    sound: minecraft:entity.villager.no
     volume: 1
     pitch: 1
