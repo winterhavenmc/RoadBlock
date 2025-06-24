@@ -87,7 +87,7 @@ final class ShowSubcommand extends AbstrtactSubcommand {
 		// if argument passed, try to parse string to int
 		if (argsList.size() == 1) {
 			try {
-				distance = Integer.parseInt(argsList.get(0));
+				distance = Integer.parseInt(argsList.getFirst());
 			}
 			catch (NumberFormatException nfe) {
 				// send player integer parse error message and return
