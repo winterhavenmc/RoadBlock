@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.winterhaven-mc</groupId>
 	<artifactId>RoadBlock</artifactId>
-	<version>1.19.2-SNAPSHOT</version>
+	<version>1.21.0-SNAPSHOT</version>
 	<name>RoadBlock</name>
 
 	<url>https://github.com/winterhavenmc/RoadBlock</url>
