@@ -58,20 +58,20 @@ final class ToolSubcommand extends AbstrtactSubcommand {
 
 		// sender must be player
 		if (!(sender instanceof final Player player)) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
 
 		// check player permissions
 		if (!player.hasPermission(permissionNode)) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_TOOL_PERMISSION).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_TOOL_PERMISSION).send();
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (argsList.size() > getMaxArgs()) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -85,7 +85,7 @@ final class ToolSubcommand extends AbstrtactSubcommand {
 
 		// if no room in inventory, send message
 		if (!noFit.isEmpty()) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_TOOL_INVENTORY_FULL).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_TOOL_INVENTORY_FULL).send();
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}

@@ -54,14 +54,14 @@ final class ReloadSubcommand extends AbstrtactSubcommand {
 
 		// check that sender has permission for reload command
 		if (!sender.hasPermission(permissionNode)) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_RELOAD_PERMISSION).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_RELOAD_PERMISSION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (argsList.size() > getMaxArgs()) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -86,7 +86,7 @@ final class ReloadSubcommand extends AbstrtactSubcommand {
 		plugin.worldManager.reload();
 
 		// send player success message
-		plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_RELOAD).send();
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_RELOAD).send();
 
 		// play reload success sound for player
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_RELOAD_SUCCESS);

@@ -226,7 +226,7 @@ public class EntityEventListener implements Listener {
 
 		// if world is not enabled, send message and return
 		if (!plugin.worldManager.isEnabled(player.getWorld())) {
-			plugin.messageBuilder.build(player, MessageId.TOOL_FAIL_WORLD_DISABLED)
+			plugin.messageBuilder.compose(player, MessageId.TOOL_FAIL_WORLD_DISABLED)
 					.setMacro(Macro.WORLD, player.getWorld())
 					.send();
 			event.setCancelled(true);
@@ -256,7 +256,7 @@ public class EntityEventListener implements Listener {
 
 			// if clicked block is air, the actual clicked block was too far away
 			if (clickedBlock.getType().equals(Material.AIR)) {
-				plugin.messageBuilder.build(player, MessageId.TOOL_FAIL_DISTANCE_EXCEEDED).send();
+				plugin.messageBuilder.compose(player, MessageId.TOOL_FAIL_DISTANCE_EXCEEDED).send();
 				return;
 			}
 
@@ -265,14 +265,14 @@ public class EntityEventListener implements Listener {
 
 			// if player does not have roadblock.set permission, do nothing and return
 			if (!player.hasPermission("roadblock.set")) {
-				plugin.messageBuilder.build(player, MessageId.TOOL_FAIL_USE_PERMISSION).send();
+				plugin.messageBuilder.compose(player, MessageId.TOOL_FAIL_USE_PERMISSION).send();
 				plugin.soundConfig.playSound(player, SoundId.TOOL_FAIL_USE_PERMISSION);
 				return;
 			}
 
 			// if block clicked is not in list of road block materials, send message and return
 			if (!plugin.blockManager.getRoadBlockMaterials().contains(clickedBlock.getType())) {
-				plugin.messageBuilder.build(player, MessageId.TOOL_FAIL_INVALID_MATERIAL)
+				plugin.messageBuilder.compose(player, MessageId.TOOL_FAIL_INVALID_MATERIAL)
 						.setMacro(Macro.MATERIAL, clickedBlock.getType())
 						.send();
 				plugin.soundConfig.playSound(player, SoundId.TOOL_FAIL_INVALID_MATERIAL);
@@ -353,7 +353,7 @@ public class EntityEventListener implements Listener {
 		int result = plugin.blockManager.storeBlockLocations(locations);
 
 		// send player successful protect message
-		plugin.messageBuilder.build(player, MessageId.TOOL_SUCCESS_PROTECT)
+		plugin.messageBuilder.compose(player, MessageId.TOOL_SUCCESS_PROTECT)
 				.setMacro(Macro.QUANTITY, result)
 				.send();
 		plugin.soundConfig.playSound(player, SoundId.TOOL_SUCCESS_PROTECT);
@@ -375,7 +375,7 @@ public class EntityEventListener implements Listener {
 		int result = plugin.blockManager.removeBlockLocations(locations);
 
 		// send player successful unprotect message
-		plugin.messageBuilder.build(player, MessageId.TOOL_SUCCESS_UNPROTECT)
+		plugin.messageBuilder.compose(player, MessageId.TOOL_SUCCESS_UNPROTECT)
 				.setMacro(Macro.QUANTITY, result)
 				.send();
 		plugin.soundConfig.playSound(player, SoundId.TOOL_SUCCESS_UNPROTECT);

@@ -87,7 +87,7 @@ public final class BlockEventListener implements Listener {
 		final Block blockBelow = placedBlock.getRelative(BlockFace.DOWN);
 		if (pathMaterialNames.contains(blockBelow.getType().toString()) && plugin.blockManager.isRoadBlock(blockBelow)) {
 			event.setCancelled(true);
-			plugin.messageBuilder.build(player, MessageId.BLOCK_PLACE_FAIL_GRASS_PATH).send();
+			plugin.messageBuilder.compose(player, MessageId.BLOCK_PLACE_FAIL_GRASS_PATH).send();
 			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_GRASS_PATH);
 			return;
 		}
@@ -95,7 +95,7 @@ public final class BlockEventListener implements Listener {
 		// check if block placed is configured distance above a road block
 		if (plugin.blockManager.isAboveRoad(placedBlock.getLocation(), height)) {
 			event.setCancelled(true);
-			plugin.messageBuilder.build(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
+			plugin.messageBuilder.compose(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
 			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_ABOVE_ROAD);
 		}
 	}
@@ -125,7 +125,7 @@ public final class BlockEventListener implements Listener {
 			// if block is above a road block, cancel event and send player message
 			if (plugin.blockManager.isAboveRoad(blockState.getLocation(), height)) {
 				event.setCancelled(true);
-				plugin.messageBuilder.build(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
+				plugin.messageBuilder.compose(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
 				plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_ABOVE_ROAD);
 				break;
 			}
@@ -154,13 +154,13 @@ public final class BlockEventListener implements Listener {
 			// if player does not have override permission, cancel event and send player message
 			if (!player.hasPermission("roadblock.break")) {
 				event.setCancelled(true);
-				plugin.messageBuilder.build(player, MessageId.TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION).send();
+				plugin.messageBuilder.compose(player, MessageId.TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION).send();
 				return;
 			}
 
 			// player does have override permission; remove protection from block and send player message
 			plugin.blockManager.removeBlockLocations(Set.of(block.getLocation()));
-			plugin.messageBuilder.build(player, MessageId.TOOL_SUCCESS_BREAK_BLOCK).send();
+			plugin.messageBuilder.compose(player, MessageId.TOOL_SUCCESS_BREAK_BLOCK).send();
 		}
 	}
 

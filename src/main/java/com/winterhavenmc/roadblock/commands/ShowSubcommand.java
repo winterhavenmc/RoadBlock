@@ -62,20 +62,20 @@ final class ShowSubcommand extends AbstrtactSubcommand {
 
 		// sender must be player
 		if (!(sender instanceof final Player player)) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
 
 		// check player permissions
 		if (!player.hasPermission(permissionNode)) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_SHOW_PERMISSION).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_SHOW_PERMISSION).send();
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (argsList.size() > getMaxArgs()) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -91,7 +91,7 @@ final class ShowSubcommand extends AbstrtactSubcommand {
 			}
 			catch (NumberFormatException nfe) {
 				// send player integer parse error message and return
-				plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_SET_INVALID_INTEGER).send();
+				plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_SET_INVALID_INTEGER).send();
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 
 				// display usage message for player
@@ -107,7 +107,7 @@ final class ShowSubcommand extends AbstrtactSubcommand {
 		plugin.highlightManager.highlightBlocks(player, locations, HighlightStyle.PROTECT);
 
 		// send player success message
-		plugin.messageBuilder.build(player, MessageId.COMMAND_SUCCESS_SHOW).setMacro(Macro.QUANTITY, locations.size()).send();
+		plugin.messageBuilder.compose(player, MessageId.COMMAND_SUCCESS_SHOW).setMacro(Macro.QUANTITY, locations.size()).send();
 
 		// if any blocks highlighted, play sound
 		if (!locations.isEmpty()) {

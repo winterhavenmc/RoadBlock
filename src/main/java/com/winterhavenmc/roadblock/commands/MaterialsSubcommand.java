@@ -55,14 +55,14 @@ final class MaterialsSubcommand extends AbstrtactSubcommand {
 
 		// check that sender has permission for status command
 		if (!sender.hasPermission(permissionNode)) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_MATERIALS_PERMISSION).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_MATERIALS_PERMISSION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (argsList.size() > getMaxArgs()) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
