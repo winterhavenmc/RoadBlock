@@ -40,19 +40,15 @@
 					<url>https://maven.pkg.github.com/winterhavenmc/RoadBlock/</url>
 				</repository>
 			</distributionManagement>
-
-			<repositories>
-				<repository>
-					<id>spigot-repo</id>
-					<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-				</repository>
-				<repository>
-					<id>glaremasters-repo</id>
-					<url>https://repo.glaremasters.me/repository/public/</url>
-				</repository>
-			</repositories>
 		</profile>
 	</profiles>
+
+	<repositories>
+		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 		<!-- Spigot API -->
