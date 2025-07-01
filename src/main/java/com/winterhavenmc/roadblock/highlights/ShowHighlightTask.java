@@ -27,7 +27,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collection;
 
-import static com.winterhavenmc.util.TimeUnit.SECONDS;
+import static com.winterhavenmc.library.TimeUnit.SECONDS;
 
 
 /**
