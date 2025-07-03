@@ -21,10 +21,9 @@ import com.winterhavenmc.roadblock.PluginMain;
 import com.winterhavenmc.roadblock.messages.MessageId;
 import com.winterhavenmc.roadblock.sounds.SoundId;
 import com.winterhavenmc.roadblock.util.RoadBlockTool;
-
 import org.bukkit.command.CommandSender;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,17 +33,19 @@ import java.util.Objects;
 /**
  * A class that implements the tool subcommand
  */
-final class ToolSubcommand extends AbstrtactSubcommand {
-
+final class ToolSubcommand extends AbstrtactSubcommand
+{
 	// reference to the plugin main class
 	private final PluginMain plugin;
 
 
 	/**
 	 * Class constructor
+	 *
 	 * @param plugin reference to the plugin main class
 	 */
-	ToolSubcommand(final PluginMain plugin) {
+	ToolSubcommand(final PluginMain plugin)
+	{
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "tool";
 		this.usageString = "/roadblock tool";
@@ -54,23 +55,26 @@ final class ToolSubcommand extends AbstrtactSubcommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final List<String> argsList) {
-
+	public boolean onCommand(final CommandSender sender, final List<String> argsList)
+	{
 		// sender must be player
-		if (!(sender instanceof final Player player)) {
+		if (!(sender instanceof final Player player))
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
 
 		// check player permissions
-		if (!player.hasPermission(permissionNode)) {
+		if (!player.hasPermission(permissionNode))
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_TOOL_PERMISSION).send();
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
-		if (argsList.size() > getMaxArgs()) {
+		if (argsList.size() > getMaxArgs())
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
@@ -84,7 +88,8 @@ final class ToolSubcommand extends AbstrtactSubcommand {
 		final HashMap<Integer, ItemStack> noFit = player.getInventory().addItem(roadBlockTool);
 
 		// if no room in inventory, send message
-		if (!noFit.isEmpty()) {
+		if (!noFit.isEmpty())
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_TOOL_INVENTORY_FULL).send();
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;

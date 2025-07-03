@@ -23,25 +23,27 @@ import java.util.*;
 /**
  * A class that implements a registry for the subcommands of the plugin
  */
-final class SubcommandRegistry {
-
+final class SubcommandRegistry
+{
 	final Map<String, Subcommand> subcommandMap = new LinkedHashMap<>();
 	final Map<String, String> aliasMap = new HashMap<>();
 
 
 	/**
 	 * Register a subcommand in the map by name.
+	 *
 	 * @param subcommand an instance of the command
 	 */
-	void register(final Subcommand subcommand) {
-
+	void register(final Subcommand subcommand)
+	{
 		String name = subcommand.getName();
 
 		subcommandMap.put(name.toLowerCase(), subcommand);
 
 		subcommand.getAliases();
 
-		for (String alias : subcommand.getAliases()) {
+		for (String alias : subcommand.getAliases())
+		{
 			aliasMap.put(alias.toLowerCase(), name.toLowerCase());
 		}
 	}
@@ -49,14 +51,16 @@ final class SubcommandRegistry {
 
 	/**
 	 * Get command instance from map by name
+	 *
 	 * @param name the command to retrieve from the map
 	 * @return Subcommand - the subcommand instance, or null if no matching name
 	 */
-	Optional<Subcommand> getSubcommand(final String name) {
-
+	Optional<Subcommand> getSubcommand(final String name)
+	{
 		String key = name;
 
-		if (aliasMap.containsKey(key)) {
+		if (aliasMap.containsKey(key))
+		{
 			key = aliasMap.get(key);
 		}
 
@@ -66,9 +70,11 @@ final class SubcommandRegistry {
 
 	/**
 	 * Get list of keys (subcommand names) from the subcommand map
+	 *
 	 * @return List of String - keys of the subcommand map
 	 */
-	Collection<String> getKeys() {
+	Collection<String> getKeys()
+	{
 		return new LinkedHashSet<>(subcommandMap.keySet());
 	}
 }

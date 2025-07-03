@@ -22,7 +22,6 @@ import com.winterhavenmc.roadblock.highlights.HighlightStyle;
 import com.winterhavenmc.roadblock.messages.Macro;
 import com.winterhavenmc.roadblock.messages.MessageId;
 import com.winterhavenmc.roadblock.sounds.SoundId;
-
 import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -36,8 +35,8 @@ import java.util.Objects;
 /**
  * A class that implements the show subcommand
  */
-final class ShowSubcommand extends AbstrtactSubcommand {
-
+final class ShowSubcommand extends AbstrtactSubcommand
+{
 	// reference to plugin main class
 	private final PluginMain plugin;
 
@@ -47,7 +46,8 @@ final class ShowSubcommand extends AbstrtactSubcommand {
 	 *
 	 * @param plugin reference to the plugin main class
 	 */
-	ShowSubcommand(final PluginMain plugin) {
+	ShowSubcommand(final PluginMain plugin)
+	{
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "show";
 		this.usageString = "/roadblock show <distance>";
@@ -58,23 +58,26 @@ final class ShowSubcommand extends AbstrtactSubcommand {
 
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final List<String> argsList) {
-
+	public boolean onCommand(final CommandSender sender, final List<String> argsList)
+	{
 		// sender must be player
-		if (!(sender instanceof final Player player)) {
+		if (!(sender instanceof final Player player))
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
 
 		// check player permissions
-		if (!player.hasPermission(permissionNode)) {
+		if (!player.hasPermission(permissionNode))
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_SHOW_PERMISSION).send();
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
-		if (argsList.size() > getMaxArgs()) {
+		if (argsList.size() > getMaxArgs())
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
@@ -85,11 +88,14 @@ final class ShowSubcommand extends AbstrtactSubcommand {
 		int distance = Config.SHOW_DISTANCE.getInt(plugin.getConfig());
 
 		// if argument passed, try to parse string to int
-		if (argsList.size() == 1) {
-			try {
+		if (argsList.size() == 1)
+		{
+			try
+			{
 				distance = Integer.parseInt(argsList.getFirst());
 			}
-			catch (NumberFormatException nfe) {
+			catch (NumberFormatException nfe)
+			{
 				// send player integer parse error message and return
 				plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_SET_INVALID_INTEGER).send();
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -110,7 +116,8 @@ final class ShowSubcommand extends AbstrtactSubcommand {
 		plugin.messageBuilder.compose(player, MessageId.COMMAND_SUCCESS_SHOW).setMacro(Macro.QUANTITY, locations.size()).send();
 
 		// if any blocks highlighted, play sound
-		if (!locations.isEmpty()) {
+		if (!locations.isEmpty())
+		{
 			plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_SHOW);
 		}
 

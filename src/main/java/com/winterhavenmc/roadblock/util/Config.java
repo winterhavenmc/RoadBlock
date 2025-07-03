@@ -12,8 +12,8 @@ import java.util.Locale;
  * <p>Provides method to fetch configuration setting using Enum member name as key.
  * Parameter values are used solely for testing validity of default config.yml file.
  */
-public enum Config {
-
+public enum Config
+{
 	DEBUG(Boolean.FALSE),
 	PROFILE(Boolean.FALSE),
 	LANGUAGE(Locale.US.toLanguageTag()),
@@ -53,50 +53,62 @@ public enum Config {
 
 	/**
 	 * Class constructor for Enum members
+	 *
 	 * @param defaultValue {@code Object} default value referenced by corresponding key as found in config.yml file
 	 */
-	Config(final Object defaultValue) {
+	Config(final Object defaultValue)
+	{
 		this.defaultObject = defaultValue;
 	}
 
 	/**
 	 * Get corresponding key for Enum member, formatted for style used in config.yml file
+	 *
 	 * @return {@code String} the key as formatted in config.yml file
 	 */
-	public String asFileKey() {
+	public String asFileKey()
+	{
 		return this.toLowerKebabCase();
 	}
 
 	/**
 	 * Convert Enum member name to lower kebab case
+	 *
 	 * @return {@code String} the Enum member name as lower kebab case
 	 */
-	private String toLowerKebabCase() {
+	private String toLowerKebabCase()
+	{
 		return this.name().toLowerCase().replace('_', '-');
 	}
 
 	/**
 	 * Convert Enum member name to upper snake case (used for testing)
+	 *
 	 * @return {@code String} the Enum member name converted to upper snake case
 	 */
-	public String toUpperSnakeCase() {
+	public String toUpperSnakeCase()
+	{
 		return this.name().toUpperCase().replace('-', '_');
 	}
 
 	/**
 	 * Get default value for key, matching exactly the corresponding string in the default config.yml file
+	 *
 	 * @return {@code String} the value for the corresponding key
 	 */
-	public String getDefaultString() {
+	public String getDefaultString()
+	{
 		return this.defaultObject.toString();
 	}
 
 	/**
 	 * Get default object for key
+	 *
 	 * @return {@code Object} the default object
 	 */
 	@SuppressWarnings("unused")
-	public Object getDefaultObject() {
+	public Object getDefaultObject()
+	{
 		return this.defaultObject;
 	}
 
@@ -106,7 +118,8 @@ public enum Config {
 	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
 	 * @return {@code boolean} the referenced value in the current configuration instance
 	 */
-	public boolean getBoolean(final Configuration configuration) {
+	public boolean getBoolean(final Configuration configuration)
+	{
 		return configuration.getBoolean(this.asFileKey());
 	}
 
@@ -116,7 +129,8 @@ public enum Config {
 	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
 	 * @return {@code int} the referenced value in the current configuration instance
 	 */
-	public int getInt(final Configuration configuration) {
+	public int getInt(final Configuration configuration)
+	{
 		return configuration.getInt(this.asFileKey());
 	}
 
@@ -126,7 +140,8 @@ public enum Config {
 	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
 	 * @return {@code String} the referenced value in the current configuration instance
 	 */
-	public String getString(final Configuration configuration) {
+	public String getString(final Configuration configuration)
+	{
 		return configuration.getString(this.asFileKey());
 	}
 
@@ -136,7 +151,8 @@ public enum Config {
 	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
 	 * @return {@code List<String>} the referenced value in the current configuration instance
 	 */
-	public List<String> getStringList(final Configuration configuration) {
+	public List<String> getStringList(final Configuration configuration)
+	{
 		return configuration.getStringList(this.asFileKey());
 	}
 
@@ -146,7 +162,8 @@ public enum Config {
 	 * @param configuration {@code Configuration} reference to the plugin current configuration instance
 	 * @return {@code Object} the referenced value in the current configuration instance
 	 */
-	public Object get(final Configuration configuration) {
+	public Object get(final Configuration configuration)
+	{
 		return configuration.get(this.asFileKey());
 	}
 

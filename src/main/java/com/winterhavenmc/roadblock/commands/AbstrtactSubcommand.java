@@ -21,11 +21,14 @@ import com.winterhavenmc.roadblock.messages.MessageId;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 
-abstract class AbstrtactSubcommand implements Subcommand {
-
+abstract class AbstrtactSubcommand implements Subcommand
+{
 	protected String name;
 	protected Collection<String> aliases = new LinkedHashSet<>();
 	protected String usageString;
@@ -36,46 +39,58 @@ abstract class AbstrtactSubcommand implements Subcommand {
 
 
 	@Override
-	public String getName() {
+	public String getName()
+	{
 		return name;
 	}
 
 	@Override
-	public Collection<String> getAliases() {
+	public Collection<String> getAliases()
+	{
 		return aliases;
 	}
 
 	@Override
-	public String getUsage() {
+	public String getUsage()
+	{
 		return usageString;
 	}
 
 	@Override
-	public void displayUsage(final CommandSender sender) {
+	public void displayUsage(final CommandSender sender)
+	{
 		sender.sendMessage(usageString);
 	}
 
 	@Override
-	public MessageId getDescription() {
+	public MessageId getDescription()
+	{
 		return description;
 	}
 
 	@Override
-	public String getPermissionNode() {
+	public String getPermissionNode()
+	{
 		return this.permissionNode;
 	}
 
 	@Override
-	public int getMinArgs() { return minArgs; }
+	public int getMinArgs()
+	{
+		return minArgs;
+	}
 
 	@Override
-	public int getMaxArgs() { return maxArgs; }
+	public int getMaxArgs()
+	{
+		return maxArgs;
+	}
 
 
 	@Override
 	public List<String> onTabComplete(final CommandSender sender, final Command command,
-									  final String alias, final String[] args) {
-
+	                                  final String alias, final String[] args)
+	{
 		return Collections.emptyList();
 	}
 

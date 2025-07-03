@@ -18,7 +18,6 @@
 package com.winterhavenmc.roadblock.highlights;
 
 import com.winterhavenmc.roadblock.PluginMain;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,8 +32,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * A class that manages the highlighting of blocks to show the protected status of blocks
  */
-public final class HighlightManager implements Listener {
-
+public final class HighlightManager implements Listener
+{
 	// reference to main class
 	private final PluginMain plugin;
 
@@ -79,16 +78,19 @@ public final class HighlightManager implements Listener {
 	                            final HighlightStyle highlightStyle)
 	{
 		// null parameter check
-		if (player == null || locationSet == null || highlightStyle == null) {
+		if (player == null || locationSet == null || highlightStyle == null)
+		{
 			return;
 		}
 
 		// if player uuid not in map, insert with locationSet
-		if (!highlightLocationMap.containsKey(player.getUniqueId())) {
+		if (!highlightLocationMap.containsKey(player.getUniqueId()))
+		{
 			highlightLocationMap.put(player.getUniqueId(), new HashSet<>(locationSet));
 		}
 		// else add locationSet to existing player highlighted blocks in highlight map
-		else {
+		else
+		{
 			highlightLocationMap.get(player.getUniqueId()).addAll(locationSet);
 		}
 
@@ -106,13 +108,14 @@ public final class HighlightManager implements Listener {
 	public void unHighlightBlocks(final Player player)
 	{
 		// null parameter check
-		if (player == null) {
+		if (player == null)
+		{
 			return;
 		}
 
 		// check if player has entry in highlight map
-		if (highlightLocationMap.containsKey(player.getUniqueId())) {
-
+		if (highlightLocationMap.containsKey(player.getUniqueId()))
+		{
 			// get block locations from highlight map for player
 			Set<Location> locationSet = highlightLocationMap.get(player.getUniqueId());
 
@@ -137,7 +140,8 @@ public final class HighlightManager implements Listener {
 	private Optional<BukkitTask> getUnhighlightTask(final Player player)
 	{
 		// null parameter check
-		if (player == null) {
+		if (player == null)
+		{
 			return Optional.empty();
 		}
 
@@ -150,12 +154,13 @@ public final class HighlightManager implements Listener {
 	 * Insert a task into the pending remove task map
 	 *
 	 * @param player the player whose task will be inserted in the map
-	 * @param task the task to be inserted in the map
+	 * @param task   the task to be inserted in the map
 	 */
 	void putUnhighlightTask(final Player player, final BukkitTask task)
 	{
 		// null parameter check
-		if (player == null || task == null) {
+		if (player == null || task == null)
+		{
 			return;
 		}
 
@@ -172,7 +177,8 @@ public final class HighlightManager implements Listener {
 	void cancelUnhighlightTask(final Player player)
 	{
 		// null parameter check
-		if (player == null) {
+		if (player == null)
+		{
 			return;
 		}
 
@@ -194,7 +200,8 @@ public final class HighlightManager implements Listener {
 	public void onPlayerQuit(final PlayerQuitEvent event)
 	{
 		// null parameter check
-		if (event == null) {
+		if (event == null)
+		{
 			return;
 		}
 

@@ -1,16 +1,15 @@
 package com.winterhavenmc.roadblock.util;
 
 import com.winterhavenmc.roadblock.PluginMain;
-
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bstats.charts.SingleLineChart;
 
 
-public class MetricsHandler {
-
-	public MetricsHandler(PluginMain plugin) {
-
+public class MetricsHandler
+{
+	public MetricsHandler(PluginMain plugin)
+	{
 		Metrics metrics = new Metrics(plugin, 13919);
 
 		// get number of currently deployed chests

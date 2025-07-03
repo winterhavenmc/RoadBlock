@@ -29,12 +29,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.sql.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
-final class DataStoreSQLite extends DataStoreAbstract implements DataStore, Listener {
-
+final class DataStoreSQLite extends DataStoreAbstract implements DataStore, Listener
+{
 	// reference to main class
 	private final JavaPlugin plugin;
 
@@ -59,8 +62,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 *
 	 * @param plugin reference to main class
 	 */
-	DataStoreSQLite(final JavaPlugin plugin) {
-
+	DataStoreSQLite(final JavaPlugin plugin)
+	{
 		// reference to main class
 		this.plugin = plugin;
 
@@ -86,10 +89,11 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 * Initialize SQLite datastore
 	 */
 	@Override
-	public void initialize() throws SQLException, ClassNotFoundException {
-
+	public void initialize() throws SQLException, ClassNotFoundException
+	{
 		// if data store is already initialized, do nothing and return
-		if (this.isInitialized()) {
+		if (this.isInitialized())
+		{
 			plugin.getLogger().info(this + " datastore already initialized.");
 			return;
 		}
@@ -114,36 +118,40 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	}
 
 
-	private int getSchemaVersion() {
-
+	private int getSchemaVersion()
+	{
 		int version = -1;
 
-		try {
+		try
+		{
 			final Statement statement = connection.createStatement();
 
 			ResultSet rs = statement.executeQuery(Queries.getQuery("GetUserVersion"));
 
-			while (rs.next()) {
+			while (rs.next())
+			{
 				version = rs.getInt(1);
 			}
-		}
-		catch (SQLException e) {
+		} catch (SQLException e)
+		{
 			plugin.getLogger().warning("Could not get schema version!");
 		}
 		return version;
 	}
 
 
-	private void updateSchema() throws SQLException {
-
+	private void updateSchema() throws SQLException
+	{
 		schemaVersion = getSchemaVersion();
 
 		final Statement statement = connection.createStatement();
 
-		if (schemaVersion == 0) {
+		if (schemaVersion == 0)
+		{
 			int count;
 			ResultSet rs = statement.executeQuery(Queries.getQuery("SelectBlockTable"));
-			if (rs.next()) {
+			if (rs.next())
+			{
 				Collection<BlockRecord> existingRecords = selectAllRecords();
 				statement.executeUpdate(Queries.getQuery("DropBlockTable"));
 				statement.executeUpdate(Queries.getQuery("DropChunkIndex"));
@@ -173,7 +181,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 * (unused for SQLite datastore)
 	 */
 	@Override
-	public void sync() {
+	public void sync()
+	{
 		// no action necessary for this storage type
 	}
 
@@ -182,20 +191,21 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 * Close SQLite datastore connection
 	 */
 	@Override
-	public void close() {
-
-		try {
+	public void close()
+	{
+		try
+		{
 			connection.close();
 			plugin.getLogger().info(this + " datastore connection closed.");
-		}
-		catch (Exception e) {
-
+		} catch (Exception e)
+		{
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while closing the " + this + " datastore.");
 			plugin.getLogger().warning(e.getMessage());
 
 			// if debugging is enabled, output stack trace
-			if (Config.DEBUG.getBoolean(plugin.getConfig())) {
+			if (Config.DEBUG.getBoolean(plugin.getConfig()))
+			{
 				e.printStackTrace();
 			}
 		}
@@ -207,14 +217,15 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 * Delete the SQLite datastore file
 	 */
 	@Override
-	public boolean delete() {
-
+	public boolean delete()
+	{
 		// get reference to dataStore file in file system
 		File dataStoreFile = new File(dataFilePath);
 
 		// if file exists, delete file
 		boolean result = false;
-		if (dataStoreFile.exists()) {
+		if (dataStoreFile.exists())
+		{
 			result = dataStoreFile.delete();
 		}
 
@@ -230,14 +241,16 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 * @return {@code true} if the location is protected, {@code false} if it is not
 	 */
 	@Override
-	public boolean isProtected(final Location location) {
-
+	public boolean isProtected(final Location location)
+	{
 		// get LocationRecord for location
 		BlockRecord blockRecord = new BlockRecord(location);
 
 		// check cache first
-		if (isChunkCached(location)) {
-			if (blockCache.containsKey(blockRecord)) {
+		if (isChunkCached(location))
+		{
+			if (blockCache.containsKey(blockRecord))
+			{
 				return blockCache.get(blockRecord).equals(CacheStatus.RESIDENT)
 						|| blockCache.get(blockRecord).equals(CacheStatus.PENDING_INSERT);
 			}
@@ -248,7 +261,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 		cacheChunk(location.getChunk());
 
 		// check cache again
-		if (blockCache.containsKey(blockRecord)) {
+		if (blockCache.containsKey(blockRecord))
+		{
 			return blockCache.get(blockRecord).equals(CacheStatus.RESIDENT)
 					|| blockCache.get(blockRecord).equals(CacheStatus.PENDING_INSERT);
 		}
@@ -262,50 +276,56 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 * @param blockRecords Collection of records to insert
 	 */
 	@Override
-	synchronized public int insertRecords(final Collection<BlockRecord> blockRecords) {
-
+	synchronized public int insertRecords(final Collection<BlockRecord> blockRecords)
+	{
 		// set cache for all records in list to pending insert
 		int count = 0;
-		for (BlockRecord blockRecord : blockRecords) {
+		for (BlockRecord blockRecord : blockRecords)
+		{
 			blockCache.put(blockRecord, CacheStatus.PENDING_INSERT);
 			count++;
 		}
-		if (Config.DEBUG.getBoolean(plugin.getConfig())) {
+		if (Config.DEBUG.getBoolean(plugin.getConfig()))
+		{
 			plugin.getLogger().info(count + " blocks marked PENDING_INSERT in cache.");
 		}
 
 		// asynchronously insert all locations in hash set
-		new BukkitRunnable() {
+		new BukkitRunnable()
+		{
 			@Override
-			public void run() {
-
+			public void run()
+			{
 				int count = 0;
 				long startTime = System.nanoTime();
 
-				try {
-
+				try
+				{
 					// set connection to transaction mode
 					connection.setAutoCommit(false);
 
-					for (BlockRecord blockRecord : blockRecords) {
-
+					for (BlockRecord blockRecord : blockRecords)
+					{
 						// if location is null, skip to next location
-						if (blockRecord == null) {
+						if (blockRecord == null)
+						{
 							continue;
 						}
 
 						// test that world in location is valid, otherwise skip to next location
-						if (plugin.getServer().getWorld(blockRecord.getWorldUid()) == null) {
+						if (plugin.getServer().getWorld(blockRecord.getWorldUid()) == null)
+						{
 							plugin.getLogger().warning("An error occured while inserting"
 									+ " a record in the " + this + " datastore. World invalid!");
 							blockCache.remove(blockRecord);
 							continue;
 						}
 
-						try {
+						try
+						{
 							// synchronize on database connection
-							synchronized (this) {
-
+							synchronized (this)
+							{
 								// create prepared statement
 								PreparedStatement preparedStatement =
 										connection.prepareStatement(Queries.getQuery("InsertOrIgnoreBlock"));
@@ -322,16 +342,16 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 								// execute prepared statement
 								preparedStatement.executeUpdate();
 							}
-						}
-						catch (SQLException e) {
-
+						} catch (SQLException e)
+						{
 							// output simple error message
 							plugin.getLogger().warning("An error occurred while inserting a location "
 									+ "into the " + this + " datastore.");
 							plugin.getLogger().warning(e.getLocalizedMessage());
 
 							// if debugging is enabled, output stack trace
-							if (Config.DEBUG.getBoolean(plugin.getConfig())) {
+							if (Config.DEBUG.getBoolean(plugin.getConfig()))
+							{
 								e.printStackTrace();
 							}
 							continue;
@@ -342,21 +362,25 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 					connection.commit();
 					connection.setAutoCommit(true);
 				}
-				catch (SQLException e) {
+				catch (SQLException e)
+				{
 					// output simple error message
 					plugin.getLogger().warning("An error occurred while attempting to "
 							+ "insert a block in the " + this + " datastore.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
 					// if debugging is enabled, output stack trace
-					if (Config.DEBUG.getBoolean(plugin.getConfig())) {
+					if (Config.DEBUG.getBoolean(plugin.getConfig()))
+					{
 						e.printStackTrace();
 					}
 				}
 
 				long elapsedTime = (System.nanoTime() - startTime);
-				if (Config.PROFILE.getBoolean(plugin.getConfig())) {
-					if (count > 0) {
+				if (Config.PROFILE.getBoolean(plugin.getConfig()))
+				{
+					if (count > 0)
+					{
 						plugin.getLogger().info(count + " blocks inserted into " + this + " datastore in "
 								+ TimeUnit.NANOSECONDS.toMillis(elapsedTime) + " milliseconds.");
 					}
@@ -373,42 +397,48 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 * @param blockRecords Collection of locations
 	 */
 	@Override
-	synchronized public int deleteRecords(final Collection<BlockRecord> blockRecords) {
-
+	synchronized public int deleteRecords(final Collection<BlockRecord> blockRecords)
+	{
 		// set cache for all records in list to pending delete
 		int count = 0;
-		for (BlockRecord blockRecord : blockRecords) {
+		for (BlockRecord blockRecord : blockRecords)
+		{
 			blockCache.put(blockRecord, CacheStatus.PENDING_DELETE);
 			count++;
 		}
-		if (Config.DEBUG.getBoolean(plugin.getConfig())) {
+		if (Config.DEBUG.getBoolean(plugin.getConfig()))
+		{
 			plugin.getLogger().info(count + " blocks marked PENDING_DELETE in cache.");
 		}
 
 		// asynchronously delete all locations
-		new BukkitRunnable() {
+		new BukkitRunnable()
+		{
 			@Override
-			public void run() {
-
+			public void run()
+			{
 				int count = 0;
 				long startTime = System.nanoTime();
 
-				try {
+				try
+				{
 					connection.setAutoCommit(false);
 
 					int rowsAffected = 0;
 
-					for (final BlockRecord blockRecord : blockRecords) {
-
+					for (final BlockRecord blockRecord : blockRecords)
+					{
 						// if key is null return, skip to next location
-						if (blockRecord == null) {
+						if (blockRecord == null)
+						{
 							continue;
 						}
 
-						try {
+						try
+						{
 							// synchronize on database connection
-							synchronized (this) {
-
+							synchronized (this)
+							{
 								// create prepared statement
 								PreparedStatement preparedStatement =
 										connection.prepareStatement(Queries.getQuery("DeleteBlock"));
@@ -423,15 +453,16 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 								rowsAffected = preparedStatement.executeUpdate();
 							}
 						}
-						catch (SQLException e) {
-
+						catch (SQLException e)
+						{
 							// output simple error message
 							plugin.getLogger().warning("An error occurred while attempting to "
 									+ "delete a block from the " + this + " datastore.");
 							plugin.getLogger().warning(e.getLocalizedMessage());
 
 							// if debugging is enabled, output stack trace
-							if (Config.DEBUG.getBoolean(plugin.getConfig())) {
+							if (Config.DEBUG.getBoolean(plugin.getConfig()))
+							{
 								e.printStackTrace();
 							}
 						}
@@ -441,21 +472,25 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 					connection.commit();
 					connection.setAutoCommit(true);
 				}
-				catch (SQLException e) {
+				catch (SQLException e)
+				{
 					// output simple error message
 					plugin.getLogger().warning("An error occurred while attempting to "
 							+ "delete a block from the " + this + " datastore.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
 					// if debugging is enabled, output stack trace
-					if (Config.DEBUG.getBoolean(plugin.getConfig())) {
+					if (Config.DEBUG.getBoolean(plugin.getConfig()))
+					{
 						e.printStackTrace();
 					}
 				}
 
 				long elapsedTime = (System.nanoTime() - startTime);
-				if (Config.PROFILE.getBoolean(plugin.getConfig())) {
-					if (count > 0) {
+				if (Config.PROFILE.getBoolean(plugin.getConfig()))
+				{
+					if (count > 0)
+					{
 						plugin.getLogger().info(count + " blocks removed from " + this + " datastore in "
 								+ TimeUnit.NANOSECONDS.toMillis(elapsedTime) + " milliseconds.");
 					}
@@ -471,19 +506,20 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 *
 	 * @return List of location records
 	 */
-	synchronized public Collection<BlockRecord> selectAllRecords() {
-
+	synchronized public Collection<BlockRecord> selectAllRecords()
+	{
 		final Collection<BlockRecord> returnSet = new HashSet<>();
 
-		try {
+		try
+		{
 			PreparedStatement preparedStatement =
 					connection.prepareStatement(Queries.getQuery("SelectAllBlocks"));
 
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
 
-			while (rs.next()) {
-
+			while (rs.next())
+			{
 				final World world;
 				final long worldUidMsb;
 				final long worldUidLsb;
@@ -496,11 +532,13 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				final int chunkZ = rs.getInt("chunk_z");
 
 				// if schema version 0, get world object from stored world name
-				if (schemaVersion == 0) {
+				if (schemaVersion == 0)
+				{
 					world = plugin.getServer().getWorld(worldName);
 				}
 				// else get world object from stored world uuid
-				else {
+				else
+				{
 					worldUidMsb = rs.getLong("worlduidmsb");
 					worldUidLsb = rs.getLong("worlduidlsb");
 					UUID worldUid = new UUID(worldUidMsb, worldUidLsb);
@@ -508,7 +546,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				}
 
 				// if world is null, skip adding record to return set
-				if (world == null) {
+				if (world == null)
+				{
 					plugin.getLogger().warning("Stored block has unloaded world: "
 							+ worldName + ". Skipping record.");
 					continue;
@@ -522,15 +561,16 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				returnSet.add(blockRecord);
 			}
 		}
-		catch (SQLException e) {
-
+		catch (SQLException e)
+		{
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
 					+ "fetch all records from the " + this + " datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (Config.DEBUG.getBoolean(plugin.getConfig())) {
+			if (Config.DEBUG.getBoolean(plugin.getConfig()))
+			{
 				e.printStackTrace();
 			}
 		}
@@ -547,12 +587,13 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 * @return Collection of locations
 	 */
 	@Override
-	synchronized public Collection<BlockRecord> selectRecordsInChunk(final Chunk chunk) {
-
+	synchronized public Collection<BlockRecord> selectRecordsInChunk(final Chunk chunk)
+	{
 		// create new set for results
 		final Collection<BlockRecord> returnSet = new HashSet<>();
 
-		try {
+		try
+		{
 			PreparedStatement preparedStatement =
 					connection.prepareStatement(Queries.getQuery("SelectBlocksInChunk"));
 
@@ -572,8 +613,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 			int count = 0;
 
-			while (rs.next()) {
-
+			while (rs.next())
+			{
 				final long worldUidMSB = rs.getLong("worlduidmsb");
 				final long worldUidLSB = rs.getLong("worlduidlsb");
 				String worldName = rs.getString("worldname");
@@ -584,13 +625,14 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				int chunkZ = rs.getInt("chunk_z");
 
 				// reconstitute world uid from components
-				UUID worldUid = new UUID(worldUidMSB,worldUidLSB);
+				UUID worldUid = new UUID(worldUidMSB, worldUidLSB);
 
 				// get world by uid
 				World world = plugin.getServer().getWorld(worldUid);
 
 				// if world is null, skip to next record
-				if (world == null) {
+				if (world == null)
+				{
 					plugin.getLogger().warning("Stored location has invalid world: "
 							+ worldName + ". Skipping record.");
 					continue;
@@ -605,20 +647,22 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				count++;
 			}
 
-			if (Config.PROFILE.getBoolean(plugin.getConfig())) {
+			if (Config.PROFILE.getBoolean(plugin.getConfig()))
+			{
 				plugin.getLogger().info("Fetched " + count + " blocks in chunk in "
 						+ TimeUnit.NANOSECONDS.toMicros(elapsedTime) + " microseconds.");
 			}
 		}
-		catch (SQLException e) {
-
+		catch (SQLException e)
+		{
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
 					+ "fetch records from the " + this + " datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (Config.DEBUG.getBoolean(plugin.getConfig())) {
+			if (Config.DEBUG.getBoolean(plugin.getConfig()))
+			{
 				e.printStackTrace();
 			}
 		}
@@ -629,10 +673,11 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 
 	@Override
-	public Collection<Location> selectNearbyBlocks(final Location location, final int distance) {
-
+	public Collection<Location> selectNearbyBlocks(final Location location, final int distance)
+	{
 		// if passed location is null, return empty set
-		if (location == null) {
+		if (location == null)
+		{
 			return Collections.emptySet();
 		}
 
@@ -640,7 +685,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 		World world = location.getWorld();
 
 		// if world is null, return empty set
-		if (world == null) {
+		if (world == null)
+		{
 			return Collections.emptySet();
 		}
 
@@ -651,7 +697,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 		Collection<Location> resultSet = new HashSet<>();
 
-		try {
+		try
+		{
 			PreparedStatement preparedStatement =
 					connection.prepareStatement(Queries.getQuery("SelectNearbyBlocks"));
 
@@ -665,8 +712,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
 
-			while (rs.next()) {
-
+			while (rs.next())
+			{
 				final double x = rs.getDouble("x");
 				final double y = rs.getDouble("y");
 				final double z = rs.getDouble("z");
@@ -679,15 +726,16 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			}
 
 		}
-		catch (final SQLException e) {
-
+		catch (final SQLException e)
+		{
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
 					+ "select nearby block records from the " + this + " datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (Config.DEBUG.getBoolean(plugin.getConfig())) {
+			if (Config.DEBUG.getBoolean(plugin.getConfig()))
+			{
 				e.printStackTrace();
 			}
 		}
@@ -701,21 +749,24 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 *
 	 * @param chunk the chunk for which to load all road block locations into cache
 	 */
-	private void cacheChunk(final Chunk chunk) {
-
+	private void cacheChunk(final Chunk chunk)
+	{
 		final Collection<BlockRecord> blockSet = selectRecordsInChunk(chunk);
 
 		int count = 0;
 
-		for (BlockRecord blockRecord : blockSet) {
+		for (BlockRecord blockRecord : blockSet)
+		{
 			blockCache.put(blockRecord, CacheStatus.RESIDENT);
 			count++;
 		}
 
 		chunkCache.add(chunk.getBlock(0, 0, 0).getLocation());
 
-		if (Config.DEBUG.getBoolean(plugin.getConfig())) {
-			if (count > 0) {
+		if (Config.DEBUG.getBoolean(plugin.getConfig()))
+		{
+			if (count > 0)
+			{
 				plugin.getLogger().info(count + " blocks added to cache.");
 			}
 		}
@@ -728,14 +779,16 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 *
 	 * @param chunk the chunk for which to remove all road block locations from cache
 	 */
-	private void flushCache(final Chunk chunk) {
-
+	private void flushCache(final Chunk chunk)
+	{
 		int count = 0;
 		long startTime = System.nanoTime();
-		for (BlockRecord blockRecord : blockCache.keySet()) {
+		for (BlockRecord blockRecord : blockCache.keySet())
+		{
 			if (blockRecord.getWorldUid().equals(chunk.getWorld().getUID())
 					&& blockRecord.getChunkX() == chunk.getX()
-					&& blockRecord.getChunkZ() == chunk.getZ()) {
+					&& blockRecord.getChunkZ() == chunk.getZ())
+			{
 				blockCache.remove(blockRecord);
 				count++;
 			}
@@ -744,8 +797,10 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 		chunkCache.remove(chunk.getBlock(0, 0, 0).getLocation());
 
 		long elapsedTime = (System.nanoTime() - startTime);
-		if (Config.PROFILE.getBoolean(plugin.getConfig())) {
-			if (count > 0) {
+		if (Config.PROFILE.getBoolean(plugin.getConfig()))
+		{
+			if (count > 0)
+			{
 				plugin.getLogger().info(count + " blocks removed from cache in "
 						+ TimeUnit.NANOSECONDS.toMicros(elapsedTime) + " microseconds.");
 			}
@@ -759,12 +814,14 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 * @param location the location to test to determine if all chunk road blocks are cached
 	 * @return {@code true} if chunk is cached, {@code false} if not
 	 */
-	private boolean isChunkCached(final Location location) {
-
+	private boolean isChunkCached(final Location location)
+	{
 		final Location chunkLoc = location.getChunk().getBlock(0, 0, 0).getLocation();
 
-		if (chunkCache.contains(chunkLoc)) {
-			if (Config.DEBUG.getBoolean(plugin.getConfig())) {
+		if (chunkCache.contains(chunkLoc))
+		{
+			if (Config.DEBUG.getBoolean(plugin.getConfig()))
+			{
 				plugin.getLogger().info("Chunk is cached.");
 			}
 			return true;
@@ -774,31 +831,34 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 
 	@Override
-	synchronized public int getTotalBlocks() {
-
+	synchronized public int getTotalBlocks()
+	{
 		int total = 0;
 
-		try {
+		try
+		{
 			PreparedStatement preparedStatement =
 					connection.prepareStatement(Queries.getQuery("CountAllBlocks"));
 
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
 
-			while (rs.next()) {
+			while (rs.next())
+			{
 				total = rs.getInt("rowcount");
 			}
 
 		}
-		catch (final SQLException e) {
-
+		catch (final SQLException e)
+		{
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
 					+ "count all records from the " + this + " datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (Config.DEBUG.getBoolean(plugin.getConfig())) {
+			if (Config.DEBUG.getBoolean(plugin.getConfig()))
+			{
 				e.printStackTrace();
 			}
 		}
@@ -814,7 +874,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 * @param event the event being handled by this method
 	 */
 	@EventHandler
-	public void onChunkUnload(final ChunkUnloadEvent event) {
+	public void onChunkUnload(final ChunkUnloadEvent event)
+	{
 		flushCache(event.getChunk());
 	}
 

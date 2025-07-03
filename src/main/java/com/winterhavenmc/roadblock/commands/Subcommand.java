@@ -29,12 +29,12 @@ import java.util.List;
  * An interface that declares the methods required to implement a subcommand
  */
 @SuppressWarnings("unused")
-interface Subcommand {
-
+interface Subcommand
+{
 	/**
 	 * Executes the given command, returning its success.
 	 *
-	 * @param sender the command sender (player or console) who issued the command
+	 * @param sender   the command sender (player or console) who issued the command
 	 * @param argsList List of String - the arguments passed
 	 * @return true if command was executed successfully, false if not
 	 */
@@ -45,14 +45,14 @@ interface Subcommand {
 	/**
 	 * Requests a list of possible completions for a command argument.
 	 *
-	 * @param sender The command sender (player or console) who issued the command
+	 * @param sender  The command sender (player or console) who issued the command
 	 * @param command Command which was executed
-	 * @param alias The alias used
-	 * @param args The arguments passed to the command, including final partial argument to be completed
+	 * @param alias   The alias used
+	 * @param args    The arguments passed to the command, including final partial argument to be completed
 	 * @return A List of possible completions for the final argument
 	 */
 	List<String> onTabComplete(final CommandSender sender, final Command command,
-							   final String alias, final String[] args);
+	                           final String alias, final String[] args);
 
 
 	/**

@@ -18,29 +18,34 @@
 package com.winterhavenmc.roadblock.commands;
 
 import com.winterhavenmc.roadblock.PluginMain;
-import com.winterhavenmc.roadblock.sounds.SoundId;
 import com.winterhavenmc.roadblock.messages.MessageId;
+import com.winterhavenmc.roadblock.sounds.SoundId;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
 
 /**
  * A class that implements the materials subcommand
  */
-final class MaterialsSubcommand extends AbstrtactSubcommand {
-
+final class MaterialsSubcommand extends AbstrtactSubcommand
+{
 	// reference to the plugin main class
 	private final PluginMain plugin;
 
 
 	/**
 	 * Class constructor
+	 *
 	 * @param plugin reference to the plugin main class
 	 */
-	MaterialsSubcommand(final PluginMain plugin) {
+	MaterialsSubcommand(final PluginMain plugin)
+	{
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "materials";
 		this.usageString = "/roadblock materials";
@@ -51,17 +56,19 @@ final class MaterialsSubcommand extends AbstrtactSubcommand {
 
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final List<String> argsList) {
-
+	public boolean onCommand(final CommandSender sender, final List<String> argsList)
+	{
 		// check that sender has permission for status command
-		if (!sender.hasPermission(permissionNode)) {
+		if (!sender.hasPermission(permissionNode))
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_MATERIALS_PERMISSION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
-		if (argsList.size() > getMaxArgs()) {
+		if (argsList.size() > getMaxArgs())
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);

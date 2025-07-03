@@ -20,7 +20,6 @@ package com.winterhavenmc.roadblock.listeners;
 import com.winterhavenmc.roadblock.PluginMain;
 import com.winterhavenmc.roadblock.messages.MessageId;
 import com.winterhavenmc.roadblock.sounds.SoundId;
-
 import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -39,15 +38,15 @@ import java.util.Set;
 /**
  * Implements player event listeners for RoadBlock events.
  */
-public final class BlockEventListener implements Listener {
-
+public final class BlockEventListener implements Listener
+{
 	// reference to main class
 	private final PluginMain plugin;
 
 	private final Set<String> pathMaterialNames = Set.of(
 			"GRASS_PATH",
 			"LEGACY_GRASS_PATH",
-			"DIRT_PATH" );
+			"DIRT_PATH");
 
 
 	/**
@@ -55,8 +54,8 @@ public final class BlockEventListener implements Listener {
 	 *
 	 * @param plugin reference to this plugin's main class
 	 */
-	public BlockEventListener(final PluginMain plugin) {
-
+	public BlockEventListener(final PluginMain plugin)
+	{
 		// reference to main
 		this.plugin = plugin;
 
@@ -72,8 +71,8 @@ public final class BlockEventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onBlockPlace(final BlockPlaceEvent event) {
-
+	void onBlockPlace(final BlockPlaceEvent event)
+	{
 		// get configured no-place-height
 		final int height = Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig());
 
@@ -85,7 +84,8 @@ public final class BlockEventListener implements Listener {
 
 		// check if block below placed block is protected grass path, to prevent converting to regular dirt
 		final Block blockBelow = placedBlock.getRelative(BlockFace.DOWN);
-		if (pathMaterialNames.contains(blockBelow.getType().toString()) && plugin.blockManager.isRoadBlock(blockBelow)) {
+		if (pathMaterialNames.contains(blockBelow.getType().toString()) && plugin.blockManager.isRoadBlock(blockBelow))
+		{
 			event.setCancelled(true);
 			plugin.messageBuilder.compose(player, MessageId.BLOCK_PLACE_FAIL_GRASS_PATH).send();
 			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_GRASS_PATH);
@@ -93,7 +93,8 @@ public final class BlockEventListener implements Listener {
 		}
 
 		// check if block placed is configured distance above a road block
-		if (plugin.blockManager.isAboveRoad(placedBlock.getLocation(), height)) {
+		if (plugin.blockManager.isAboveRoad(placedBlock.getLocation(), height))
+		{
 			event.setCancelled(true);
 			plugin.messageBuilder.compose(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
 			plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_ABOVE_ROAD);
@@ -108,8 +109,8 @@ public final class BlockEventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onBlockMultiPlace(final BlockMultiPlaceEvent event) {
-
+	void onBlockMultiPlace(final BlockMultiPlaceEvent event)
+	{
 		// get configured no-place-height
 		final int height = Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig());
 
@@ -120,10 +121,11 @@ public final class BlockEventListener implements Listener {
 		final Player player = event.getPlayer();
 
 		// iterate through blocks and check if any are above a road block
-		for (BlockState blockState : replacedBlocks) {
-
+		for (BlockState blockState : replacedBlocks)
+		{
 			// if block is above a road block, cancel event and send player message
-			if (plugin.blockManager.isAboveRoad(blockState.getLocation(), height)) {
+			if (plugin.blockManager.isAboveRoad(blockState.getLocation(), height))
+			{
 				event.setCancelled(true);
 				plugin.messageBuilder.compose(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
 				plugin.soundConfig.playSound(player, SoundId.BLOCK_PLACE_FAIL_ABOVE_ROAD);
@@ -140,8 +142,8 @@ public final class BlockEventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onBlockBreak(final BlockBreakEvent event) {
-
+	void onBlockBreak(final BlockBreakEvent event)
+	{
 		// get block being broken
 		final Block block = event.getBlock();
 
@@ -149,10 +151,11 @@ public final class BlockEventListener implements Listener {
 		final Player player = event.getPlayer();
 
 		// check if block is a protected road block
-		if (plugin.blockManager.isRoadBlock(block)) {
-
+		if (plugin.blockManager.isRoadBlock(block))
+		{
 			// if player does not have override permission, cancel event and send player message
-			if (!player.hasPermission("roadblock.break")) {
+			if (!player.hasPermission("roadblock.break"))
+			{
 				event.setCancelled(true);
 				plugin.messageBuilder.compose(player, MessageId.TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION).send();
 				return;
@@ -172,14 +175,16 @@ public final class BlockEventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onBlockExplode(final BlockExplodeEvent event) {
-
+	void onBlockExplode(final BlockExplodeEvent event)
+	{
 		// get collection of exploded blocks
 		final Collection<Block> blocks = new ArrayList<>(event.blockList());
 
 		// remove any road blocks from event block list
-		for (Block block : blocks) {
-			if (plugin.blockManager.isRoadBlock(block)) {
+		for (Block block : blocks)
+		{
+			if (plugin.blockManager.isRoadBlock(block))
+			{
 				event.blockList().remove(block);
 			}
 		}
@@ -193,16 +198,17 @@ public final class BlockEventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onPistonExtend(final BlockPistonExtendEvent event) {
-
+	void onPistonExtend(final BlockPistonExtendEvent event)
+	{
 		// get list of blocks affected by piston
 		final Collection<Block> blocks = new ArrayList<>(event.getBlocks());
 
 		// iterate through block list checking for road blocks
-		for (Block block : blocks) {
-
+		for (Block block : blocks)
+		{
 			// if block is a road block, cancel event and break piston
-			if (plugin.blockManager.isRoadBlock(block)) {
+			if (plugin.blockManager.isRoadBlock(block))
+			{
 				event.setCancelled(true);
 
 				// break the piston
@@ -219,16 +225,17 @@ public final class BlockEventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onPistonRetract(final BlockPistonRetractEvent event) {
-
+	void onPistonRetract(final BlockPistonRetractEvent event)
+	{
 		// get collection of blocks affected by piston
 		final Collection<Block> blocks = new ArrayList<>(event.getBlocks());
 
 		// iterate through block list checking for road blocks
-		for (Block block : blocks) {
-
+		for (Block block : blocks)
+		{
 			// if block is a road block, cancel event and break piston
-			if (plugin.blockManager.isRoadBlock(block)) {
+			if (plugin.blockManager.isRoadBlock(block))
+			{
 				event.setCancelled(true);
 
 				// break the piston
@@ -245,10 +252,11 @@ public final class BlockEventListener implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onBlockForm(final BlockFormEvent event) {
-
+	void onBlockForm(final BlockFormEvent event)
+	{
 		// if configured false, do nothing and return
-		if (!Config.SNOW_PLOW.getBoolean(plugin.getConfig())) {
+		if (!Config.SNOW_PLOW.getBoolean(plugin.getConfig()))
+		{
 			return;
 		}
 
@@ -256,7 +264,8 @@ public final class BlockEventListener implements Listener {
 		Block block = event.getBlock();
 
 		// if formed block is above road block, cancel event
-		if (plugin.blockManager.isAboveRoad(block.getLocation(), 1)) {
+		if (plugin.blockManager.isAboveRoad(block.getLocation(), 1))
+		{
 			event.setCancelled(true);
 		}
 	}

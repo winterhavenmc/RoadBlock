@@ -28,8 +28,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.*;
 
 
-public final class BlockManager {
-
+public final class BlockManager
+{
 	// reference to main class
 	private final JavaPlugin plugin;
 
@@ -44,8 +44,8 @@ public final class BlockManager {
 	 *
 	 * @param plugin reference to main class
 	 */
-	public BlockManager(final JavaPlugin plugin) {
-
+	public BlockManager(final JavaPlugin plugin)
+	{
 		// set reference to main class
 		this.plugin = plugin;
 
@@ -60,8 +60,10 @@ public final class BlockManager {
 	/**
 	 * Close data store
 	 */
-	public void close() {
-		if (dataStore != null) {
+	public void close()
+	{
+		if (dataStore != null)
+		{
 			dataStore.close();
 		}
 	}
@@ -70,8 +72,8 @@ public final class BlockManager {
 	/**
 	 * reload data store
 	 */
-	public void reload() {
-
+	public void reload()
+	{
 		// reload road block materials from config
 		updateMaterials();
 
@@ -82,8 +84,8 @@ public final class BlockManager {
 		final DataStoreType newType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
 
 		// if current datastore type does not match configured datastore type, create new datastore
-		if (!currentType.equals(newType)) {
-
+		if (!currentType.equals(newType))
+		{
 			// create new datastore
 			dataStore = DataStore.connect(plugin);
 		}
@@ -96,10 +98,11 @@ public final class BlockManager {
 	 * @param startLocation location to begin searching for attached road blocks
 	 * @return Set of Locations of attached road blocks
 	 */
-	public Set<Location> getFill(final Location startLocation) {
-
+	public Set<Location> getFill(final Location startLocation)
+	{
 		// if passed location is null, return empty set
-		if (startLocation == null) {
+		if (startLocation == null)
+		{
 			return Collections.emptySet();
 		}
 
@@ -113,15 +116,15 @@ public final class BlockManager {
 		queue.add(startLocation);
 
 		// loop until queue is empty
-		while (!queue.isEmpty()) {
-
+		while (!queue.isEmpty())
+		{
 			// remove location at head of queue
 			Location loc = queue.poll();
 
 			// if location is not in return set and is a road block material and is not too far from start...
 			if (!returnSet.contains(loc) && roadBlockMaterials.contains(loc.getBlock().getType())
-					&& loc.distanceSquared(startLocation) < Math.pow(Config.SPREAD_DISTANCE.getInt(plugin.getConfig()), 2)) {
-
+					&& loc.distanceSquared(startLocation) < Math.pow(Config.SPREAD_DISTANCE.getInt(plugin.getConfig()), 2))
+			{
 				// add location to return set
 				returnSet.add(loc);
 
@@ -136,10 +139,12 @@ public final class BlockManager {
 	}
 
 
-	public Collection<BlockRecord> getBlockRecords(final Collection<Location> locationSet) {
+	public Collection<BlockRecord> getBlockRecords(final Collection<Location> locationSet)
+	{
 		// create set of block records from locationSet
 		Collection<BlockRecord> blockRecordSet = new HashSet<>();
-		for (Location location : locationSet) {
+		for (Location location : locationSet)
+		{
 			blockRecordSet.add(new BlockRecord(location));
 		}
 		return blockRecordSet;
@@ -152,10 +157,11 @@ public final class BlockManager {
 	 * @param player the player to is above a road block
 	 * @return {@code true} if player is within three blocks above a road block, else {@code false}
 	 */
-	public boolean isAboveRoad(final Player player) {
-
+	public boolean isAboveRoad(final Player player)
+	{
 		// if player is null, return false
-		if (player == null) {
+		if (player == null)
+		{
 			return false;
 		}
 
@@ -163,7 +169,8 @@ public final class BlockManager {
 		final int distance = Config.ON_ROAD_HEIGHT.getInt(plugin.getConfig());
 
 		// if distance is less than one, return false
-		if (distance < 1) {
+		if (distance < 1)
+		{
 			return false;
 		}
 
@@ -179,15 +186,17 @@ public final class BlockManager {
 	 * @param distance the distance in blocks to test below location for road blocks
 	 * @return {@code true} if location is above a road block, else {@code false}
 	 */
-	public boolean isAboveRoad(final Location location, final int distance) {
-
+	public boolean isAboveRoad(final Location location, final int distance)
+	{
 		// if passed location is null, return false
-		if (location == null) {
+		if (location == null)
+		{
 			return false;
 		}
 
 		// if passed distance is less than one, return false
-		if (distance < 1) {
+		if (distance < 1)
+		{
 			return false;
 		}
 
@@ -195,14 +204,16 @@ public final class BlockManager {
 		int checkDepth = distance;
 
 		// iterate until maxDepth reached
-		while (checkDepth > 0) {
-
+		while (checkDepth > 0)
+		{
 			// get block at checkDepth
 			Block testBlock = location.getBlock().getRelative(BlockFace.DOWN, checkDepth);
 
 			// don't check datastore unless testBlock is road block material
-			if (isRoadBlockMaterial(testBlock)) {
-				if (dataStore.isProtected(testBlock.getLocation())) {
+			if (isRoadBlockMaterial(testBlock))
+			{
+				if (dataStore.isProtected(testBlock.getLocation()))
+				{
 					result = true;
 					break;
 				}
@@ -221,15 +232,17 @@ public final class BlockManager {
 	 * @param block the block to test
 	 * @return {@code true} if the block is a protected road block, else {@code false}
 	 */
-	public boolean isRoadBlock(final Block block) {
-
+	public boolean isRoadBlock(final Block block)
+	{
 		// if passed block is null, return false
-		if (block == null) {
+		if (block == null)
+		{
 			return false;
 		}
 
 		// check if block is road block material
-		if (!isRoadBlockMaterial(block)) {
+		if (!isRoadBlockMaterial(block))
+		{
 			return false;
 		}
 
@@ -244,7 +257,8 @@ public final class BlockManager {
 	 * @param block the block to test for valid configured road block material
 	 * @return {@code true} if the block material is a configured road block material, {@code false} if it is not
 	 */
-	private boolean isRoadBlockMaterial(final Block block) {
+	private boolean isRoadBlockMaterial(final Block block)
+	{
 		return block != null && roadBlockMaterials.contains(block.getType());
 	}
 
@@ -256,7 +270,8 @@ public final class BlockManager {
 	 * @return {@code true} if the block at location is a configured road block material, {@code false} if it is not
 	 */
 	@SuppressWarnings("unused")
-	private boolean isRoadBlockMaterial(final Location location) {
+	private boolean isRoadBlockMaterial(final Location location)
+	{
 		return location != null && roadBlockMaterials.contains(location.getBlock().getType());
 	}
 
@@ -267,7 +282,8 @@ public final class BlockManager {
 	 * @param material the material type to test for valid road block material
 	 * @return {@code true} if the material is a configured road block material, {@code false} if it is not
 	 */
-	public boolean isRoadBlockMaterial(final Material material) {
+	public boolean isRoadBlockMaterial(final Material material)
+	{
 		return material != null && roadBlockMaterials.contains(material);
 	}
 
@@ -277,7 +293,8 @@ public final class BlockManager {
 	 *
 	 * @param locations a Collection of Locations to be inserted into the datastore
 	 */
-	public int storeBlockLocations(final Collection<Location> locations) {
+	public int storeBlockLocations(final Collection<Location> locations)
+	{
 		return dataStore.insertRecords(getBlockRecords(locations));
 	}
 
@@ -287,7 +304,8 @@ public final class BlockManager {
 	 *
 	 * @param locations a Collection of Locations to be deleted from the datastore
 	 */
-	public int removeBlockLocations(final Collection<Location> locations) {
+	public int removeBlockLocations(final Collection<Location> locations)
+	{
 		return dataStore.deleteRecords(getBlockRecords(locations));
 	}
 
@@ -295,8 +313,8 @@ public final class BlockManager {
 	/**
 	 * Parse valid road block materials from config file
 	 */
-	public void updateMaterials() {
-
+	public void updateMaterials()
+	{
 		final Collection<String> materialStringList =
 				new HashSet<>(Config.MATERIALS.getStringList(plugin.getConfig()));
 
@@ -304,20 +322,23 @@ public final class BlockManager {
 
 		Material matchMaterial = null;
 
-		for (String string : materialStringList) {
-
+		for (String string : materialStringList)
+		{
 			// try to split on colon
-			if (!string.isEmpty()) {
+			if (!string.isEmpty())
+			{
 				String[] materialElements = string.split("\\s*:\\s*");
 
 				// try to match material
-				if (materialElements.length > 0) {
+				if (materialElements.length > 0)
+				{
 					matchMaterial = Material.matchMaterial(materialElements[0]);
 				}
 			}
 
 			// if matching material found, add to returnSet
-			if (matchMaterial != null) {
+			if (matchMaterial != null)
+			{
 				returnSet.add(matchMaterial);
 			}
 		}
@@ -325,17 +346,20 @@ public final class BlockManager {
 	}
 
 
-	synchronized public int getBlockTotal() {
+	synchronized public int getBlockTotal()
+	{
 		return dataStore.getTotalBlocks();
 	}
 
 
-	public Collection<Location> selectNearbyBlocks(final Location location, final int distance) {
+	public Collection<Location> selectNearbyBlocks(final Location location, final int distance)
+	{
 		return dataStore.selectNearbyBlocks(location, distance);
 	}
 
 
-	public Set<Material> getRoadBlockMaterials() {
+	public Set<Material> getRoadBlockMaterials()
+	{
 		return roadBlockMaterials;
 	}
 

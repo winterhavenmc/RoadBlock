@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.roadblock.sounds;
 
-public enum SoundId {
-
+public enum SoundId
+{
 	COMMAND_FAIL,
 	COMMAND_INVALID,
 	COMMAND_RELOAD_SUCCESS,
@@ -31,5 +31,4 @@ public enum SoundId {
 	TOOL_SUCCESS_UNPROTECT,
 	BLOCK_PLACE_FAIL_GRASS_PATH,
 	BLOCK_PLACE_FAIL_ABOVE_ROAD,
-
 }

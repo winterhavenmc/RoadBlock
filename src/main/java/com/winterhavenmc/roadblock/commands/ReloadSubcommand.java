@@ -18,8 +18,8 @@
 package com.winterhavenmc.roadblock.commands;
 
 import com.winterhavenmc.roadblock.PluginMain;
-import com.winterhavenmc.roadblock.sounds.SoundId;
 import com.winterhavenmc.roadblock.messages.MessageId;
+import com.winterhavenmc.roadblock.sounds.SoundId;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -29,17 +29,19 @@ import java.util.Objects;
 /**
  * A class that implements the reload subcommand
  */
-final class ReloadSubcommand extends AbstrtactSubcommand {
-
+final class ReloadSubcommand extends AbstrtactSubcommand
+{
 	// reference to the plugin main class
 	private final PluginMain plugin;
 
 
 	/**
 	 * Class constructor
+	 *
 	 * @param plugin reference to the plugin main class
 	 */
-	ReloadSubcommand(final PluginMain plugin) {
+	ReloadSubcommand(final PluginMain plugin)
+	{
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "reload";
 		this.usageString = "/roadblock reload";
@@ -50,17 +52,19 @@ final class ReloadSubcommand extends AbstrtactSubcommand {
 
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final List<String> argsList) {
-
+	public boolean onCommand(final CommandSender sender, final List<String> argsList)
+	{
 		// check that sender has permission for reload command
-		if (!sender.hasPermission(permissionNode)) {
+		if (!sender.hasPermission(permissionNode))
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_RELOAD_PERMISSION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
-		if (argsList.size() > getMaxArgs()) {
+		if (argsList.size() > getMaxArgs())
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);

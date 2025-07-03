@@ -22,11 +22,11 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.*;
+import java.util.Collection;
 
 
-interface DataStore {
-
+interface DataStore
+{
 	/**
 	 * Initialize storage
 	 *
@@ -76,8 +76,8 @@ interface DataStore {
 	 *
 	 * @return new datastore of configured type
 	 */
-	static DataStore connect(final JavaPlugin plugin) {
-
+	static DataStore connect(final JavaPlugin plugin)
+	{
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
 
@@ -85,13 +85,15 @@ interface DataStore {
 		final DataStore newDataStore = dataStoreType.connect(plugin);
 
 		// initialize new data store
-		try {
+		try
+		{
 			newDataStore.initialize();
-		}
-		catch (Exception e) {
+		} catch (Exception e)
+		{
 			plugin.getLogger().severe("Could not initialize " + newDataStore + " datastore!");
 			plugin.getLogger().severe(e.getLocalizedMessage());
-			if (Config.DEBUG.getBoolean(plugin.getConfig())) {
+			if (Config.DEBUG.getBoolean(plugin.getConfig()))
+			{
 				e.printStackTrace();
 			}
 		}
@@ -117,7 +119,7 @@ interface DataStore {
 	 * Store list of records
 	 *
 	 * @param blockRecords a {@code Collection} of {@code Location}
-	 *                  for block locations to be inserted into the datastore
+	 *                     for block locations to be inserted into the datastore
 	 */
 	@SuppressWarnings("UnusedReturnValue")
 	int insertRecords(final Collection<BlockRecord> blockRecords);
@@ -127,7 +129,7 @@ interface DataStore {
 	 * delete list of records
 	 *
 	 * @param blockRecords {@code Collection} of {@code Location}
-	 *                    containing unique composite keys of records to delete
+	 *                     containing unique composite keys of records to delete
 	 */
 	@SuppressWarnings("UnusedReturnValue")
 	int deleteRecords(final Collection<BlockRecord> blockRecords);
