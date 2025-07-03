@@ -598,8 +598,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 		try
 		{
-			PreparedStatement preparedStatement =
-					connection.prepareStatement(Queries.getQuery("SelectBlocksInChunk"));
+			PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("SelectBlocksInChunk"));
 
 			long worldUidMsb = chunk.getWorld().getUID().getMostSignificantBits();
 			long worldUidLsb = chunk.getWorld().getUID().getLeastSignificantBits();
