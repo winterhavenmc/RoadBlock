@@ -267,6 +267,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 *
 	 * @param blockLocations Collection of records to insert
 	 */
+	//TODO: Simplify this method
 	@Override
 	synchronized public int insertRecords(final Collection<BlockLocation> blockLocations)
 	{
