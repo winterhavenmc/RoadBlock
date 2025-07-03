@@ -28,6 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public final class BlockManager
@@ -143,17 +144,11 @@ public final class BlockManager
 
 	public Collection<BlockLocation> getBlockLocations(final Collection<Location> locationSet)
 	{
-		// create set of BlockLocations from locationSet
-		Collection<BlockLocation> resultSet = new HashSet<>();
-
-		for (Location location : locationSet)
-		{
-			if (BlockLocation.of(location) instanceof ValidBlockLocation blockLocation)
-			{
-				resultSet.add(blockLocation);
-			}
-		}
-		return resultSet;
+		return locationSet.stream()
+				.map(BlockLocation::of)
+				.filter(ValidBlockLocation.class::isInstance)
+				.map(ValidBlockLocation.class::cast)
+				.collect(Collectors.toSet());
 	}
 
 
