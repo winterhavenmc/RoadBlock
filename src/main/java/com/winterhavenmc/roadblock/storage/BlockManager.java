@@ -105,16 +105,11 @@ public final class BlockManager
 	{
 		if (startLocation == null) return Collections.emptySet();
 
-		// create HashSet for return values
 		final Set<Location> returnSet = new HashSet<>();
-
-		// create queue using linked list implementation
 		final Queue<Location> queue = new LinkedList<>();
 
 		// put start location in queue
 		queue.add(startLocation);
-
-		// loop until queue is empty
 		while (!queue.isEmpty())
 		{
 			// remove location at head of queue
