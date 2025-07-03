@@ -142,9 +142,12 @@ public final class BlockManager
 	}
 
 
-	public Collection<BlockLocation> getBlockLocations(final Collection<Location> locationSet)
+	/**
+	 * Returns a Collection of valid block locations contained in a collection of locations.
+	 */
+	public Set<BlockLocation> getBlockLocations(final Collection<Location> locations)
 	{
-		return locationSet.stream()
+		return locations.stream()
 				.map(BlockLocation::of)
 				.filter(ValidBlockLocation.class::isInstance)
 				.map(ValidBlockLocation.class::cast)
