@@ -784,8 +784,6 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 */
 	private void flushCache(final Chunk chunk)
 	{
-		int count = 0;
-		long startTime = System.nanoTime();
 		for (BlockLocation blockLocation : blockCache.keySet())
 		{
 			if (blockLocation instanceof ValidBlockLocation validLocation
@@ -794,21 +792,10 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 					&& validLocation.chunkZ() == chunk.getZ())
 			{
 				blockCache.remove(blockLocation);
-				count++;
 			}
 		}
 
 		chunkCache.remove(chunk.getBlock(0, 0, 0).getLocation());
-
-		long elapsedTime = (System.nanoTime() - startTime);
-		if (Config.PROFILE.getBoolean(plugin.getConfig()))
-		{
-			if (count > 0)
-			{
-				plugin.getLogger().info(count + " blocks removed from cache in "
-						+ TimeUnit.NANOSECONDS.toMicros(elapsedTime) + " microseconds.");
-			}
-		}
 	}
 
 
