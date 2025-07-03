@@ -238,11 +238,7 @@ public final class BlockManager
 	 */
 	public boolean isRoadBlock(final Block block)
 	{
-		// if passed block is null, return false
-		if (block == null)
-		{
-			return false;
-		}
+		if (block == null) return false;
 
 		// check if block is road block material
 		if (!isRoadBlockMaterial(block))
