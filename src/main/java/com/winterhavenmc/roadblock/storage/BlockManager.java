@@ -103,11 +103,7 @@ public final class BlockManager
 	 */
 	public Set<Location> getFill(final Location startLocation)
 	{
-		// if passed location is null, return empty set
-		if (startLocation == null)
-		{
-			return Collections.emptySet();
-		}
+		if (startLocation == null) return Collections.emptySet();
 
 		// create HashSet for return values
 		final Set<Location> returnSet = new HashSet<>();
