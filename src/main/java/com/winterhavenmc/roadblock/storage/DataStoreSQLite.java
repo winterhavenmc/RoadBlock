@@ -756,23 +756,12 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	{
 		final Collection<ValidBlockLocation> blockSet = selectRecordsInChunk(chunk);
 
-		int count = 0;
-
 		for (BlockLocation blockLocation : blockSet)
 		{
 			blockCache.put(blockLocation, CacheStatus.RESIDENT);
-			count++;
 		}
 
 		chunkCache.add(chunk.getBlock(0, 0, 0).getLocation());
-
-		if (Config.DEBUG.getBoolean(plugin.getConfig()))
-		{
-			if (count > 0)
-			{
-				plugin.getLogger().info(count + " blocks added to cache.");
-			}
-		}
 	}
 
 
