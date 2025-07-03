@@ -628,26 +628,20 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				int chunkX = rs.getInt("chunk_x");
 				int chunkZ = rs.getInt("chunk_z");
 
-				// reconstitute world uid from components
-				UUID worldUid = new UUID(worldUidMSB, worldUidLSB);
-
 				// get world by uid
-				World world = plugin.getServer().getWorld(worldUid);
+				World world = plugin.getServer().getWorld(new UUID(worldUidMSB, worldUidLSB));
 
-				// if world is null, skip to next record
-				if (world == null)
+				// if world is not null, add block record to return set
+				if (world != null && BlockLocation.of(world.getName(), world.getUID(),
+						blockX, blockY, blockZ, chunkX, chunkZ) instanceof ValidBlockLocation validBlockLocation)
+				{
+					returnSet.add(validBlockLocation);
+				}
+				else
 				{
 					plugin.getLogger().warning("Stored location has invalid world: "
 							+ worldName + ". Skipping record.");
-					continue;
 				}
-
-				// get current world name
-				worldName = world.getName();
-
-				// insert block location in return set
-				returnSet.add(BlockLocation.of(worldName, worldUid, blockX, blockY, blockZ, chunkX, chunkZ));
-				count++;
 			}
 		}
 		catch (SQLException e)
