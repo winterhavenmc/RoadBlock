@@ -822,15 +822,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	{
 		final Location chunkLoc = location.getChunk().getBlock(0, 0, 0).getLocation();
 
-		if (chunkCache.contains(chunkLoc))
-		{
-			if (Config.DEBUG.getBoolean(plugin.getConfig()))
-			{
-				plugin.getLogger().info("Chunk is cached.");
-			}
-			return true;
-		}
-		return false;
+		return chunkCache.contains(chunkLoc);
 	}
 
 
