@@ -245,33 +245,20 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	@Override
 	public boolean isProtected(final Location location)
 	{
-		// get LocationRecord for location
-		BlockLocation blockLocation = BlockLocation.of(location);
+		return BlockLocation.of(location) instanceof ValidBlockLocation validLocation
+				&& isProtected(validLocation, location);
+	}
 
-		if (blockLocation instanceof ValidBlockLocation validLocation)
+
+	private boolean isProtected(ValidBlockLocation validLocation, Location location)
+	{
+		if (!isChunkCached(location))
 		{
-			// check cache first
-			if (isChunkCached(location))
-			{
-				if (blockCache.containsKey(validLocation))
-				{
-					return blockCache.get(validLocation).equals(CacheStatus.RESIDENT)
-							|| blockCache.get(validLocation).equals(CacheStatus.PENDING_INSERT);
-				}
-				return false;
-			}
-
-			// add chunk to cache
 			cacheChunk(location.getChunk());
-
-			// check cache again
-			if (blockCache.containsKey(validLocation))
-			{
-				return blockCache.get(validLocation).equals(CacheStatus.RESIDENT)
-						|| blockCache.get(validLocation).equals(CacheStatus.PENDING_INSERT);
-			}
 		}
-		return false;
+
+		CacheStatus status = blockCache.get(validLocation);
+		return status == CacheStatus.RESIDENT || status == CacheStatus.PENDING_INSERT;
 	}
 
 
