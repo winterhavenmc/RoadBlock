@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.roadblock.storage;
 
+import com.winterhavenmc.roadblock.block_location.BlockLocation;
+import com.winterhavenmc.roadblock.block_location.ValidBlockLocation;
 import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -122,7 +124,7 @@ interface DataStore
 	 *                     for block locations to be inserted into the datastore
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	int insertRecords(final Collection<BlockRecord> blockRecords);
+	int insertRecords(final Collection<BlockLocation> blockRecords);
 
 
 	/**
@@ -132,7 +134,7 @@ interface DataStore
 	 *                     containing unique composite keys of records to delete
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	int deleteRecords(final Collection<BlockRecord> blockRecords);
+	int deleteRecords(final Collection<BlockLocation> blockRecords);
 
 
 	/**
@@ -140,7 +142,7 @@ interface DataStore
 	 *
 	 * @return Set of {@code Location} for all block records
 	 */
-	Collection<BlockRecord> selectAllRecords();
+	Collection<BlockLocation> selectAllRecords();
 
 
 	/**
@@ -157,7 +159,7 @@ interface DataStore
 	 * @param chunk the chunk containing records to be returned
 	 * @return {@code Set} of {@code LocationRecords} for block records within the chunk
 	 */
-	Collection<BlockRecord> selectRecordsInChunk(final Chunk chunk);
+	Collection<ValidBlockLocation> selectRecordsInChunk(final Chunk chunk);
 
 
 	/**

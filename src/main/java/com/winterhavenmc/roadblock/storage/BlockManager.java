@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.roadblock.storage;
 
+import com.winterhavenmc.roadblock.block_location.BlockLocation;
+import com.winterhavenmc.roadblock.block_location.ValidBlockLocation;
 import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -139,15 +141,19 @@ public final class BlockManager
 	}
 
 
-	public Collection<BlockRecord> getBlockRecords(final Collection<Location> locationSet)
+	public Collection<BlockLocation> getBlockLocations(final Collection<Location> locationSet)
 	{
-		// create set of block records from locationSet
-		Collection<BlockRecord> blockRecordSet = new HashSet<>();
+		// create set of BlockLocations from locationSet
+		Collection<BlockLocation> resultSet = new HashSet<>();
+
 		for (Location location : locationSet)
 		{
-			blockRecordSet.add(new BlockRecord(location));
+			if (BlockLocation.of(location) instanceof ValidBlockLocation blockLocation)
+			{
+				resultSet.add(blockLocation);
+			}
 		}
-		return blockRecordSet;
+		return resultSet;
 	}
 
 
@@ -295,7 +301,7 @@ public final class BlockManager
 	 */
 	public int storeBlockLocations(final Collection<Location> locations)
 	{
-		return dataStore.insertRecords(getBlockRecords(locations));
+		return dataStore.insertRecords(getBlockLocations(locations));
 	}
 
 
@@ -306,7 +312,7 @@ public final class BlockManager
 	 */
 	public int removeBlockLocations(final Collection<Location> locations)
 	{
-		return dataStore.deleteRecords(getBlockRecords(locations));
+		return dataStore.deleteRecords(getBlockLocations(locations));
 	}
 
 

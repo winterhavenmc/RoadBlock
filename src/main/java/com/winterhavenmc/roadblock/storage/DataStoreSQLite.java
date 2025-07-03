@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.roadblock.storage;
 
+import com.winterhavenmc.roadblock.block_location.BlockLocation;
+import com.winterhavenmc.roadblock.block_location.ValidBlockLocation;
 import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -42,7 +44,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	private final JavaPlugin plugin;
 
 	// block cache
-	private final BlockRecordCache blockCache;
+	private final BlockLocationCache blockCache;
 
 	// chunk cache
 	private final Collection<Location> chunkCache;
@@ -74,7 +76,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 		this.dataFilePath = plugin.getDataFolder() + File.separator + type.getStorageName();
 
 		// create empty block cache
-		this.blockCache = BlockRecordCache.getInstance();
+		this.blockCache = BlockLocationCache.getInstance();
 
 		// create empty chunk location cache
 		this.chunkCache = new HashSet<>();
@@ -152,7 +154,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			ResultSet rs = statement.executeQuery(Queries.getQuery("SelectBlockTable"));
 			if (rs.next())
 			{
-				Collection<BlockRecord> existingRecords = selectAllRecords();
+				Collection<BlockLocation> existingRecords = selectAllRecords();
 				statement.executeUpdate(Queries.getQuery("DropBlockTable"));
 				statement.executeUpdate(Queries.getQuery("DropChunkIndex"));
 				statement.executeUpdate(Queries.getQuery("CreateBlockTable"));
@@ -244,27 +246,30 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	public boolean isProtected(final Location location)
 	{
 		// get LocationRecord for location
-		BlockRecord blockRecord = new BlockRecord(location);
+		BlockLocation blockLocation = BlockLocation.of(location);
 
-		// check cache first
-		if (isChunkCached(location))
+		if (blockLocation instanceof ValidBlockLocation validLocation)
 		{
-			if (blockCache.containsKey(blockRecord))
+			// check cache first
+			if (isChunkCached(location))
 			{
-				return blockCache.get(blockRecord).equals(CacheStatus.RESIDENT)
-						|| blockCache.get(blockRecord).equals(CacheStatus.PENDING_INSERT);
+				if (blockCache.containsKey(validLocation))
+				{
+					return blockCache.get(validLocation).equals(CacheStatus.RESIDENT)
+							|| blockCache.get(validLocation).equals(CacheStatus.PENDING_INSERT);
+				}
+				return false;
 			}
-			return false;
-		}
 
-		// add chunk to cache
-		cacheChunk(location.getChunk());
+			// add chunk to cache
+			cacheChunk(location.getChunk());
 
-		// check cache again
-		if (blockCache.containsKey(blockRecord))
-		{
-			return blockCache.get(blockRecord).equals(CacheStatus.RESIDENT)
-					|| blockCache.get(blockRecord).equals(CacheStatus.PENDING_INSERT);
+			// check cache again
+			if (blockCache.containsKey(validLocation))
+			{
+				return blockCache.get(validLocation).equals(CacheStatus.RESIDENT)
+						|| blockCache.get(validLocation).equals(CacheStatus.PENDING_INSERT);
+			}
 		}
 		return false;
 	}
@@ -273,16 +278,16 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	/**
 	 * Insert records into the SQLite datastore
 	 *
-	 * @param blockRecords Collection of records to insert
+	 * @param blockLocations Collection of records to insert
 	 */
 	@Override
-	synchronized public int insertRecords(final Collection<BlockRecord> blockRecords)
+	synchronized public int insertRecords(final Collection<BlockLocation> blockLocations)
 	{
 		// set cache for all records in list to pending insert
 		int count = 0;
-		for (BlockRecord blockRecord : blockRecords)
+		for (BlockLocation blockLocation : blockLocations)
 		{
-			blockCache.put(blockRecord, CacheStatus.PENDING_INSERT);
+			blockCache.put(blockLocation, CacheStatus.PENDING_INSERT);
 			count++;
 		}
 		if (Config.DEBUG.getBoolean(plugin.getConfig()))
@@ -304,20 +309,19 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 					// set connection to transaction mode
 					connection.setAutoCommit(false);
 
-					for (BlockRecord blockRecord : blockRecords)
+					for (BlockLocation blockLocation : blockLocations)
 					{
-						// if location is null, skip to next location
-						if (blockRecord == null)
+						if (!(blockLocation instanceof ValidBlockLocation validLocation))
 						{
 							continue;
 						}
 
 						// test that world in location is valid, otherwise skip to next location
-						if (plugin.getServer().getWorld(blockRecord.getWorldUid()) == null)
+						if (plugin.getServer().getWorld(validLocation.worldUid()) == null)
 						{
 							plugin.getLogger().warning("An error occured while inserting"
 									+ " a record in the " + this + " datastore. World invalid!");
-							blockCache.remove(blockRecord);
+							blockCache.remove(validLocation);
 							continue;
 						}
 
@@ -330,19 +334,20 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 								PreparedStatement preparedStatement =
 										connection.prepareStatement(Queries.getQuery("InsertOrIgnoreBlock"));
 
-								preparedStatement.setString(1, blockRecord.getWorldName());
-								preparedStatement.setLong(2, blockRecord.getWorldUid().getMostSignificantBits());
-								preparedStatement.setLong(3, blockRecord.getWorldUid().getLeastSignificantBits());
-								preparedStatement.setInt(4, blockRecord.getBlockX());
-								preparedStatement.setInt(5, blockRecord.getBlockY());
-								preparedStatement.setInt(6, blockRecord.getBlockZ());
-								preparedStatement.setInt(7, blockRecord.getChunkX());
-								preparedStatement.setInt(8, blockRecord.getChunkZ());
+								preparedStatement.setString(1, validLocation.worldName());
+								preparedStatement.setLong(2, validLocation.worldUid().getMostSignificantBits());
+								preparedStatement.setLong(3, validLocation.worldUid().getLeastSignificantBits());
+								preparedStatement.setInt(4, validLocation.blockX());
+								preparedStatement.setInt(5, validLocation.blockY());
+								preparedStatement.setInt(6, validLocation.blockZ());
+								preparedStatement.setInt(7, validLocation.chunkX());
+								preparedStatement.setInt(8, validLocation.chunkZ());
 
 								// execute prepared statement
 								preparedStatement.executeUpdate();
 							}
-						} catch (SQLException e)
+						}
+						catch (SQLException e)
 						{
 							// output simple error message
 							plugin.getLogger().warning("An error occurred while inserting a location "
@@ -357,7 +362,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 							continue;
 						}
 						count++;
-						blockCache.put(blockRecord, CacheStatus.RESIDENT);
+						blockCache.put(blockLocation, CacheStatus.RESIDENT);
 					}
 					connection.commit();
 					connection.setAutoCommit(true);
@@ -394,16 +399,16 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	/**
 	 * Delete a list of locations from the SQLite datastore
 	 *
-	 * @param blockRecords Collection of locations
+	 * @param blockLocations Collection of locations
 	 */
 	@Override
-	synchronized public int deleteRecords(final Collection<BlockRecord> blockRecords)
+	synchronized public int deleteRecords(final Collection<BlockLocation> blockLocations)
 	{
 		// set cache for all records in list to pending delete
 		int count = 0;
-		for (BlockRecord blockRecord : blockRecords)
+		for (BlockLocation blockLocation : blockLocations)
 		{
-			blockCache.put(blockRecord, CacheStatus.PENDING_DELETE);
+			blockCache.put(blockLocation, CacheStatus.PENDING_DELETE);
 			count++;
 		}
 		if (Config.DEBUG.getBoolean(plugin.getConfig()))
@@ -426,10 +431,13 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 					int rowsAffected = 0;
 
-					for (final BlockRecord blockRecord : blockRecords)
+					for (final BlockLocation blockLocation : blockLocations)
 					{
 						// if key is null return, skip to next location
-						if (blockRecord == null)
+
+
+
+						if (!(blockLocation instanceof ValidBlockLocation validLocation))
 						{
 							continue;
 						}
@@ -443,11 +451,11 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 								PreparedStatement preparedStatement =
 										connection.prepareStatement(Queries.getQuery("DeleteBlock"));
 
-								preparedStatement.setLong(1, blockRecord.getWorldUid().getMostSignificantBits());
-								preparedStatement.setLong(2, blockRecord.getWorldUid().getLeastSignificantBits());
-								preparedStatement.setInt(3, blockRecord.getBlockX());
-								preparedStatement.setInt(4, blockRecord.getBlockY());
-								preparedStatement.setInt(5, blockRecord.getBlockZ());
+								preparedStatement.setLong(1, validLocation.worldUid().getMostSignificantBits());
+								preparedStatement.setLong(2, validLocation.worldUid().getLeastSignificantBits());
+								preparedStatement.setInt(3, validLocation.blockX());
+								preparedStatement.setInt(4, validLocation.blockY());
+								preparedStatement.setInt(5, validLocation.blockZ());
 
 								// execute prepared statement
 								rowsAffected = preparedStatement.executeUpdate();
@@ -466,7 +474,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 								e.printStackTrace();
 							}
 						}
-						blockCache.remove(blockRecord);
+						blockCache.remove(blockLocation);
 						count = count + rowsAffected;
 					}
 					connection.commit();
@@ -506,9 +514,9 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 *
 	 * @return List of location records
 	 */
-	synchronized public Collection<BlockRecord> selectAllRecords()
+	synchronized public Collection<BlockLocation> selectAllRecords()
 	{
-		final Collection<BlockRecord> returnSet = new HashSet<>();
+		final Collection<BlockLocation> returnSet = new HashSet<>();
 
 		try
 		{
@@ -553,12 +561,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 					continue;
 				}
 
-				// create block record object from retrieved record
-				BlockRecord blockRecord = new BlockRecord(world.getName(), world.getUID(),
-						blockX, blockY, blockZ, chunkX, chunkZ);
-
 				// add block record to return set
-				returnSet.add(blockRecord);
+				returnSet.add(BlockLocation.of(world.getName(), world.getUID(), blockX, blockY, blockZ, chunkX, chunkZ));
 			}
 		}
 		catch (SQLException e)
@@ -587,10 +591,10 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 * @return Collection of locations
 	 */
 	@Override
-	synchronized public Collection<BlockRecord> selectRecordsInChunk(final Chunk chunk)
+	synchronized public Collection<ValidBlockLocation> selectRecordsInChunk(final Chunk chunk)
 	{
 		// create new set for results
-		final Collection<BlockRecord> returnSet = new HashSet<>();
+		final Collection<ValidBlockLocation> returnSet = new HashSet<>();
 
 		try
 		{
@@ -641,9 +645,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				// get current world name
 				worldName = world.getName();
 
-				// create block record from stored location
-				BlockRecord record = new BlockRecord(worldName, worldUid, blockX, blockY, blockZ, chunkX, chunkZ);
-				returnSet.add(record);
+				// insert block location in return set
+				returnSet.add(BlockLocation.of(worldName, worldUid, blockX, blockY, blockZ, chunkX, chunkZ));
 				count++;
 			}
 
@@ -751,13 +754,13 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 */
 	private void cacheChunk(final Chunk chunk)
 	{
-		final Collection<BlockRecord> blockSet = selectRecordsInChunk(chunk);
+		final Collection<ValidBlockLocation> blockSet = selectRecordsInChunk(chunk);
 
 		int count = 0;
 
-		for (BlockRecord blockRecord : blockSet)
+		for (BlockLocation blockLocation : blockSet)
 		{
-			blockCache.put(blockRecord, CacheStatus.RESIDENT);
+			blockCache.put(blockLocation, CacheStatus.RESIDENT);
 			count++;
 		}
 
@@ -783,13 +786,14 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	{
 		int count = 0;
 		long startTime = System.nanoTime();
-		for (BlockRecord blockRecord : blockCache.keySet())
+		for (BlockLocation blockLocation : blockCache.keySet())
 		{
-			if (blockRecord.getWorldUid().equals(chunk.getWorld().getUID())
-					&& blockRecord.getChunkX() == chunk.getX()
-					&& blockRecord.getChunkZ() == chunk.getZ())
+			if (blockLocation instanceof ValidBlockLocation validLocation
+					&& validLocation.worldUid().equals(chunk.getWorld().getUID())
+					&& validLocation.chunkX() == chunk.getX()
+					&& validLocation.chunkZ() == chunk.getZ())
 			{
-				blockCache.remove(blockRecord);
+				blockCache.remove(blockLocation);
 				count++;
 			}
 		}
@@ -837,8 +841,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 		try
 		{
-			PreparedStatement preparedStatement =
-					connection.prepareStatement(Queries.getQuery("CountAllBlocks"));
+			PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("CountAllBlocks"));
 
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
