@@ -609,12 +609,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			preparedStatement.setInt(4, chunk.getZ());
 
 			// execute sql query
-			long startTime = System.nanoTime();
 			ResultSet rs = preparedStatement.executeQuery();
-
-			long elapsedTime = System.nanoTime() - startTime;
-
-			int count = 0;
 
 			while (rs.next())
 			{
