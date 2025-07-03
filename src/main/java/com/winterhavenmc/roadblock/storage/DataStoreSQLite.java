@@ -649,12 +649,6 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				returnSet.add(BlockLocation.of(worldName, worldUid, blockX, blockY, blockZ, chunkX, chunkZ));
 				count++;
 			}
-
-			if (Config.PROFILE.getBoolean(plugin.getConfig()))
-			{
-				plugin.getLogger().info("Fetched " + count + " blocks in chunk in "
-						+ TimeUnit.NANOSECONDS.toMicros(elapsedTime) + " microseconds.");
-			}
 		}
 		catch (SQLException e)
 		{
