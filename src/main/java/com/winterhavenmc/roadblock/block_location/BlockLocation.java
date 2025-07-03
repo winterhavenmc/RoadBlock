@@ -4,6 +4,7 @@ import org.bukkit.Location;
 
 import java.util.UUID;
 
+
 public sealed interface BlockLocation permits ValidBlockLocation, InvalidBlockLocation
 {
 	static BlockLocation of(Location location)
@@ -17,8 +18,11 @@ public sealed interface BlockLocation permits ValidBlockLocation, InvalidBlockLo
 				location.getChunk().getX(), location.getChunk().getZ());
 	}
 
-	static ValidBlockLocation of(String worldName, UUID worldUid, int blockX, int blockY, int blockZ, int chunkX, int chunkZ)
+
+	static BlockLocation of(String worldName, UUID worldUid, int blockX, int blockY, int blockZ, int chunkX, int chunkZ)
 	{
+		if (worldName == null) return new InvalidBlockLocation("The world name was null.");
+		if (worldUid == null) return new InvalidBlockLocation("The world UUID was null.");
 		return new ValidBlockLocation(worldName, worldUid, blockX, blockY, blockZ, chunkX, chunkZ);
 	}
 
