@@ -17,12 +17,13 @@
 
 package com.winterhavenmc.roadblock.storage;
 
+import com.winterhavenmc.roadblock.PluginMain;
 import com.winterhavenmc.roadblock.model.RoadBlock;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
+import java.util.Set;
 
 
 interface DataStore
@@ -76,7 +77,7 @@ interface DataStore
 	 *
 	 * @return new datastore of configured type
 	 */
-	static DataStore connect(final JavaPlugin plugin)
+	static DataStore connect(final PluginMain plugin)
 	{
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
@@ -142,7 +143,7 @@ interface DataStore
 	/**
 	 * count records in blocks table
 	 *
-	 * @return numner of records in blocks table
+	 * @return number of records in blocks table
 	 */
 	int getTotalBlocks();
 
@@ -166,6 +167,6 @@ interface DataStore
 	Collection<Location> selectNearbyBlocks(final Location location, final int distance);
 
 
-	Collection<RoadBlock.BlockLocation> selectNearbyBlockLocations(final RoadBlock.BlockLocation blockLocation, final int distance);
+	Set<RoadBlock.Valid.Protected> selectNearbyRoadBlocks(final Location location, final int distance);
 
 }
