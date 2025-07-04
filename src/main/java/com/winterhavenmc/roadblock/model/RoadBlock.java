@@ -112,7 +112,9 @@ public sealed interface RoadBlock permits RoadBlock.Valid, RoadBlock.Invalid
 		WORLD_UNLOADED("The location world was not loaded."),
 		WORLD_NAME_NULL("The world name was null."),
 		WORLD_UID_NULL("The world UUID was null."),
-		WORLD_NAME_BLANK("The world name was blank.");
+		WORLD_NAME_BLANK("The world name was blank."),
+		BLOCK_MATERIAL("The block is not a RoadBlock material."),
+		;
 
 		private final String message; //TODO: these will be message keys for a localized bundle
 
