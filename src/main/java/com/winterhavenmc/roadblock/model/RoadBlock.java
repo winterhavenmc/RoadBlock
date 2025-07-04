@@ -5,6 +5,7 @@ import com.winterhavenmc.roadblock.util.Reason;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 
 import java.util.UUID;
 
