@@ -116,6 +116,11 @@ public sealed interface RoadBlock permits RoadBlock.Valid, RoadBlock.Invalid
 		private final String message; //TODO: these will be message keys for a localized bundle
 
 
+		/**
+		 * Enum constructor assigns message String to constant field
+		 *
+		 * @param message a human-readable error message
+		 */
 		FailReason(String message)
 		{
 			this.message = message;
