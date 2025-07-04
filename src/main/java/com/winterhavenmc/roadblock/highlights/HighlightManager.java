@@ -18,7 +18,6 @@
 package com.winterhavenmc.roadblock.highlights;
 
 import com.winterhavenmc.roadblock.PluginMain;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,13 +32,13 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * A class that manages the highlighting of blocks to show the protected status of blocks
  */
-public final class HighlightManager implements Listener {
-
+public final class HighlightManager implements Listener
+{
 	// reference to main class
 	private final PluginMain plugin;
 
 	// Map of highlighted block locations for players
-	private final Map<UUID, HashSet<Location>> highlightLocationMap;
+	private final Map<UUID, Set<Location>> highlightLocationMap;
 
 	// Map of unhighlight tasks for player
 	private final Map<UUID, BukkitTask> unHighlightTaskMap;
@@ -50,8 +49,8 @@ public final class HighlightManager implements Listener {
 	 *
 	 * @param plugin reference to main class
 	 */
-	public HighlightManager(final PluginMain plugin) {
-
+	public HighlightManager(final PluginMain plugin)
+	{
 		// set reference to main class
 		this.plugin = plugin;
 
@@ -76,19 +75,22 @@ public final class HighlightManager implements Listener {
 	 */
 	public void highlightBlocks(final Player player,
 	                            final Collection<Location> locationSet,
-	                            final HighlightStyle highlightStyle) {
-
-		// check for null parameters
-		if (player == null || locationSet == null || highlightStyle == null) {
+	                            final HighlightStyle highlightStyle)
+	{
+		// null parameter check
+		if (player == null || locationSet == null || highlightStyle == null)
+		{
 			return;
 		}
 
 		// if player uuid not in map, insert with locationSet
-		if (!highlightLocationMap.containsKey(player.getUniqueId())) {
+		if (!highlightLocationMap.containsKey(player.getUniqueId()))
+		{
 			highlightLocationMap.put(player.getUniqueId(), new HashSet<>(locationSet));
 		}
 		// else add locationSet to existing player highlighted blocks in highlight map
-		else {
+		else
+		{
 			highlightLocationMap.get(player.getUniqueId()).addAll(locationSet);
 		}
 
@@ -103,18 +105,19 @@ public final class HighlightManager implements Listener {
 	 *
 	 * @param player the player for whom to remove all block highlighting
 	 */
-	public void unHighlightBlocks(final Player player) {
-
-		// check for null parameter
-		if (player == null) {
+	public void unHighlightBlocks(final Player player)
+	{
+		// null parameter check
+		if (player == null)
+		{
 			return;
 		}
 
 		// check if player has entry in highlight map
-		if (highlightLocationMap.containsKey(player.getUniqueId())) {
-
+		if (highlightLocationMap.containsKey(player.getUniqueId()))
+		{
 			// get block locations from highlight map for player
-			HashSet<Location> locationSet = highlightLocationMap.get(player.getUniqueId());
+			Set<Location> locationSet = highlightLocationMap.get(player.getUniqueId());
 
 			// send block change to player for each block location in highlight map for player
 			locationSet.forEach(location -> player.sendBlockChange(location, location.getBlock().getBlockData()));
@@ -134,10 +137,11 @@ public final class HighlightManager implements Listener {
 	 * @param player the player whose task will be retrieved from the map
 	 * @return BukkitTask - the task retrieved
 	 */
-	private Optional<BukkitTask> getUnhighlightTask(final Player player) {
-
-		// check for null parameter
-		if (player == null) {
+	private Optional<BukkitTask> getUnhighlightTask(final Player player)
+	{
+		// null parameter check
+		if (player == null)
+		{
 			return Optional.empty();
 		}
 
@@ -150,12 +154,13 @@ public final class HighlightManager implements Listener {
 	 * Insert a task into the pending remove task map
 	 *
 	 * @param player the player whose task will be inserted in the map
-	 * @param task the task to be inserted in the map
+	 * @param task   the task to be inserted in the map
 	 */
-	void putUnhighlightTask(final Player player, final BukkitTask task) {
-
-		// check for null parameters
-		if (player == null || task == null) {
+	void putUnhighlightTask(final Player player, final BukkitTask task)
+	{
+		// null parameter check
+		if (player == null || task == null)
+		{
 			return;
 		}
 
@@ -169,10 +174,11 @@ public final class HighlightManager implements Listener {
 	 *
 	 * @param player the player whose task will be removed from the map
 	 */
-	void cancelUnhighlightTask(final Player player) {
-
-		// check for null parameter
-		if (player == null) {
+	void cancelUnhighlightTask(final Player player)
+	{
+		// null parameter check
+		if (player == null)
+		{
 			return;
 		}
 
@@ -191,10 +197,11 @@ public final class HighlightManager implements Listener {
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	public void onPlayerQuit(final PlayerQuitEvent event) {
-
-		// check for null parameter
-		if (event == null) {
+	public void onPlayerQuit(final PlayerQuitEvent event)
+	{
+		// null parameter check
+		if (event == null)
+		{
 			return;
 		}
 

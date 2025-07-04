@@ -18,8 +18,8 @@
 package com.winterhavenmc.roadblock.storage;
 
 
-abstract class DataStoreAbstract {
-
+abstract class DataStoreAbstract
+{
 	private boolean initialized;
 
 	DataStoreType type;
@@ -30,7 +30,8 @@ abstract class DataStoreAbstract {
 	 *
 	 * @return boolean
 	 */
-	public boolean isInitialized() {
+	public boolean isInitialized()
+	{
 		return this.initialized;
 	}
 
@@ -40,7 +41,8 @@ abstract class DataStoreAbstract {
 	 *
 	 * @param initialized boolean value to set field
 	 */
-	public void setInitialized(final boolean initialized) {
+	public void setInitialized(final boolean initialized)
+	{
 		this.initialized = initialized;
 	}
 
@@ -50,7 +52,8 @@ abstract class DataStoreAbstract {
 	 *
 	 * @return DataStoreType of this datastore type
 	 */
-	public DataStoreType getType() {
+	public DataStoreType getType()
+	{
 		return this.type;
 	}
 
@@ -61,7 +64,8 @@ abstract class DataStoreAbstract {
 	 * @return display name of datastore
 	 */
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return this.getType().toString();
 	}
 

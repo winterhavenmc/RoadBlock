@@ -20,8 +20,8 @@ package com.winterhavenmc.roadblock.messages;
 /**
  * Enum with entries for all player messages in language configuration files
  */
-public enum MessageId {
-
+public enum MessageId
+{
 	COMMAND_HELP_INVALID,
 	COMMAND_HELP_HELP,
 	COMMAND_HELP_MATERIALS,
@@ -58,5 +58,4 @@ public enum MessageId {
 
 	BLOCK_PLACE_FAIL_GRASS_PATH,
 	BLOCK_PLACE_FAIL_ABOVE_ROAD,
-
 }

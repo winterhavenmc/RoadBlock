@@ -18,7 +18,7 @@
 package com.winterhavenmc.roadblock.highlights;
 
 import com.winterhavenmc.roadblock.PluginMain;
-
+import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
@@ -27,14 +27,14 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collection;
 
-import static com.winterhavenmc.util.TimeUnit.SECONDS;
+import static com.winterhavenmc.library.TimeUnit.SECONDS;
 
 
 /**
  * A class that applies highlighting to blocks for a player and creates a task to remove the highlighting after a delay
  */
-final class ShowHighlightTask extends BukkitRunnable {
-
+final class ShowHighlightTask extends BukkitRunnable
+{
 	private final PluginMain plugin;
 	private final Player player;
 	private final Collection<Location> locationSet;
@@ -43,16 +43,17 @@ final class ShowHighlightTask extends BukkitRunnable {
 
 	/**
 	 * Class constructor
-	 * @param plugin reference to the plugin main class
-	 * @param player the player for whom to highlight blocks
-	 * @param locationSet Set of Location of blocks to be highlighted
+	 *
+	 * @param plugin         reference to the plugin main class
+	 * @param player         the player for whom to highlight blocks
+	 * @param locationSet    Set of Location of blocks to be highlighted
 	 * @param highlightStyle the highlight style to use
 	 */
 	ShowHighlightTask(final PluginMain plugin,
-					  final Player player,
-					  final Collection<Location> locationSet,
-					  final HighlightStyle highlightStyle) {
-
+	                  final Player player,
+	                  final Collection<Location> locationSet,
+	                  final HighlightStyle highlightStyle)
+	{
 		this.plugin = plugin;
 		this.player = player;
 		this.locationSet = locationSet;
@@ -61,8 +62,8 @@ final class ShowHighlightTask extends BukkitRunnable {
 
 
 	@Override
-	public void run() {
-
+	public void run()
+	{
 		// create block data for highlight style material
 		BlockData blockData = plugin.getServer().createBlockData(highlightStyle.getMaterial(plugin));
 
@@ -70,7 +71,8 @@ final class ShowHighlightTask extends BukkitRunnable {
 		locationSet.forEach(location -> player.sendBlockChange(location, blockData));
 
 		// create task to unhighlight locationSet in 30 seconds
-		final BukkitTask task = new RemoveHighlightTask(plugin, player).runTaskLaterAsynchronously(plugin, SECONDS.toTicks(30));
+		final BukkitTask task = new RemoveHighlightTask(plugin, player)
+				.runTaskLaterAsynchronously(plugin, SECONDS.toTicks(Config.HIGHLIGHT_DURATION.getInt(plugin.getConfig())));
 
 		// if pending remove highlight task exists, cancel task
 		plugin.highlightManager.cancelUnhighlightTask(player);

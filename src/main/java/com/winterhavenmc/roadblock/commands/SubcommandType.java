@@ -20,42 +20,52 @@ package com.winterhavenmc.roadblock.commands;
 import com.winterhavenmc.roadblock.PluginMain;
 
 
-enum SubcommandType {
+enum SubcommandType
+{
+	MATERIALS()
+			{
+				@Override
+				Subcommand create(final PluginMain plugin)
+				{
+					return new MaterialsSubcommand(plugin);
+				}
+			},
 
-	MATERIALS() {
-		@Override
-		Subcommand create(final PluginMain plugin) {
-			return new MaterialsSubcommand(plugin);
-		}
-	},
+	RELOAD()
+			{
+				@Override
+				Subcommand create(final PluginMain plugin)
+				{
+					return new ReloadSubcommand(plugin);
+				}
+			},
 
-	RELOAD() {
-		@Override
-		Subcommand create(final PluginMain plugin) {
-			return new ReloadSubcommand(plugin);
-		}
-	},
+	SHOW()
+			{
+				@Override
+				Subcommand create(final PluginMain plugin)
+				{
+					return new ShowSubcommand(plugin);
+				}
+			},
 
-	SHOW() {
-		@Override
-		Subcommand create(final PluginMain plugin) {
-			return new ShowSubcommand(plugin);
-		}
-	},
+	STATUS()
+			{
+				@Override
+				Subcommand create(final PluginMain plugin)
+				{
+					return new StatusSubcommand(plugin);
+				}
+			},
 
-	STATUS() {
-		@Override
-		Subcommand create(final PluginMain plugin) {
-			return new StatusSubcommand(plugin);
-		}
-	},
-
-	TOOL() {
-		@Override
-		Subcommand create(final PluginMain plugin) {
-			return new ToolSubcommand(plugin);
-		}
-	};
+	TOOL()
+			{
+				@Override
+				Subcommand create(final PluginMain plugin)
+				{
+					return new ToolSubcommand(plugin);
+				}
+			};
 
 
 	/**
@@ -65,5 +75,4 @@ enum SubcommandType {
 	 * @return an instance of the subcommand
 	 */
 	abstract Subcommand create(final PluginMain plugin);
-
 }

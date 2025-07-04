@@ -17,58 +17,70 @@
 
 package com.winterhavenmc.roadblock.storage;
 
+import com.winterhavenmc.roadblock.block_location.BlockLocation;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 
 @SuppressWarnings("UnusedReturnValue")
-final class BlockRecordCache {
-
+final class BlockLocationCache
+{
 	// block cache
-	private final Map<BlockRecord, CacheStatus> blockMap = new ConcurrentHashMap<>();
+	private final Map<BlockLocation, CacheStatus> blockMap = new ConcurrentHashMap<>();
 
 
 	/**
 	 * Private class constructor
 	 */
-	private BlockRecordCache() { }
+	private BlockLocationCache()
+	{
+	}
 
 
 	/**
 	 * Singleton helper class
 	 */
-	private static class SingletonHelper {
-		private static final BlockRecordCache INSTANCE = new BlockRecordCache();
+	private static class SingletonHelper
+	{
+		private static final BlockLocationCache INSTANCE = new BlockLocationCache();
 	}
 
 
 	/**
 	 * Static factory for class
+	 *
 	 * @return instance of this singleton class
 	 */
-	static BlockRecordCache getInstance() {
+	static BlockLocationCache getInstance()
+	{
 		return SingletonHelper.INSTANCE;
 	}
 
 
-	CacheStatus get(final BlockRecord key) {
+	CacheStatus get(final BlockLocation key)
+	{
 		return blockMap.get(key);
 	}
 
-	CacheStatus put(final BlockRecord key, final CacheStatus value) {
+	CacheStatus put(final BlockLocation key, final CacheStatus value)
+	{
 		return blockMap.put(key, value);
 	}
 
-	CacheStatus remove(final BlockRecord key) {
+	CacheStatus remove(final BlockLocation key)
+	{
 		return blockMap.remove(key);
 	}
 
-	boolean containsKey(final BlockRecord key) {
+	boolean containsKey(final BlockLocation key)
+	{
 		return blockMap.containsKey(key);
 	}
 
-	Set<BlockRecord> keySet() {
+	Set<BlockLocation> keySet()
+	{
 		return blockMap.keySet();
 	}
 

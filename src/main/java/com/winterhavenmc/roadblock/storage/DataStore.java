@@ -17,15 +17,18 @@
 
 package com.winterhavenmc.roadblock.storage;
 
+import com.winterhavenmc.roadblock.block_location.BlockLocation;
+import com.winterhavenmc.roadblock.block_location.ValidBlockLocation;
+
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.*;
+import java.util.Collection;
 
 
-interface DataStore {
-
+interface DataStore
+{
 	/**
 	 * Initialize storage
 	 *
@@ -75,8 +78,8 @@ interface DataStore {
 	 *
 	 * @return new datastore of configured type
 	 */
-	static DataStore connect(final JavaPlugin plugin) {
-
+	static DataStore connect(final JavaPlugin plugin)
+	{
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
 
@@ -84,15 +87,13 @@ interface DataStore {
 		final DataStore newDataStore = dataStoreType.connect(plugin);
 
 		// initialize new data store
-		try {
+		try
+		{
 			newDataStore.initialize();
-		}
-		catch (Exception e) {
+		} catch (Exception e)
+		{
 			plugin.getLogger().severe("Could not initialize " + newDataStore + " datastore!");
 			plugin.getLogger().severe(e.getLocalizedMessage());
-			if (plugin.getConfig().getBoolean("debug")) {
-				e.printStackTrace();
-			}
 		}
 
 		// convert any existing data stores to new type
@@ -116,20 +117,20 @@ interface DataStore {
 	 * Store list of records
 	 *
 	 * @param blockRecords a {@code Collection} of {@code Location}
-	 *                  for block locations to be inserted into the datastore
+	 *                     for block locations to be inserted into the datastore
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	int insertRecords(final Collection<BlockRecord> blockRecords);
+	int insertRecords(final Collection<BlockLocation> blockRecords);
 
 
 	/**
 	 * delete list of records
 	 *
 	 * @param blockRecords {@code Collection} of {@code Location}
-	 *                    containing unique composite keys of records to delete
+	 *                     containing unique composite keys of records to delete
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	int deleteRecords(final Collection<BlockRecord> blockRecords);
+	int deleteRecords(final Collection<BlockLocation> blockRecords);
 
 
 	/**
@@ -137,7 +138,7 @@ interface DataStore {
 	 *
 	 * @return Set of {@code Location} for all block records
 	 */
-	Collection<BlockRecord> selectAllRecords();
+	Collection<BlockLocation> selectAllRecords();
 
 
 	/**
@@ -154,7 +155,7 @@ interface DataStore {
 	 * @param chunk the chunk containing records to be returned
 	 * @return {@code Set} of {@code LocationRecords} for block records within the chunk
 	 */
-	Collection<BlockRecord> selectRecordsInChunk(final Chunk chunk);
+	Collection<ValidBlockLocation> selectRecordsInChunk(final Chunk chunk);
 
 
 	/**
@@ -165,5 +166,8 @@ interface DataStore {
 	 * @return Set of Locations that are within {@code distance} of {@code location}
 	 */
 	Collection<Location> selectNearbyBlocks(final Location location, final int distance);
+
+
+	Collection<BlockLocation> selectNearbyBlockLocations(final BlockLocation blockLocation, final int distance);
 
 }

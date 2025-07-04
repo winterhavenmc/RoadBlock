@@ -18,7 +18,6 @@
 package com.winterhavenmc.roadblock.util;
 
 import com.winterhavenmc.roadblock.PluginMain;
-
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
@@ -27,24 +26,28 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.*;
+import java.util.Objects;
+import java.util.Set;
 
 
-public final class RoadBlockTool {
-
+public final class RoadBlockTool
+{
 	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
 	private final static NamespacedKey PERSISTENT_KEY = new NamespacedKey(plugin, "isTool");
 
+	public static final Material DEFAULT_MATERIAL = Material.GOLDEN_PICKAXE;
+
 	public final static Set<Material> toolTransparentMaterials = Set.of(
 			Material.AIR, Material.CAVE_AIR, Material.VOID_AIR, Material.SNOW,
-			Material.GRASS, Material.TALL_GRASS, Material.VINE );
+			Material.SHORT_GRASS, Material.TALL_GRASS, Material.VINE);
 
 
 	/**
 	 * Private constructor to prevent instantiation of this utility class
 	 */
-	private RoadBlockTool() {
+	private RoadBlockTool()
+	{
 		throw new AssertionError();
 	}
 
@@ -54,20 +57,15 @@ public final class RoadBlockTool {
 	 *
 	 * @return RoadBlock tool item stack
 	 */
-	public static ItemStack create() {
-
-		// initialize material
-		Material material = null;
-
+	public static ItemStack create()
+	{
 		// get configured material
-		String materialString = plugin.getConfig().getString("tool-material");
-		if (materialString != null) {
-			material = Material.matchMaterial(materialString);
-		}
+		Material material = Material.matchMaterial(Config.TOOL_MATERIAL.getString(plugin.getConfig()));
 
-		// if no matching material found, use default GOLDEN_PICKAXE
-		if (material == null) {
-			material = Material.GOLDEN_PICKAXE;
+		// if no matching material found, use default material
+		if (material == null)
+		{
+			material = DEFAULT_MATERIAL;
 		}
 
 		// create item stack of configured tool material
@@ -105,22 +103,25 @@ public final class RoadBlockTool {
 	 * @param itemStack the ItemStack to be tested
 	 * @return true if item is a RoadBlock tool, false if it is not
 	 */
-	public static boolean isTool(final ItemStack itemStack) {
-
+	public static boolean isTool(final ItemStack itemStack)
+	{
 		// if item stack is null, return false
-		if (itemStack == null) {
+		if (itemStack == null)
+		{
 			return false;
 		}
 
 		// if item stack does not have meta data, return false
-		if (!itemStack.hasItemMeta()) {
+		if (!itemStack.hasItemMeta())
+		{
 			return false;
 		}
 
 		// if item stack does not have persistent data tag, return false
 		//noinspection RedundantIfStatement
 		if (!Objects.requireNonNull(itemStack.getItemMeta())
-				.getPersistentDataContainer().has(PERSISTENT_KEY, PersistentDataType.BYTE)) {
+				.getPersistentDataContainer().has(PERSISTENT_KEY, PersistentDataType.BYTE))
+		{
 			return false;
 		}
 

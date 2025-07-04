@@ -18,9 +18,9 @@
 package com.winterhavenmc.roadblock.commands;
 
 import com.winterhavenmc.roadblock.PluginMain;
-import com.winterhavenmc.roadblock.sounds.SoundId;
-
 import com.winterhavenmc.roadblock.messages.MessageId;
+import com.winterhavenmc.roadblock.sounds.SoundId;
+import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -28,12 +28,13 @@ import java.util.List;
 import java.util.Objects;
 
 
-final class StatusSubcommand extends AbstrtactSubcommand {
-
+final class StatusSubcommand extends AbstrtactSubcommand
+{
 	private final PluginMain plugin;
 
 
-	StatusSubcommand(final PluginMain plugin) {
+	StatusSubcommand(final PluginMain plugin)
+	{
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "status";
 		this.usageString = "/roadblock status";
@@ -43,18 +44,20 @@ final class StatusSubcommand extends AbstrtactSubcommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final List<String> argsList) {
-
+	public boolean onCommand(final CommandSender sender, final List<String> argsList)
+	{
 		// check that sender has permission for status command
-		if (!sender.hasPermission(permissionNode)) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_STATUS_PERMISSION).send();
+		if (!sender.hasPermission(permissionNode))
+		{
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_STATUS_PERMISSION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
-		if (argsList.size() > getMaxArgs()) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
+		if (argsList.size() > getMaxArgs())
+		{
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -78,7 +81,8 @@ final class StatusSubcommand extends AbstrtactSubcommand {
 	}
 
 
-	private void displayPluginVersion(final CommandSender sender) {
+	private void displayPluginVersion(final CommandSender sender)
+	{
 		String versionString = this.plugin.getDescription().getVersion();
 		sender.sendMessage(ChatColor.DARK_GRAY + "["
 				+ ChatColor.YELLOW + plugin.getName() + ChatColor.DARK_GRAY + "] "
@@ -86,71 +90,85 @@ final class StatusSubcommand extends AbstrtactSubcommand {
 	}
 
 
-	private void displayDebugSetting(final CommandSender sender) {
-		if (plugin.getConfig().getBoolean("debug")) {
-			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: true");
+	private void displayDebugSetting(final CommandSender sender)
+	{
+		if (Config.DEBUG.getBoolean(plugin.getConfig()))
+		{
+			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: " + Config.DEBUG.getBoolean(plugin.getConfig()));
 		}
 	}
 
 
-	private void displayProfileSetting(final CommandSender sender) {
-		if (plugin.getConfig().getBoolean("profile")) {
-			sender.sendMessage(ChatColor.DARK_RED + "PROFILE: true");
+	private void displayProfileSetting(final CommandSender sender)
+	{
+		if (Config.PROFILE.getBoolean(plugin.getConfig()))
+		{
+			sender.sendMessage(ChatColor.DARK_RED + "PROFILE: " + Config.PROFILE.getBoolean(plugin.getConfig()));
 		}
 	}
 
 
-	private void displayTotalBlocksProtected(final CommandSender sender) {
-		if (plugin.getConfig().getBoolean("display-total")) {
+	private void displayTotalBlocksProtected(final CommandSender sender)
+	{
+		if (Config.DISPLAY_TOTAL.getBoolean(plugin.getConfig()))
+		{
 			sender.sendMessage(ChatColor.GREEN + "Total blocks protected: "
 					+ ChatColor.RESET + plugin.blockManager.getBlockTotal() + " blocks");
 		}
 	}
 
 
-	private void displaySpreadDistanceSetting(final CommandSender sender) {
+	private void displaySpreadDistanceSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Spread distance: "
-				+ ChatColor.RESET + plugin.getConfig().getInt("spread-distance") + " blocks");
+				+ ChatColor.RESET + Config.SPREAD_DISTANCE.getInt(plugin.getConfig()) + " blocks");
 	}
 
 
-	private void displayShowDistanceSetting(final CommandSender sender) {
+	private void displayShowDistanceSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Show distance: "
-				+ ChatColor.RESET + plugin.getConfig().getInt("show-distance") + " blocks");
+				+ ChatColor.RESET + Config.SHOW_DISTANCE.getInt(plugin.getConfig()) + " blocks");
 	}
 
 
-	private void displayNoPlaceHeightSetting(final CommandSender sender) {
+	private void displayNoPlaceHeightSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "No place height: "
-				+ ChatColor.RESET + plugin.getConfig().getInt("no-place-height") + " blocks");
+				+ ChatColor.RESET + Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig()) + " blocks");
 	}
 
 
-	private void displayPlayerOnRoadHeightSetting(final CommandSender sender) {
+	private void displayPlayerOnRoadHeightSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Player on road height: "
-				+ ChatColor.RESET + plugin.getConfig().getInt("on-road-height") + " blocks");
+				+ ChatColor.RESET + Config.ON_ROAD_HEIGHT.getInt(plugin.getConfig()) + " blocks");
 	}
 
 
-	private void displayMobTargetDistanceSetting(final CommandSender sender) {
+	private void displayMobTargetDistanceSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Mob targeting distance: "
-				+ ChatColor.RESET + plugin.getConfig().getInt("target-distance") + " blocks");
+				+ ChatColor.RESET + Config.TARGET_DISTANCE.getInt(plugin.getConfig()) + " blocks");
 	}
 
 
-	private void displaySnowPlowSetting(final CommandSender sender) {
+	private void displaySnowPlowSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Snow plow: "
-				+ ChatColor.RESET + plugin.getConfig().getString("snow-plow"));
+				+ ChatColor.RESET + Config.SNOW_PLOW.getBoolean(plugin.getConfig()));
 	}
 
 
-	private void displaySpeedBoostSetting(final CommandSender sender) {
+	private void displaySpeedBoostSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Speed boost: "
-				+ ChatColor.RESET + plugin.getConfig().getString("speed-boost"));
+				+ ChatColor.RESET + Config.SPEED_BOOST.getBoolean(plugin.getConfig()));
 	}
 
 
-	private void displayEnabledWorlds(final CommandSender sender) {
+	private void displayEnabledWorlds(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Enabled worlds: "
 				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());
 	}

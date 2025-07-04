@@ -17,14 +17,15 @@
 
 package com.winterhavenmc.roadblock.highlights;
 
+import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public enum HighlightStyle {
-
-	PROTECT(Material.EMERALD_BLOCK, "protect-material"),
-	UNPROTECT(Material.REDSTONE_BLOCK, "unprotect-material");
+public enum HighlightStyle
+{
+	PROTECT(Material.EMERALD_BLOCK, Config.PROTECT_MATERIAL.toKey()),
+	UNPROTECT(Material.REDSTONE_BLOCK, Config.UNPROTECT_MATERIAL.toKey());
 
 	private final Material defaultMaterial;
 	private final String configString;
@@ -36,7 +37,8 @@ public enum HighlightStyle {
 	 * @param defaultMaterial the material type to use as default
 	 * @param configString    the configuration key for material type
 	 */
-	HighlightStyle(final Material defaultMaterial, final String configString) {
+	HighlightStyle(final Material defaultMaterial, final String configString)
+	{
 		this.defaultMaterial = defaultMaterial;
 		this.configString = configString;
 	}
@@ -47,13 +49,14 @@ public enum HighlightStyle {
 	 *
 	 * @return the material type that matches the configured string
 	 */
-	final Material getMaterial(final JavaPlugin plugin) {
-
+	final Material getMaterial(final JavaPlugin plugin)
+	{
 		// get configured material
 		String materialString = plugin.getConfig().getString(this.configString);
 
 		// if no configured material, return default material
-		if (materialString == null) {
+		if (materialString == null)
+		{
 			return this.defaultMaterial;
 		}
 
@@ -61,7 +64,8 @@ public enum HighlightStyle {
 		Material material = Material.matchMaterial(materialString);
 
 		// if no matching material, return default material
-		if (material == null) {
+		if (material == null)
+		{
 			material = this.defaultMaterial;
 		}
 

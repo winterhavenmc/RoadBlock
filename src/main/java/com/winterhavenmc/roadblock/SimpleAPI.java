@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.roadblock;
 
+import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,15 +25,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 
 @SuppressWarnings({"unused", "WeakerAccess"})
-public final class SimpleAPI {
-
+public final class SimpleAPI
+{
 	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
 
 	/**
 	 * Private constructor to prevent instantiation of this utility class
 	 */
-	private SimpleAPI() {
+	private SimpleAPI()
+	{
 		throw new AssertionError();
 	}
 
@@ -43,7 +45,8 @@ public final class SimpleAPI {
 	 * @param material the material to check
 	 * @return {@code true} if the material is in the configured list of RoadBlock materials, else {@code false}
 	 */
-	public static boolean isRoadBlockMaterial(final Material material) {
+	public static boolean isRoadBlockMaterial(final Material material)
+	{
 		return plugin.blockManager.isRoadBlockMaterial(material);
 	}
 
@@ -54,7 +57,8 @@ public final class SimpleAPI {
 	 * @param player the player to check for road block proximity
 	 * @return {@code true} if player is configured height or less above a road block, else {@code false}
 	 */
-	public static boolean isAboveRoad(final Player player) {
+	public static boolean isAboveRoad(final Player player)
+	{
 		return plugin.blockManager.isAboveRoad(player);
 	}
 
@@ -65,8 +69,9 @@ public final class SimpleAPI {
 	 * @param location the location to check road block proximity
 	 * @return {@code true} if block is within configured no-place-height above a road block, else {@code false}
 	 */
-	public static boolean isAboveRoad(final Location location) {
-		return plugin.blockManager.isAboveRoad(location, plugin.getConfig().getInt("no-place-height"));
+	public static boolean isAboveRoad(final Location location)
+	{
+		return plugin.blockManager.isAboveRoad(location, Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig()));
 	}
 
 
@@ -77,7 +82,8 @@ public final class SimpleAPI {
 	 * @param height   the number of blocks above a road block to consider
 	 * @return {@code true} if block is within {@code height} above a road block, else {@code false}
 	 */
-	public static boolean isAboveRoad(final Location location, final int height) {
+	public static boolean isAboveRoad(final Location location, final int height)
+	{
 		return plugin.blockManager.isAboveRoad(location, height);
 	}
 
@@ -88,10 +94,10 @@ public final class SimpleAPI {
 	 * @param location the location to check
 	 * @return {@code true} if block can be placed at location, else {@code false}
 	 */
-	public static boolean canPlace(final Location location) {
-
+	public static boolean canPlace(final Location location)
+	{
 		// get configured no-place-height
-		int height = plugin.getConfig().getInt("no-place-height");
+		int height = Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig());
 
 		// check location with configured no-place-height
 		return canPlace(location, height);
@@ -105,8 +111,8 @@ public final class SimpleAPI {
 	 * @param height   the height above road to consider not placeable
 	 * @return {@code true} if the block can be place at location, else {@code false}
 	 */
-	public static boolean canPlace(final Location location, final int height) {
-
+	public static boolean canPlace(final Location location, final int height)
+	{
 		// return result of: block is a protected road block or block is within passed height above a road block
 		return !(plugin.blockManager.isRoadBlock(location.getBlock())
 				|| plugin.blockManager.isAboveRoad(location, height));
