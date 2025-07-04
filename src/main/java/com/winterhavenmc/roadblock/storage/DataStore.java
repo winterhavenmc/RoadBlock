@@ -171,4 +171,7 @@ interface DataStore
 	 */
 	Collection<Location> selectNearbyBlocks(final Location location, final int distance);
 
+
+	Collection<BlockLocation> selectNearbyBlockLocations(final BlockLocation blockLocation, final int distance);
+
 }
