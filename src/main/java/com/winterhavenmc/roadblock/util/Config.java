@@ -32,6 +32,7 @@ public enum Config
 	SOUND_EFFECTS(Boolean.TRUE),
 	SPEED_BOOST(Boolean.TRUE),
 	TITLES_ENABLED(Boolean.TRUE),
+	HIGHLIGHT_DURATION(10),
 	MATERIALS(List.of(
 			Material.DIRT_PATH,
 			Material.COBBLESTONE,
