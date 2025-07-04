@@ -105,28 +105,15 @@ public final class RoadBlockTool
 	 */
 	public static boolean isTool(final ItemStack itemStack)
 	{
-		// if item stack is null, return false
-		if (itemStack == null)
-		{
-			return false;
-		}
-
-		// if item stack does not have meta data, return false
-		if (!itemStack.hasItemMeta())
+		// if item stack is null or does not have metadata, return false
+		if (itemStack == null || !itemStack.hasItemMeta())
 		{
 			return false;
 		}
 
 		// if item stack does not have persistent data tag, return false
-		//noinspection RedundantIfStatement
-		if (!Objects.requireNonNull(itemStack.getItemMeta())
-				.getPersistentDataContainer().has(PERSISTENT_KEY, PersistentDataType.BYTE))
-		{
-			return false;
-		}
-
-		// return true
-		return true;
+		else return Objects.requireNonNull(itemStack.getItemMeta())
+					.getPersistentDataContainer().has(PERSISTENT_KEY, PersistentDataType.BYTE);
 	}
 
 }
