@@ -24,14 +24,7 @@ public sealed interface RoadBlock permits RoadBlock.Valid, RoadBlock.Invalid
 	record Unprotected(BlockLocation blockLocation) implements Valid { }
 
 
-	/**
-	 * Constructs a {@code RoadBlock} result from a block location and plugin context.
-	 *
-	 * @param blockLocation the location of the block to evaluate
-	 * @param plugin        the plugin context used for block lookups
-	 * @return a {@link Protected}, {@link Unprotected}, or {@link Invalid} variant
-	 */
-	static RoadBlock of(final BlockLocation blockLocation, final PluginMain plugin)
+	static RoadBlock of(final BlockLocation.Valid blockLocation, final PluginMain plugin)
 	{
 		if (blockLocation instanceof BlockLocation.Invalid(FailReason reason)) return new RoadBlock.Invalid(reason);
 		else if (blockLocation instanceof BlockLocation.Valid valid)
@@ -52,11 +45,6 @@ public sealed interface RoadBlock permits RoadBlock.Valid, RoadBlock.Invalid
 		record Invalid(FailReason reason) implements BlockLocation { }
 		record Valid(String worldName, UUID worldUid, int blockX, int blockY, int blockZ, int chunkX, int chunkZ) implements BlockLocation
 		{
-			/**
-			 * Gets a Bukkit {@link Location} object for this block location.
-			 *
-			 * @return the Bukkit Location, or {@code null} if the world is not loaded
-			 */
 			public Location getLocation()
 			{
 				World world = Bukkit.getWorld(worldUid);
@@ -67,12 +55,6 @@ public sealed interface RoadBlock permits RoadBlock.Valid, RoadBlock.Invalid
 		}
 
 
-		/**
-		 * Factory method that constructs a {@code BlockLocation} from a Bukkit {@link Location}.
-		 *
-		 * @param location the Bukkit location
-		 * @return a {@link Valid} or {@link Invalid} instance
-		 */
 		static BlockLocation of(final Location location)
 		{
 			if (location == null) return new Invalid(FailReason.LOCATION_NULL);
@@ -84,11 +66,6 @@ public sealed interface RoadBlock permits RoadBlock.Valid, RoadBlock.Invalid
 		}
 
 
-		/**
-		 * Constructs a {@code BlockLocation} from raw parameters.
-		 *
-		 * @return a {@link Valid} or {@link Invalid} instance
-		 */
 		static BlockLocation of(final String worldName, final UUID worldUid,
 		                        final int blockX, final int blockY, final int blockZ,
 		                        final int chunkX, final int chunkZ)
