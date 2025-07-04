@@ -370,11 +370,11 @@ public class EntityEventListener implements Listener
 		plugin.highlightManager.highlightBlocks(player, locations, HighlightStyle.PROTECT);
 
 		// store blocks
-		int result = plugin.blockManager.storeBlockLocations(locations);
+		int count = plugin.blockManager.storeBlockLocations(locations);
 
 		// send player successful protect message
 		plugin.messageBuilder.compose(player, MessageId.TOOL_SUCCESS_PROTECT)
-				.setMacro(Macro.QUANTITY, result)
+				.setMacro(Macro.QUANTITY, count)
 				.send();
 		plugin.soundConfig.playSound(player, SoundId.TOOL_SUCCESS_PROTECT);
 	}
