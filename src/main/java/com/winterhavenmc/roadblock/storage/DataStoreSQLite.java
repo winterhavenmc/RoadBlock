@@ -433,7 +433,6 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 				while (rs.next())
 				{
-					final String worldName = rs.getString("worldName");
 					final UUID worldUid = new UUID(rs.getInt("worldMsb"),
 							rs.getInt(rs.getInt("worldLsb")));
 					final double x = rs.getDouble("x");
