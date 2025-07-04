@@ -50,6 +50,7 @@ public enum Config
 			Material.MOSSY_STONE_BRICK_STAIRS
 	));
 
+
 	private final Object defaultObject;
 
 	/**
@@ -67,7 +68,7 @@ public enum Config
 	 *
 	 * @return {@code String} the key as formatted in config.yml file
 	 */
-	public String asFileKey()
+	public String toKey()
 	{
 		return this.toLowerKebabCase();
 	}
@@ -121,7 +122,7 @@ public enum Config
 	 */
 	public boolean getBoolean(final Configuration configuration)
 	{
-		return configuration.getBoolean(this.asFileKey());
+		return configuration.getBoolean(this.toKey());
 	}
 
 	/**
@@ -132,7 +133,7 @@ public enum Config
 	 */
 	public int getInt(final Configuration configuration)
 	{
-		return configuration.getInt(this.asFileKey());
+		return configuration.getInt(this.toKey());
 	}
 
 	/**
@@ -143,7 +144,7 @@ public enum Config
 	 */
 	public String getString(final Configuration configuration)
 	{
-		return configuration.getString(this.asFileKey());
+		return configuration.getString(this.toKey());
 	}
 
 	/**
@@ -154,7 +155,7 @@ public enum Config
 	 */
 	public List<String> getStringList(final Configuration configuration)
 	{
-		return configuration.getStringList(this.asFileKey());
+		return configuration.getStringList(this.toKey());
 	}
 
 	/**
@@ -165,7 +166,7 @@ public enum Config
 	 */
 	public Object get(final Configuration configuration)
 	{
-		return configuration.get(this.asFileKey());
+		return configuration.get(this.toKey());
 	}
 
 }
