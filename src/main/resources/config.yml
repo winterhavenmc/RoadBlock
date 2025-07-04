@@ -53,6 +53,9 @@ titles-enabled: true
 # give players a speed boost effect when on roads
 speed-boost: true
 
+# Time before highlights disappear (in seconds)
+highlight-duration: 10
+
 # materials to be considered road blocks (material types documented here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html)
 materials:
   - DIRT_PATH
