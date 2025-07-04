@@ -17,8 +17,7 @@
 
 package com.winterhavenmc.roadblock.storage;
 
-import com.winterhavenmc.roadblock.block_location.BlockLocation;
-import com.winterhavenmc.roadblock.block_location.ValidBlockLocation;
+import com.winterhavenmc.roadblock.model.RoadBlock;
 import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -136,12 +135,12 @@ public final class BlockManager
 	/**
 	 * Returns a Collection of valid block locations contained in a collection of locations.
 	 */
-	public Set<BlockLocation> getBlockLocations(final Collection<Location> locations)
+	public Set<RoadBlock.BlockLocation> getBlockLocations(final Collection<Location> locations)
 	{
 		return locations.stream()
-				.map(BlockLocation::of)
-				.filter(ValidBlockLocation.class::isInstance)
-				.map(ValidBlockLocation.class::cast)
+				.map(RoadBlock.BlockLocation::of)
+				.filter(RoadBlock.BlockLocation.Valid.class::isInstance)
+				.map(RoadBlock.BlockLocation.Valid.class::cast)
 				.collect(Collectors.toSet());
 	}
 
@@ -349,7 +348,7 @@ public final class BlockManager
 	}
 
 
-	public Collection<BlockLocation> selectNearbyBlockLocations(final BlockLocation blockLocation, final int distance)
+	public Collection<RoadBlock.BlockLocation> selectNearbyBlockLocations(final RoadBlock.BlockLocation blockLocation, final int distance)
 	{
 		return dataStore.selectNearbyBlockLocations(blockLocation, distance);
 	}

@@ -17,9 +17,7 @@
 
 package com.winterhavenmc.roadblock.storage;
 
-import com.winterhavenmc.roadblock.block_location.BlockLocation;
-import com.winterhavenmc.roadblock.block_location.ValidBlockLocation;
-
+import com.winterhavenmc.roadblock.model.RoadBlock;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -120,7 +118,7 @@ interface DataStore
 	 *                     for block locations to be inserted into the datastore
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	int insertRecords(final Collection<BlockLocation> blockRecords);
+	int insertRecords(final Collection<RoadBlock.BlockLocation> blockRecords);
 
 
 	/**
@@ -130,7 +128,7 @@ interface DataStore
 	 *                     containing unique composite keys of records to delete
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	int deleteRecords(final Collection<BlockLocation> blockRecords);
+	int deleteRecords(final Collection<RoadBlock.BlockLocation> blockRecords);
 
 
 	/**
@@ -138,7 +136,7 @@ interface DataStore
 	 *
 	 * @return Set of {@code Location} for all block records
 	 */
-	Collection<BlockLocation> selectAllRecords();
+	Collection<RoadBlock.BlockLocation> selectAllRecords();
 
 
 	/**
@@ -155,7 +153,7 @@ interface DataStore
 	 * @param chunk the chunk containing records to be returned
 	 * @return {@code Set} of {@code LocationRecords} for block records within the chunk
 	 */
-	Collection<ValidBlockLocation> selectRecordsInChunk(final Chunk chunk);
+	Collection<RoadBlock.BlockLocation.Valid> selectRecordsInChunk(final Chunk chunk);
 
 
 	/**
@@ -168,6 +166,6 @@ interface DataStore
 	Collection<Location> selectNearbyBlocks(final Location location, final int distance);
 
 
-	Collection<BlockLocation> selectNearbyBlockLocations(final BlockLocation blockLocation, final int distance);
+	Collection<RoadBlock.BlockLocation> selectNearbyBlockLocations(final RoadBlock.BlockLocation blockLocation, final int distance);
 
 }
