@@ -26,14 +26,13 @@ public sealed interface RoadBlock permits RoadBlock.Valid, RoadBlock.Invalid
 
 	static RoadBlock of(final BlockLocation.Valid blockLocation, final PluginMain plugin)
 	{
-		if (blockLocation instanceof BlockLocation.Invalid(FailReason reason)) return new RoadBlock.Invalid(reason);
-		else if (blockLocation instanceof BlockLocation.Valid valid)
-		{
-			World world = plugin.getServer().getWorld(valid.worldUid);
-			if (world != null && plugin.blockManager.isRoadBlock(world.getBlockAt(valid.blockX, valid.blockY, valid.blockZ)))
-				return new Protected(blockLocation);
-		}
-		return new Unprotected(blockLocation);
+		World world = plugin.getServer().getWorld(blockLocation.worldUid);
+		if (world == null) return new RoadBlock.Invalid(WORLD_NULL);
+
+		Block block = world.getBlockAt(blockLocation.blockX, blockLocation.blockY, blockLocation.blockZ);
+		if (plugin.blockManager.isRoadBlock(block)) return new Protected(blockLocation);
+		else if (plugin.blockManager.isRoadBlockMaterial(block.getType())) return new RoadBlock.Unprotected(blockLocation);
+		else return new Invalid(BLOCK_MATERIAL);
 	}
 
 
