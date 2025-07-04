@@ -18,6 +18,7 @@
 package com.winterhavenmc.roadblock.listeners;
 
 import com.winterhavenmc.roadblock.PluginMain;
+import com.winterhavenmc.roadblock.messages.Macro;
 import com.winterhavenmc.roadblock.messages.MessageId;
 import com.winterhavenmc.roadblock.sounds.SoundId;
 import com.winterhavenmc.roadblock.util.Config;
@@ -157,7 +158,9 @@ public final class BlockEventListener implements Listener
 			if (!player.hasPermission("roadblock.break"))
 			{
 				event.setCancelled(true);
-				plugin.messageBuilder.compose(player, MessageId.TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION).send();
+				plugin.messageBuilder.compose(player, MessageId.TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION)
+						.setMacro(Macro.WORLD, player.getWorld())
+						.send();
 				return;
 			}
 

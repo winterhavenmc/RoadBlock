@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.roadblock.storage;
 
+import com.winterhavenmc.roadblock.PluginMain;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -31,7 +32,7 @@ enum DataStoreType
 	SQLITE("SQLite", "roadblocks.db")
 			{
 				@Override
-				public DataStore connect(final JavaPlugin plugin)
+				public DataStore connect(final PluginMain plugin)
 				{
 					// create new sqlite datastore object
 					return new DataStoreSQLite(plugin);
@@ -75,7 +76,7 @@ enum DataStoreType
 	 *
 	 * @return instance of a DataStore
 	 */
-	public abstract DataStore connect(final JavaPlugin plugin);
+	public abstract DataStore connect(final PluginMain plugin);
 
 	@Override
 	public final String toString()
@@ -186,7 +187,7 @@ enum DataStoreType
 	 *
 	 * @param newDataStore the new datastore that all other existing datastores should be converted to
 	 */
-	static void convertAll(final JavaPlugin plugin, final DataStore newDataStore)
+	static void convertAll(final PluginMain plugin, final DataStore newDataStore)
 	{
 		// get collection of all data store types
 		final Collection<DataStoreType> dataStores =

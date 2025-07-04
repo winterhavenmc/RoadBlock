@@ -17,15 +17,14 @@
 
 package com.winterhavenmc.roadblock.storage;
 
-import com.winterhavenmc.roadblock.block_location.BlockLocation;
-import com.winterhavenmc.roadblock.block_location.ValidBlockLocation;
+import com.winterhavenmc.roadblock.PluginMain;
+import com.winterhavenmc.roadblock.model.RoadBlock;
 import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,7 +33,7 @@ import java.util.stream.Collectors;
 public final class BlockManager
 {
 	// reference to main class
-	private final JavaPlugin plugin;
+	private final PluginMain plugin;
 
 	// set of road block materials
 	private Set<Material> roadBlockMaterials;
@@ -47,7 +46,7 @@ public final class BlockManager
 	 *
 	 * @param plugin reference to main class
 	 */
-	public BlockManager(final JavaPlugin plugin)
+	public BlockManager(final PluginMain plugin)
 	{
 		// set reference to main class
 		this.plugin = plugin;
@@ -136,12 +135,12 @@ public final class BlockManager
 	/**
 	 * Returns a Collection of valid block locations contained in a collection of locations.
 	 */
-	public Set<BlockLocation> getBlockLocations(final Collection<Location> locations)
+	public Set<RoadBlock.BlockLocation> getBlockLocations(final Collection<Location> locations)
 	{
 		return locations.stream()
-				.map(BlockLocation::of)
-				.filter(ValidBlockLocation.class::isInstance)
-				.map(ValidBlockLocation.class::cast)
+				.map(RoadBlock.BlockLocation::of)
+				.filter(RoadBlock.BlockLocation.Valid.class::isInstance)
+				.map(RoadBlock.BlockLocation.Valid.class::cast)
 				.collect(Collectors.toSet());
 	}
 
@@ -349,9 +348,9 @@ public final class BlockManager
 	}
 
 
-	public Collection<BlockLocation> selectNearbyBlockLocations(final BlockLocation blockLocation, final int distance)
+	public Set<RoadBlock.Protected> selectNearbyRoadBlocks(final Location location, final int distance)
 	{
-		return dataStore.selectNearbyBlockLocations(blockLocation, distance);
+		return dataStore.selectNearbyRoadBlocks(location, distance);
 	}
 
 

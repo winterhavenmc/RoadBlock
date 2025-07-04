@@ -17,14 +17,13 @@
 
 package com.winterhavenmc.roadblock.storage;
 
-import com.winterhavenmc.roadblock.block_location.BlockLocation;
-import com.winterhavenmc.roadblock.block_location.ValidBlockLocation;
-
+import com.winterhavenmc.roadblock.PluginMain;
+import com.winterhavenmc.roadblock.model.RoadBlock;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
+import java.util.Set;
 
 
 interface DataStore
@@ -78,7 +77,7 @@ interface DataStore
 	 *
 	 * @return new datastore of configured type
 	 */
-	static DataStore connect(final JavaPlugin plugin)
+	static DataStore connect(final PluginMain plugin)
 	{
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
@@ -120,7 +119,7 @@ interface DataStore
 	 *                     for block locations to be inserted into the datastore
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	int insertRecords(final Collection<BlockLocation> blockRecords);
+	int insertRecords(final Collection<RoadBlock.BlockLocation> blockRecords);
 
 
 	/**
@@ -130,7 +129,7 @@ interface DataStore
 	 *                     containing unique composite keys of records to delete
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	int deleteRecords(final Collection<BlockLocation> blockRecords);
+	int deleteRecords(final Collection<RoadBlock.BlockLocation> blockRecords);
 
 
 	/**
@@ -138,13 +137,13 @@ interface DataStore
 	 *
 	 * @return Set of {@code Location} for all block records
 	 */
-	Collection<BlockLocation> selectAllRecords();
+	Collection<RoadBlock.BlockLocation> selectAllRecords();
 
 
 	/**
 	 * count records in blocks table
 	 *
-	 * @return numner of records in blocks table
+	 * @return number of records in blocks table
 	 */
 	int getTotalBlocks();
 
@@ -155,7 +154,7 @@ interface DataStore
 	 * @param chunk the chunk containing records to be returned
 	 * @return {@code Set} of {@code LocationRecords} for block records within the chunk
 	 */
-	Collection<ValidBlockLocation> selectRecordsInChunk(final Chunk chunk);
+	Collection<RoadBlock.BlockLocation.Valid> selectRecordsInChunk(final Chunk chunk);
 
 
 	/**
@@ -168,6 +167,6 @@ interface DataStore
 	Collection<Location> selectNearbyBlocks(final Location location, final int distance);
 
 
-	Collection<BlockLocation> selectNearbyBlockLocations(final BlockLocation blockLocation, final int distance);
+	Set<RoadBlock.Valid.Protected> selectNearbyRoadBlocks(final Location location, final int distance);
 
 }

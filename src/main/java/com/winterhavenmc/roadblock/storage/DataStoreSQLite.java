@@ -17,30 +17,25 @@
 
 package com.winterhavenmc.roadblock.storage;
 
-import com.winterhavenmc.roadblock.block_location.BlockLocation;
-import com.winterhavenmc.roadblock.block_location.ValidBlockLocation;
-
+import com.winterhavenmc.roadblock.PluginMain;
+import com.winterhavenmc.roadblock.model.RoadBlock;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.sql.*;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 
 
 final class DataStoreSQLite extends DataStoreAbstract implements DataStore, Listener
 {
 	// reference to main class
-	private final JavaPlugin plugin;
+	private final PluginMain plugin;
 
 	// block cache
 	private final BlockLocationCache blockCache;
@@ -63,7 +58,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 *
 	 * @param plugin reference to main class
 	 */
-	DataStoreSQLite(final JavaPlugin plugin)
+	DataStoreSQLite(final PluginMain plugin)
 	{
 		// reference to main class
 		this.plugin = plugin;
@@ -153,7 +148,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			ResultSet rs = statement.executeQuery(Queries.getQuery("SelectBlockTable"));
 			if (rs.next())
 			{
-				Collection<BlockLocation> existingRecords = selectAllRecords();
+				Collection<RoadBlock.BlockLocation> existingRecords = selectAllRecords();
 				statement.executeUpdate(Queries.getQuery("DropBlockTable"));
 				statement.executeUpdate(Queries.getQuery("DropChunkIndex"));
 				statement.executeUpdate(Queries.getQuery("CreateBlockTable"));
@@ -239,12 +234,12 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	@Override
 	public boolean isProtected(final Location location)
 	{
-		return BlockLocation.of(location) instanceof ValidBlockLocation validLocation
+		return RoadBlock.BlockLocation.of(location) instanceof RoadBlock.BlockLocation.Valid validLocation
 				&& isProtected(validLocation, location);
 	}
 
 
-	private boolean isProtected(ValidBlockLocation validLocation, Location location)
+	private boolean isProtected(RoadBlock.BlockLocation.Valid validLocation, Location location)
 	{
 		if (!isChunkCached(location))
 		{
@@ -262,7 +257,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 * @param blockLocations Collection of records to insert
 	 */
 	@Override
-	synchronized public int insertRecords(final Collection<BlockLocation> blockLocations)
+	synchronized public int insertRecords(final Collection<RoadBlock.BlockLocation> blockLocations)
 	{
 		blockLocations.forEach(location -> blockCache.put(location, CacheStatus.PENDING_INSERT));
 		new AsyncInsert(blockLocations).runTaskAsynchronously(plugin);
@@ -276,7 +271,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 * @param blockLocations Collection of locations
 	 */
 	@Override
-	synchronized public int deleteRecords(final Collection<BlockLocation> blockLocations)
+	synchronized public int deleteRecords(final Collection<RoadBlock.BlockLocation> blockLocations)
 	{
 		blockLocations.forEach(location -> blockCache.put(location, CacheStatus.PENDING_DELETE));
 		new AsyncDelete(blockLocations).runTaskAsynchronously(plugin);
@@ -289,9 +284,9 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 *
 	 * @return List of location records
 	 */
-	synchronized public Collection<BlockLocation> selectAllRecords()
+	synchronized public Collection<RoadBlock.BlockLocation> selectAllRecords()
 	{
-		final Collection<BlockLocation> results = new HashSet<>();
+		final Collection<RoadBlock.BlockLocation> results = new HashSet<>();
 
 		try
 		{
@@ -334,7 +329,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				}
 
 				// add block record to return set
-				results.add(BlockLocation.of(world.getName(), world.getUID(), blockX, blockY, blockZ, chunkX, chunkZ));
+				results.add(RoadBlock.BlockLocation.of(world.getName(), world.getUID(), blockX, blockY, blockZ, chunkX, chunkZ));
 			}
 		}
 		catch (SQLException e)
@@ -356,9 +351,9 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 * @return Collection of locations
 	 */
 	@Override
-	synchronized public Collection<ValidBlockLocation> selectRecordsInChunk(final Chunk chunk)
+	synchronized public Collection<RoadBlock.BlockLocation.Valid> selectRecordsInChunk(final Chunk chunk)
 	{
-		final Collection<ValidBlockLocation> results = new HashSet<>();
+		final Collection<RoadBlock.BlockLocation.Valid> results = new HashSet<>();
 
 		try
 		{
@@ -390,8 +385,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				World world = plugin.getServer().getWorld(new UUID(worldUidMSB, worldUidLSB));
 
 				// if world is not null, add block record to return set
-				if (world != null && BlockLocation.of(world.getName(), world.getUID(),
-						blockX, blockY, blockZ, chunkX, chunkZ) instanceof ValidBlockLocation validBlockLocation)
+				if (world != null && RoadBlock.BlockLocation.of(world.getName(), world.getUID(),
+						blockX, blockY, blockZ, chunkX, chunkZ) instanceof RoadBlock.BlockLocation.Valid validBlockLocation)
 				{
 					results.add(validBlockLocation);
 				}
@@ -414,21 +409,20 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	}
 
 
-	public Collection<BlockLocation> selectNearbyBlockLocations(final BlockLocation blockLocation, final int distance)
+	public Set<RoadBlock.Protected> selectNearbyRoadBlocks(final Location location, final int distance)
 	{
-		if (blockLocation instanceof ValidBlockLocation validBlockLocation)
+		if (location.getWorld() != null)
 		{
-			Collection<BlockLocation> results = new HashSet<>();
+			Set<RoadBlock.Valid.Protected> results = new HashSet<>();
 
 			try
 			{
 				PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("SelectNearbyBlocks"));
-				preparedStatement.setLong(1, validBlockLocation.worldUid().getMostSignificantBits());
-				preparedStatement.setLong(2, validBlockLocation.worldUid().getLeastSignificantBits());
-				preparedStatement.setInt(3, validBlockLocation.blockX() - distance);
-				preparedStatement.setInt(4, validBlockLocation.blockX() + distance);
-				preparedStatement.setInt(5, validBlockLocation.blockZ() - distance);
-				preparedStatement.setInt(6, validBlockLocation.blockZ() + distance);
+				preparedStatement.setLong(1, location.getWorld().getUID().getMostSignificantBits());
+				preparedStatement.setLong(2, location.getWorld().getUID().getLeastSignificantBits());
+				preparedStatement.setInt(4, location.getBlockX() + distance);
+				preparedStatement.setInt(5, location.getBlockY() - distance);
+				preparedStatement.setInt(6, location.getBlockZ() + distance);
 				ResultSet rs = preparedStatement.executeQuery();
 
 				while (rs.next())
@@ -444,11 +438,15 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 					if (world != null)
 					{
 						// get location for stored record
-						BlockLocation newBlockLocation = BlockLocation.of(new Location(world, x, y, z));
-
-						if (newBlockLocation instanceof ValidBlockLocation)
+						RoadBlock.BlockLocation newBlockLocation = RoadBlock.BlockLocation.of(new Location(world, x, y, z));
+						if (newBlockLocation instanceof RoadBlock.BlockLocation.Valid validBlockLocation)
 						{
-							results.add(newBlockLocation);
+							RoadBlock roadBlock = RoadBlock.of(validBlockLocation, plugin);
+
+							if (roadBlock instanceof RoadBlock.Valid.Protected protectedRoadBlock)
+							{
+								results.add(protectedRoadBlock);
+							}
 						}
 					}
 				}
@@ -472,11 +470,11 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	}
 
 
-	public Collection<Location> selectNearbyBlocks(final Location location, final int distance)
+	public Set<Location> selectNearbyBlocks(final Location location, final int distance)
 	{
-		if (BlockLocation.of(location) instanceof ValidBlockLocation validBlockLocation)
+		if (RoadBlock.BlockLocation.of(location) instanceof RoadBlock.BlockLocation.Valid validBlockLocation)
 		{
-			Collection<Location> results = new HashSet<>();
+			Set<Location> results = new HashSet<>();
 
 			try
 			{
@@ -531,9 +529,9 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 */
 	private void cacheChunk(final Chunk chunk)
 	{
-		final Collection<ValidBlockLocation> blockSet = selectRecordsInChunk(chunk);
+		final Collection<RoadBlock.BlockLocation.Valid> blockSet = selectRecordsInChunk(chunk);
 
-		for (BlockLocation blockLocation : blockSet)
+		for (RoadBlock.BlockLocation blockLocation : blockSet)
 		{
 			blockCache.put(blockLocation, CacheStatus.RESIDENT);
 		}
@@ -550,9 +548,9 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 */
 	private void flushCache(final Chunk chunk)
 	{
-		for (BlockLocation blockLocation : blockCache.keySet())
+		for (RoadBlock.BlockLocation blockLocation : blockCache.keySet())
 		{
-			if (blockLocation instanceof ValidBlockLocation validLocation
+			if (blockLocation instanceof RoadBlock.BlockLocation.Valid validLocation
 					&& validLocation.worldUid().equals(chunk.getWorld().getUID())
 					&& validLocation.chunkX() == chunk.getX()
 					&& validLocation.chunkZ() == chunk.getZ())
@@ -618,9 +616,9 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 
 	private class AsyncInsert extends BukkitRunnable
 	{
-		private final Collection<BlockLocation> blockLocations;
+		private final Collection<RoadBlock.BlockLocation> blockLocations;
 
-		public AsyncInsert(Collection<BlockLocation> blockLocations)
+		public AsyncInsert(Collection<RoadBlock.BlockLocation> blockLocations)
 		{
 			this.blockLocations = blockLocations;
 		}
@@ -633,9 +631,9 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 				// set connection to transaction mode
 				connection.setAutoCommit(false);
 
-				for (BlockLocation blockLocation : blockLocations)
+				for (RoadBlock.BlockLocation blockLocation : blockLocations)
 				{
-					if (blockLocation instanceof ValidBlockLocation(
+					if (blockLocation instanceof RoadBlock.BlockLocation.Valid(
 							String worldName, UUID worldUid,
 							int blockX, int blockY, int blockZ,
 							int chunkX, int chunkZ))
@@ -676,11 +674,12 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 		}
 	}
 
+
 	private class AsyncDelete extends BukkitRunnable
 	{
-		private final Collection<BlockLocation> blockLocations;
+		private final Collection<RoadBlock.BlockLocation> blockLocations;
 
-		public AsyncDelete(Collection<BlockLocation> blockLocations)
+		public AsyncDelete(Collection<RoadBlock.BlockLocation> blockLocations)
 		{
 			this.blockLocations = blockLocations;
 		}
@@ -692,10 +691,10 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 			{
 				connection.setAutoCommit(false);
 
-				for (final BlockLocation blockLocation : blockLocations)
+				for (final RoadBlock.BlockLocation blockLocation : blockLocations)
 				{
 					// if key is null return, skip to next location
-					if (!(blockLocation instanceof ValidBlockLocation validLocation))
+					if (!(blockLocation instanceof RoadBlock.BlockLocation.Valid validLocation))
 					{
 						continue;
 					}

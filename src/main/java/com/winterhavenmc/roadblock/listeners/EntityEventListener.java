@@ -278,7 +278,9 @@ public class EntityEventListener implements Listener
 			// if player does not have roadblock.set permission, do nothing and return
 			if (!player.hasPermission("roadblock.set"))
 			{
-				plugin.messageBuilder.compose(player, MessageId.TOOL_FAIL_USE_PERMISSION).send();
+				plugin.messageBuilder.compose(player, MessageId.TOOL_FAIL_USE_PERMISSION)
+						.setMacro(Macro.WORLD, player.getWorld())
+						.send();
 				plugin.soundConfig.playSound(player, SoundId.TOOL_FAIL_USE_PERMISSION);
 				return;
 			}

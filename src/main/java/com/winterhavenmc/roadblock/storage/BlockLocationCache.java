@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.roadblock.storage;
 
-import com.winterhavenmc.roadblock.block_location.BlockLocation;
+import com.winterhavenmc.roadblock.model.RoadBlock;
 
 import java.util.Map;
 import java.util.Set;
@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 final class BlockLocationCache
 {
 	// block cache
-	private final Map<BlockLocation, CacheStatus> blockMap = new ConcurrentHashMap<>();
+	private final Map<RoadBlock.BlockLocation, CacheStatus> blockMap = new ConcurrentHashMap<>();
 
 
 	/**
@@ -59,27 +59,27 @@ final class BlockLocationCache
 	}
 
 
-	CacheStatus get(final BlockLocation key)
+	CacheStatus get(final RoadBlock.BlockLocation key)
 	{
 		return blockMap.get(key);
 	}
 
-	CacheStatus put(final BlockLocation key, final CacheStatus value)
+	CacheStatus put(final RoadBlock.BlockLocation key, final CacheStatus value)
 	{
 		return blockMap.put(key, value);
 	}
 
-	CacheStatus remove(final BlockLocation key)
+	CacheStatus remove(final RoadBlock.BlockLocation key)
 	{
 		return blockMap.remove(key);
 	}
 
-	boolean containsKey(final BlockLocation key)
+	boolean containsKey(final RoadBlock.BlockLocation key)
 	{
 		return blockMap.containsKey(key);
 	}
 
-	Set<BlockLocation> keySet()
+	Set<RoadBlock.BlockLocation> keySet()
 	{
 		return blockMap.keySet();
 	}
