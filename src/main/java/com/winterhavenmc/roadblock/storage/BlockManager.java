@@ -348,9 +348,9 @@ public final class BlockManager
 	}
 
 
-	public Collection<RoadBlock.BlockLocation> selectNearbyBlockLocations(final RoadBlock.BlockLocation blockLocation, final int distance)
+	public Set<RoadBlock.Protected> selectNearbyRoadBlocks(final Location location, final int distance)
 	{
-		return dataStore.selectNearbyBlockLocations(blockLocation, distance);
+		return dataStore.selectNearbyRoadBlocks(location, distance);
 	}
 
 

@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.roadblock.storage;
 
+import com.winterhavenmc.roadblock.PluginMain;
 import com.winterhavenmc.roadblock.model.RoadBlock;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -24,7 +25,6 @@ import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -35,7 +35,7 @@ import java.util.*;
 final class DataStoreSQLite extends DataStoreAbstract implements DataStore, Listener
 {
 	// reference to main class
-	private final JavaPlugin plugin;
+	private final PluginMain plugin;
 
 	// block cache
 	private final BlockLocationCache blockCache;
@@ -58,7 +58,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	 *
 	 * @param plugin reference to main class
 	 */
-	DataStoreSQLite(final JavaPlugin plugin)
+	DataStoreSQLite(final PluginMain plugin)
 	{
 		// reference to main class
 		this.plugin = plugin;
@@ -409,21 +409,20 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 	}
 
 
-	public Set<RoadBlock.BlockLocation> selectNearbyBlockLocations(final RoadBlock.BlockLocation blockLocation, final int distance)
+	public Set<RoadBlock.Protected> selectNearbyRoadBlocks(final Location location, final int distance)
 	{
-		if (blockLocation instanceof RoadBlock.BlockLocation.Valid validBlockLocation)
+		if (location.getWorld() != null)
 		{
-			Set<RoadBlock.BlockLocation> results = new HashSet<>();
+			Set<RoadBlock.Valid.Protected> results = new HashSet<>();
 
 			try
 			{
 				PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("SelectNearbyBlocks"));
-				preparedStatement.setLong(1, validBlockLocation.worldUid().getMostSignificantBits());
-				preparedStatement.setLong(2, validBlockLocation.worldUid().getLeastSignificantBits());
-				preparedStatement.setInt(3, validBlockLocation.blockX() - distance);
-				preparedStatement.setInt(4, validBlockLocation.blockX() + distance);
-				preparedStatement.setInt(5, validBlockLocation.blockZ() - distance);
-				preparedStatement.setInt(6, validBlockLocation.blockZ() + distance);
+				preparedStatement.setLong(1, location.getWorld().getUID().getMostSignificantBits());
+				preparedStatement.setLong(2, location.getWorld().getUID().getLeastSignificantBits());
+				preparedStatement.setInt(4, location.getBlockX() + distance);
+				preparedStatement.setInt(5, location.getBlockY() - distance);
+				preparedStatement.setInt(6, location.getBlockZ() + distance);
 				ResultSet rs = preparedStatement.executeQuery();
 
 				while (rs.next())
@@ -440,10 +439,14 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore, List
 					{
 						// get location for stored record
 						RoadBlock.BlockLocation newBlockLocation = RoadBlock.BlockLocation.of(new Location(world, x, y, z));
-
-						if (newBlockLocation instanceof RoadBlock.BlockLocation.Valid)
+						if (newBlockLocation instanceof RoadBlock.BlockLocation.Valid validBlockLocation)
 						{
-							results.add(newBlockLocation);
+							RoadBlock roadBlock = RoadBlock.of(validBlockLocation, plugin);
+
+							if (roadBlock instanceof RoadBlock.Valid.Protected protectedRoadBlock)
+							{
+								results.add(protectedRoadBlock);
+							}
 						}
 					}
 				}
