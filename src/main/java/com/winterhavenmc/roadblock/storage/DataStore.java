@@ -19,7 +19,7 @@ package com.winterhavenmc.roadblock.storage;
 
 import com.winterhavenmc.roadblock.block_location.BlockLocation;
 import com.winterhavenmc.roadblock.block_location.ValidBlockLocation;
-import com.winterhavenmc.roadblock.util.Config;
+
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -94,10 +94,6 @@ interface DataStore
 		{
 			plugin.getLogger().severe("Could not initialize " + newDataStore + " datastore!");
 			plugin.getLogger().severe(e.getLocalizedMessage());
-			if (Config.DEBUG.getBoolean(plugin.getConfig()))
-			{
-				e.printStackTrace();
-			}
 		}
 
 		// convert any existing data stores to new type
