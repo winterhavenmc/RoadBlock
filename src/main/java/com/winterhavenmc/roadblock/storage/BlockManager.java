@@ -349,6 +349,12 @@ public final class BlockManager
 	}
 
 
+	public Collection<BlockLocation> selectNearbyBlockLocations(final BlockLocation blockLocation, final int distance)
+	{
+		return dataStore.selectNearbyBlockLocations(blockLocation, distance);
+	}
+
+
 	public Set<Material> getRoadBlockMaterials()
 	{
 		return roadBlockMaterials;
