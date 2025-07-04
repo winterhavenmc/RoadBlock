@@ -17,14 +17,15 @@
 
 package com.winterhavenmc.roadblock.highlights;
 
+import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
 public enum HighlightStyle
 {
-	PROTECT(Material.EMERALD_BLOCK, "protect-material"),
-	UNPROTECT(Material.REDSTONE_BLOCK, "unprotect-material");
+	PROTECT(Material.EMERALD_BLOCK, Config.PROTECT_MATERIAL.toKey()),
+	UNPROTECT(Material.REDSTONE_BLOCK, Config.UNPROTECT_MATERIAL.toKey());
 
 	private final Material defaultMaterial;
 	private final String configString;
