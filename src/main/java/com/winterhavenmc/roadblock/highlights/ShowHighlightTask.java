@@ -18,6 +18,7 @@
 package com.winterhavenmc.roadblock.highlights;
 
 import com.winterhavenmc.roadblock.PluginMain;
+import com.winterhavenmc.roadblock.util.Config;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
@@ -70,7 +71,8 @@ final class ShowHighlightTask extends BukkitRunnable
 		locationSet.forEach(location -> player.sendBlockChange(location, blockData));
 
 		// create task to unhighlight locationSet in 30 seconds
-		final BukkitTask task = new RemoveHighlightTask(plugin, player).runTaskLaterAsynchronously(plugin, SECONDS.toTicks(30));
+		final BukkitTask task = new RemoveHighlightTask(plugin, player)
+				.runTaskLaterAsynchronously(plugin, SECONDS.toTicks(Config.HIGHLIGHT_DURATION.getInt(plugin.getConfig())));
 
 		// if pending remove highlight task exists, cancel task
 		plugin.highlightManager.cancelUnhighlightTask(player);
