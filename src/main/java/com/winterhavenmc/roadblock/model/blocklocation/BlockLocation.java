@@ -1,9 +1,6 @@
 package com.winterhavenmc.roadblock.model.blocklocation;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
-
 import java.util.UUID;
 
 import static com.winterhavenmc.roadblock.model.blocklocation.BlockLocationReason.*;
@@ -15,16 +12,8 @@ import static com.winterhavenmc.roadblock.model.blocklocation.BlockLocationReaso
 sealed public interface BlockLocation permits BlockLocation.Valid, BlockLocation.Invalid
 {
 	record Invalid(BlockLocationReason reason) implements BlockLocation { }
-	record Valid(String worldName, UUID worldUid, int blockX, int blockY, int blockZ, int chunkX, int chunkZ) implements BlockLocation
-	{
-		public Location getLocation()
-		{
-			World world = Bukkit.getWorld(worldUid);
-			return (world != null)
-					? new Location(world, blockX, blockY, blockZ)
-					: null;
-		}
-	}
+	record Valid(String worldName, UUID worldUid, int blockX, int blockY, int blockZ,
+	             int chunkX, int chunkZ) implements BlockLocation { }
 
 
 	static BlockLocation of(final Location location)
