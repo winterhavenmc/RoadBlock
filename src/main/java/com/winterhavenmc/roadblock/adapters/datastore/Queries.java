@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.roadblock.storage;
+package com.winterhavenmc.roadblock.adapters.datastore;
 
 import java.io.IOException;
 import java.io.InputStream;

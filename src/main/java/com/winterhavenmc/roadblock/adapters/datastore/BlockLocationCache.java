@@ -15,9 +15,9 @@
  *
  */
 
-package com.winterhavenmc.roadblock.storage;
+package com.winterhavenmc.roadblock.adapters.datastore;
 
-import com.winterhavenmc.roadblock.model.RoadBlock;
+import com.winterhavenmc.roadblock.model.blocklocation.BlockLocation;
 
 import java.util.Map;
 import java.util.Set;
@@ -25,18 +25,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 @SuppressWarnings("UnusedReturnValue")
-final class BlockLocationCache
+public final class BlockLocationCache
 {
 	// block cache
-	private final Map<RoadBlock.BlockLocation, CacheStatus> blockMap = new ConcurrentHashMap<>();
+	private final Map<BlockLocation, CacheStatus> blockMap = new ConcurrentHashMap<>();
 
 
 	/**
 	 * Private class constructor
 	 */
-	private BlockLocationCache()
-	{
-	}
+	private BlockLocationCache() { }
 
 
 	/**
@@ -53,33 +51,33 @@ final class BlockLocationCache
 	 *
 	 * @return instance of this singleton class
 	 */
-	static BlockLocationCache getInstance()
+	public static BlockLocationCache getInstance()
 	{
 		return SingletonHelper.INSTANCE;
 	}
 
 
-	CacheStatus get(final RoadBlock.BlockLocation key)
+	public CacheStatus get(final BlockLocation key)
 	{
 		return blockMap.get(key);
 	}
 
-	CacheStatus put(final RoadBlock.BlockLocation key, final CacheStatus value)
+	public CacheStatus put(final BlockLocation key, final CacheStatus value)
 	{
 		return blockMap.put(key, value);
 	}
 
-	CacheStatus remove(final RoadBlock.BlockLocation key)
+	public CacheStatus remove(final BlockLocation key)
 	{
 		return blockMap.remove(key);
 	}
 
-	boolean containsKey(final RoadBlock.BlockLocation key)
+	boolean containsKey(final BlockLocation key)
 	{
 		return blockMap.containsKey(key);
 	}
 
-	Set<RoadBlock.BlockLocation> keySet()
+	public Set<BlockLocation> keySet()
 	{
 		return blockMap.keySet();
 	}

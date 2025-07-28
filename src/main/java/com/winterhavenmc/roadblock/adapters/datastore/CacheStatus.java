@@ -15,9 +15,9 @@
  *
  */
 
-package com.winterhavenmc.roadblock.storage;
+package com.winterhavenmc.roadblock.adapters.datastore;
 
-enum CacheStatus
+public enum CacheStatus
 {
 	RESIDENT,
 	PENDING_INSERT,
