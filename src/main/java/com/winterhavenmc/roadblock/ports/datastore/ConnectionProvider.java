@@ -1,8 +1,6 @@
 package com.winterhavenmc.roadblock.ports.datastore;
 
 import org.bukkit.plugin.Plugin;
-
-import java.sql.Connection;
 import java.sql.SQLException;
 
 
