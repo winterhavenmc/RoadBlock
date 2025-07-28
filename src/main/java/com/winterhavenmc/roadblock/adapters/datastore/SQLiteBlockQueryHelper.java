@@ -12,7 +12,7 @@ class SQLiteBlockQueryHelper
 {
 	ResultSet selectAllRecords(final PreparedStatement preparedStatement) throws SQLException
 	{
-
+		return preparedStatement.executeQuery();
 	}
 
 
