@@ -252,10 +252,11 @@ public class EntityEventListener implements Listener
 				try
 				{
 					clickedBlock = player.getTargetBlock(RoadBlockTool.toolTransparentMaterials, 100);
-				} catch (Exception e)
+				}
+				catch (Exception exception)
 				{
 					plugin.getLogger().info("player.getTargetBlock() threw an exception.");
-					plugin.getLogger().info(e.getLocalizedMessage());
+					plugin.getLogger().info(exception.getLocalizedMessage());
 				}
 			}
 
