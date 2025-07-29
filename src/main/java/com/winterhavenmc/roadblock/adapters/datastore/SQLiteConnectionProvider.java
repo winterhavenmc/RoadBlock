@@ -35,7 +35,7 @@ public class SQLiteConnectionProvider implements ConnectionProvider
 	 * Initialize SQLite datastore
 	 */
 	@Override
-	public void initialize() throws SQLException, ClassNotFoundException
+	public void connect() throws SQLException, ClassNotFoundException
 	{
 		// if data store is already initialized, do nothing and return
 		if (initialized)

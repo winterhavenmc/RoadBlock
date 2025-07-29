@@ -50,7 +50,7 @@ public final class BlockManager
 	{
 		this.plugin = plugin;
 		this.connectionProvider = Bootstrap.getConnectionProvider(plugin);
-		ConnectionProvider.initialize(plugin, connectionProvider);
+		ConnectionProvider.connect(plugin, connectionProvider);
 		this.roadBlockMaterials = updateMaterials();
 	}
 

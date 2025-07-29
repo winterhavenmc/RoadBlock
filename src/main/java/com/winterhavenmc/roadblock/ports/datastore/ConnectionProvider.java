@@ -6,28 +6,24 @@ import java.sql.SQLException;
 
 public interface ConnectionProvider
 {
-	/**
-	 * Create new data store of configured type.<br>
-	 * No parameter version used when no current datastore exists
-	 */
-	static void initialize(Plugin plugin, ConnectionProvider connectionProvider)
+	static void connect(Plugin plugin, ConnectionProvider connectionProvider)
 	{
 		try
 		{
-			connectionProvider.initialize();
+			connectionProvider.connect();
 		}
 		catch (Exception exception)
 		{
-			plugin.getLogger().severe("Could not initialize SQLite datastore!");
+			plugin.getLogger().severe("Could not initialize datastore!");
 			plugin.getLogger().severe(exception.getLocalizedMessage());
 		}
 	}
 
 
 	/**
-	 * Initialize SQLite datastore
+	 * Initialize datastore
 	 */
-	void initialize() throws SQLException, ClassNotFoundException;
+	void connect() throws SQLException, ClassNotFoundException;
 
 
 	/**
