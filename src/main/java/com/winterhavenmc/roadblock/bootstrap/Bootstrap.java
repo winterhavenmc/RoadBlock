@@ -1,4 +1,4 @@
-package com.winterhavenmc.roadblock;
+package com.winterhavenmc.roadblock.bootstrap;
 
 import com.winterhavenmc.roadblock.adapters.datastore.sqlite.SQLiteConnectionProvider;
 import com.winterhavenmc.roadblock.ports.datastore.ConnectionProvider;

@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.roadblock.storage;
 
-import com.winterhavenmc.roadblock.Bootstrap;
+import com.winterhavenmc.roadblock.bootstrap.Bootstrap;
 import com.winterhavenmc.roadblock.PluginMain;
 import com.winterhavenmc.roadblock.model.blocklocation.BlockLocation;
 import com.winterhavenmc.roadblock.ports.datastore.ConnectionProvider;
