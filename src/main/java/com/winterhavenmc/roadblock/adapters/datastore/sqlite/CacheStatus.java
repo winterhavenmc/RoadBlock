@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.roadblock.adapters.datastore;
+package com.winterhavenmc.roadblock.adapters.datastore.sqlite;
 
 public enum CacheStatus
 {

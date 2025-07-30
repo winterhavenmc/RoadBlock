@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.roadblock.adapters.datastore;
+package com.winterhavenmc.roadblock.adapters.datastore.sqlite;
 
 import com.winterhavenmc.roadblock.model.blocklocation.BlockLocation;
 

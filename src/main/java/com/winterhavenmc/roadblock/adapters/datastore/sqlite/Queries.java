@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.roadblock.adapters.datastore;
+package com.winterhavenmc.roadblock.adapters.datastore.sqlite;
 
 import java.io.IOException;
 import java.io.InputStream;
