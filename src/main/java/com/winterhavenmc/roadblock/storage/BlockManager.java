@@ -116,7 +116,7 @@ public final class BlockManager
 
 
 	/**
-	 * Returns a Collection of valid block locations contained in a collection of locations.
+	 * Returns a Set of valid block locations from a Collection of Bukkit locations.
 	 */
 	public Set<BlockLocation.Valid> getBlockLocations(final Collection<Location> locations)
 	{
