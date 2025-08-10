@@ -61,27 +61,4 @@ public final class SqliteSchemaUpdaterFromV0 implements SqliteSchemaUpdater
 		statement.executeUpdate(SqliteQueries.getQuery("CreateChunkIndex"));
 	}
 
-
-	private static int getSchemaVersion(final Plugin plugin, final Connection connection)
-	{
-		int version = -1;
-
-		try
-		{
-			final Statement statement = connection.createStatement();
-
-			ResultSet rs = statement.executeQuery(SqliteQueries.getQuery("GetUserVersion"));
-
-			if (rs.next())
-			{
-				version = rs.getInt(1);
-			}
-		}
-		catch (SQLException e)
-		{
-			plugin.getLogger().warning("Could not get schema version!");
-		}
-		return version;
-	}
-
 }
