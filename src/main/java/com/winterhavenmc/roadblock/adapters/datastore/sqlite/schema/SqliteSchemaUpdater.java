@@ -27,7 +27,7 @@ public sealed interface SqliteSchemaUpdater permits SqliteSchemaUpdaterFromV0, S
 	}
 
 
-	private static int getSchemaVersion(final Plugin plugin, final Connection connection)
+	static int getSchemaVersion(final Plugin plugin, final Connection connection)
 	{
 		int version = -1;
 
