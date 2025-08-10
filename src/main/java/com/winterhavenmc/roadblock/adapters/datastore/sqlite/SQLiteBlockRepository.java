@@ -38,9 +38,9 @@ public class SQLiteBlockRepository implements BlockRepository
 
 		try
 		{
-			final Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(Queries.getQuery("GetUserVersion"));
-			while (resultSet.next())
+			ResultSet resultSet = statement.executeQuery(SqliteQueries.getQuery("GetUserVersion"));
+
+			if (resultSet.next())
 			{
 				version = resultSet.getInt(1);
 			}
@@ -61,7 +61,7 @@ public class SQLiteBlockRepository implements BlockRepository
 	 */
 	public int save(final Set<BlockLocation.Valid> blockLocations)
 	{
-		try (PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("InsertOrIgnoreBlock")))
+		try (PreparedStatement preparedStatement = connection.prepareStatement(SqliteQueries.getQuery("InsertOrIgnoreBlock")))
 		{
 			connection.setAutoCommit(false);
 			int count = 0;
@@ -95,7 +95,7 @@ public class SQLiteBlockRepository implements BlockRepository
 	 */
 	public Set<BlockLocation.Valid> getAll()
 	{
-		try (PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("SelectAllBlocks")))
+		try (PreparedStatement preparedStatement = connection.prepareStatement(SqliteQueries.getQuery("SelectAllBlocks")))
 		{
 			ResultSet resultSet = blockQueryHelper.selectAllRecords(preparedStatement);
 			return (schemaVersion == 0)
@@ -123,7 +123,7 @@ public class SQLiteBlockRepository implements BlockRepository
 	{
 		int count = 0;
 
-		try (PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("CountAllBlocks")))
+		try (PreparedStatement preparedStatement = connection.prepareStatement(SqliteQueries.getQuery("CountAllBlocks")))
 		{
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next())
@@ -150,7 +150,7 @@ public class SQLiteBlockRepository implements BlockRepository
 	@Override
 	public Collection<BlockLocation.Valid> getBlocksInChunk(final Chunk chunk)
 	{
-		try (PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("SelectBlocksInChunk")))
+		try (PreparedStatement preparedStatement = connection.prepareStatement(SqliteQueries.getQuery("SelectBlocksInChunk")))
 		{
 			ResultSet resultSet = blockQueryHelper.selectRecordsInChunk(chunk, preparedStatement);
 			return blockRowMapper.mapLocationsV1(resultSet);
@@ -180,7 +180,7 @@ public class SQLiteBlockRepository implements BlockRepository
 
 		if (BlockLocation.of(location) instanceof BlockLocation.Valid validBlockLocation)
 		{
-			try (PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("SelectNearbyBlocks")))
+			try (PreparedStatement preparedStatement = connection.prepareStatement(SqliteQueries.getQuery("SelectNearbyBlocks")))
 			{
 				ResultSet resultSet = blockQueryHelper.selectNearbyBlocks(validBlockLocation, distance, preparedStatement);
 				while (resultSet.next())
@@ -209,7 +209,7 @@ public class SQLiteBlockRepository implements BlockRepository
 	{
 		int count = 0;
 
-		try (PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("DeleteBlock")))
+		try (PreparedStatement preparedStatement = connection.prepareStatement(SqliteQueries.getQuery("DeleteBlock")))
 		{
 			connection.setAutoCommit(false);
 
