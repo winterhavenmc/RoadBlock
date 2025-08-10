@@ -30,7 +30,7 @@ public final class SqliteSchemaUpdaterFromV0 implements SqliteSchemaUpdater
 	@Override
 	public void update() throws SQLException
 	{
-		int schemaVersion = getSchemaVersion(plugin, connection);
+		int schemaVersion = SqliteSchemaUpdater.getSchemaVersion(plugin, connection);
 
 		final Statement statement = connection.createStatement();
 
