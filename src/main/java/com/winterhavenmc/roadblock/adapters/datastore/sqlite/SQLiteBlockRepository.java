@@ -34,9 +34,9 @@ public class SQLiteBlockRepository implements BlockRepository
 
 	private int getSchemaVersion()
 	{
-		int version = -1;
+		int version = 0;
 
-		try
+		try (Statement statement = connection.createStatement())
 		{
 			ResultSet resultSet = statement.executeQuery(SqliteQueries.getQuery("GetUserVersion"));
 
@@ -47,7 +47,7 @@ public class SQLiteBlockRepository implements BlockRepository
 		}
 		catch (SQLException sqlException)
 		{
-			plugin.getLogger().warning("Could not get schema version!");
+			plugin.getLogger().warning("Schema version not detected.");
 		}
 
 		return version;
@@ -98,9 +98,8 @@ public class SQLiteBlockRepository implements BlockRepository
 		try (PreparedStatement preparedStatement = connection.prepareStatement(SqliteQueries.getQuery("SelectAllBlocks")))
 		{
 			ResultSet resultSet = blockQueryHelper.selectAllRecords(preparedStatement);
-			return (schemaVersion == 0)
-					? blockRowMapper.mapLocationsV0(resultSet)
-					: blockRowMapper.mapLocationsV1(resultSet);
+
+			return blockRowMapper.mapLocations(resultSet, schemaVersion);
 		}
 		catch (SQLException sqlException)
 		{
@@ -153,7 +152,7 @@ public class SQLiteBlockRepository implements BlockRepository
 		try (PreparedStatement preparedStatement = connection.prepareStatement(SqliteQueries.getQuery("SelectBlocksInChunk")))
 		{
 			ResultSet resultSet = blockQueryHelper.selectRecordsInChunk(chunk, preparedStatement);
-			return blockRowMapper.mapLocationsV1(resultSet);
+			return blockRowMapper.mapLocations(resultSet, schemaVersion);
 		}
 		catch (SQLException sqlException)
 		{
