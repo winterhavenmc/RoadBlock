@@ -62,20 +62,24 @@ public final class BlockLocationCache
 		return blockMap.get(key);
 	}
 
+
 	public CacheStatus put(final BlockLocation key, final CacheStatus value)
 	{
 		return blockMap.put(key, value);
 	}
+
 
 	public CacheStatus remove(final BlockLocation key)
 	{
 		return blockMap.remove(key);
 	}
 
+
 	boolean containsKey(final BlockLocation key)
 	{
 		return blockMap.containsKey(key);
 	}
+
 
 	public Set<BlockLocation> keySet()
 	{
