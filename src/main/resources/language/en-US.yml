@@ -12,6 +12,13 @@ ITEM_INFO:
   - '&eUse to set'
   - '&eRoadBlock protection'
 
+ITEMS:
+  TOOL:
+    NAME: '&6RoadBlock Tool'
+    LORE:
+    - '&eUse to set'
+    - '&eRoadBlock protection'
+
 
 ##########
 # Messages
