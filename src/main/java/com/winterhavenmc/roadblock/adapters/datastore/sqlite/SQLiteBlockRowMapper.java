@@ -21,6 +21,14 @@ public class SQLiteBlockRowMapper
 	}
 
 
+	Set<BlockLocation.Valid> mapLocations(final ResultSet resultSet, final int schemaVersion) throws SQLException
+	{
+		return (schemaVersion == 0)
+				? mapLocationsV0(resultSet)
+				: mapLocationsV1(resultSet);
+	}
+
+
 	Set<BlockLocation.Valid> mapLocationsV0(final ResultSet resultSet) throws SQLException
 	{
 		Set<BlockLocation.Valid> results = new HashSet<>();
