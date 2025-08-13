@@ -231,10 +231,6 @@
 									<pattern>com.winterhavenmc.library</pattern>
 									<shadedPattern>com.winterhavenmc.roadblock.shaded</shadedPattern>
 								</relocation>
-								<relocation>
-									<pattern>org.bstats</pattern>
-									<shadedPattern>com.winterhavenmc.roadblock.shaded</shadedPattern>
-								</relocation>
 							</relocations>
 						</configuration>
 					</execution>
