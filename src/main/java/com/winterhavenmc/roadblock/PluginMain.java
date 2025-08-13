@@ -25,8 +25,6 @@ import com.winterhavenmc.roadblock.commands.CommandManager;
 import com.winterhavenmc.roadblock.highlights.HighlightManager;
 import com.winterhavenmc.roadblock.listeners.BlockEventListener;
 import com.winterhavenmc.roadblock.listeners.EntityEventListener;
-import com.winterhavenmc.roadblock.messages.Macro;
-import com.winterhavenmc.roadblock.messages.MessageId;
 import com.winterhavenmc.roadblock.storage.BlockManager;
 import com.winterhavenmc.roadblock.util.MetricsHandler;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,7 +32,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PluginMain extends JavaPlugin
 {
-	public MessageBuilder<MessageId, Macro> messageBuilder;
+	public MessageBuilder messageBuilder;
 	public WorldManager worldManager;
 	public SoundConfiguration soundConfig;
 	public BlockManager blockManager;
@@ -48,7 +46,7 @@ public final class PluginMain extends JavaPlugin
 		saveDefaultConfig();
 
 		// instantiate message builder
-		messageBuilder = new MessageBuilder<>(this);
+		messageBuilder = MessageBuilder.create(this);
 
 		// instantiate sound configuration
 		soundConfig = new YamlSoundConfiguration(this);
