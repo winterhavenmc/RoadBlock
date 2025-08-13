@@ -17,8 +17,10 @@
 
 package com.winterhavenmc.roadblock.highlights;
 
+import com.winterhavenmc.library.time.TimeUnit;
 import com.winterhavenmc.roadblock.PluginMain;
 import com.winterhavenmc.roadblock.util.Config;
+
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
@@ -26,8 +28,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collection;
-
-import static com.winterhavenmc.library.TimeUnit.SECONDS;
 
 
 /**
@@ -72,7 +72,7 @@ final class ShowHighlightTask extends BukkitRunnable
 
 		// create task to unhighlight locationSet in 30 seconds
 		final BukkitTask task = new RemoveHighlightTask(plugin, player)
-				.runTaskLaterAsynchronously(plugin, SECONDS.toTicks(Config.HIGHLIGHT_DURATION.getInt(plugin.getConfig())));
+				.runTaskLaterAsynchronously(plugin, TimeUnit.SECONDS.toTicks(Config.HIGHLIGHT_DURATION.getInt(plugin.getConfig())));
 
 		// if pending remove highlight task exists, cancel task
 		plugin.highlightManager.cancelUnhighlightTask(player);
