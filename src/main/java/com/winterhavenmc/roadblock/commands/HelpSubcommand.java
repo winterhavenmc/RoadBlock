@@ -88,14 +88,14 @@ final class HelpSubcommand extends AbstrtactSubcommand
 		}
 
 		// if no arguments, display usage for all commands
-		if (args.size() == 0)
+		if (args.isEmpty())
 		{
 			displayUsageAll(sender);
 			return true;
 		}
 
 		// display subcommand help message or invalid command message
-		subcommandRegistry.getSubcommand(args.get(0)).ifPresentOrElse(
+		subcommandRegistry.getSubcommand(args.getFirst()).ifPresentOrElse(
 				subcommand -> sendCommandHelpMessage(sender, subcommand),
 				() -> sendCommandInvalidMessage(sender)
 		);
