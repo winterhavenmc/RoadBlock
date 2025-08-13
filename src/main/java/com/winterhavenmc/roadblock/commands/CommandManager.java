@@ -107,7 +107,7 @@ public final class CommandManager implements TabExecutor
 		// get subcommand, remove from front of list
 		if (!argsList.isEmpty())
 		{
-			subcommandName = argsList.remove(0);
+			subcommandName = argsList.removeFirst();
 		}
 
 		// if no arguments, set command to help
