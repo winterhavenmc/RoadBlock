@@ -39,7 +39,7 @@ public class SQLiteConnectionProvider implements ConnectionProvider
 		// if data store is already initialized, do nothing and return
 		if (initialized)
 		{
-			plugin.getLogger().info("SQLite datastore already initialized.");
+			plugin.getLogger().info(SqliteMessage.DATASTORE_INITIALIZED_ERROR.toString());
 			return;
 		}
 
@@ -60,7 +60,7 @@ public class SQLiteConnectionProvider implements ConnectionProvider
 
 		// set initialized true
 		this.initialized = true;
-		plugin.getLogger().info("SQLite datastore initialized.");
+		plugin.getLogger().info(SqliteMessage.DATASTORE_INITIALIZED_NOTICE.toString());
 	}
 
 
@@ -73,12 +73,12 @@ public class SQLiteConnectionProvider implements ConnectionProvider
 		try
 		{
 			connection.close();
-			plugin.getLogger().info(this + " datastore connection closed.");
+			plugin.getLogger().info(SqliteMessage.DATASTORE_CLOSED_NOTICE.toString());
 		}
 		catch (Exception e)
 		{
 			// output simple error message
-			plugin.getLogger().warning("An error occurred while closing the SQLite datastore.");
+			plugin.getLogger().warning(SqliteMessage.DATASTORE_CLOSE_ERROR.toString());
 			plugin.getLogger().warning(e.getMessage());
 		}
 		this.initialized = false;
