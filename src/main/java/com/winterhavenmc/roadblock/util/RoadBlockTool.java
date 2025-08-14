@@ -20,9 +20,7 @@ package com.winterhavenmc.roadblock.util;
 import com.winterhavenmc.roadblock.PluginMain;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -34,7 +32,7 @@ public final class RoadBlockTool
 {
 	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
-	private final static NamespacedKey PERSISTENT_KEY = new NamespacedKey(plugin, "isTool");
+	private final static NamespacedKey PERSISTENT_KEY = new NamespacedKey(plugin, "TOOL");
 
 	public static final Material DEFAULT_MATERIAL = Material.GOLDEN_PICKAXE;
 
@@ -59,41 +57,7 @@ public final class RoadBlockTool
 	 */
 	public static ItemStack create()
 	{
-		// get configured material
-		Material material = Material.matchMaterial(Config.TOOL_MATERIAL.getString(plugin.getConfig()));
-
-		// if no matching material found, use default material
-		if (material == null)
-		{
-			material = DEFAULT_MATERIAL;
-		}
-
-		// create item stack of configured tool material
-		final ItemStack itemStack = new ItemStack(material);
-
-		// get item stack metadata
-		final ItemMeta metaData = itemStack.getItemMeta();
-
-		// set display name to configured tool name
-		assert metaData != null;
-		metaData.setDisplayName(plugin.messageBuilder.getItemName().orElse("RoadBlock Tool"));
-
-		// set lore to configured tool lore
-		metaData.setLore(plugin.messageBuilder.getItemLore());
-
-		// hide item stack attributes and enchants
-		metaData.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-		metaData.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-		metaData.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-
-		// set persistent data in item metadata
-		metaData.getPersistentDataContainer().set(PERSISTENT_KEY, PersistentDataType.BYTE, (byte) 1);
-
-		// set item stack metadata
-		itemStack.setItemMeta(metaData);
-
-		// return item stack
-		return itemStack;
+		return plugin.messageBuilder.itemForge().createItem("TOOL").orElse(null);
 	}
 
 
