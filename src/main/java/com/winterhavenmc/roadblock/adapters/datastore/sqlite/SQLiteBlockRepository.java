@@ -14,7 +14,7 @@ public class SQLiteBlockRepository implements BlockRepository
 {
 	private final Plugin plugin;
 	private final Connection connection;
-	private final SQLiteBlockQueryHelper blockQueryHelper = new SQLiteBlockQueryHelper();
+	private final SQLiteBlockQueryExecutor blockQueryHelper = new SQLiteBlockQueryExecutor();
 	private final SQLiteBlockRowMapper blockRowMapper;
 	private final int schemaVersion;
 	private final BlockLocationCache blockCache;

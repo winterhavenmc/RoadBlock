@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-class SQLiteBlockQueryHelper
+class SQLiteBlockQueryExecutor
 {
 	ResultSet selectAllRecords(final PreparedStatement preparedStatement) throws SQLException
 	{
