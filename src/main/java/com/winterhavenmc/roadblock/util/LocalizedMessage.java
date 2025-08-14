@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,11 +15,12 @@
  *
  */
 
-package com.winterhavenmc.roadblock.storage;
+package com.winterhavenmc.roadblock.util;
 
-enum CacheStatus
+import java.util.Locale;
+
+
+public interface LocalizedMessage
 {
-	RESIDENT,
-	PENDING_INSERT,
-	PENDING_DELETE,
+	String getLocalizedMessage(Locale locale);
 }

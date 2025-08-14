@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.roadblock.storage;
+package com.winterhavenmc.roadblock.adapters.datastore.sqlite;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,20 +23,20 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 
-final class Queries
+public final class SqliteQueries
 {
 	private final static String propFileName = "queries.properties";
-
 	private static Properties properties;
 
 
 	/*
 	 * Private class constructor to prevent instantiation
 	 */
-	private Queries()
+	private SqliteQueries()
 	{
 		throw new AssertionError();
 	}
+
 
 	private static Properties getQueries() throws SQLException
 	{
@@ -46,8 +46,7 @@ final class Queries
 			properties = new Properties();
 			try
 			{
-
-				InputStream inputStream = Queries.class.getResourceAsStream("/" + propFileName);
+				InputStream inputStream = SqliteQueries.class.getResourceAsStream("/" + propFileName);
 
 				if (inputStream == null)
 				{
@@ -64,7 +63,8 @@ final class Queries
 		return properties;
 	}
 
-	static String getQuery(final String query) throws SQLException
+
+	public static String getQuery(final String query) throws SQLException
 	{
 		return getQueries().getProperty(query);
 	}

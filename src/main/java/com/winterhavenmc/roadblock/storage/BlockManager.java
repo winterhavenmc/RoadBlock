@@ -17,14 +17,18 @@
 
 package com.winterhavenmc.roadblock.storage;
 
+import com.winterhavenmc.roadblock.bootstrap.Bootstrap;
 import com.winterhavenmc.roadblock.PluginMain;
-import com.winterhavenmc.roadblock.model.RoadBlock;
+import com.winterhavenmc.roadblock.model.blocklocation.BlockLocation;
+import com.winterhavenmc.roadblock.ports.datastore.ConnectionProvider;
 import com.winterhavenmc.roadblock.util.Config;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,14 +36,10 @@ import java.util.stream.Collectors;
 
 public final class BlockManager
 {
-	// reference to main class
-	private final PluginMain plugin;
-
-	// set of road block materials
+	private final Plugin plugin;
+	private final ConnectionProvider connectionProvider;
 	private Set<Material> roadBlockMaterials;
 
-	// data store
-	DataStore dataStore;
 
 	/**
 	 * Class constructor
@@ -48,14 +48,10 @@ public final class BlockManager
 	 */
 	public BlockManager(final PluginMain plugin)
 	{
-		// set reference to main class
 		this.plugin = plugin;
-
-		// get road block materials from config file
-		updateMaterials();
-
-		// create data store using configured type
-		dataStore = DataStore.connect(plugin);
+		this.connectionProvider = Bootstrap.getConnectionProvider(plugin);
+		ConnectionProvider.connect(plugin, connectionProvider);
+		this.roadBlockMaterials = updateMaterials();
 	}
 
 
@@ -64,9 +60,9 @@ public final class BlockManager
 	 */
 	public void close()
 	{
-		if (dataStore != null)
+		if (connectionProvider != null)
 		{
-			dataStore.close();
+			connectionProvider.close();
 		}
 	}
 
@@ -77,20 +73,7 @@ public final class BlockManager
 	public void reload()
 	{
 		// reload road block materials from config
-		updateMaterials();
-
-		// get current datastore type
-		final DataStoreType currentType = dataStore.getType();
-
-		// get configured datastore type
-		final DataStoreType newType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
-
-		// if current datastore type does not match configured datastore type, create new datastore
-		if (!currentType.equals(newType))
-		{
-			// create new datastore
-			dataStore = DataStore.connect(plugin);
-		}
+		this.roadBlockMaterials = updateMaterials();
 	}
 
 
@@ -133,14 +116,14 @@ public final class BlockManager
 
 
 	/**
-	 * Returns a Collection of valid block locations contained in a collection of locations.
+	 * Returns a Set of valid block locations from a Collection of Bukkit locations.
 	 */
-	public Set<RoadBlock.BlockLocation> getBlockLocations(final Collection<Location> locations)
+	public Set<BlockLocation.Valid> getBlockLocations(final Collection<Location> locations)
 	{
 		return locations.stream()
-				.map(RoadBlock.BlockLocation::of)
-				.filter(RoadBlock.BlockLocation.Valid.class::isInstance)
-				.map(RoadBlock.BlockLocation.Valid.class::cast)
+				.map(BlockLocation::of)
+				.filter(BlockLocation.Valid.class::isInstance)
+				.map(BlockLocation.Valid.class::cast)
 				.collect(Collectors.toSet());
 	}
 
@@ -206,7 +189,7 @@ public final class BlockManager
 			// don't check datastore unless testBlock is road block material
 			if (isRoadBlockMaterial(testBlock))
 			{
-				if (dataStore.isProtected(testBlock.getLocation()))
+				if (connectionProvider.blocks().isProtected(testBlock.getLocation()))
 				{
 					result = true;
 					break;
@@ -237,7 +220,7 @@ public final class BlockManager
 		}
 
 		// check if block is in cache or datastore
-		return dataStore.isProtected(block.getLocation());
+		return connectionProvider.blocks().isProtected(block.getLocation());
 	}
 
 
@@ -285,7 +268,7 @@ public final class BlockManager
 	 */
 	public int storeBlockLocations(final Collection<Location> locations)
 	{
-		return dataStore.insertRecords(getBlockLocations(locations));
+		return connectionProvider.blocks().save(getBlockLocations(locations));
 	}
 
 
@@ -296,14 +279,14 @@ public final class BlockManager
 	 */
 	public int removeBlockLocations(final Collection<Location> locations)
 	{
-		return dataStore.deleteRecords(getBlockLocations(locations));
+		return connectionProvider.blocks().delete(getBlockLocations(locations));
 	}
 
 
 	/**
 	 * Parse valid road block materials from config file
 	 */
-	public void updateMaterials()
+	public Set<Material> updateMaterials()
 	{
 		final Collection<String> materialStringList =
 				new HashSet<>(Config.MATERIALS.getStringList(plugin.getConfig()));
@@ -332,25 +315,7 @@ public final class BlockManager
 				returnSet.add(matchMaterial);
 			}
 		}
-		this.roadBlockMaterials = returnSet;
-	}
-
-
-	synchronized public int getBlockTotal()
-	{
-		return dataStore.getTotalBlocks();
-	}
-
-
-	public Collection<Location> selectNearbyBlocks(final Location location, final int distance)
-	{
-		return dataStore.selectNearbyBlocks(location, distance);
-	}
-
-
-	public Set<RoadBlock.Protected> selectNearbyRoadBlocks(final Location location, final int distance)
-	{
-		return dataStore.selectNearbyRoadBlocks(location, distance);
+		return returnSet;
 	}
 
 
@@ -358,5 +323,18 @@ public final class BlockManager
 	{
 		return roadBlockMaterials;
 	}
+
+
+	synchronized public int getBlockTotal()
+	{
+		return connectionProvider.blocks().getTotalBlocks();
+	}
+
+
+	public Collection<Location> selectNearbyBlocks(final Location location, final int distance)
+	{
+		return connectionProvider.blocks().getNearbyBlocks(location, distance);
+	}
+
 
 }

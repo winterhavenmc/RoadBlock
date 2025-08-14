@@ -252,10 +252,11 @@ public class EntityEventListener implements Listener
 				try
 				{
 					clickedBlock = player.getTargetBlock(RoadBlockTool.toolTransparentMaterials, 100);
-				} catch (Exception e)
+				}
+				catch (Exception exception)
 				{
 					plugin.getLogger().info("player.getTargetBlock() threw an exception.");
-					plugin.getLogger().info(e.getLocalizedMessage());
+					plugin.getLogger().info(exception.getLocalizedMessage());
 				}
 			}
 
@@ -278,20 +279,20 @@ public class EntityEventListener implements Listener
 			// if player does not have roadblock.set permission, do nothing and return
 			if (!player.hasPermission("roadblock.set"))
 			{
+				plugin.soundConfig.playSound(player, SoundId.TOOL_FAIL_USE_PERMISSION);
 				plugin.messageBuilder.compose(player, MessageId.TOOL_FAIL_USE_PERMISSION)
 						.setMacro(Macro.WORLD, player.getWorld())
 						.send();
-				plugin.soundConfig.playSound(player, SoundId.TOOL_FAIL_USE_PERMISSION);
 				return;
 			}
 
 			// if block clicked is not in list of road block materials, send message and return
 			if (!plugin.blockManager.getRoadBlockMaterials().contains(clickedBlock.getType()))
 			{
+				plugin.soundConfig.playSound(player, SoundId.TOOL_FAIL_INVALID_MATERIAL);
 				plugin.messageBuilder.compose(player, MessageId.TOOL_FAIL_INVALID_MATERIAL)
 						.setMacro(Macro.MATERIAL, clickedBlock.getType())
 						.send();
-				plugin.soundConfig.playSound(player, SoundId.TOOL_FAIL_INVALID_MATERIAL);
 				return;
 			}
 
@@ -375,10 +376,10 @@ public class EntityEventListener implements Listener
 		int count = plugin.blockManager.storeBlockLocations(locations);
 
 		// send player successful protect message
+		plugin.soundConfig.playSound(player, SoundId.TOOL_SUCCESS_PROTECT);
 		plugin.messageBuilder.compose(player, MessageId.TOOL_SUCCESS_PROTECT)
 				.setMacro(Macro.QUANTITY, count)
 				.send();
-		plugin.soundConfig.playSound(player, SoundId.TOOL_SUCCESS_PROTECT);
 	}
 
 
@@ -397,10 +398,10 @@ public class EntityEventListener implements Listener
 		int result = plugin.blockManager.removeBlockLocations(locations);
 
 		// send player successful unprotect message
+		plugin.soundConfig.playSound(player, SoundId.TOOL_SUCCESS_UNPROTECT);
 		plugin.messageBuilder.compose(player, MessageId.TOOL_SUCCESS_UNPROTECT)
 				.setMacro(Macro.QUANTITY, result)
 				.send();
-		plugin.soundConfig.playSound(player, SoundId.TOOL_SUCCESS_UNPROTECT);
 	}
 
 }
