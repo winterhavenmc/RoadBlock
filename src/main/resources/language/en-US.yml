@@ -3,21 +3,13 @@
 ###########
 # Item Info
 ###########
-ITEM_INFO:
-  # Item Display Name
-  ITEM_NAME: '&6RoadBlock Tool'
-
-  # Item Lore
-  ITEM_LORE:
-  - '&eUse to set'
-  - '&eRoadBlock protection'
-
 ITEMS:
   TOOL:
-    NAME: '&6RoadBlock Tool'
+    MATERIAL: GOLDEN_PICKAXE
+    DISPLAY_NAME: <gold>RoadBlock Tool</gold>
     LORE:
-    - '&eUse to set'
-    - '&eRoadBlock protection'
+    - <yellow>Use to set</yellow>
+    - <yellow>RoadBlock protection</yellow>
 
 
 ##########
@@ -25,178 +17,138 @@ ITEMS:
 ##########
 
 # Variable substitutions:
-#  %ITEM%           item name from this file
-#  %WORLD%          name of player's current world
-#  %QUANTITY%       a quantity
-#  %MATERIAL%       block material
-
-# Color codes:
-# &0 black          &4 red          &8 dark grey        &c salmon
-# &1 dark blue      &5 purple       &9 lavender         &d light purple
-# &2 dark green     &6 gold         &a light green      &e yellow
-# &3 aqua           &7 light grey   &b light blue       &f white
+#  {ITEM}           item name from this file
+#  {WORLD}          name of player's current world
+#  {QUANTITY}       a quantity
+#  {MATERIAL}       block material
 
 ##################
 # Command Messages
 ##################
 MESSAGES:
   COMMAND_SUCCESS_RELOAD:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &7Configuration reloaded.'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <gray>Configuration reloaded.</gray>
 
   COMMAND_SUCCESS_SHOW:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &7Highlighted %QUANTITY% nearby RoadBlocks.'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <gray>Highlighted {QUANTITY} nearby RoadBlocks.</gray>
 
 
   COMMAND_HELP_INVALID:
-    enabled: true
-    message: '&3[RoadBlock]&c That is not a valid command!'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>That is not a valid command!</red>
 
   COMMAND_HELP_HELP:
-    enabled: true
-    message: '&eDisplay help for RoadBlock commands.'
+    MESSAGE_TEXT: <yellow>Display help for RoadBlock commands.</yellow>
 
   COMMAND_HELP_MATERIALS:
-    enabled: true
-    message: '&eDisplay configured RoadBlock materials.'
+    MESSAGE_TEXT: <yellow>Display configured RoadBlock materials.</yellow>
 
   COMMAND_HELP_RELOAD:
-    enabled: true
-    message: '&eReload the configuration without needing to restart the server.'
+    MESSAGE_TEXT: <yellow>Reload the configuration without needing to restart the server.</yellow>
 
   COMMAND_HELP_SHOW:
-    enabled: true
-    message: '&eHighlight protected RoadBlocks within configured radius.'
+    MESSAGE_TEXT: <yellow>Highlight protected RoadBlocks within configured radius.<yellow>
 
   COMMAND_HELP_STATUS:
-    enabled: true
-    message: '&eDisplay plugin configuration settings.'
+    MESSAGE_TEXT: <yellow>Display plugin configuration settings.</yellow>
 
   COMMAND_HELP_TOOL:
-    enabled: true
-    message: '&ePlace a RoadBlock tool in player inventory.'
+    MESSAGE_TEXT: <yellow>Place a RoadBlock tool in player inventory.</yellow>
 
   COMMAND_HELP_USAGE_HEADER:
-    enabled: true
-    message: '&eCommand usage:'
+    MESSAGE_TEXT: <yellow>Command usage:</yellow>
 
 
   COMMAND_FAIL_ARGS_COUNT_UNDER:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &cToo few arguments!'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>Too few arguments!</red>
 
   COMMAND_FAIL_ARGS_COUNT_OVER:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &cToo many arguments!'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>>Too many arguments!</red>
 
   COMMAND_FAIL_CONSOLE:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &cYou must be in game to use this command!'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>You must be in game to use this command!</red>
 
   COMMAND_FAIL_INVALID_COMMAND:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &cThat is not a valid command!'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>That is not a valid command!</red>
 
   COMMAND_FAIL_INVALID_QUANTITY:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &cInvalid quantity!'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>Invalid quantity!</red>
 
   COMMAND_FAIL_TOOL_INVENTORY_FULL:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &cCould not give %ITEM%&r&c because your inventory is full.'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>Could not give {ITEM} because your inventory is full.</red>
 
   COMMAND_FAIL_TOOL_PERMISSION:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &cYou do not have permission to create a %ITEM%!'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>You do not have permission to create a {ITEM}!</red>
 
   COMMAND_FAIL_HELP_PERMISSION:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &cYou do not have permission to view RoadBlock help!'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>You do not have permission to view RoadBlock help!</red>
 
   COMMAND_FAIL_RELOAD_PERMISSION:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &cYou do not have permission to reload RoadBlock configuration!'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>You do not have permission to reload RoadBlock configuration!</red>
 
   COMMAND_FAIL_SHOW_PERMISSION:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &cYou do not have permission to highlight nearby RoadBlocks!'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>You do not have permission to highlight nearby RoadBlocks!</red>
 
   COMMAND_FAIL_MATERIALS_PERMISSION:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &cYou do not have permission to view RoadBlock materials!'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>You do not have permission to view RoadBlock materials!</red>
 
   COMMAND_FAIL_STATUS_PERMISSION:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &cYou do not have permission to view RoadBlock settings!'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>You do not have permission to view RoadBlock settings!</red>
 
   COMMAND_FAIL_SET_INVALID_INTEGER:
-    enabled: true
-    message: '&8[&eRoadBlock&8] &cValue must be an integer!'
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>Value must be an integer!</red>
 
 
   ###############
   # Tool Messages
   ###############
   TOOL_SUCCESS_PROTECT:
-    enabled: true
-    repeat-delay: 1
+    REPEAT_DELAY: 1
     # uncomment following line to display chat message
-    #message: '&8[&eRoadBlock&8] &7Protected %QUANTITY% blocks.'
-    subtitle: '&7Protected %QUANTITY% blocks.'
+    #MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <gray>Protected {QUANTITY} blocks.</gray>
+    SUBTITLE_TEXT: <gray>Protected {QUANTITY} blocks.</gray>
 
   TOOL_SUCCESS_UNPROTECT:
-    enabled: true
-    repeat-delay: 1
+    REPEAT_DELAY: 1
     # uncomment following line to display chat message
-    #message: '&8[&eRoadBlock&8] &7Unprotected %QUANTITY% blocks.'
-    subtitle: '&7Unprotected %QUANTITY% blocks.'
+    #message: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <gray>Unprotected {QUANTITY} blocks.</gray>
+    SUBTITLE_TEXT: <gray>Unprotected {QUANTITY} blocks.</gray>
 
   TOOL_SUCCESS_BREAK_BLOCK:
-    enabled: true
-    repeat-delay: 1
-    message: '&8[&eRoadBlock&8] &7Removed protection from block.'
+    REPEAT_DELAY: 1
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <gray>Removed protection from block.</gray>
 
   TOOL_FAIL_WORLD_DISABLED:
-    enabled: true
-    repeat-delay: 1
-    message: '&8[&eRoadBlock&8] &cPlugin is not enabled in world ''%WORLD%''.'
+    REPEAT_DELAY: 1
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>Plugin is not enabled in world '{WORLD}'.</red>
 
   TOOL_FAIL_USE_PERMISSION:
-    enabled: true
-    repeat-delay: 1
-    message: '&8[&eRoadBlock&8] &cYou do not have permission to use a &b%ITEM%&r&c in %WORLD%.'
+    REPEAT_DELAY: 1
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>You do not have permission to use a <light_blue>{ITEM}</light_blue> in {WORLD}.</red>
 
   TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION:
-    enabled: true
-    repeat-delay: 1
-    message: '&8[&eRoadBlock&8] &cYou do not have permission to break road blocks in %WORLD%.'
+    REPEAT_DELAY: 1
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>You do not have permission to break road blocks in {WORLD}.</red>
 
   TOOL_FAIL_INVALID_MATERIAL:
-    enabled: true
-    repeat-delay: 1
-    message: '&8[&eRoadBlock&8] &cBlock type %MATERIAL% is not a valid RoadBlock material!'
+    REPEAT_DELAY: 1
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>Block type {MATERIAL} is not a valid RoadBlock material!
 
   TOOL_FAIL_USE_SHIFT_CLICK:
-    enabled: true
-    repeat-delay: 5
-    message: '&8[&eRoadBlock&8] &7You must shift-click to use a %ITEM%&r&7.'
+    REPEAT_DELAY: 5
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>You must shift-click to use a {ITEM}.</red>
 
   TOOL_FAIL_DISTANCE_EXCEEDED:
-    enabled: true
-    repeat-delay: 5
-    message: '&8[&eRoadBlock&8] &7Clicked block is too far away!'
+    REPEAT_DELAY: 5
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>Clicked block is too far away!</red>
 
 
   ################
   # Other Messages
   ################
   BLOCK_PLACE_FAIL_GRASS_PATH:
-    enabled: true
-    repeat-delay: 1
-    message: '&8[&eRoadBlock&8] &cYou cannot place blocks on top of protected grass path blocks.'
+    REPEAT_DELAY: 1
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>You cannot place blocks on top of protected grass path blocks.</red>
 
   BLOCK_PLACE_FAIL_ABOVE_ROAD:
-    enabled: true
-    repeat-delay: 1
-    message: '&8[&eRoadBlock&8] &cYou cannot place blocks over protected road blocks.'
+    REPEAT_DELAY: 1
+    MESSAGE_TEXT: <dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>You cannot place blocks over protected road blocks.</red>
