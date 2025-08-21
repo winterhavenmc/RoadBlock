@@ -12,15 +12,20 @@ ITEMS:
     - <yellow>RoadBlock protection</yellow>
 
 
-##########
-# Messages
-##########
-
-# Variable substitutions:
+# Message placeholders:
 #  {ITEM}           item name from this file
 #  {WORLD}          name of player's current world
 #  {QUANTITY}       a quantity
 #  {MATERIAL}       block material
+
+# Message Fields:
+# MESSAGE_KEY: the unique identifier for each individual message, represented by an enum constant in code
+#   MESSAGE_TEXT: string value that will be displayed as a chat message, may be omitted
+#   TITILE_TEXT: string value that will be displayed as a title, may be omitted
+#   SUBTITLE_TEXT: string value that will be displayed as a subtitle, may be omitted
+#   ENABLED: boolean value determines whether any of the message text fields will be displayed, defaults to true if omitted
+#   REPEAT_DELAY: integer value representing the number of seconds to wait before sending a message to a given player again
+#   TITLE_FADE_IN, TITLE_STAY, TITLE_FADE_OUT: integer values to override the default title fade timings (in ticks)
 
 ##################
 # Command Messages
@@ -105,7 +110,7 @@ MESSAGES:
     REPEAT_DELAY: 1
     # uncomment following line to display chat message
     #MESSAGE_TEXT: "<dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <gray>Protected {QUANTITY} blocks.</gray>"
-    SUBTITLE_TEXT: "<gray>Protected {QUANTITY} blocks.</gray>"
+    SUBTITLE_TEXT: "<gray>Protected {QUANTITY} additional blocks.</gray>"
 
   TOOL_SUCCESS_UNPROTECT:
     REPEAT_DELAY: 1
