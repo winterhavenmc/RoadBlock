@@ -16,17 +16,17 @@ public enum BlockLocationReason implements Reason
 	WORLD_NAME_BLANK("The world name was blank."),
 	;
 
-	private final String message; //TODO: these will be message keys for a localized bundle
+	private final String defaultMessage; //TODO: these will be message keys for a localized bundle
 
 
 	/**
 	 * Enum constructor assigns message String to constant field
 	 *
-	 * @param message a human-readable error message
+	 * @param defaultMessage a human-readable error message
 	 */
-	BlockLocationReason(String message)
+	BlockLocationReason(String defaultMessage)
 	{
-		this.message = message;
+		this.defaultMessage = defaultMessage;
 	}
 
 
@@ -35,8 +35,8 @@ public enum BlockLocationReason implements Reason
 	 *
 	 * @return the failure description
 	 */
-	public String getMessage()
+	public String getDefaultMessage()
 	{
-		return message;
+		return defaultMessage;
 	}
 }
