@@ -1,12 +1,16 @@
 package com.winterhavenmc.roadblock.model.blocklocation;
 
-import com.winterhavenmc.roadblock.util.Reason;
+import com.winterhavenmc.roadblock.util.LocalizedMessage;
+
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * The set of possible failure reasons when evaluating a block location.
  * Each enum constant provides a human-readable explanation.
  */
-public enum BlockLocationReason implements Reason
+public enum BlockLocationMessage implements LocalizedMessage
 {
 	LOCATION_NULL("The location was null."),
 	WORLD_NULL("The location world was null."),
@@ -24,7 +28,7 @@ public enum BlockLocationReason implements Reason
 	 *
 	 * @param defaultMessage a human-readable error message
 	 */
-	BlockLocationReason(String defaultMessage)
+	BlockLocationMessage(String defaultMessage)
 	{
 		this.defaultMessage = defaultMessage;
 	}
@@ -38,5 +42,20 @@ public enum BlockLocationReason implements Reason
 	public String getDefaultMessage()
 	{
 		return defaultMessage;
+	}
+
+
+	@Override
+	public String getLocalizedMessage(final Locale locale)
+	{
+		try
+		{
+			ResourceBundle bundle = ResourceBundle.getBundle(getClass().getSimpleName(), locale);
+			return bundle.getString(name());
+		}
+		catch (MissingResourceException exception)
+		{
+			return this.defaultMessage;
+		}
 	}
 }

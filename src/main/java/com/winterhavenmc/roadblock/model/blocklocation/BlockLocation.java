@@ -3,7 +3,7 @@ package com.winterhavenmc.roadblock.model.blocklocation;
 import org.bukkit.Location;
 import java.util.UUID;
 
-import static com.winterhavenmc.roadblock.model.blocklocation.BlockLocationReason.*;
+import static com.winterhavenmc.roadblock.model.blocklocation.BlockLocationMessage.*;
 
 
 /**
@@ -11,7 +11,7 @@ import static com.winterhavenmc.roadblock.model.blocklocation.BlockLocationReaso
  */
 sealed public interface BlockLocation permits BlockLocation.Valid, BlockLocation.Invalid
 {
-	record Invalid(BlockLocationReason reason) implements BlockLocation { }
+	record Invalid(BlockLocationMessage reason) implements BlockLocation { }
 	record Valid(String worldName, UUID worldUid, int blockX, int blockY, int blockZ,
 	             int chunkX, int chunkZ) implements BlockLocation { }
 
