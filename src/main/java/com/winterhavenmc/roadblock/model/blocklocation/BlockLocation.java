@@ -7,7 +7,7 @@ import static com.winterhavenmc.roadblock.model.blocklocation.BlockLocationReaso
 
 
 /**
- * A sealed type representing either a valid or invalid location.
+ * A sealed type representing either a valid or invalid block location.
  */
 sealed public interface BlockLocation permits BlockLocation.Valid, BlockLocation.Invalid
 {
