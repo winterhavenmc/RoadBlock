@@ -20,7 +20,7 @@ public enum BlockLocationMessage implements LocalizedMessage
 	WORLD_NAME_BLANK("The world name was blank."),
 	;
 
-	private final String defaultMessage; //TODO: these will be message keys for a localized bundle
+	private final String defaultMessage;
 
 
 	/**
