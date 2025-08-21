@@ -107,7 +107,7 @@ public class SQLiteBlockRowMapper
 			if (blockLocation instanceof BlockLocation.Invalid(BlockLocationMessage reason))
 			{
 				plugin.getLogger().warning(SqliteMessage.CREATE_BLOCK_ERROR
-						.getLocalizedMessage(localeProvider.getLocale(), reason.getDefaultMessage()));
+						.getLocalizedMessage(localeProvider.getLocale(), reason.getLocalizedMessage(localeProvider.getLocale())));
 				return new BlockLocation.Invalid(reason);
 			}
 			else
