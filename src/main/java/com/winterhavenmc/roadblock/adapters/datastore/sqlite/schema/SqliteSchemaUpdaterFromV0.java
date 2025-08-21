@@ -35,7 +35,7 @@ public final class SqliteSchemaUpdaterFromV0 implements SqliteSchemaUpdater
 
 
 	@Override
-	public void update() throws SQLException
+	public void update()
 	{
 		int schemaVersion = SqliteSchemaUpdater.getSchemaVersion(plugin, connection, localeProvider);
 
@@ -46,7 +46,7 @@ public final class SqliteSchemaUpdaterFromV0 implements SqliteSchemaUpdater
 	}
 
 
-	private void updateBlockTableSchema(final Connection connection, final int schemaVersion) throws SQLException
+	private void updateBlockTableSchema(final Connection connection, final int schemaVersion)
 	{
 		Set<BlockLocation.Valid> existingBlockRecords = blockRepository.getAll();
 
