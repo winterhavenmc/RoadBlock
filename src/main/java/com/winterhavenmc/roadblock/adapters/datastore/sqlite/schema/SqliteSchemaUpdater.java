@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 public sealed interface SqliteSchemaUpdater permits SqliteSchemaUpdaterFromV0, SqliteSchemaUpdaterNoOp
 {
-	void update() throws SQLException;
+	void update();
 
 
 	static SqliteSchemaUpdater create(final Plugin plugin,
