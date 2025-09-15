@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>core</artifactId>
+	<parent>
+		<groupId>com.winterhavenmc.roadblock</groupId>
+		<artifactId>roadblock-parent</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+
+	<dependencies>
+		<!-- internal -->
+		<dependency>
+			<groupId>com.winterhavenmc.roadblock</groupId>
+			<artifactId>models</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<!-- external -->
+		<!-- MessageBuilderLib -->
+		<dependency>
+			<groupId>com.winterhaven-mc</groupId>
+			<artifactId>message-builder-lib</artifactId>
+		</dependency>
+
+		<!-- SoundConfigLib -->
+		<dependency>
+			<groupId>com.winterhaven-mc</groupId>
+			<artifactId>sound-config-lib</artifactId>
+		</dependency>
+
+		<!-- WorldManagerLib -->
+		<dependency>
+			<groupId>com.winterhaven-mc</groupId>
+			<artifactId>world-manager-lib</artifactId>
+		</dependency>
+
+		<!-- bStats -->
+		<dependency>
+			<groupId>org.bstats</groupId>
+			<artifactId>bstats-bukkit</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>

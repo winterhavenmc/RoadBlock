@@ -1,0 +1,61 @@
+name: RoadBlock
+main: com.winterhavenmc.roadblock.plugin.Bootstrap
+author: ${project.author}
+version: ${project.version}
+api-version: 1.20
+softdepend: [ Iris, Multiverse-Core, My_Worlds ]
+
+commands:
+  roadblock:
+    aliases: rb
+    description: Use /roadblock help [command] to display subcommand help.
+    usage: /roadblock [command]
+
+permissions:
+  roadblock.help:
+    description: Display help for RoadBlock commands.
+    default: op
+
+  roadblock.status:
+    description: Allows display of config settings.
+    default: op
+
+  roadblock.materials:
+    description: Allows display of configured RoadBlock materials.
+    default: op
+
+  roadblock.reload:
+    description: Allows reloading the config file.
+    default: op
+
+  roadblock.break:
+    description: Allows breaking RoadBlock protected blocks.
+    default: op
+
+  roadblock.set:
+    description: Allows setting RoadBlock protection on blocks.
+    default: op
+
+  roadblock.unset:
+    description: Allows removing RoadBlock protection on blocks.
+    default: op
+
+  roadblock.tool:
+    description: Allows creating a RoadBlock tool in inventory.
+    default: op
+
+  roadblock.show:
+    description: Allows highlighting blocks within specified distance.
+    default: op
+
+  roadblock.admin:
+    description: Allows all admin commands
+    default: op
+    children:
+      roadblock.help: true
+      roadblock.reload: true
+      roadblock.set: true
+      roadblock.show: true
+      roadblock.status: true
+      roadblock.tool: true
+      roadblock.unset: true
