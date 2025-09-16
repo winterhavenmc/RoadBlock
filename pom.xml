@@ -192,21 +192,6 @@
 
 		<pluginManagement>
 			<plugins>
-				<!-- maven shade plugin -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-shade-plugin</artifactId>
-					<version>3.6.0</version>
-					<executions>
-						<execution>
-							<phase>package</phase>
-							<goals>
-								<goal>shade</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-
 				<!-- maven enforcer plugin -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -231,6 +216,49 @@
 							</configuration>
 						</execution>
 					</executions>
+				</plugin>
+
+				<!-- Maven shade plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<version>3.6.1</version>
+					<configuration>
+						<!-- Final shaded JAR name -->
+						<finalName>RoadBlock-${project.version}</finalName>
+
+						<!-- Minimize to remove unused classes (optional, test carefully) -->
+						<minimizeJar>true</minimizeJar>
+
+						<!-- Do not generate a dependency-reduced POM -->
+						<createDependencyReducedPom>false</createDependencyReducedPom>
+
+						<filters>
+							<filter>
+								<!-- Apply only to dependencies (not the plugin module itself) -->
+								<artifact>*:*</artifact>
+								<excludes>
+									<exclude>META-INF/*.SF</exclude>
+									<exclude>META-INF/*.DSA</exclude>
+									<exclude>META-INF/*.RSA</exclude>
+									<!-- optionally exclude MANIFEST.MF from dependencies if not needed -->
+									<exclude>META-INF/MANIFEST.MF</exclude>
+								</excludes>
+							</filter>
+						</filters>
+
+						<!-- relocate these packages on the class path to avoid conflicts with other plugins -->
+						<relocations>
+							<relocation>
+								<pattern>com.winterhavenmc.library</pattern>
+								<shadedPattern>com.winterhavenmc.roadblock.shaded</shadedPattern>
+							</relocation>
+							<relocation>
+								<pattern>org.bstats</pattern>
+								<shadedPattern>com.winterhavenmc.roadblock.shaded</shadedPattern>
+							</relocation>
+						</relocations>
+					</configuration>
 				</plugin>
 
 				<!-- maven compile plugin -->
@@ -328,6 +356,7 @@
 			</plugins>
 		</pluginManagement>
 
+		<!-- plugins inherited by all modules -->
 		<plugins>
 			<!-- maven enforcer plugin -->
 			<plugin>
@@ -339,12 +368,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
-
-			<!-- maven shade plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
 			</plugin>
 
 			<!-- maven Javadoc plugin -->
