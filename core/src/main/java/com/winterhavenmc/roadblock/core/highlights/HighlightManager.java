@@ -68,15 +68,16 @@ public final class HighlightManager implements Listener
 		// null parameter check
 		if (player != null && locationSet != null && highlightStyle != null)
 		{
-			// if player uuid not in map, insert with locationSet
-			if (!highlightLocationMap.containsKey(player.getUniqueId()))
+			// if player uuid is in map, add all in locationSet
+			if (highlightLocationMap.containsKey(player.getUniqueId()))
 			{
-				highlightLocationMap.put(player.getUniqueId(), new HashSet<>(locationSet));
+				// add locationSet to existing player highlighted blocks in highlight map
+				highlightLocationMap.get(player.getUniqueId()).addAll(locationSet);
 			}
-			// else add locationSet to existing player highlighted blocks in highlight map
 			else
 			{
-				highlightLocationMap.get(player.getUniqueId()).addAll(locationSet);
+				// add newly created locationSet for player
+				highlightLocationMap.put(player.getUniqueId(), new HashSet<>(locationSet));
 			}
 
 			// run showHighlight task with small delay
