@@ -29,6 +29,7 @@ import com.winterhavenmc.roadblock.core.ports.datastore.ConnectionProvider;
 import com.winterhavenmc.roadblock.core.storage.BlockManager;
 import com.winterhavenmc.roadblock.core.util.MetricsHandler;
 
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -67,6 +68,7 @@ public final class PluginController
 		// instantiate context containers to inject dependencies
 		CommandContextContainer commandCtx = new CommandContextContainer(plugin, messageBuilder, soundConfig, worldManager, blockManager, highlightManager);
 		ListenerContextContainer listenerCtx = new ListenerContextContainer(plugin, messageBuilder, soundConfig, worldManager, blockManager, highlightManager);
+		MetricsContextContainer metricsCtx = new MetricsContextContainer(plugin, blockManager);
 
 		// instantiate command manager
 		commandManager = new CommandManager(commandCtx);
@@ -76,7 +78,7 @@ public final class PluginController
 		entityEventListener = new EntityEventListener(listenerCtx);
 
 		// bStats
-		new MetricsHandler(listenerCtx);
+		new MetricsHandler(metricsCtx);
 	}
 
 
@@ -86,10 +88,12 @@ public final class PluginController
 		blockManager.close();
 	}
 
-	public record CommandContextContainer(JavaPlugin plugin, MessageBuilder messageBuilder, SoundConfiguration soundConfig,
+	public record CommandContextContainer(Plugin plugin, MessageBuilder messageBuilder, SoundConfiguration soundConfig,
 	                               WorldManager worldManager, BlockManager blockManager, HighlightManager highlightManager) { }
 
-	public record ListenerContextContainer(JavaPlugin plugin, MessageBuilder messageBuilder, SoundConfiguration soundConfig,
+	public record ListenerContextContainer(Plugin plugin, MessageBuilder messageBuilder, SoundConfiguration soundConfig,
 	                                       WorldManager worldManager, BlockManager blockManager, HighlightManager highlightManager) { }
+
+	public record MetricsContextContainer(Plugin plugin, BlockManager blockManager) { }
 
 }
