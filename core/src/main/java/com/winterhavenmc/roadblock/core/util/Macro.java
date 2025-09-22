@@ -25,4 +25,8 @@ public enum Macro
 	QUANTITY,
 	MATERIAL,
 	WORLD,
+
+	SETTING,
+	PLUGIN,
+	URL,
 }

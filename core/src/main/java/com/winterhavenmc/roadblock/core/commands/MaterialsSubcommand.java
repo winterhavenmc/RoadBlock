@@ -35,13 +35,13 @@ import java.util.List;
  */
 final class MaterialsSubcommand extends AbstrtactSubcommand
 {
-	private final PluginController.ContextContainer ctx;
+	private final PluginController.CommandContextContainer ctx;
 
 
 	/**
 	 * Class constructor
 	 */
-	MaterialsSubcommand(final PluginController.ContextContainer ctx)
+	MaterialsSubcommand(final PluginController.CommandContextContainer ctx)
 	{
 		this.ctx = ctx;
 		this.name = "materials";

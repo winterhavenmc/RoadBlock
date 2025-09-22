@@ -2,6 +2,7 @@ name: RoadBlock
 main: com.winterhavenmc.roadblock.plugin.Bootstrap
 author: ${project.author}
 version: ${project.version}
+url: ${project.url}
 api-version: 1.20
 softdepend: [ Iris, Multiverse-Core, My_Worlds ]
 

@@ -1,0 +1,372 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.roadblock.core.PluginController",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_2076649994 { 
+   	label=roadblock
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   BlockEventListener1626742453[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BlockEventListener</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: ListenerContextContainer [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   pathMaterialNames: Set&lt;String&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># onBlockBreak(event: BlockBreakEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onBlockExplode(event: BlockExplodeEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onBlockForm(event: BlockFormEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onBlockMultiPlace(event: BlockMultiPlaceEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onBlockPlace(event: BlockPlaceEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onPistonExtend(event: BlockPistonExtendEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onPistonRetract(event: BlockPistonRetractEvent)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BlockManager1631532145[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BlockManager</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   connectionProvider: ConnectionProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   roadBlockMaterials: Set&lt;Material&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ close()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getBlockLocations(locations: Collection&lt;Location&gt;): Set&lt;Valid&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getFill(startLocation: Location): Set&lt;Location&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isAboveRoad(player: Player): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isAboveRoad(location: Location, distance: int): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isRoadBlock(block: Block): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >- isRoadBlockMaterial(block: Block): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >- isRoadBlockMaterial(location: Location): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isRoadBlockMaterial(material: Material): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reload()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ removeBlockLocations(locations: Collection&lt;Location&gt;): int</TD></TR>
+<TR><TD ALIGN="LEFT" >+ selectNearbyBlocks(location: Location, distance: int): Collection&lt;Location&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ storeBlockLocations(locations: Collection&lt;Location&gt;): int</TD></TR>
+<TR><TD ALIGN="LEFT" >+ updateMaterials(): Set&lt;Material&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Bootstrap844580920[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Bootstrap</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >#   connectionProvider: SqliteConnectionProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   pluginController: PluginController [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ onDisable()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onEnable()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CommandContextContainer1181725209[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CommandContextContainer</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   blockManager: BlockManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   highlightManager: HighlightManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageBuilder: MessageBuilder [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: JavaPlugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   soundConfig: SoundConfiguration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worldManager: WorldManager [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ blockManager(): BlockManager</TD></TR>
+<TR><TD ALIGN="LEFT" >+ highlightManager(): HighlightManager</TD></TR>
+<TR><TD ALIGN="LEFT" >+ messageBuilder(): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ plugin(): JavaPlugin</TD></TR>
+<TR><TD ALIGN="LEFT" >+ soundConfig(): SoundConfiguration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worldManager(): WorldManager</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CommandManager1013274450[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CommandManager</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: CommandContextContainer [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   subcommandRegistry: SubcommandRegistry [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- getMatchingSubcommandNames(sender: CommandSender, matchString: String): List&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCommand(sender: CommandSender, command: Command, label: String, args: String[]): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onTabComplete(sender: CommandSender, command: Command, alias: String, args: String[]): List&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+EntityEventListener1626742453[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)EntityEventListener</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   cancelReasons: Set&lt;TargetReason&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   ctx: ListenerContextContainer [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># onEntityChangeBlock(event: EntityChangeBlockEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onEntityExplode(event: EntityExplodeEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onEntityTargetLivingEntity(event: EntityTargetLivingEntityEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onPlayerChangeGameMode(event: PlayerGameModeChangeEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onPlayerChangeItem(event: PlayerItemHeldEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onPlayerDropItem(event: PlayerDropItemEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onPlayerInteract(event: PlayerInteractEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onPlayerMove(event: PlayerMoveEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># protectBlocks(player: Player, locations: Collection&lt;Location&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" ># unprotectBlocks(player: Player, locations: Collection&lt;Location&gt;)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+HighlightManager1627698039[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)HighlightManager</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   highlightLocationMap: Map&lt;UUID, Set&lt;Location&gt;&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   unHighlightTaskMap: Map&lt;UUID, BukkitTask&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># cancelUnhighlightTask(player: Player)</TD></TR>
+<TR><TD ALIGN="LEFT" >- getUnhighlightTask(player: Player): Optional&lt;BukkitTask&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ highlightBlocks(player: Player, locationSet: Collection&lt;Location&gt;, highlightStyle: HighlightStyle)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onPlayerQuit(event: PlayerQuitEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># putUnhighlightTask(player: Player, task: BukkitTask)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ unHighlightBlocks(player: Player)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ListenerContextContainer1181725209[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ListenerContextContainer</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   blockManager: BlockManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   highlightManager: HighlightManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageBuilder: MessageBuilder [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   soundConfig: SoundConfiguration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worldManager: WorldManager [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ blockManager(): BlockManager</TD></TR>
+<TR><TD ALIGN="LEFT" >+ highlightManager(): HighlightManager</TD></TR>
+<TR><TD ALIGN="LEFT" >+ messageBuilder(): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ plugin(): Plugin</TD></TR>
+<TR><TD ALIGN="LEFT" >+ soundConfig(): SoundConfiguration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worldManager(): WorldManager</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+PluginController285538844[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)PluginController</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ shutDown()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ startUp(plugin: JavaPlugin, connectionProvider: ConnectionProvider)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+RoadBlockPluginController285538844[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)RoadBlockPluginController</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+   blockEventListener: BlockEventListener [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   blockManager: BlockManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   commandManager: CommandManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   entityEventListener: EntityEventListener [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   highlightManager: HighlightManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   messageBuilder: MessageBuilder [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   soundConfig: SoundConfiguration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   worldManager: WorldManager [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ shutDown()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ startUp(plugin: JavaPlugin, connectionProvider: ConnectionProvider)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Subcommand1013274450[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Subcommand</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ displayUsage(sender: CommandSender)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getAliases(): Collection&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getDescription(): MessageId</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMaxArgs(): int</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMinArgs(): int</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getName(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getPermissionNode(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getUsage(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCommand(sender: CommandSender, argsList: List&lt;String&gt;): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onTabComplete(sender: CommandSender, command: Command, alias: String, args: String[]): List&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+SubcommandRegistry1013274450[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SubcommandRegistry</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >#   aliasMap: Map&lt;String, String&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   subcommandMap: Map&lt;String, Subcommand&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># getSubcommand(name: String): Optional&lt;Subcommand&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" ># register(subcommand: Subcommand)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+BlockEventListener1626742453 -> ListenerContextContainer1181725209[label="ctx
+[0..1]"];
+Bootstrap844580920 -> PluginController285538844[label="pluginController
+[0..1]"];
+CommandManager1013274450 -> CommandContextContainer1181725209[label="ctx
+[0..1]"];
+CommandManager1013274450 -> SubcommandRegistry1013274450[label="subcommandRegistry
+[0..1]"];
+EntityEventListener1626742453 -> ListenerContextContainer1181725209[label="ctx
+[0..1]"];
+PluginController285538844 -> RoadBlockPluginController285538844[arrowhead=none, arrowtail=empty, dir=both];
+RoadBlockPluginController285538844 -> BlockEventListener1626742453[label="blockEventListener
+[0..1]"];
+RoadBlockPluginController285538844 -> BlockManager1631532145[label="blockManager
+[0..1]"];
+RoadBlockPluginController285538844 -> CommandManager1013274450[label="commandManager
+[0..1]"];
+RoadBlockPluginController285538844 -> EntityEventListener1626742453[label="entityEventListener
+[0..1]"];
+RoadBlockPluginController285538844 -> HighlightManager1627698039[label="highlightManager
+[0..1]"];
+    
+}
+@enduml
