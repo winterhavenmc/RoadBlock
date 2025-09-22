@@ -8,7 +8,7 @@ import org.bstats.charts.SingleLineChart;
 
 public class MetricsHandler
 {
-	public MetricsHandler(final PluginController.ContextContainer ctx)
+	public MetricsHandler(final PluginController.ListenerContextContainer ctx)
 	{
 		Metrics metrics = new Metrics(ctx.plugin(), 13919);
 

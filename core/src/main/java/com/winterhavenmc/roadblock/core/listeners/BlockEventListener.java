@@ -42,7 +42,7 @@ import java.util.Set;
  */
 public final class BlockEventListener implements Listener
 {
-	private final PluginController.ContextContainer ctx;
+	private final PluginController.ListenerContextContainer ctx;
 	private final Set<String> pathMaterialNames = Set.of(
 			"GRASS_PATH",
 			"LEGACY_GRASS_PATH",
@@ -52,7 +52,7 @@ public final class BlockEventListener implements Listener
 	/**
 	 * Class constructor for BlockEventListener class
 	 */
-	public BlockEventListener(final PluginController.ContextContainer ctx)
+	public BlockEventListener(final PluginController.ListenerContextContainer ctx)
 	{
 		this.ctx = ctx;
 

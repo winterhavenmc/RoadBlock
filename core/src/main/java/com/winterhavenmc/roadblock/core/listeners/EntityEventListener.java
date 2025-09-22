@@ -48,7 +48,7 @@ import java.util.Set;
 
 public class EntityEventListener implements Listener
 {
-	private final PluginController.ContextContainer ctx;
+	private final PluginController.ListenerContextContainer ctx;
 	private final Set<EntityTargetEvent.TargetReason> cancelReasons = Set.of(
 			EntityTargetEvent.TargetReason.CLOSEST_PLAYER,
 			EntityTargetEvent.TargetReason.RANDOM_TARGET,
@@ -61,7 +61,7 @@ public class EntityEventListener implements Listener
 	/**
 	 * Class constructor for EntityEventListener
 	 */
-	public EntityEventListener(final PluginController.ContextContainer ctx)
+	public EntityEventListener(final PluginController.ListenerContextContainer ctx)
 	{
 		this.ctx = ctx;
 		ctx.plugin().getServer().getPluginManager().registerEvents(this, ctx.plugin());
