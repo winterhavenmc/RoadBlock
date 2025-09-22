@@ -39,6 +39,9 @@ public final class PluginController
 	public SoundConfiguration soundConfig;
 	public BlockManager blockManager;
 	public HighlightManager highlightManager;
+	public CommandManager commandManager;
+	public BlockEventListener blockEventListener;
+	public EntityEventListener entityEventListener;
 
 
 	public void startUp(final JavaPlugin plugin, final ConnectionProvider connectionProvider)
@@ -61,18 +64,19 @@ public final class PluginController
 		// instantiate highlight manager
 		highlightManager = new HighlightManager(plugin);
 
-		// create context container to inject dependencies
-		ContextContainer ctx = new ContextContainer(plugin, messageBuilder, soundConfig, worldManager, blockManager, highlightManager);
+		// instantiate context containers to inject dependencies
+		CommandContextContainer commandCtx = new CommandContextContainer(plugin, messageBuilder, soundConfig, worldManager, blockManager, highlightManager);
+		ListenerContextContainer listenerCtx = new ListenerContextContainer(plugin, messageBuilder, soundConfig, worldManager, blockManager, highlightManager);
 
 		// instantiate command manager
-		new CommandManager(ctx);
+		commandManager = new CommandManager(commandCtx);
 
 		// instantiate event listeners
-		new BlockEventListener(ctx);
-		new EntityEventListener(ctx);
+		blockEventListener = new BlockEventListener(listenerCtx);
+		entityEventListener = new EntityEventListener(listenerCtx);
 
 		// bStats
-		new MetricsHandler(ctx);
+		new MetricsHandler(listenerCtx);
 	}
 
 
@@ -82,7 +86,10 @@ public final class PluginController
 		blockManager.close();
 	}
 
-	public record ContextContainer(JavaPlugin plugin, MessageBuilder messageBuilder, SoundConfiguration soundConfig,
+	public record CommandContextContainer(JavaPlugin plugin, MessageBuilder messageBuilder, SoundConfiguration soundConfig,
 	                               WorldManager worldManager, BlockManager blockManager, HighlightManager highlightManager) { }
+
+	public record ListenerContextContainer(JavaPlugin plugin, MessageBuilder messageBuilder, SoundConfiguration soundConfig,
+	                                       WorldManager worldManager, BlockManager blockManager, HighlightManager highlightManager) { }
 
 }
