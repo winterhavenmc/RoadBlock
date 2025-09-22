@@ -29,7 +29,6 @@ import com.winterhavenmc.roadblock.core.ports.datastore.ConnectionProvider;
 import com.winterhavenmc.roadblock.core.storage.BlockManager;
 import com.winterhavenmc.roadblock.core.util.MetricsHandler;
 
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
