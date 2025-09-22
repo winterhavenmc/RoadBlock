@@ -88,7 +88,7 @@ public final class PluginController
 		blockManager.close();
 	}
 
-	public record CommandContextContainer(Plugin plugin, MessageBuilder messageBuilder, SoundConfiguration soundConfig,
+	public record CommandContextContainer(JavaPlugin plugin, MessageBuilder messageBuilder, SoundConfiguration soundConfig,
 	                               WorldManager worldManager, BlockManager blockManager, HighlightManager highlightManager) { }
 
 	public record ListenerContextContainer(Plugin plugin, MessageBuilder messageBuilder, SoundConfiguration soundConfig,
