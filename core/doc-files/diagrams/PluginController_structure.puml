@@ -45,8 +45,8 @@ config=StructureConfiguration;
     "cutConstructors": true
   },
   "graphTraversal": {
-    "forwardDepth": 1,
-    "backwardDepth": 1,
+    "forwardDepth": 3,
+    "backwardDepth": 3,
     "classPackageExcludeFilter": "",
     "classPackageIncludeFilter": "",
     "classNameExcludeFilter": "",
@@ -56,7 +56,7 @@ config=StructureConfiguration;
     "hideMappings": false,
     "hideDataStructures": false,
     "hidePrivateMethods": true,
-    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
     "onlyShowApplicationEntryPoints": false, // root node is included
     "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
   },
@@ -95,6 +95,27 @@ subgraph cluster_1655488073 {
 	fillcolor="#d8d8d8"
 	style=filled
    
+   BlockEventListener1626742453[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BlockEventListener</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: ListenerContextContainer [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   pathMaterialNames: Set&lt;String&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># onBlockBreak(event: BlockBreakEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onBlockExplode(event: BlockExplodeEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onBlockForm(event: BlockFormEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onBlockMultiPlace(event: BlockMultiPlaceEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onBlockPlace(event: BlockPlaceEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onPistonExtend(event: BlockPistonExtendEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onPistonRetract(event: BlockPistonRetractEvent)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
 BlockManager1631532145[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)BlockManager</TD></TR>
@@ -124,16 +145,80 @@ BlockManager1631532145[
 	fillcolor="#FFFFFF"
 ];
 
+Bootstrap844580920[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Bootstrap</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >#   connectionProvider: SqliteConnectionProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   pluginController: PluginController [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ onDisable()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onEnable()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CommandContextContainer1181725209[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CommandContextContainer</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   blockManager: BlockManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   highlightManager: HighlightManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageBuilder: MessageBuilder [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: JavaPlugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   soundConfig: SoundConfiguration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worldManager: WorldManager [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ blockManager(): BlockManager</TD></TR>
+<TR><TD ALIGN="LEFT" >+ highlightManager(): HighlightManager</TD></TR>
+<TR><TD ALIGN="LEFT" >+ messageBuilder(): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ plugin(): JavaPlugin</TD></TR>
+<TR><TD ALIGN="LEFT" >+ soundConfig(): SoundConfiguration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worldManager(): WorldManager</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
 CommandManager1013274450[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)CommandManager</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >-   ctx: ContextContainer [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   ctx: CommandContextContainer [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   subcommandRegistry: SubcommandRegistry [0..1]</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >- getMatchingSubcommandNames(sender: CommandSender, matchString: String): List&lt;String&gt;</TD></TR>
 <TR><TD ALIGN="LEFT" >+ onCommand(sender: CommandSender, command: Command, label: String, args: String[]): boolean</TD></TR>
 <TR><TD ALIGN="LEFT" >+ onTabComplete(sender: CommandSender, command: Command, alias: String, args: String[]): List&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+EntityEventListener1626742453[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)EntityEventListener</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   cancelReasons: Set&lt;TargetReason&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   ctx: ListenerContextContainer [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># onEntityChangeBlock(event: EntityChangeBlockEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onEntityExplode(event: EntityExplodeEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onEntityTargetLivingEntity(event: EntityTargetLivingEntityEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onPlayerChangeGameMode(event: PlayerGameModeChangeEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onPlayerChangeItem(event: PlayerItemHeldEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onPlayerDropItem(event: PlayerDropItemEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onPlayerInteract(event: PlayerInteractEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onPlayerMove(event: PlayerMoveEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" ># protectBlocks(player: Player, locations: Collection&lt;Location&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" ># unprotectBlocks(player: Player, locations: Collection&lt;Location&gt;)</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -162,60 +247,23 @@ HighlightManager1627698039[
 	fillcolor="#FFFFFF"
 ];
 
-Bootstrap844580920[
+ListenerContextContainer1181725209[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)Bootstrap</TD></TR>
+<TR><TD ALIGN="LEFT" >(C)ListenerContextContainer</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >#   connectionProvider: SqliteConnectionProvider [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >#   pluginController: PluginController [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   blockManager: BlockManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   highlightManager: HighlightManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageBuilder: MessageBuilder [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   soundConfig: SoundConfiguration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worldManager: WorldManager [0..1]</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >+ onDisable()</TD></TR>
-<TR><TD ALIGN="LEFT" >+ onEnable()</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-   BlockEventListener1626742453[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)BlockEventListener</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   ctx: ContextContainer [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   pathMaterialNames: Set&lt;String&gt; [0..*]</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" ># onBlockBreak(event: BlockBreakEvent)</TD></TR>
-<TR><TD ALIGN="LEFT" ># onBlockExplode(event: BlockExplodeEvent)</TD></TR>
-<TR><TD ALIGN="LEFT" ># onBlockForm(event: BlockFormEvent)</TD></TR>
-<TR><TD ALIGN="LEFT" ># onBlockMultiPlace(event: BlockMultiPlaceEvent)</TD></TR>
-<TR><TD ALIGN="LEFT" ># onBlockPlace(event: BlockPlaceEvent)</TD></TR>
-<TR><TD ALIGN="LEFT" ># onPistonExtend(event: BlockPistonExtendEvent)</TD></TR>
-<TR><TD ALIGN="LEFT" ># onPistonRetract(event: BlockPistonRetractEvent)</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-EntityEventListener1626742453[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)EntityEventListener</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   cancelReasons: Set&lt;TargetReason&gt; [0..*]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   ctx: ContextContainer [0..1]</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" ># onEntityChangeBlock(event: EntityChangeBlockEvent)</TD></TR>
-<TR><TD ALIGN="LEFT" ># onEntityExplode(event: EntityExplodeEvent)</TD></TR>
-<TR><TD ALIGN="LEFT" ># onEntityTargetLivingEntity(event: EntityTargetLivingEntityEvent)</TD></TR>
-<TR><TD ALIGN="LEFT" ># onPlayerChangeGameMode(event: PlayerGameModeChangeEvent)</TD></TR>
-<TR><TD ALIGN="LEFT" ># onPlayerChangeItem(event: PlayerItemHeldEvent)</TD></TR>
-<TR><TD ALIGN="LEFT" ># onPlayerDropItem(event: PlayerDropItemEvent)</TD></TR>
-<TR><TD ALIGN="LEFT" ># onPlayerInteract(event: PlayerInteractEvent)</TD></TR>
-<TR><TD ALIGN="LEFT" ># onPlayerMove(event: PlayerMoveEvent)</TD></TR>
-<TR><TD ALIGN="LEFT" ># protectBlocks(player: Player, locations: Collection&lt;Location&gt;)</TD></TR>
-<TR><TD ALIGN="LEFT" ># unprotectBlocks(player: Player, locations: Collection&lt;Location&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ blockManager(): BlockManager</TD></TR>
+<TR><TD ALIGN="LEFT" >+ highlightManager(): HighlightManager</TD></TR>
+<TR><TD ALIGN="LEFT" >+ messageBuilder(): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ plugin(): Plugin</TD></TR>
+<TR><TD ALIGN="LEFT" >+ soundConfig(): SoundConfiguration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worldManager(): WorldManager</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -225,7 +273,20 @@ EntityEventListener1626742453[
 
 PluginController285538844[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)PluginController</TD></TR>
+<TR><TD ALIGN="LEFT" >(I)PluginController</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ shutDown()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ startUp(plugin: JavaPlugin, connectionProvider: ConnectionProvider)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+RoadBlockPluginController285538844[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)RoadBlockPluginController</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >+   blockEventListener: BlockEventListener [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >+   blockManager: BlockManager [0..1]</TD></TR>
@@ -244,21 +305,67 @@ PluginController285538844[
 	shape=plaintext
 	fillcolor="#FFFFFF"
 ];
+
+Subcommand1013274450[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Subcommand</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ displayUsage(sender: CommandSender)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getAliases(): Collection&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getDescription(): MessageId</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMaxArgs(): int</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMinArgs(): int</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getName(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getPermissionNode(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getUsage(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCommand(sender: CommandSender, argsList: List&lt;String&gt;): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onTabComplete(sender: CommandSender, command: Command, alias: String, args: String[]): List&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+SubcommandRegistry1013274450[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SubcommandRegistry</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >#   aliasMap: Map&lt;String, String&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   subcommandMap: Map&lt;String, Subcommand&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># getSubcommand(name: String): Optional&lt;Subcommand&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" ># register(subcommand: Subcommand)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
 } 
 } 
 
 'edges    
+BlockEventListener1626742453 -> ListenerContextContainer1181725209[label="ctx
+[0..1]"];
 Bootstrap844580920 -> PluginController285538844[label="pluginController
 [0..1]"];
-PluginController285538844 -> BlockEventListener1626742453[label="blockEventListener
+CommandManager1013274450 -> CommandContextContainer1181725209[label="ctx
 [0..1]"];
-PluginController285538844 -> BlockManager1631532145[label="blockManager
+CommandManager1013274450 -> SubcommandRegistry1013274450[label="subcommandRegistry
 [0..1]"];
-PluginController285538844 -> CommandManager1013274450[label="commandManager
+EntityEventListener1626742453 -> ListenerContextContainer1181725209[label="ctx
 [0..1]"];
-PluginController285538844 -> EntityEventListener1626742453[label="entityEventListener
+PluginController285538844 -> RoadBlockPluginController285538844[arrowhead=none, arrowtail=empty, dir=both];
+RoadBlockPluginController285538844 -> BlockEventListener1626742453[label="blockEventListener
 [0..1]"];
-PluginController285538844 -> HighlightManager1627698039[label="highlightManager
+RoadBlockPluginController285538844 -> BlockManager1631532145[label="blockManager
+[0..1]"];
+RoadBlockPluginController285538844 -> CommandManager1013274450[label="commandManager
+[0..1]"];
+RoadBlockPluginController285538844 -> EntityEventListener1626742453[label="entityEventListener
+[0..1]"];
+RoadBlockPluginController285538844 -> HighlightManager1627698039[label="highlightManager
 [0..1]"];
     
 }
