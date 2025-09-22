@@ -3,6 +3,7 @@ package com.winterhavenmc.roadblock.plugin;
 import com.winterhavenmc.roadblock.core.PluginController;
 import com.winterhavenmc.roadblock.adapters.datastore.sqlite.SqliteConnectionProvider;
 
+import com.winterhavenmc.roadblock.core.RoadBlockPluginController;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -15,7 +16,7 @@ public class Bootstrap extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
-		pluginController = new PluginController();
+		pluginController = new RoadBlockPluginController();
 		connectionProvider = new SqliteConnectionProvider(this);
 		pluginController.startUp(this, connectionProvider);
 	}
