@@ -322,7 +322,7 @@ public final class BlockManager
 	}
 
 
-	synchronized public int getBlockTotal()
+	public int getBlockTotal()
 	{
 		return connectionProvider.blocks().getTotalBlocks();
 	}
