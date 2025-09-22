@@ -103,6 +103,46 @@ MESSAGES:
     MESSAGE_TEXT: "<dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>Value must be an integer!</red>"
 
 
+  #########################
+  # Status Command Messages
+  #########################
+  COMMAND_STATUS_HEADER:
+    MESSAGE_TEXT: "<newline><gradient:blue:aqua><strikethrough>                    =</strikethrough>[</gradient> <dark_aqua>{PLUGIN}</dark_aqua> <gradient:aqua:blue>]<strikethrough>=                    </strikethrough></gradient>"
+
+  COMMAND_STATUS_FOOTER:
+    MESSAGE_TEXT: "<newline><click:open_url:{URL}><blue><underlined>{URL}<underlined></blue></click>"
+
+  COMMAND_STATUS_VERSION_SETTING:
+    MESSAGE_TEXT: "<green>Version:</green> {SETTING}"
+
+  COMMAND_STATUS_TOTAL_BLOCKS_PROTECTED:
+    MESSAGE_TEXT: "<green>Total Blocks Protected:</green> {SETTING}"
+
+  COMMAND_STATUS_SPREAD_DISTANCE_SETTING:
+    MESSAGE_TEXT: "<green>Spread distance:</green> {SETTING} blocks"
+
+  COMMAND_STATUS_SHOW_DISTANCE_SETTING:
+    MESSAGE_TEXT: "<green>Show distance:</green> {SETTING} blocks"
+
+  COMMAND_STATUS_NO_PLACE_HEIGHT_SETTING:
+    MESSAGE_TEXT: "<green>No place height:</green> {SETTING}"
+
+  COMMAND_STATUS_PLAYER_ON_ROAD_HEIGHT_SETTING:
+    MESSAGE_TEXT: "<green>Player on road height:</green> {SETTING} blocks"
+
+  COMMAND_STATUS_MOB_TARGETING_DISTANCE_SETTING:
+    MESSAGE_TEXT: "<green>Mob targeting distance: </green> {SETTING} blocks"
+
+  COMMAND_STATUS_SNOW_PLOW_SETTING:
+    MESSAGE_TEXT: "<green>Snow plow: </green> {SETTING}"
+
+  COMMAND_STATUS_SPEED_BOOST_SETTING:
+    MESSAGE_TEXT: "<green>Speed boost:</green> {SETTING}"
+
+  COMMAND_STATUS_ENABLED_WORLDS_SETTING:
+    MESSAGE_TEXT: "<green>Enabled worlds:</green> {SETTING}"
+
+
   ###############
   # Tool Messages
   ###############
@@ -148,7 +188,7 @@ MESSAGES:
 
 
   ################
-  # Other Messages
+  # Event Messages
   ################
   BLOCK_PLACE_FAIL_GRASS_PATH:
     REPEAT_DELAY: 1
@@ -157,3 +197,4 @@ MESSAGES:
   BLOCK_PLACE_FAIL_ABOVE_ROAD:
     REPEAT_DELAY: 1
     MESSAGE_TEXT: "<dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>You cannot place blocks over protected road blocks.</red>"
+
