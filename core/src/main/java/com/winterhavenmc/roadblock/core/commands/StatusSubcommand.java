@@ -18,6 +18,7 @@
 package com.winterhavenmc.roadblock.core.commands;
 
 import com.winterhavenmc.roadblock.core.PluginController;
+import com.winterhavenmc.roadblock.core.util.Macro;
 import com.winterhavenmc.roadblock.core.util.MessageId;
 import com.winterhavenmc.roadblock.core.util.SoundId;
 import com.winterhavenmc.roadblock.core.util.Config;
@@ -63,6 +64,7 @@ final class StatusSubcommand extends AbstrtactSubcommand
 		}
 
 		// display Bootstrap info and config settings
+		displayStatusHeader(sender);
 		displayPluginVersion(sender);
 		displayDebugSetting(sender);
 		displayProfileSetting(sender);
@@ -75,17 +77,30 @@ final class StatusSubcommand extends AbstrtactSubcommand
 		displaySnowPlowSetting(sender);
 		displaySpeedBoostSetting(sender);
 		displayEnabledWorlds(sender);
+		displayStatusFooter(sender);
 
 		return true;
 	}
 
 
+	private void displayStatusHeader(final CommandSender sender)
+	{
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_HEADER)
+				.setMacro(Macro.PLUGIN, ctx.plugin().getDescription().getName())
+				.send();
+	}
+	private void displayStatusFooter(final CommandSender sender)
+	{
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_FOOTER)
+				.setMacro(Macro.URL, "https://github.com/winterhavenmc/RoadBlock")
+				.send();
+	}
+
 	private void displayPluginVersion(final CommandSender sender)
 	{
-		String versionString = ctx.plugin().getDescription().getVersion();
-		sender.sendMessage(ChatColor.DARK_GRAY + "["
-				+ ChatColor.YELLOW + ctx.plugin().getName() + ChatColor.DARK_GRAY + "] "
-				+ ChatColor.AQUA + "Version: " + ChatColor.RESET + versionString);
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_VERSION_SETTING)
+				.setMacro(Macro.SETTING, ctx.plugin().getDescription().getVersion())
+				.send();
 	}
 
 
@@ -111,65 +126,73 @@ final class StatusSubcommand extends AbstrtactSubcommand
 	{
 		if (Config.DISPLAY_TOTAL.getBoolean(ctx.plugin().getConfig()))
 		{
-			sender.sendMessage(ChatColor.GREEN + "Total blocks protected: "
-					+ ChatColor.RESET + ctx.blockManager().getBlockTotal() + " blocks");
+			ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_TOTAL_BLOCKS_PROTECTED)
+					.setMacro(Macro.SETTING, ctx.blockManager().getBlockTotal())
+					.send();
 		}
 	}
 
 
 	private void displaySpreadDistanceSetting(final CommandSender sender)
 	{
-		sender.sendMessage(ChatColor.GREEN + "Spread distance: "
-				+ ChatColor.RESET + Config.SPREAD_DISTANCE.getInt(ctx.plugin().getConfig()) + " blocks");
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_SPREAD_DISTANCE_SETTING)
+						.setMacro(Macro.SETTING, Config.SPREAD_DISTANCE.getInt(ctx.plugin().getConfig()));
 	}
 
 
 	private void displayShowDistanceSetting(final CommandSender sender)
 	{
-		sender.sendMessage(ChatColor.GREEN + "Show distance: "
-				+ ChatColor.RESET + Config.SHOW_DISTANCE.getInt(ctx.plugin().getConfig()) + " blocks");
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_SHOW_DISTANCE_SETTING)
+				.setMacro(Macro.SETTING, Config.SHOW_DISTANCE.getInt(ctx.plugin().getConfig()))
+				.send();
 	}
 
 
 	private void displayNoPlaceHeightSetting(final CommandSender sender)
 	{
-		sender.sendMessage(ChatColor.GREEN + "No place height: "
-				+ ChatColor.RESET + Config.NO_PLACE_HEIGHT.getInt(ctx.plugin().getConfig()) + " blocks");
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_NO_PLACE_HEIGHT_SETTING)
+				.setMacro(Macro.SETTING, Config.NO_PLACE_HEIGHT.getInt(ctx.plugin().getConfig()))
+				.send();
 	}
 
 
 	private void displayPlayerOnRoadHeightSetting(final CommandSender sender)
 	{
-		sender.sendMessage(ChatColor.GREEN + "Player on road height: "
-				+ ChatColor.RESET + Config.ON_ROAD_HEIGHT.getInt(ctx.plugin().getConfig()) + " blocks");
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_PLAYER_ON_ROAD_HEIGHT_SETTING)
+				.setMacro(Macro.SETTING, Config.ON_ROAD_HEIGHT.getInt(ctx.plugin().getConfig()))
+				.send();
 	}
 
 
 	private void displayMobTargetDistanceSetting(final CommandSender sender)
 	{
-		sender.sendMessage(ChatColor.GREEN + "Mob targeting distance: "
-				+ ChatColor.RESET + Config.TARGET_DISTANCE.getInt(ctx.plugin().getConfig()) + " blocks");
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_MOB_TARGETING_DISTANCE_SETTING)
+				.setMacro(Macro.SETTING, Config.TARGET_DISTANCE.getInt(ctx.plugin().getConfig()))
+				.send();
 	}
 
 
 	private void displaySnowPlowSetting(final CommandSender sender)
 	{
-		sender.sendMessage(ChatColor.GREEN + "Snow plow: "
-				+ ChatColor.RESET + Config.SNOW_PLOW.getBoolean(ctx.plugin().getConfig()));
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_SNOW_PLOW_SETTING)
+				.setMacro(Macro.SETTING, Config.SNOW_PLOW.getBoolean(ctx.plugin().getConfig()))
+				.send();
 	}
 
 
 	private void displaySpeedBoostSetting(final CommandSender sender)
 	{
-		sender.sendMessage(ChatColor.GREEN + "Speed boost: "
-				+ ChatColor.RESET + Config.SPEED_BOOST.getBoolean(ctx.plugin().getConfig()));
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_SPEED_BOOST_SETTING)
+				.setMacro(Macro.SETTING, Config.SPEED_BOOST.getBoolean(ctx.plugin().getConfig()))
+				.send();
 	}
 
 
 	private void displayEnabledWorlds(final CommandSender sender)
 	{
-		sender.sendMessage(ChatColor.GREEN + "Enabled worlds: "
-				+ ChatColor.RESET + ctx.worldManager().getEnabledWorldNames().toString());
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_ENABLED_WORLDS_SETTING)
+				.setMacro(Macro.SETTING, ctx.worldManager().getEnabledWorldNames().toString())
+				.send();
 	}
 
 }
