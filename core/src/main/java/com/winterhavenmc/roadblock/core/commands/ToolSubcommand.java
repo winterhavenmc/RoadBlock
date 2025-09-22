@@ -38,12 +38,12 @@ final class ToolSubcommand extends AbstrtactSubcommand
 {
 
 
-	private final PluginController.ContextContainer ctx;
+	private final PluginController.CommandContextContainer ctx;
 
 	/**
 	 * Class constructor
 	 */
-	ToolSubcommand(final PluginController.ContextContainer ctx)
+	ToolSubcommand(final PluginController.CommandContextContainer ctx)
 	{
 		this.ctx = ctx;
 		this.name = "tool";

@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  */
 final class HelpSubcommand extends AbstrtactSubcommand
 {
-	private final PluginController.ContextContainer ctx;
+	private final PluginController.CommandContextContainer ctx;
 	private final SubcommandRegistry subcommandRegistry;
 
 
@@ -44,7 +44,7 @@ final class HelpSubcommand extends AbstrtactSubcommand
 	 *
 	 * @param subcommandRegistry a reference to the subcommand registry
 	 */
-	HelpSubcommand(final PluginController.ContextContainer ctx, final SubcommandRegistry subcommandRegistry)
+	HelpSubcommand(final PluginController.CommandContextContainer ctx, final SubcommandRegistry subcommandRegistry)
 	{
 		this.ctx = ctx;
 		this.subcommandRegistry = Objects.requireNonNull(subcommandRegistry);

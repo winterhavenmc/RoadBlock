@@ -34,14 +34,14 @@ import java.util.stream.Collectors;
  */
 public final class CommandManager implements TabExecutor
 {
-	private final PluginController.ContextContainer ctx;
+	private final PluginController.CommandContextContainer ctx;
 	private final SubcommandRegistry subcommandRegistry = new SubcommandRegistry();
 
 
 	/**
 	 * Class constructor
 	 */
-	public CommandManager(final PluginController.ContextContainer ctx)
+	public CommandManager(final PluginController.CommandContextContainer ctx)
 	{
 		this.ctx = ctx;
 
