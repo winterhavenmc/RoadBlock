@@ -79,7 +79,7 @@ final class ToolSubcommand extends AbstrtactSubcommand
 
 		// create road block tool
 		ValidItemKey itemKey = ItemKey.of("TOOL").isValid().orElseThrow();
-		final ItemStack roadBlockTool = ctx.messageBuilder().itemForge().createItem(itemKey).orElse(null);
+		final ItemStack roadBlockTool = ctx.messageBuilder().items().createItem(itemKey).orElse(null);
 
 		// put tool in player's inventory
 		final HashMap<Integer, ItemStack> noFit = player.getInventory().addItem(roadBlockTool);

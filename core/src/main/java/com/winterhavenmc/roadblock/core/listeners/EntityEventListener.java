@@ -192,7 +192,7 @@ public class EntityEventListener implements Listener
 	void onPlayerDropItem(final PlayerDropItemEvent event)
 	{
 		// if dropped item is a road block tool, remove dropped item
-		if (ItemForge.isCustomItem(event.getItemDrop().getItemStack()))
+		if (ctx.messageBuilder().items().isItem(event.getItemDrop().getItemStack()))
 		{
 			event.getItemDrop().remove();
 			ctx.soundConfig().playSound(event.getPlayer(), SoundId.TOOL_DROP);
