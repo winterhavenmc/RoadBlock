@@ -364,7 +364,7 @@ public class EntityEventListener implements Listener
 		int count = ctx.blockManager().storeBlockLocations(locations);
 
 		// send player successful protect message
-		ctx.soundConfig().playSound(player, SoundId.TOOL_SUCCESS_PROTECT);
+		ctx.messageBuilder().sounds().play(player, SoundId.TOOL_SUCCESS_PROTECT);
 		ctx.messageBuilder().compose(player, MessageId.TOOL_SUCCESS_PROTECT)
 				.setMacro(Macro.QUANTITY, count)
 				.send();
@@ -386,7 +386,7 @@ public class EntityEventListener implements Listener
 		int result = ctx.blockManager().removeBlockLocations(locations);
 
 		// send player successful unprotect message
-		ctx.soundConfig().playSound(player, SoundId.TOOL_SUCCESS_UNPROTECT);
+		ctx.messageBuilder().sounds().play(player, SoundId.TOOL_SUCCESS_UNPROTECT);
 		ctx.messageBuilder().compose(player, MessageId.TOOL_SUCCESS_UNPROTECT)
 				.setMacro(Macro.QUANTITY, result)
 				.send();

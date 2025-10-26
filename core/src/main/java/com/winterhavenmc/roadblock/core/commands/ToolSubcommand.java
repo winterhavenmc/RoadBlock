@@ -21,7 +21,6 @@ import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 import com.winterhavenmc.roadblock.core.context.CommandCtx;
 import com.winterhavenmc.roadblock.core.util.MessageId;
-import com.winterhavenmc.roadblock.core.util.SoundId;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -67,7 +66,6 @@ final class ToolSubcommand extends AbstrtactSubcommand
 		if (!player.hasPermission(permissionNode))
 		{
 			ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_TOOL_PERMISSION).send();
-			ctx.soundConfig().playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
@@ -75,7 +73,6 @@ final class ToolSubcommand extends AbstrtactSubcommand
 		if (argsList.size() > getMaxArgs())
 		{
 			ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
-			ctx.soundConfig().playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
 		}
@@ -91,13 +88,13 @@ final class ToolSubcommand extends AbstrtactSubcommand
 		if (!noFit.isEmpty())
 		{
 			ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_TOOL_INVENTORY_FULL).send();
-			ctx.soundConfig().playSound(player, SoundId.COMMAND_FAIL);
-			return true;
 		}
-
-		// play success sound
-		ctx.soundConfig().playSound(player, SoundId.COMMAND_SUCCESS_TOOL);
+		else
+		{
+			ctx.messageBuilder().compose(sender, MessageId.COMMAND_SUCCESS_TOOL);
+		}
 
 		return true;
 	}
+
 }

@@ -67,7 +67,6 @@ final class ShowSubcommand extends AbstrtactSubcommand
 		if (!player.hasPermission(permissionNode))
 		{
 			ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_SHOW_PERMISSION).send();
-			ctx.soundConfig().playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
@@ -75,7 +74,6 @@ final class ShowSubcommand extends AbstrtactSubcommand
 		if (argsList.size() > getMaxArgs())
 		{
 			ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
-			ctx.soundConfig().playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
 		}
@@ -94,7 +92,6 @@ final class ShowSubcommand extends AbstrtactSubcommand
 			{
 				// send player integer parse error message and return
 				ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_SET_INVALID_INTEGER).send();
-				ctx.soundConfig().playSound(sender, SoundId.COMMAND_FAIL);
 
 				// display usage message for player
 				displayUsage(player);
@@ -108,13 +105,10 @@ final class ShowSubcommand extends AbstrtactSubcommand
 		// highlight blocks
 		ctx.highlightManager().highlightBlocks(player, locations, HighlightStyle.PROTECT);
 
-		// send player success message
-		ctx.messageBuilder().compose(player, MessageId.COMMAND_SUCCESS_SHOW).setMacro(Macro.QUANTITY, locations.size()).send();
-
-		// if any blocks highlighted, play sound
+		// send player success message; TODO: add else statement to display message when empty
 		if (!locations.isEmpty())
 		{
-			ctx.soundConfig().playSound(player, SoundId.COMMAND_SUCCESS_SHOW);
+			ctx.messageBuilder().compose(player, MessageId.COMMAND_SUCCESS_SHOW).setMacro(Macro.QUANTITY, locations.size()).send();
 		}
 
 		return true;

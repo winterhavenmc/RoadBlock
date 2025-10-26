@@ -82,7 +82,6 @@ final class HelpSubcommand extends AbstrtactSubcommand
 		if (!sender.hasPermission(permissionNode))
 		{
 			ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_HELP_PERMISSION).send();
-			ctx.soundConfig().playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
@@ -123,8 +122,7 @@ final class HelpSubcommand extends AbstrtactSubcommand
 	 */
 	private void sendCommandInvalidMessage(final CommandSender sender)
 	{
-		ctx.messageBuilder().compose(sender, MessageId.COMMAND_HELP_INVALID).send();
-		ctx.soundConfig().playSound(sender, SoundId.COMMAND_INVALID);
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_INVALID_HELP).send();
 		displayUsageAll(sender);
 	}
 
