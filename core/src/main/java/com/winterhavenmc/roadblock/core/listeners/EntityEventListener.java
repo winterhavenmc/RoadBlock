@@ -221,7 +221,7 @@ public class EntityEventListener implements Listener
 		Block clickedBlock = event.getClickedBlock();
 
 		// if world is not enabled, send message and return
-		if (!ctx.worldManager().isEnabled(player.getWorld()))
+		if (!ctx.messageBuilder().worlds().isEnabled(player.getWorld()))
 		{
 			event.setCancelled(true);
 			ctx.messageBuilder().compose(player, MessageId.TOOL_FAIL_WORLD_DISABLED)
