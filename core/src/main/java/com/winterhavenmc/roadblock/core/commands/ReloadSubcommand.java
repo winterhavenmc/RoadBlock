@@ -77,12 +77,6 @@ final class ReloadSubcommand extends AbstrtactSubcommand
 		// reload messages
 		ctx.messageBuilder().reload();
 
-		// reload sounds
-		ctx.soundConfig().reload();
-
-		// reload enabled worlds
-		ctx.worldManager().reload();
-
 		// send player success message
 		ctx.messageBuilder().compose(sender, MessageId.COMMAND_SUCCESS_RELOAD).send();
 
