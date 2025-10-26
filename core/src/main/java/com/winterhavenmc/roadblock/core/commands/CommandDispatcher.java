@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.roadblock.core.commands;
 
-import com.winterhavenmc.roadblock.core.PluginController;
 import com.winterhavenmc.roadblock.core.util.MessageId;
 import com.winterhavenmc.roadblock.core.context.CommandCtx;
 
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
 /**
  * A class that handles the execution of commands
  */
-public final class CommandManager implements TabExecutor
+public final class CommandDispatcher implements TabExecutor
 {
 	private final CommandCtx ctx;
 	private final SubcommandRegistry subcommandRegistry = new SubcommandRegistry();
@@ -118,8 +117,7 @@ public final class CommandManager implements TabExecutor
 		if (optionalSubcommand.isEmpty())
 		{
 			optionalSubcommand = subcommandRegistry.getSubcommand("help");
-			ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND).send();
-			ctx.soundConfig().playSound(sender, SoundId.COMMAND_INVALID);
+			ctx.messageBuilder().compose(sender, MessageId.COMMAND_INVALID).send();
 		}
 
 		// execute subcommand

@@ -71,7 +71,7 @@ public final class RoadBlockPluginController implements PluginController
 		MetricsCtx metricsCtx = new MetricsCtx(plugin, blockManager);
 
 		// instantiate command manager
-		commandManager = new CommandManager(commandCtx);
+		commandDispatcher = new CommandDispatcher(commandCtx);
 
 		// instantiate event listeners
 		blockEventListener = new BlockEventListener(listenerCtx);
