@@ -15,13 +15,12 @@
  *
  */
 
-package com.winterhavenmc.roadblock.core;
+package com.winterhavenmc.roadblock.core.controller;
 
-import com.winterhavenmc.library.messagebuilder.MessageBuilder;
-import com.winterhavenmc.library.soundconfig.SoundConfiguration;
-import com.winterhavenmc.library.soundconfig.YamlSoundConfiguration;
-import com.winterhavenmc.library.worldmanager.WorldManager;
-import com.winterhavenmc.roadblock.core.commands.CommandManager;
+import com.winterhavenmc.roadblock.core.commands.CommandDispatcher;
+import com.winterhavenmc.roadblock.core.context.CommandCtx;
+import com.winterhavenmc.roadblock.core.context.ListenerCtx;
+import com.winterhavenmc.roadblock.core.context.MetricsCtx;
 import com.winterhavenmc.roadblock.core.highlights.HighlightManager;
 import com.winterhavenmc.roadblock.core.listeners.BlockEventListener;
 import com.winterhavenmc.roadblock.core.listeners.EntityEventListener;
@@ -29,14 +28,14 @@ import com.winterhavenmc.roadblock.core.ports.datastore.ConnectionProvider;
 import com.winterhavenmc.roadblock.core.storage.BlockManager;
 import com.winterhavenmc.roadblock.core.util.MetricsHandler;
 
+import com.winterhavenmc.library.messagebuilder.MessageBuilder;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 
 public final class RoadBlockPluginController implements PluginController
 {
 	public MessageBuilder messageBuilder;
-	public WorldManager worldManager;
-	public SoundConfiguration soundConfig;
 	public BlockManager blockManager;
 	public HighlightManager highlightManager;
 	public CommandManager commandManager;
@@ -52,12 +51,6 @@ public final class RoadBlockPluginController implements PluginController
 
 		// instantiate message builder
 		messageBuilder = MessageBuilder.create(plugin);
-
-		// instantiate sound configuration
-		soundConfig = new YamlSoundConfiguration(plugin);
-
-		// instantiate world manager
-		worldManager = new WorldManager(plugin);
 
 		// instantiate block manager
 		blockManager = new BlockManager(plugin, connectionProvider);

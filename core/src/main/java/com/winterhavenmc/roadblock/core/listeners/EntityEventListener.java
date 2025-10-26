@@ -195,7 +195,7 @@ public class EntityEventListener implements Listener
 		if (ctx.messageBuilder().items().isItem(event.getItemDrop().getItemStack()))
 		{
 			event.getItemDrop().remove();
-			ctx.soundConfig().playSound(event.getPlayer(), SoundId.TOOL_DROP);
+			ctx.messageBuilder().sounds().play(event.getPlayer(), SoundId.TOOL_DROP);
 		}
 	}
 
@@ -267,7 +267,7 @@ public class EntityEventListener implements Listener
 			// if player does not have roadblock.set permission, do nothing and return
 			if (!player.hasPermission("roadblock.set"))
 			{
-				ctx.soundConfig().playSound(player, SoundId.TOOL_FAIL_USE_PERMISSION);
+				ctx.messageBuilder().sounds().play(player, SoundId.TOOL_FAIL_USE_PERMISSION);
 				ctx.messageBuilder().compose(player, MessageId.TOOL_FAIL_USE_PERMISSION)
 						.setMacro(Macro.WORLD, player.getWorld())
 						.send();
@@ -277,7 +277,7 @@ public class EntityEventListener implements Listener
 			// if block clicked is not in list of road block materials, send message and return
 			if (!ctx.blockManager().getRoadBlockMaterials().contains(clickedBlock.getType()))
 			{
-				ctx.soundConfig().playSound(player, SoundId.TOOL_FAIL_INVALID_MATERIAL);
+				ctx.messageBuilder().sounds().play(player, SoundId.TOOL_FAIL_INVALID_MATERIAL);
 				ctx.messageBuilder().compose(player, MessageId.TOOL_FAIL_INVALID_MATERIAL)
 						.setMacro(Macro.MATERIAL, clickedBlock.getType())
 						.send();
