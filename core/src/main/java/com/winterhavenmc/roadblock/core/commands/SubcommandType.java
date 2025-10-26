@@ -18,14 +18,14 @@
 package com.winterhavenmc.roadblock.core.commands;
 
 
-import com.winterhavenmc.roadblock.core.PluginController;
+import com.winterhavenmc.roadblock.core.context.CommandCtx;
 
 enum SubcommandType
 {
 	MATERIALS()
 			{
 				@Override
-				Subcommand create(final PluginController.CommandContextContainer ctx)
+				Subcommand create(final CommandCtx ctx)
 				{
 					return new MaterialsSubcommand(ctx);
 				}
@@ -34,7 +34,7 @@ enum SubcommandType
 	RELOAD()
 			{
 				@Override
-				Subcommand create(final PluginController.CommandContextContainer ctx)
+				Subcommand create(final CommandCtx ctx)
 				{
 					return new ReloadSubcommand(ctx);
 				}
@@ -43,7 +43,7 @@ enum SubcommandType
 	SHOW()
 			{
 				@Override
-				Subcommand create(final PluginController.CommandContextContainer ctx)
+				Subcommand create(final CommandCtx ctx)
 				{
 					return new ShowSubcommand(ctx);
 				}
@@ -52,7 +52,7 @@ enum SubcommandType
 	STATUS()
 			{
 				@Override
-				Subcommand create(final PluginController.CommandContextContainer ctx)
+				Subcommand create(final CommandCtx ctx)
 				{
 					return new StatusSubcommand(ctx);
 				}
@@ -61,7 +61,7 @@ enum SubcommandType
 	TOOL()
 			{
 				@Override
-				Subcommand create(final PluginController.CommandContextContainer ctx)
+				Subcommand create(final CommandCtx ctx)
 				{
 					return new ToolSubcommand(ctx);
 				}
@@ -73,5 +73,5 @@ enum SubcommandType
 	 *
 	 * @return an instance of the subcommand
 	 */
-	abstract Subcommand create(final PluginController.CommandContextContainer ctx);
+	abstract Subcommand create(final CommandCtx ctx);
 }

@@ -19,7 +19,8 @@ package com.winterhavenmc.roadblock.core.commands;
 
 import com.winterhavenmc.roadblock.core.PluginController;
 import com.winterhavenmc.roadblock.core.util.MessageId;
-import com.winterhavenmc.roadblock.core.util.SoundId;
+import com.winterhavenmc.roadblock.core.context.CommandCtx;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -34,14 +35,14 @@ import java.util.stream.Collectors;
  */
 public final class CommandManager implements TabExecutor
 {
-	private final PluginController.CommandContextContainer ctx;
+	private final CommandCtx ctx;
 	private final SubcommandRegistry subcommandRegistry = new SubcommandRegistry();
 
 
 	/**
 	 * Class constructor
 	 */
-	public CommandManager(final PluginController.CommandContextContainer ctx)
+	public CommandDispatcher(final CommandCtx ctx)
 	{
 		this.ctx = ctx;
 

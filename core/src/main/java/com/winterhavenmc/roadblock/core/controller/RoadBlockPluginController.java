@@ -66,9 +66,9 @@ public final class RoadBlockPluginController implements PluginController
 		highlightManager = new HighlightManager(plugin);
 
 		// instantiate context containers to inject dependencies
-		CommandContextContainer commandCtx = new CommandContextContainer(plugin, messageBuilder, soundConfig, worldManager, blockManager, highlightManager);
-		ListenerContextContainer listenerCtx = new ListenerContextContainer(plugin, messageBuilder, soundConfig, worldManager, blockManager, highlightManager);
-		MetricsContextContainer metricsCtx = new MetricsContextContainer(plugin, blockManager);
+		CommandCtx commandCtx = new CommandCtx(plugin, messageBuilder, blockManager, highlightManager);
+		ListenerCtx listenerCtx = new ListenerCtx(plugin, messageBuilder, blockManager, highlightManager);
+		MetricsCtx metricsCtx = new MetricsCtx(plugin, blockManager);
 
 		// instantiate command manager
 		commandManager = new CommandManager(commandCtx);

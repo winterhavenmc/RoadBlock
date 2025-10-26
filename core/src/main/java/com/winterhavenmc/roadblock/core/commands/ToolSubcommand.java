@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.roadblock.core.commands;
 
-import com.winterhavenmc.library.messagebuilder.keys.ItemKey;
-import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
-import com.winterhavenmc.roadblock.core.PluginController;
+import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
+import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
+import com.winterhavenmc.roadblock.core.context.CommandCtx;
 import com.winterhavenmc.roadblock.core.util.MessageId;
 import com.winterhavenmc.roadblock.core.util.SoundId;
 
@@ -38,12 +38,12 @@ final class ToolSubcommand extends AbstrtactSubcommand
 {
 
 
-	private final PluginController.CommandContextContainer ctx;
+	private final CommandCtx ctx;
 
 	/**
 	 * Class constructor
 	 */
-	ToolSubcommand(final PluginController.CommandContextContainer ctx)
+	ToolSubcommand(final CommandCtx ctx)
 	{
 		this.ctx = ctx;
 		this.name = "tool";

@@ -1,6 +1,6 @@
 package com.winterhavenmc.roadblock.core.util;
 
-import com.winterhavenmc.roadblock.core.PluginController;
+import com.winterhavenmc.roadblock.core.context.MetricsCtx;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bstats.charts.SingleLineChart;
@@ -8,7 +8,7 @@ import org.bstats.charts.SingleLineChart;
 
 public class MetricsHandler
 {
-	public MetricsHandler(final PluginController.MetricsContextContainer ctx)
+	public MetricsHandler(final MetricsCtx ctx)
 	{
 		Metrics metrics = new Metrics(ctx.plugin(), 13919);
 
