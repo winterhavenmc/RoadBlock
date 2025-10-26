@@ -34,7 +34,7 @@ public final class BlockLocationCache
 	/**
 	 * Private class constructor
 	 */
-	private BlockLocationCache() { }
+	private BlockLocationCache() { /* private constructor to prevent instantiation */ }
 
 
 	/**
