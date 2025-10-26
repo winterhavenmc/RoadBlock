@@ -162,7 +162,7 @@ public class EntityEventListener implements Listener
 
 		final ItemStack previousItem = player.getInventory().getItem(event.getPreviousSlot());
 
-		if (ItemForge.isCustomItem(previousItem))
+		if (ctx.messageBuilder().items().isItem(previousItem))
 		{
 			ctx.highlightManager().unHighlightBlocks(player);
 		}
@@ -231,7 +231,7 @@ public class EntityEventListener implements Listener
 		}
 
 		// if event is air/block click with RoadBlock tool, begin tool use procedure
-		if (ItemForge.isCustomItem(playerItem) && !action.equals(Action.PHYSICAL))
+		if (ctx.messageBuilder().items().isItem(playerItem) && !action.equals(Action.PHYSICAL))
 		{
 			// if clicked block is tool transparent material, try to find non-air block along line of sight
 			if (clickedBlock == null || toolTransparentMaterials.contains(clickedBlock.getType()))
