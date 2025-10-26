@@ -1,18 +1,21 @@
 package com.winterhavenmc.roadblock.adapters.datastore.sqlite;
 
-import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.roadblock.models.blocklocation.BlockLocation;
 import com.winterhavenmc.roadblock.core.ports.datastore.BlockRepository;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.sql.*;
 import java.util.*;
 
 
-public class SqliteBlockRepository implements BlockRepository
+public class SqliteBlockRepository implements BlockRepository, Listener
 {
 	private final Plugin plugin;
 	private final LocaleProvider localeProvider;
@@ -33,6 +36,10 @@ public class SqliteBlockRepository implements BlockRepository
 		this.chunkCache = new HashSet<>();
 		this.schemaVersion = getSchemaVersion();
 		this.blockRowMapper = new SqliteBlockRowMapper(plugin, localeProvider);
+
+		// register events in this class
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+
 	}
 
 
@@ -319,6 +326,13 @@ public class SqliteBlockRepository implements BlockRepository
 		}
 
 		chunkCache.add(chunk.getBlock(0, 0, 0).getLocation());
+	}
+
+
+	@EventHandler
+	public void onChunkUnload(ChunkUnloadEvent event)
+	{
+		flushCache(event.getChunk());
 	}
 
 }
