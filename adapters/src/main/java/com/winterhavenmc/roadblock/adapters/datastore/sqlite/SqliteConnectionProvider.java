@@ -29,7 +29,7 @@ public class SqliteConnectionProvider implements ConnectionProvider
 	public SqliteConnectionProvider(final Plugin plugin)
 	{
 		this.plugin = plugin;
-		this.localeProvider = LocaleProvider.create(plugin);
+		this.localeProvider = BukkitLocaleProvider.create(plugin);
 		this.dataFilePath = plugin.getDataFolder() + File.separator + "roadblocks.db";
 	}
 
