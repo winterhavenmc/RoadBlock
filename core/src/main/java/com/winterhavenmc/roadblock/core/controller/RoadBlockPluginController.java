@@ -38,7 +38,7 @@ public final class RoadBlockPluginController implements PluginController
 	public MessageBuilder messageBuilder;
 	public BlockManager blockManager;
 	public HighlightManager highlightManager;
-	public CommandManager commandManager;
+	public CommandDispatcher commandDispatcher;
 	public BlockEventListener blockEventListener;
 	public EntityEventListener entityEventListener;
 
