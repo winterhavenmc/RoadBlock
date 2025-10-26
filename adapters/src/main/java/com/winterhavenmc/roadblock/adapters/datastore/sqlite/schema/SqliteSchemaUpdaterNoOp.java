@@ -1,6 +1,6 @@
 package com.winterhavenmc.roadblock.adapters.datastore.sqlite.schema;
 
-import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.roadblock.adapters.datastore.sqlite.SqliteMessage;
 import org.bukkit.plugin.Plugin;
 
