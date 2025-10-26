@@ -1,6 +1,6 @@
 package com.winterhavenmc.roadblock.adapters.datastore.sqlite;
 
-import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.roadblock.models.blocklocation.BlockLocation;
 import com.winterhavenmc.roadblock.models.blocklocation.BlockLocationMessage;
 import org.bukkit.World;
@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
 
 public class SqliteBlockRowMapper
 {

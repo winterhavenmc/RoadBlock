@@ -37,6 +37,8 @@ MESSAGES:
   COMMAND_SUCCESS_SHOW:
     MESSAGE_TEXT: "<dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <gray>Highlighted {QUANTITY} nearby RoadBlocks.</gray>"
 
+  COMMAND_SUCCESS_TOOL:
+    MESSAGE_TEXT: "<dark_gray>[<yellow>RoadBlock</yellow>]</aqua> <gray>RoadBlock tool created!</aqua>"
 
   COMMAND_HELP_INVALID:
     MESSAGE_TEXT: "<dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>That is not a valid command!</red>"
@@ -63,6 +65,9 @@ MESSAGES:
     MESSAGE_TEXT: "<yellow>Command usage:</yellow>"
 
 
+  COMMAND_INVALID:
+    MESSAGE_TEXT: "<dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>That is not a valid command!</red>"
+
   COMMAND_FAIL_ARGS_COUNT_UNDER:
     MESSAGE_TEXT: "<dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>Too few arguments!</red>"
 
@@ -71,9 +76,6 @@ MESSAGES:
 
   COMMAND_FAIL_CONSOLE:
     MESSAGE_TEXT: "<dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>You must be in game to use this command!</red>"
-
-  COMMAND_FAIL_INVALID_COMMAND:
-    MESSAGE_TEXT: "<dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>That is not a valid command!</red>"
 
   COMMAND_FAIL_INVALID_QUANTITY:
     MESSAGE_TEXT: "<dark_gray>[<yellow>RoadBlock</yellow>]</dark_gray> <red>Invalid quantity!</red>"
@@ -110,10 +112,10 @@ MESSAGES:
     MESSAGE_TEXT: "<newline><gradient:blue:aqua><strikethrough>                    =</strikethrough>[</gradient> <dark_aqua>{PLUGIN}</dark_aqua> <gradient:aqua:blue>]<strikethrough>=                    </strikethrough></gradient>"
 
   COMMAND_STATUS_FOOTER:
-    MESSAGE_TEXT: "<newline><click:open_url:{URL}><blue><underlined>{URL}<underlined></blue></click>"
+    MESSAGE_TEXT: "<newline><click:open_url:{PLUGIN.URL}><blue><underlined>{PLUGIN.URL}<underlined></blue></click><newline>"
 
   COMMAND_STATUS_VERSION_SETTING:
-    MESSAGE_TEXT: "<green>Version:</green> {SETTING}"
+    MESSAGE_TEXT: "<green>Version:</green> {PLUGIN.VERSION}"
 
   COMMAND_STATUS_TOTAL_BLOCKS_PROTECTED:
     MESSAGE_TEXT: "<green>Total Blocks Protected:</green> {SETTING}"

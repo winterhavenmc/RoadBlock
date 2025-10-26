@@ -1,86 +1,85 @@
 # sound configuration file for ${project.name} v${project.version}
 
 COMMAND_FAIL:
-  enabled: true
-  player-only: true
-  sound: minecraft:entity.villager.no
-  volume: 1
-  pitch: 1
+  ENABLED: true
+  PLAYER_ONLY: true
+  SOUND_NAME: minecraft:entity.villager.no
+  VOLUME: 1
+  PITCH: 1
 
-COMMAND_INVALID:
-  enabled: true
-  player-only: true
-  sound: minecraft:entity.wandering_trader.ambient
-  volume: 1
-  pitch: 1
+COMMAND_FAIL_INVALID:
+  ENABLED: true
+  PLAYER_ONLY: true
+  SOUND_NAME: minecraft:entity.wandering_trader.ambient
+  VOLUME: 1
+  PITCH: 1
 
-
-COMMAND_RELOAD_SUCCESS:
-  enabled: true
-  player-only: true
-  sound: minecraft:block.note_block.chime
-  volume: 1
-  pitch: 1
+COMMAND_SUCCESS_RELOAD:
+  ENABLED: true
+  PLAYER_ONLY: true
+  SOUND_NAME: minecraft:block.note_block.chime
+  VOLUME: 1
+  PITCH: 1
 
 COMMAND_SUCCESS_TOOL:
-  enabled: true
-  player-only: true
-  sound: minecraft:entity.item.pickup
-  volume: 1
-  pitch: 1
+  ENABLED: true
+  PLAYER_ONLY: true
+  SOUND_NAME: minecraft:entity.item.pickup
+  VOLUME: 1
+  PITCH: 1
 
 COMMAND_SUCCESS_SHOW:
-  enabled: true
-  player-only: true
-  sound: minecraft:entity.player.levelup
-  volume: 1
-  pitch: 1.5
+  ENABLED: true
+  PLAYER_ONLY: true
+  SOUND_NAME: minecraft:entity.player.levelup
+  VOLUME: 1
+  PITCH: 1.5
 
 TOOL_DROP:
-  enabled: true
-  player-only: true
-  sound: minecraft:entity.item.break
-  volume: 1
-  pitch: 1
+  ENABLED: true
+  PLAYER_ONLY: true
+  SOUND_NAME: minecraft:entity.item.break
+  VOLUME: 1
+  PITCH: 1
 
 TOOL_FAIL_USE_PERMISSION:
-  enabled: true
-  player-only: true
-  sound: minecraft:entity.villager.no
-  volume: 1
-  pitch: 1
+  ENABLED: true
+  PLAYER_ONLY: true
+  SOUND_NAME: minecraft:entity.villager.no
+  VOLUME: 1
+  PITCH: 1
 
 TOOL_FAIL_INVALID_MATERIAL:
-  enabled: true
-  player-only: true
-  sound: minecraft:entity.villager.no
-  volume: 1
-  pitch: 1
+  ENABLED: true
+  PLAYER_ONLY: true
+  SOUND_NAME: minecraft:entity.villager.no
+  VOLUME: 1
+  PITCH: 1
 
 TOOL_SUCCESS_PROTECT:
-    enabled: true
-    player-only: true
-    sound: minecraft:block.note_block.pling
-    volume: 1
-    pitch: 1
+  ENABLED: true
+  PLAYER_ONLY: true
+  SOUND_NAME: minecraft:block.note_block.pling
+  VOLUME: 1
+  PITCH: 1
 
 TOOL_SUCCESS_UNPROTECT:
-    enabled: true
-    player-only: true
-    sound: minecraft:block.note_block.bass
-    volume: 1
-    pitch: 1
+  ENABLED: true
+  PLAYER_ONLY: true
+  SOUND_NAME: minecraft:block.note_block.bass
+  VOLUME: 1
+  PITCH: 1
 
 BLOCK_PLACE_FAIL_GRASS_PATH:
-    enabled: true
-    player-only: true
-    sound: minecraft:entity.villager.no
-    volume: 1
-    pitch: 1
+  ENABLED: true
+  PLAYER_ONLY: true
+  SOUND_NAME: minecraft:entity.villager.no
+  VOLUME: 1
+  PITCH: 1
 
 BLOCK_PLACE_FAIL_ABOVE_ROAD:
-    enabled: true
-    player-only: true
-    sound: minecraft:entity.villager.no
-    volume: 1
-    pitch: 1
+  ENABLED: true
+  PLAYER_ONLY: true
+  SOUND_NAME: minecraft:entity.villager.no
+  VOLUME: 1
+  PITCH: 1

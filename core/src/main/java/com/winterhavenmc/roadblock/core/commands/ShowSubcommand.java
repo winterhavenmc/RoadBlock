@@ -17,11 +17,10 @@
 
 package com.winterhavenmc.roadblock.core.commands;
 
-import com.winterhavenmc.roadblock.core.PluginController;
+import com.winterhavenmc.roadblock.core.context.CommandCtx;
 import com.winterhavenmc.roadblock.core.highlights.HighlightStyle;
 import com.winterhavenmc.roadblock.core.util.Macro;
 import com.winterhavenmc.roadblock.core.util.MessageId;
-import com.winterhavenmc.roadblock.core.util.SoundId;
 import com.winterhavenmc.roadblock.core.util.Config;
 
 import org.bukkit.Location;
@@ -37,13 +36,13 @@ import java.util.List;
  */
 final class ShowSubcommand extends AbstrtactSubcommand
 {
-	private final PluginController.CommandContextContainer ctx;
+	private final CommandCtx ctx;
 
 
 	/**
 	 * Class constructor
 	 */
-	ShowSubcommand(final PluginController.CommandContextContainer ctx)
+	ShowSubcommand(final CommandCtx ctx)
 	{
 		this.ctx = ctx;
 		this.name = "show";
@@ -68,7 +67,6 @@ final class ShowSubcommand extends AbstrtactSubcommand
 		if (!player.hasPermission(permissionNode))
 		{
 			ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_SHOW_PERMISSION).send();
-			ctx.soundConfig().playSound(player, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
@@ -76,7 +74,6 @@ final class ShowSubcommand extends AbstrtactSubcommand
 		if (argsList.size() > getMaxArgs())
 		{
 			ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
-			ctx.soundConfig().playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
 		}
@@ -95,7 +92,6 @@ final class ShowSubcommand extends AbstrtactSubcommand
 			{
 				// send player integer parse error message and return
 				ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_SET_INVALID_INTEGER).send();
-				ctx.soundConfig().playSound(sender, SoundId.COMMAND_FAIL);
 
 				// display usage message for player
 				displayUsage(player);
@@ -109,13 +105,10 @@ final class ShowSubcommand extends AbstrtactSubcommand
 		// highlight blocks
 		ctx.highlightManager().highlightBlocks(player, locations, HighlightStyle.PROTECT);
 
-		// send player success message
-		ctx.messageBuilder().compose(player, MessageId.COMMAND_SUCCESS_SHOW).setMacro(Macro.QUANTITY, locations.size()).send();
-
-		// if any blocks highlighted, play sound
+		// send player success message; TODO: add else statement to display message when empty
 		if (!locations.isEmpty())
 		{
-			ctx.soundConfig().playSound(player, SoundId.COMMAND_SUCCESS_SHOW);
+			ctx.messageBuilder().compose(player, MessageId.COMMAND_SUCCESS_SHOW).setMacro(Macro.QUANTITY, locations.size()).send();
 		}
 
 		return true;

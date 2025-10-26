@@ -17,10 +17,9 @@
 
 package com.winterhavenmc.roadblock.core.listeners;
 
-import com.winterhavenmc.roadblock.core.RoadBlockPluginController;
+import com.winterhavenmc.roadblock.core.context.ListenerCtx;
 import com.winterhavenmc.roadblock.core.util.Macro;
 import com.winterhavenmc.roadblock.core.util.MessageId;
-import com.winterhavenmc.roadblock.core.util.SoundId;
 import com.winterhavenmc.roadblock.core.util.Config;
 
 import org.bukkit.block.Block;
@@ -42,7 +41,7 @@ import java.util.Set;
  */
 public final class BlockEventListener implements Listener
 {
-	private final RoadBlockPluginController.ListenerContextContainer ctx;
+	private final ListenerCtx ctx;
 	private final Set<String> pathMaterialNames = Set.of(
 			"GRASS_PATH",
 			"LEGACY_GRASS_PATH",
@@ -52,7 +51,7 @@ public final class BlockEventListener implements Listener
 	/**
 	 * Class constructor for BlockEventListener class
 	 */
-	public BlockEventListener(final RoadBlockPluginController.ListenerContextContainer ctx)
+	public BlockEventListener(final ListenerCtx ctx)
 	{
 		this.ctx = ctx;
 
@@ -85,7 +84,6 @@ public final class BlockEventListener implements Listener
 		{
 			event.setCancelled(true);
 			ctx.messageBuilder().compose(player, MessageId.BLOCK_PLACE_FAIL_GRASS_PATH).send();
-			ctx.soundConfig().playSound(player, SoundId.BLOCK_PLACE_FAIL_GRASS_PATH);
 			return;
 		}
 
@@ -94,7 +92,6 @@ public final class BlockEventListener implements Listener
 		{
 			event.setCancelled(true);
 			ctx.messageBuilder().compose(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
-			ctx.soundConfig().playSound(player, SoundId.BLOCK_PLACE_FAIL_ABOVE_ROAD);
 		}
 	}
 
@@ -125,7 +122,6 @@ public final class BlockEventListener implements Listener
 			{
 				event.setCancelled(true);
 				ctx.messageBuilder().compose(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
-				ctx.soundConfig().playSound(player, SoundId.BLOCK_PLACE_FAIL_ABOVE_ROAD);
 				break;
 			}
 		}
