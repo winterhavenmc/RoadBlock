@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.roadblock.core.highlights;
 
-import com.winterhavenmc.library.time.TimeUnit;
+import com.winterhavenmc.library.messagebuilder.models.time.TimeUnit;
 import com.winterhavenmc.roadblock.core.util.Config;
 
 import org.bukkit.Location;
