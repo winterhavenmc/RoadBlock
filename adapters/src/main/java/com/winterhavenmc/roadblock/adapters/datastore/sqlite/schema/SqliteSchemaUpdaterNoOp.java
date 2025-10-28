@@ -1,27 +1,29 @@
 package com.winterhavenmc.roadblock.adapters.datastore.sqlite.schema;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
+
 import com.winterhavenmc.roadblock.adapters.datastore.sqlite.SqliteMessage;
+
 import org.bukkit.plugin.Plugin;
 
 
 public final class SqliteSchemaUpdaterNoOp implements SqliteSchemaUpdater
 {
 	private final Plugin plugin;
-	private final LocaleProvider localeProvider;
+	private final ConfigRepository configRepository;
 
 
-	public SqliteSchemaUpdaterNoOp(final Plugin plugin, final LocaleProvider localeProvider)
+	public SqliteSchemaUpdaterNoOp(final Plugin plugin, final ConfigRepository configRepository)
 	{
 		this.plugin = plugin;
-		this.localeProvider = localeProvider;
+		this.configRepository = configRepository;
 	}
 
 
 	@Override
 	public void update()
 	{
-		plugin.getLogger().info(SqliteMessage.SCHEMA_UP_TO_DATE_NOTICE.getLocalizedMessage(localeProvider.getLocale()));
+		plugin.getLogger().info(SqliteMessage.SCHEMA_UP_TO_DATE_NOTICE.getLocalizedMessage(configRepository.locale()));
 	}
 
 }
