@@ -1,6 +1,6 @@
 package com.winterhavenmc.roadblock.adapters.datastore.sqlite;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.roadblock.models.blocklocation.BlockLocation;
 import com.winterhavenmc.roadblock.core.ports.datastore.BlockRepository;
 
@@ -18,7 +18,7 @@ import java.util.*;
 public class SqliteBlockRepository implements BlockRepository, Listener
 {
 	private final Plugin plugin;
-	private final LocaleProvider localeProvider;
+	private final ConfigRepository configRepository;
 	private final Connection connection;
 	private final SqliteBlockQueryExecutor blockQueryHelper = new SqliteBlockQueryExecutor();
 	private final SqliteBlockRowMapper blockRowMapper;
@@ -27,15 +27,15 @@ public class SqliteBlockRepository implements BlockRepository, Listener
 	private final Collection<Location> chunkCache;
 
 
-	public SqliteBlockRepository(final Plugin plugin, final Connection connection, final LocaleProvider localeProvider)
+	public SqliteBlockRepository(final Plugin plugin, final Connection connection, final ConfigRepository configRepository)
 	{
 		this.plugin = plugin;
-		this.localeProvider = localeProvider;
+		this.configRepository = configRepository;
 		this.connection = connection;
 		this.blockCache = BlockLocationCache.getInstance();
 		this.chunkCache = new HashSet<>();
 		this.schemaVersion = getSchemaVersion();
-		this.blockRowMapper = new SqliteBlockRowMapper(plugin, localeProvider);
+		this.blockRowMapper = new SqliteBlockRowMapper(plugin, configRepository);
 
 		// register events in this class
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -58,7 +58,7 @@ public class SqliteBlockRepository implements BlockRepository, Listener
 		}
 		catch (SQLException sqlException)
 		{
-			plugin.getLogger().warning(SqliteMessage.SCHEMA_VERSION_ERROR.getLocalizedMessage(localeProvider.getLocale()));
+			plugin.getLogger().warning(SqliteMessage.SCHEMA_VERSION_ERROR.getLocalizedMessage(configRepository.locale()));
 		}
 
 		return version;
@@ -90,7 +90,7 @@ public class SqliteBlockRepository implements BlockRepository, Listener
 		}
 		catch (SQLException sqlException)
 		{
-			plugin.getLogger().warning(SqliteMessage.INSERT_BLOCK_ERROR.getLocalizedMessage(localeProvider.getLocale()));
+			plugin.getLogger().warning(SqliteMessage.INSERT_BLOCK_ERROR.getLocalizedMessage(configRepository.locale()));
 			plugin.getLogger().warning(sqlException.getLocalizedMessage());
 			return 0;
 		}
@@ -112,7 +112,7 @@ public class SqliteBlockRepository implements BlockRepository, Listener
 		}
 		catch (SQLException sqlException)
 		{
-			plugin.getLogger().warning(SqliteMessage.SELECT_ALL_BLOCKS_ERROR.getLocalizedMessage(localeProvider.getLocale()));
+			plugin.getLogger().warning(SqliteMessage.SELECT_ALL_BLOCKS_ERROR.getLocalizedMessage(configRepository.locale()));
 			plugin.getLogger().warning(sqlException.getLocalizedMessage());
 			return Set.of();
 		}
@@ -139,7 +139,7 @@ public class SqliteBlockRepository implements BlockRepository, Listener
 		}
 		catch (final SQLException sqlException)
 		{
-			plugin.getLogger().warning(SqliteMessage.SELECT_BLOCK_COUNT_ERROR.getLocalizedMessage(localeProvider.getLocale()));
+			plugin.getLogger().warning(SqliteMessage.SELECT_BLOCK_COUNT_ERROR.getLocalizedMessage(configRepository.locale()));
 			plugin.getLogger().warning(sqlException.getLocalizedMessage());
 		}
 
@@ -163,7 +163,7 @@ public class SqliteBlockRepository implements BlockRepository, Listener
 		}
 		catch (SQLException sqlException)
 		{
-			plugin.getLogger().warning(SqliteMessage.SELECT_BLOCKS_IN_CHUNK_ERROR.getLocalizedMessage(localeProvider.getLocale()));
+			plugin.getLogger().warning(SqliteMessage.SELECT_BLOCKS_IN_CHUNK_ERROR.getLocalizedMessage(configRepository.locale()));
 			plugin.getLogger().warning(sqlException.getLocalizedMessage());
 			return Set.of();
 		}
@@ -199,7 +199,7 @@ public class SqliteBlockRepository implements BlockRepository, Listener
 			}
 			catch (final SQLException sqlException)
 			{
-				plugin.getLogger().warning(SqliteMessage.SELECT_BLOCKS_BY_PROXIMITY_ERROR.getLocalizedMessage(localeProvider.getLocale()));
+				plugin.getLogger().warning(SqliteMessage.SELECT_BLOCKS_BY_PROXIMITY_ERROR.getLocalizedMessage(configRepository.locale()));
 				plugin.getLogger().warning(sqlException.getLocalizedMessage());
 			}
 		}
@@ -227,7 +227,7 @@ public class SqliteBlockRepository implements BlockRepository, Listener
 					}
 					catch (SQLException sqlException)
 					{
-						plugin.getLogger().warning(SqliteMessage.DELETE_BLOCK_RECORD_ERROR.getLocalizedMessage(localeProvider.getLocale()));
+						plugin.getLogger().warning(SqliteMessage.DELETE_BLOCK_RECORD_ERROR.getLocalizedMessage(configRepository.locale()));
 						plugin.getLogger().warning(sqlException.getLocalizedMessage());
 					}
 				}
@@ -240,7 +240,7 @@ public class SqliteBlockRepository implements BlockRepository, Listener
 		}
 		catch (SQLException sqlException)
 		{
-			plugin.getLogger().warning(SqliteMessage.DELETE_BLOCK_RECORD_ERROR.getLocalizedMessage(localeProvider.getLocale()));
+			plugin.getLogger().warning(SqliteMessage.DELETE_BLOCK_RECORD_ERROR.getLocalizedMessage(configRepository.locale()));
 			plugin.getLogger().warning(sqlException.getLocalizedMessage());
 		}
 

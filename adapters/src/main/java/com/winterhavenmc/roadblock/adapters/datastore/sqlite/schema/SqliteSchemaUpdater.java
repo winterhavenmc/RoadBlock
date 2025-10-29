@@ -1,9 +1,11 @@
 package com.winterhavenmc.roadblock.adapters.datastore.sqlite.schema;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
+
 import com.winterhavenmc.roadblock.adapters.datastore.sqlite.SqliteMessage;
 import com.winterhavenmc.roadblock.adapters.datastore.sqlite.SqliteQueries;
 import com.winterhavenmc.roadblock.core.ports.datastore.BlockRepository;
+
 import org.bukkit.plugin.Plugin;
 
 import java.sql.*;
@@ -17,18 +19,18 @@ public sealed interface SqliteSchemaUpdater permits SqliteSchemaUpdaterFromV0, S
 
 	static SqliteSchemaUpdater create(final Plugin plugin,
                                       final Connection connection,
-									  final LocaleProvider localeProvider,
+									  final ConfigRepository configRepository,
                                       final BlockRepository blockRepository)
 	{
-		int version = getSchemaVersion(plugin, connection, localeProvider);
+		int version = getSchemaVersion(plugin, connection, configRepository);
 
 		return (version == 0)
-				? new SqliteSchemaUpdaterFromV0(plugin, connection, localeProvider, blockRepository)
-				: new SqliteSchemaUpdaterNoOp(plugin, localeProvider);
+				? new SqliteSchemaUpdaterFromV0(plugin, connection, configRepository, blockRepository)
+				: new SqliteSchemaUpdaterNoOp(plugin, configRepository);
 	}
 
 
-	static int getSchemaVersion(final Plugin plugin, final Connection connection, final LocaleProvider localeProvider)
+	static int getSchemaVersion(final Plugin plugin, final Connection connection, final ConfigRepository configRepository)
 	{
 		int version = -1;
 
@@ -44,7 +46,7 @@ public sealed interface SqliteSchemaUpdater permits SqliteSchemaUpdaterFromV0, S
 		}
 		catch (SQLException sqlException)
 		{
-			plugin.getLogger().warning(SqliteMessage.SCHEMA_VERSION_ERROR.getLocalizedMessage(localeProvider.getLocale()));
+			plugin.getLogger().warning(SqliteMessage.SCHEMA_VERSION_ERROR.getLocalizedMessage(configRepository.locale()));
 			plugin.getLogger().warning(sqlException.getLocalizedMessage());
 		}
 
@@ -54,7 +56,7 @@ public sealed interface SqliteSchemaUpdater permits SqliteSchemaUpdaterFromV0, S
 
 	default void setSchemaVersion(final Connection connection,
 	                              final Logger logger,
-	                              final LocaleProvider localeProvider,
+	                              final ConfigRepository configRepository,
 	                              final int version)
 	{
 		try (final Statement statement = connection.createStatement())
@@ -63,7 +65,7 @@ public sealed interface SqliteSchemaUpdater permits SqliteSchemaUpdaterFromV0, S
 		}
 		catch (SQLException sqlException)
 		{
-			logger.warning(SqliteMessage.SCHEMA_UPDATE_ERROR.getLocalizedMessage(localeProvider.getLocale()));
+			logger.warning(SqliteMessage.SCHEMA_UPDATE_ERROR.getLocalizedMessage(configRepository.locale()));
 			logger.warning(sqlException.getLocalizedMessage());
 		}
 	}

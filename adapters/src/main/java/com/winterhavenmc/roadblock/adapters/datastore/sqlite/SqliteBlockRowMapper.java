@@ -1,6 +1,6 @@
 package com.winterhavenmc.roadblock.adapters.datastore.sqlite;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.roadblock.models.blocklocation.BlockLocation;
 import com.winterhavenmc.roadblock.models.blocklocation.BlockLocationMessage;
 import org.bukkit.World;
@@ -16,13 +16,13 @@ import java.util.UUID;
 public class SqliteBlockRowMapper
 {
 	private final Plugin plugin;
-	private final LocaleProvider localeProvider;
+	private final ConfigRepository configRepository;
 
 
-	SqliteBlockRowMapper(final Plugin plugin, final LocaleProvider localeProvider)
+	SqliteBlockRowMapper(final Plugin plugin, final ConfigRepository configRepository)
 	{
 		this.plugin = plugin;
-		this.localeProvider = localeProvider;
+		this.configRepository = configRepository;
 	}
 
 
@@ -97,7 +97,7 @@ public class SqliteBlockRowMapper
 		if (world == null)
 		{
 			plugin.getLogger().warning(SqliteMessage.CREATE_BLOCK_INVALID_WORLD_ERROR
-					.getLocalizedMessage(localeProvider.getLocale(), worldName));
+					.getLocalizedMessage(configRepository.locale(), worldName));
 			return new BlockLocation.Invalid(BlockLocationMessage.WORLD_NULL);
 		}
 		else
@@ -108,7 +108,7 @@ public class SqliteBlockRowMapper
 			if (blockLocation instanceof BlockLocation.Invalid(BlockLocationMessage reason))
 			{
 				plugin.getLogger().warning(SqliteMessage.CREATE_BLOCK_ERROR
-						.getLocalizedMessage(localeProvider.getLocale(), reason.getLocalizedMessage(localeProvider.getLocale())));
+						.getLocalizedMessage(configRepository.locale(), reason.getLocalizedMessage(configRepository.locale())));
 				return new BlockLocation.Invalid(reason);
 			}
 			else
