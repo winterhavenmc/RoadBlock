@@ -58,15 +58,13 @@ final class ToolSubcommand extends AbstrtactSubcommand
 		// sender must be player
 		if (!(sender instanceof final Player player))
 		{
-			ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
-			return true;
+			return ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
 		}
 
 		// check player permissions
 		if (!player.hasPermission(permissionNode))
 		{
-			ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_TOOL_PERMISSION).send();
-			return true;
+			return ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_TOOL_PERMISSION).send();
 		}
 
 		// check max arguments
@@ -87,14 +85,12 @@ final class ToolSubcommand extends AbstrtactSubcommand
 		// if no room in inventory, send message
 		if (!noFit.isEmpty())
 		{
-			ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_TOOL_INVENTORY_FULL).send();
+			return ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_TOOL_INVENTORY_FULL).send();
 		}
 		else
 		{
-			ctx.messageBuilder().compose(sender, MessageId.COMMAND_SUCCESS_TOOL);
+			return ctx.messageBuilder().compose(sender, MessageId.COMMAND_SUCCESS_TOOL).send();
 		}
-
-		return true;
 	}
 
 }
