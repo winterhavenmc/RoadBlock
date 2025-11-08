@@ -80,7 +80,7 @@ public class SqliteBlockRepository implements BlockRepository, Listener
 			{
 				if (blockLocation instanceof BlockLocation.Valid validBlockLocation)
 				{
-					count += blockQueryHelper.insertRecord(validBlockLocation, preparedStatement);
+					count += blockQueryExecutor.insertRecord(validBlockLocation, preparedStatement);
 					blockCache.put(validBlockLocation, CacheStatus.RESIDENT);
 				}
 			}
