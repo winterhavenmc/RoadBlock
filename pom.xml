@@ -164,22 +164,6 @@
 	</dependencies>
 
 	<build>
-		<!-- Resources -->
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-
-		<!-- Test Resources -->
-		<testResources>
-			<testResource>
-				<directory>src/test/resources</directory>
-				<filtering>true</filtering>
-			</testResource>
-		</testResources>
-
 		<pluginManagement>
 			<plugins>
 				<!-- maven enforcer plugin -->

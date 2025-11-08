@@ -17,9 +17,12 @@
 
 package com.winterhavenmc.roadblock.core.ports.datastore;
 
+import com.winterhavenmc.roadblock.core.ports.config.MaterialsProvider;
 import com.winterhavenmc.roadblock.models.blocklocation.BlockLocation;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.Set;
@@ -82,4 +85,16 @@ public interface BlockRepository
 	void flushCache(Chunk chunk);
 
 	boolean isProtected(Location location);
+
+	int removeBlockLocations(Collection<Location> locations);
+
+	int storeBlockLocations(Collection<Location> locations);
+
+	Set<Location> getFill(Location startLocation, MaterialsProvider materialsProvider);
+
+	boolean isAboveRoad(Player player);
+
+	boolean isAboveRoad(Location location, int distance);
+
+	boolean isRoadBlock(Block block);
 }
