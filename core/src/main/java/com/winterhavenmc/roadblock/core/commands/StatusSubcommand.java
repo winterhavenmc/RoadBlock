@@ -124,7 +124,7 @@ final class StatusSubcommand extends AbstrtactSubcommand
 		if (Config.DISPLAY_TOTAL.getBoolean(ctx.plugin().getConfig()))
 		{
 			ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_TOTAL_BLOCKS_PROTECTED)
-					.setMacro(Macro.SETTING, ctx.blockManager().getBlockTotal())
+					.setMacro(Macro.SETTING, ctx.blocks().getTotalBlocks())
 					.send();
 		}
 	}

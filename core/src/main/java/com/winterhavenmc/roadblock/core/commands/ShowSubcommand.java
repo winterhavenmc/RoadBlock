@@ -18,7 +18,7 @@
 package com.winterhavenmc.roadblock.core.commands;
 
 import com.winterhavenmc.roadblock.core.context.CommandCtx;
-import com.winterhavenmc.roadblock.core.highlights.HighlightStyle;
+import com.winterhavenmc.roadblock.core.ports.highlights.HighlightStyle;
 import com.winterhavenmc.roadblock.core.util.Macro;
 import com.winterhavenmc.roadblock.core.util.MessageId;
 import com.winterhavenmc.roadblock.core.util.Config;
@@ -100,7 +100,7 @@ final class ShowSubcommand extends AbstrtactSubcommand
 		}
 
 		// get set of block locations within distance of player location
-		Collection<Location> locations = ctx.blockManager().selectNearbyBlocks(player.getLocation(), distance);
+		Collection<Location> locations = ctx.blocks().getNearbyBlocks(player.getLocation(), distance);
 
 		// highlight blocks
 		ctx.highlightManager().highlightBlocks(player, locations, HighlightStyle.PROTECT);
