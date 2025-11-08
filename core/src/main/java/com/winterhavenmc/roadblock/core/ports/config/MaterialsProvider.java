@@ -2,7 +2,6 @@ package com.winterhavenmc.roadblock.core.ports.config;
 
 import com.winterhavenmc.roadblock.core.util.Config;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.Plugin;
@@ -20,11 +19,11 @@ public final class MaterialsProvider
 
 	public MaterialsProvider(final Plugin plugin)
 	{
-		this.materialsSupplier = () -> updateMaterials(plugin);
+		this.materialsSupplier = () -> getValidMaterials(plugin);
 	}
 
 
-	public Supplier<Set<Material>> get()
+	public Supplier<Set<Material>> getSupplier()
 	{
 		return this.materialsSupplier;
 	}
@@ -52,7 +51,7 @@ public final class MaterialsProvider
 	/**
 	 * Parse valid road block materials from config file
 	 */
-	public static Set<Material> updateMaterials(final Plugin plugin)
+	private static Set<Material> getValidMaterials(final Plugin plugin)
 	{
 		final Collection<String> materialStringList =
 				new HashSet<>(Config.MATERIALS.getStringList(plugin.getConfig()));
@@ -94,18 +93,6 @@ public final class MaterialsProvider
 	public boolean isRoadBlockMaterial(final Block block)
 	{
 		return block != null && contains(block.getType());
-	}
-
-
-	/**
-	 * Check if block at location is a valid road block material
-	 *
-	 * @param location the location of a block to test for valid road block material
-	 * @return {@code true} if the block at location is a configured road block material, {@code false} if it is not
-	 */
-	public boolean isRoadBlockMaterial(final Location location)
-	{
-		return location != null && contains(location.getBlock().getType());
 	}
 
 }
