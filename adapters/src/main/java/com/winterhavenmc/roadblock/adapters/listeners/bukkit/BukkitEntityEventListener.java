@@ -15,10 +15,14 @@
  *
  */
 
-package com.winterhavenmc.roadblock.core.listeners;
+package com.winterhavenmc.roadblock.adapters.listeners.bukkit;
 
-import com.winterhavenmc.roadblock.core.context.ListenerCtx;
-import com.winterhavenmc.roadblock.core.highlights.HighlightStyle;
+import com.winterhavenmc.library.messagebuilder.MessageBuilder;
+import com.winterhavenmc.roadblock.core.ports.highlights.HighlightManager;
+import com.winterhavenmc.roadblock.core.ports.highlights.HighlightStyle;
+import com.winterhavenmc.roadblock.core.ports.listeners.EntityEventListener;
+import com.winterhavenmc.roadblock.core.ports.config.MaterialsProvider;
+import com.winterhavenmc.roadblock.core.ports.datastore.BlockRepository;
 import com.winterhavenmc.roadblock.core.util.Macro;
 import com.winterhavenmc.roadblock.core.util.MessageId;
 import com.winterhavenmc.roadblock.core.util.SoundId;
@@ -29,7 +33,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -37,6 +40,7 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -46,13 +50,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class EntityEventListener implements Listener
+public class BukkitEntityEventListener implements EntityEventListener
 {
-	private final ListenerCtx ctx;
+	private final Plugin plugin;
+	private final MessageBuilder messageBuilder;
+	private final BlockRepository blocks;
+	private final MaterialsProvider materials;
+	private final HighlightManager highlightManager;
+
 	private final Set<EntityTargetEvent.TargetReason> cancelReasons = Set.of(
 			EntityTargetEvent.TargetReason.CLOSEST_PLAYER,
 			EntityTargetEvent.TargetReason.RANDOM_TARGET,
 			EntityTargetEvent.TargetReason.UNKNOWN);
+
 	private final static Set<Material> toolTransparentMaterials = Set.of(
 			Material.AIR, Material.CAVE_AIR, Material.VOID_AIR, Material.SNOW,
 			Material.SHORT_GRASS, Material.TALL_GRASS, Material.VINE);
@@ -61,10 +71,18 @@ public class EntityEventListener implements Listener
 	/**
 	 * Class constructor for EntityEventListener
 	 */
-	public EntityEventListener(final ListenerCtx ctx)
+	public BukkitEntityEventListener(final Plugin plugin,
+	                                 final MessageBuilder messageBuilder,
+	                                 final BlockRepository blocks,
+	                                 final MaterialsProvider materials,
+	                                 final HighlightManager highlightManager)
 	{
-		this.ctx = ctx;
-		ctx.plugin().getServer().getPluginManager().registerEvents(this, ctx.plugin());
+		this.plugin = plugin;
+		this.messageBuilder = messageBuilder;
+		this.blocks = blocks;
+		this.materials = materials;
+		this.highlightManager = highlightManager;
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 
@@ -75,7 +93,8 @@ public class EntityEventListener implements Listener
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onEntityExplode(final EntityExplodeEvent event)
+	@Override
+	public void onEntityExplode(final EntityExplodeEvent event)
 	{
 		// get collection of exploded blocks
 		final Collection<Block> blocks = new ArrayList<>(event.blockList());
@@ -83,7 +102,7 @@ public class EntityEventListener implements Listener
 		// remove any road blocks from event block list
 		for (Block block : blocks)
 		{
-			if (ctx.blockManager().isRoadBlock(block))
+			if (this.blocks.isRoadBlock(block))
 			{
 				event.blockList().remove(block);
 			}
@@ -96,10 +115,11 @@ public class EntityEventListener implements Listener
 	 * stops entities from changing protected road blocks
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onEntityChangeBlock(final EntityChangeBlockEvent event)
+	@Override
+	public void onEntityChangeBlock(final EntityChangeBlockEvent event)
 	{
 		// if event block is a RoadBlock, cancel event
-		if (ctx.blockManager().isRoadBlock(event.getBlock()))
+		if (this.blocks.isRoadBlock(event.getBlock()))
 		{
 			event.setCancelled(true);
 		}
@@ -114,10 +134,11 @@ public class EntityEventListener implements Listener
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onEntityTargetLivingEntity(final EntityTargetLivingEntityEvent event)
+	@Override
+	public void onEntityTargetLivingEntity(final EntityTargetLivingEntityEvent event)
 	{
 		// if configured target distance is zero or negative, do nothing and return (feature is disabled)
-		if (Config.TARGET_DISTANCE.getInt(ctx.plugin().getConfig()) <= 0)
+		if (Config.TARGET_DISTANCE.getInt(plugin.getConfig()) <= 0)
 		{
 			return;
 		}
@@ -126,12 +147,12 @@ public class EntityEventListener implements Listener
 		if (event.getTarget() != null && event.getTarget() instanceof final Player player)
 		{
 			// check that player is above a road block
-			if (ctx.blockManager().isAboveRoad(player))
+			if (this.blocks.isAboveRoad(player))
 			{
 				// if entity to target distance is less than configured target distance,
 				// do nothing and return, allowing player to be targeted
 				if (event.getEntity().getLocation()
-						.distanceSquared(player.getLocation()) < Math.pow(Config.TARGET_DISTANCE.getInt(ctx.plugin().getConfig()), 2))
+						.distanceSquared(player.getLocation()) < Math.pow(Config.TARGET_DISTANCE.getInt(plugin.getConfig()), 2))
 				{
 					return;
 				}
@@ -156,15 +177,16 @@ public class EntityEventListener implements Listener
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	void onPlayerChangeItem(final PlayerItemHeldEvent event)
+	@Override
+	public void onPlayerChangeItem(final PlayerItemHeldEvent event)
 	{
 		final Player player = event.getPlayer();
 
 		final ItemStack previousItem = player.getInventory().getItem(event.getPreviousSlot());
 
-		if (ctx.messageBuilder().items().isItem(previousItem))
+		if (messageBuilder.items().isItem(previousItem))
 		{
-			ctx.highlightManager().unHighlightBlocks(player);
+			highlightManager.unHighlightBlocks(player);
 		}
 	}
 
@@ -176,9 +198,10 @@ public class EntityEventListener implements Listener
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	void onPlayerChangeGameMode(final PlayerGameModeChangeEvent event)
+	@Override
+	public void onPlayerChangeGameMode(final PlayerGameModeChangeEvent event)
 	{
-		ctx.highlightManager().unHighlightBlocks(event.getPlayer());
+		highlightManager.unHighlightBlocks(event.getPlayer());
 	}
 
 
@@ -189,13 +212,14 @@ public class EntityEventListener implements Listener
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onPlayerDropItem(final PlayerDropItemEvent event)
+	@Override
+	public void onPlayerDropItem(final PlayerDropItemEvent event)
 	{
 		// if dropped item is a road block tool, remove dropped item
-		if (ctx.messageBuilder().items().isItem(event.getItemDrop().getItemStack()))
+		if (messageBuilder.items().isItem(event.getItemDrop().getItemStack()))
 		{
 			event.getItemDrop().remove();
-			ctx.messageBuilder().sounds().play(event.getPlayer(), SoundId.TOOL_DROP);
+			messageBuilder.sounds().play(event.getPlayer(), SoundId.TOOL_DROP);
 		}
 	}
 
@@ -207,7 +231,8 @@ public class EntityEventListener implements Listener
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
-	void onPlayerInteract(final PlayerInteractEvent event)
+	@Override
+	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
 		//NOTE: do not check for cancelled event here; long distance clicks are considered cancelled
 
@@ -221,17 +246,17 @@ public class EntityEventListener implements Listener
 		Block clickedBlock = event.getClickedBlock();
 
 		// if world is not enabled, send message and return
-		if (!ctx.messageBuilder().worlds().isEnabled(player.getWorld().getUID()))
+		if (!messageBuilder.worlds().isEnabled(player.getWorld().getUID()))
 		{
 			event.setCancelled(true);
-			ctx.messageBuilder().compose(player, MessageId.TOOL_FAIL_WORLD_DISABLED)
+			messageBuilder.compose(player, MessageId.TOOL_FAIL_WORLD_DISABLED)
 					.setMacro(Macro.WORLD, player.getWorld())
 					.send();
 			return;
 		}
 
 		// if event is air/block click with RoadBlock tool, begin tool use procedure
-		if (ctx.messageBuilder().items().isItem(playerItem) && !action.equals(Action.PHYSICAL))
+		if (messageBuilder.items().isItem(playerItem) && !action.equals(Action.PHYSICAL))
 		{
 			// if clicked block is tool transparent material, try to find non-air block along line of sight
 			if (clickedBlock == null || toolTransparentMaterials.contains(clickedBlock.getType()))
@@ -243,8 +268,8 @@ public class EntityEventListener implements Listener
 				}
 				catch (Exception exception)
 				{
-					ctx.plugin().getLogger().info("player.getTargetBlock() threw an exception.");
-					ctx.plugin().getLogger().info(exception.getLocalizedMessage());
+					plugin.getLogger().info("player.getTargetBlock() threw an exception.");
+					plugin.getLogger().info(exception.getLocalizedMessage());
 				}
 			}
 
@@ -257,7 +282,7 @@ public class EntityEventListener implements Listener
 			// if clicked block is air, the actual clicked block was too far away
 			if (clickedBlock.getType().equals(Material.AIR))
 			{
-				ctx.messageBuilder().compose(player, MessageId.TOOL_FAIL_DISTANCE_EXCEEDED).send();
+				messageBuilder.compose(player, MessageId.TOOL_FAIL_DISTANCE_EXCEEDED).send();
 				return;
 			}
 
@@ -267,25 +292,25 @@ public class EntityEventListener implements Listener
 			// if player does not have roadblock.set permission, do nothing and return
 			if (!player.hasPermission("roadblock.set"))
 			{
-				ctx.messageBuilder().sounds().play(player, SoundId.TOOL_FAIL_USE_PERMISSION);
-				ctx.messageBuilder().compose(player, MessageId.TOOL_FAIL_USE_PERMISSION)
+				messageBuilder.sounds().play(player, SoundId.TOOL_FAIL_USE_PERMISSION);
+				messageBuilder.compose(player, MessageId.TOOL_FAIL_USE_PERMISSION)
 						.setMacro(Macro.WORLD, player.getWorld())
 						.send();
 				return;
 			}
 
 			// if block clicked is not in list of road block materials, send message and return
-			if (!ctx.blockManager().getRoadBlockMaterials().contains(clickedBlock.getType()))
+			if (!materials.contains(clickedBlock.getType()))
 			{
-				ctx.messageBuilder().sounds().play(player, SoundId.TOOL_FAIL_INVALID_MATERIAL);
-				ctx.messageBuilder().compose(player, MessageId.TOOL_FAIL_INVALID_MATERIAL)
+				messageBuilder.sounds().play(player, SoundId.TOOL_FAIL_INVALID_MATERIAL);
+				messageBuilder.compose(player, MessageId.TOOL_FAIL_INVALID_MATERIAL)
 						.setMacro(Macro.MATERIAL, clickedBlock.getType())
 						.send();
 				return;
 			}
 
 			// get road block locations attached to clicked block
-			final Collection<Location> locations = new HashSet<>(ctx.blockManager().getFill(clickedBlock.getLocation()));
+			final Collection<Location> locations = new HashSet<>(this.blocks.getFill(clickedBlock.getLocation(), materials));
 
 			// if right click, protect blocks
 			if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR))
@@ -303,10 +328,11 @@ public class EntityEventListener implements Listener
 
 
 	@EventHandler
-	final void onPlayerMove(final PlayerMoveEvent event)
+	@Override
+	public final void onPlayerMove(final PlayerMoveEvent event)
 	{
 		// if speed boost is configured false, do nothing and return
-		if (!Config.SPEED_BOOST.getBoolean(ctx.plugin().getConfig()))
+		if (!Config.SPEED_BOOST.getBoolean(plugin.getConfig()))
 		{
 			return;
 		}
@@ -315,7 +341,7 @@ public class EntityEventListener implements Listener
 		final Player player = event.getPlayer();
 
 		// if player is not above road, do nothing and return
-		if (!ctx.blockManager().isAboveRoad(player))
+		if (!this.blocks.isAboveRoad(player))
 		{
 			return;
 		}
@@ -355,17 +381,18 @@ public class EntityEventListener implements Listener
 	 * @param player    the player invoking the protection of blocks
 	 * @param locations Collection of Location of blocks to be protected
 	 */
-	void protectBlocks(final Player player, final Collection<Location> locations)
+	@Override
+	public void protectBlocks(final Player player, final Collection<Location> locations)
 	{
 		// highlight blocks
-		ctx.highlightManager().highlightBlocks(player, locations, HighlightStyle.PROTECT);
+		highlightManager.highlightBlocks(player, locations, HighlightStyle.PROTECT);
 
 		// store blocks
-		int count = ctx.blockManager().storeBlockLocations(locations);
+		int count = this.blocks.storeBlockLocations(locations);
 
 		// send player successful protect message
-		ctx.messageBuilder().sounds().play(player, SoundId.TOOL_SUCCESS_PROTECT);
-		ctx.messageBuilder().compose(player, MessageId.TOOL_SUCCESS_PROTECT)
+		messageBuilder.sounds().play(player, SoundId.TOOL_SUCCESS_PROTECT);
+		messageBuilder.compose(player, MessageId.TOOL_SUCCESS_PROTECT)
 				.setMacro(Macro.QUANTITY, count)
 				.send();
 	}
@@ -377,17 +404,18 @@ public class EntityEventListener implements Listener
 	 * @param player    the player invoking the unprotection of blocks
 	 * @param locations Collection of Location of blocks to be unprotected
 	 */
-	void unprotectBlocks(final Player player, final Collection<Location> locations)
+	@Override
+	public void unprotectBlocks(final Player player, final Collection<Location> locations)
 	{
 		// highlight blocks
-		ctx.highlightManager().highlightBlocks(player, locations, HighlightStyle.UNPROTECT);
+		highlightManager.highlightBlocks(player, locations, HighlightStyle.UNPROTECT);
 
 		// remove blocks from storage
-		int result = ctx.blockManager().removeBlockLocations(locations);
+		int result = this.blocks.removeBlockLocations(locations);
 
 		// send player successful unprotect message
-		ctx.messageBuilder().sounds().play(player, SoundId.TOOL_SUCCESS_UNPROTECT);
-		ctx.messageBuilder().compose(player, MessageId.TOOL_SUCCESS_UNPROTECT)
+		messageBuilder.sounds().play(player, SoundId.TOOL_SUCCESS_UNPROTECT);
+		messageBuilder.compose(player, MessageId.TOOL_SUCCESS_UNPROTECT)
 				.setMacro(Macro.QUANTITY, result)
 				.send();
 	}

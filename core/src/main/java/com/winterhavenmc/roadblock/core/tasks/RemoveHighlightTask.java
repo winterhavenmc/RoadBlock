@@ -15,8 +15,9 @@
  *
  */
 
-package com.winterhavenmc.roadblock.core.highlights;
+package com.winterhavenmc.roadblock.core.tasks;
 
+import com.winterhavenmc.roadblock.core.ports.highlights.HighlightManager;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 

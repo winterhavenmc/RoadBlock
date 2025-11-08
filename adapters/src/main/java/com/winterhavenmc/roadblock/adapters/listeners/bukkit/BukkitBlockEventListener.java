@@ -15,9 +15,11 @@
  *
  */
 
-package com.winterhavenmc.roadblock.core.listeners;
+package com.winterhavenmc.roadblock.adapters.listeners.bukkit;
 
-import com.winterhavenmc.roadblock.core.context.ListenerCtx;
+import com.winterhavenmc.library.messagebuilder.MessageBuilder;
+import com.winterhavenmc.roadblock.core.ports.listeners.BlockEventListener;
+import com.winterhavenmc.roadblock.core.ports.datastore.BlockRepository;
 import com.winterhavenmc.roadblock.core.util.Macro;
 import com.winterhavenmc.roadblock.core.util.MessageId;
 import com.winterhavenmc.roadblock.core.util.Config;
@@ -27,8 +29,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,9 +41,12 @@ import java.util.Set;
 /**
  * Implements player event listeners for RoadBlock events.
  */
-public final class BlockEventListener implements Listener
+public final class BukkitBlockEventListener implements BlockEventListener
 {
-	private final ListenerCtx ctx;
+	private final Plugin plugin;
+	private final MessageBuilder messageBuilder;
+	private final BlockRepository blocks;
+
 	private final Set<String> pathMaterialNames = Set.of(
 			"GRASS_PATH",
 			"LEGACY_GRASS_PATH",
@@ -51,12 +56,15 @@ public final class BlockEventListener implements Listener
 	/**
 	 * Class constructor for BlockEventListener class
 	 */
-	public BlockEventListener(final ListenerCtx ctx)
+	public BukkitBlockEventListener(final Plugin plugin,
+	                                final MessageBuilder messageBuilder,
+	                                final BlockRepository blocks)
 	{
-		this.ctx = ctx;
-
+		this.plugin = plugin;
+		this.messageBuilder = messageBuilder;
+		this.blocks = blocks;
 		// register events in this class
-		ctx.plugin().getServer().getPluginManager().registerEvents(this, ctx.plugin());
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 
@@ -67,10 +75,11 @@ public final class BlockEventListener implements Listener
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onBlockPlace(final BlockPlaceEvent event)
+	@Override
+	public void onBlockPlace(final BlockPlaceEvent event)
 	{
 		// get configured no-place-height
-		final int height = Config.NO_PLACE_HEIGHT.getInt(ctx.plugin().getConfig());
+		final int height = Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig());
 
 		// get block placed
 		final Block placedBlock = event.getBlockPlaced();
@@ -80,18 +89,18 @@ public final class BlockEventListener implements Listener
 
 		// check if block below placed block is protected grass path, to prevent converting to regular dirt
 		final Block blockBelow = placedBlock.getRelative(BlockFace.DOWN);
-		if (pathMaterialNames.contains(blockBelow.getType().toString()) && ctx.blockManager().isRoadBlock(blockBelow))
+		if (pathMaterialNames.contains(blockBelow.getType().toString()) && blocks.isRoadBlock(blockBelow))
 		{
 			event.setCancelled(true);
-			ctx.messageBuilder().compose(player, MessageId.BLOCK_PLACE_FAIL_GRASS_PATH).send();
+			messageBuilder.compose(player, MessageId.BLOCK_PLACE_FAIL_GRASS_PATH).send();
 			return;
 		}
 
 		// check if block placed is configured distance above a road block
-		if (ctx.blockManager().isAboveRoad(placedBlock.getLocation(), height))
+		if (blocks.isAboveRoad(placedBlock.getLocation(), height))
 		{
 			event.setCancelled(true);
-			ctx.messageBuilder().compose(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
+			messageBuilder.compose(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
 		}
 	}
 
@@ -103,10 +112,11 @@ public final class BlockEventListener implements Listener
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onBlockMultiPlace(final BlockMultiPlaceEvent event)
+	@Override
+	public void onBlockMultiPlace(final BlockMultiPlaceEvent event)
 	{
 		// get configured no-place-height
-		final int height = Config.NO_PLACE_HEIGHT.getInt(ctx.plugin().getConfig());
+		final int height = Config.NO_PLACE_HEIGHT.getInt(plugin.getConfig());
 
 		// get list of blocks that will be replaced
 		final List<BlockState> replacedBlocks = event.getReplacedBlockStates();
@@ -118,10 +128,10 @@ public final class BlockEventListener implements Listener
 		for (BlockState blockState : replacedBlocks)
 		{
 			// if block is above a road block, cancel event and send player message
-			if (ctx.blockManager().isAboveRoad(blockState.getLocation(), height))
+			if (blocks.isAboveRoad(blockState.getLocation(), height))
 			{
 				event.setCancelled(true);
-				ctx.messageBuilder().compose(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
+				messageBuilder.compose(player, MessageId.BLOCK_PLACE_FAIL_ABOVE_ROAD).send();
 				break;
 			}
 		}
@@ -135,7 +145,8 @@ public final class BlockEventListener implements Listener
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onBlockBreak(final BlockBreakEvent event)
+	@Override
+	public void onBlockBreak(final BlockBreakEvent event)
 	{
 		// get block being broken
 		final Block block = event.getBlock();
@@ -144,21 +155,21 @@ public final class BlockEventListener implements Listener
 		final Player player = event.getPlayer();
 
 		// check if block is a protected road block
-		if (ctx.blockManager().isRoadBlock(block))
+		if (blocks.isRoadBlock(block))
 		{
 			// if player does not have override permission, cancel event and send player message
 			if (!player.hasPermission("roadblock.break"))
 			{
 				event.setCancelled(true);
-				ctx.messageBuilder().compose(player, MessageId.TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION)
+				messageBuilder.compose(player, MessageId.TOOL_FAIL_USE_BLOCK_BREAK_PERMISSION)
 						.setMacro(Macro.WORLD, player.getWorld())
 						.send();
 				return;
 			}
 
 			// player does have override permission; remove protection from block and send player message
-			ctx.blockManager().removeBlockLocations(Set.of(block.getLocation()));
-			ctx.messageBuilder().compose(player, MessageId.TOOL_SUCCESS_BREAK_BLOCK).send();
+			blocks.removeBlockLocations(Set.of(block.getLocation()));
+			messageBuilder.compose(player, MessageId.TOOL_SUCCESS_BREAK_BLOCK).send();
 		}
 	}
 
@@ -170,15 +181,16 @@ public final class BlockEventListener implements Listener
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onBlockExplode(final BlockExplodeEvent event)
+	@Override
+	public void onBlockExplode(final BlockExplodeEvent event)
 	{
 		// get collection of exploded blocks
-		final Collection<Block> blocks = new ArrayList<>(event.blockList());
+		final Collection<Block> eventBlocks = new ArrayList<>(event.blockList());
 
 		// remove any road blocks from event block list
-		for (Block block : blocks)
+		for (Block block : eventBlocks)
 		{
-			if (ctx.blockManager().isRoadBlock(block))
+			if (this.blocks.isRoadBlock(block))
 			{
 				event.blockList().remove(block);
 			}
@@ -193,16 +205,17 @@ public final class BlockEventListener implements Listener
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onPistonExtend(final BlockPistonExtendEvent event)
+	@Override
+	public void onPistonExtend(final BlockPistonExtendEvent event)
 	{
 		// get list of blocks affected by piston
-		final Collection<Block> blocks = new ArrayList<>(event.getBlocks());
+		final Collection<Block> eventBlocks = new ArrayList<>(event.getBlocks());
 
 		// iterate through block list checking for road blocks
-		for (Block block : blocks)
+		for (Block block : eventBlocks)
 		{
 			// if block is a road block, cancel event and break piston
-			if (ctx.blockManager().isRoadBlock(block))
+			if (this.blocks.isRoadBlock(block))
 			{
 				event.setCancelled(true);
 
@@ -220,16 +233,17 @@ public final class BlockEventListener implements Listener
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onPistonRetract(final BlockPistonRetractEvent event)
+	@Override
+	public void onPistonRetract(final BlockPistonRetractEvent event)
 	{
 		// get collection of blocks affected by piston
-		final Collection<Block> blocks = new ArrayList<>(event.getBlocks());
+		final Collection<Block> eventBlocks = new ArrayList<>(event.getBlocks());
 
 		// iterate through block list checking for road blocks
-		for (Block block : blocks)
+		for (Block block : eventBlocks)
 		{
 			// if block is a road block, cancel event and break piston
-			if (ctx.blockManager().isRoadBlock(block))
+			if (this.blocks.isRoadBlock(block))
 			{
 				event.setCancelled(true);
 
@@ -247,10 +261,11 @@ public final class BlockEventListener implements Listener
 	 * @param event the event handled by this method
 	 */
 	@EventHandler(ignoreCancelled = true)
-	void onBlockForm(final BlockFormEvent event)
+	@Override
+	public void onBlockForm(final BlockFormEvent event)
 	{
 		// if configured false, do nothing and return
-		if (!Config.SNOW_PLOW.getBoolean(ctx.plugin().getConfig()))
+		if (!Config.SNOW_PLOW.getBoolean(plugin.getConfig()))
 		{
 			return;
 		}
@@ -259,7 +274,7 @@ public final class BlockEventListener implements Listener
 		Block block = event.getBlock();
 
 		// if formed block is above road block, cancel event
-		if (ctx.blockManager().isAboveRoad(block.getLocation(), 1))
+		if (blocks.isAboveRoad(block.getLocation(), 1))
 		{
 			event.setCancelled(true);
 		}

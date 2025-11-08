@@ -15,10 +15,13 @@
  *
  */
 
-package com.winterhavenmc.roadblock.core.highlights;
+package com.winterhavenmc.roadblock.core.tasks;
+
+import com.winterhavenmc.roadblock.core.ports.highlights.HighlightManager;
+import com.winterhavenmc.roadblock.core.ports.highlights.HighlightStyle;
+import com.winterhavenmc.roadblock.core.util.Config;
 
 import com.winterhavenmc.library.messagebuilder.models.time.TimeUnit;
-import com.winterhavenmc.roadblock.core.util.Config;
 
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
@@ -33,7 +36,7 @@ import java.util.Collection;
 /**
  * A class that applies highlighting to blocks for a player and creates a task to remove the highlighting after a delay
  */
-final class ShowHighlightTask extends BukkitRunnable
+public final class ShowHighlightTask extends BukkitRunnable
 {
 	private final Plugin plugin;
 	private final HighlightManager highlightManager;
@@ -50,11 +53,11 @@ final class ShowHighlightTask extends BukkitRunnable
 	 * @param locationSet    Set of Location of blocks to be highlighted
 	 * @param highlightStyle the highlight style to use
 	 */
-	ShowHighlightTask(final Plugin plugin,
-	                  final HighlightManager highlightManager,
-	                  final Player player,
-	                  final Collection<Location> locationSet,
-	                  final HighlightStyle highlightStyle)
+	public ShowHighlightTask(final Plugin plugin,
+	                         final HighlightManager highlightManager,
+	                         final Player player,
+	                         final Collection<Location> locationSet,
+	                         final HighlightStyle highlightStyle)
 	{
 		this.plugin = plugin;
 		this.highlightManager = highlightManager;

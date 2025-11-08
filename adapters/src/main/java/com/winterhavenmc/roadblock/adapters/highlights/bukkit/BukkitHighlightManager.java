@@ -15,12 +15,14 @@
  *
  */
 
-package com.winterhavenmc.roadblock.core.highlights;
+package com.winterhavenmc.roadblock.adapters.highlights.bukkit;
 
+import com.winterhavenmc.roadblock.core.ports.highlights.HighlightManager;
+import com.winterhavenmc.roadblock.core.ports.highlights.HighlightStyle;
+import com.winterhavenmc.roadblock.core.tasks.ShowHighlightTask;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -32,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * A class that manages the highlighting of blocks to show the protected status of blocks
  */
-public final class HighlightManager implements Listener
+public final class BukkitHighlightManager implements HighlightManager
 {
 	private final Plugin plugin;
 	private final Map<UUID, Set<Location>> highlightLocationMap;
@@ -42,7 +44,7 @@ public final class HighlightManager implements Listener
 	/**
 	 * Class constructor
 	 */
-	public HighlightManager(final Plugin plugin)
+	public BukkitHighlightManager(final Plugin plugin)
 	{
 		this.plugin = plugin;
 		highlightLocationMap = new ConcurrentHashMap<>();
@@ -61,6 +63,7 @@ public final class HighlightManager implements Listener
 	 * @param locationSet    a collection of Locations of blocks to highlight
 	 * @param highlightStyle HighlightStyle enum value to use for highlighting
 	 */
+	@Override
 	public void highlightBlocks(final Player player,
 	                            final Collection<Location> locationSet,
 	                            final HighlightStyle highlightStyle)
@@ -92,6 +95,7 @@ public final class HighlightManager implements Listener
 	 *
 	 * @param player the player for whom to remove all block highlighting
 	 */
+	@Override
 	public void unHighlightBlocks(final Player player)
 	{
 		// null parameter check
@@ -122,7 +126,8 @@ public final class HighlightManager implements Listener
 	 * @param player the player whose task will be retrieved from the map
 	 * @return BukkitTask - the task retrieved
 	 */
-	private Optional<BukkitTask> getUnhighlightTask(final Player player)
+	@Override
+	public Optional<BukkitTask> getUnhighlightTask(Player player)
 	{
 		return (player != null)
 				? Optional.ofNullable(unHighlightTaskMap.get(player.getUniqueId()))
@@ -136,7 +141,8 @@ public final class HighlightManager implements Listener
 	 * @param player the player whose task will be inserted in the map
 	 * @param task   the task to be inserted in the map
 	 */
-	void putUnhighlightTask(final Player player, final BukkitTask task)
+	@Override
+	public void putUnhighlightTask(final Player player, final BukkitTask task)
 	{
 		// null parameter check
 		if (player != null && task != null)
@@ -152,7 +158,8 @@ public final class HighlightManager implements Listener
 	 *
 	 * @param player the player whose task will be removed from the map
 	 */
-	void cancelUnhighlightTask(final Player player)
+	@Override
+	public void cancelUnhighlightTask(final Player player)
 	{
 		// null parameter check
 		if (player != null)
@@ -173,6 +180,7 @@ public final class HighlightManager implements Listener
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
+	@Override
 	public void onPlayerQuit(final PlayerQuitEvent event)
 	{
 		// null parameter check

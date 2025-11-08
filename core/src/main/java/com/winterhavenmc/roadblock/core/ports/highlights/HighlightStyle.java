@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.roadblock.core.highlights;
+package com.winterhavenmc.roadblock.core.ports.highlights;
 
 import com.winterhavenmc.roadblock.core.util.Config;
 import org.bukkit.Material;
@@ -49,7 +49,7 @@ public enum HighlightStyle
 	 *
 	 * @return the material type that matches the configured string
 	 */
-	final Material getMaterial(final Plugin plugin)
+	public final Material getMaterial(final Plugin plugin)
 	{
 		// get configured material
 		String materialString = plugin.getConfig().getString(this.configString);
