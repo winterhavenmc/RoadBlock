@@ -71,9 +71,6 @@ final class ReloadSubcommand extends AbstrtactSubcommand
 		// reload config file
 		ctx.plugin().reloadConfig();
 
-		// update road block materials list
-		ctx.blockManager().reload();
-
 		// reload messages
 		ctx.messageBuilder().reload();
 
