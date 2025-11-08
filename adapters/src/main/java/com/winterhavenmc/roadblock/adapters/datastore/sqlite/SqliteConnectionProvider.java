@@ -4,6 +4,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 
 import com.winterhavenmc.roadblock.adapters.datastore.sqlite.schema.SqliteSchemaUpdater;
+import com.winterhavenmc.roadblock.core.ports.config.MaterialsProvider;
 import com.winterhavenmc.roadblock.core.ports.datastore.BlockRepository;
 import com.winterhavenmc.roadblock.core.ports.datastore.ConnectionProvider;
 
@@ -16,6 +17,7 @@ import java.sql.*;
 public class SqliteConnectionProvider implements ConnectionProvider
 {
 	private final Plugin plugin;
+	private final MaterialsProvider materials;
 	private final ConfigRepository configRepository;
 	private final String dataFilePath;
 	private Connection connection;
@@ -28,8 +30,9 @@ public class SqliteConnectionProvider implements ConnectionProvider
 	 *
 	 * @param plugin reference to main class
 	 */
-	public SqliteConnectionProvider(final Plugin plugin)
+	public SqliteConnectionProvider(final Plugin plugin, final MaterialsProvider materials)
 	{
+		this.materials = materials;
 		this.plugin = plugin;
 		this.configRepository = BukkitConfigRepository.create(plugin);
 		this.dataFilePath = plugin.getDataFolder() + File.separator + "roadblocks.db";
@@ -58,7 +61,7 @@ public class SqliteConnectionProvider implements ConnectionProvider
 		// create a database connection
 		connection = DriverManager.getConnection(dbUrl);
 
-		blocks = new SqliteBlockRepository(plugin, connection, configRepository);
+		blocks = new SqliteBlockRepository(plugin, connection, configRepository, materials);
 
 		// update database schema if necessary
 		SqliteSchemaUpdater schemaUpdater = SqliteSchemaUpdater.create(plugin, connection, configRepository, blocks);
