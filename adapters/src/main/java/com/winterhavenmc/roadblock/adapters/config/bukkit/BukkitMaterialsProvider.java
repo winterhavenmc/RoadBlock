@@ -1,5 +1,6 @@
-package com.winterhavenmc.roadblock.core.ports.config;
+package com.winterhavenmc.roadblock.adapters.config.bukkit;
 
+import com.winterhavenmc.roadblock.core.ports.config.MaterialsProvider;
 import com.winterhavenmc.roadblock.core.util.Config;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

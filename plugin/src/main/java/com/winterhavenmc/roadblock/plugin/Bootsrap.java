@@ -6,7 +6,7 @@ import com.winterhavenmc.roadblock.adapters.highlights.bukkit.BukkitHighlightMan
 import com.winterhavenmc.roadblock.adapters.listeners.bukkit.BukkitBlockEventListener;
 import com.winterhavenmc.roadblock.adapters.listeners.bukkit.BukkitEntityEventListener;
 
-import com.winterhavenmc.roadblock.core.ports.config.BukkitMaterialsProvider;
+import com.winterhavenmc.roadblock.adapters.config.bukkit.BukkitMaterialsProvider;
 import com.winterhavenmc.roadblock.core.util.PluginCtx;
 import com.winterhavenmc.roadblock.core.ports.highlights.HighlightManager;
 import com.winterhavenmc.roadblock.core.ports.config.MaterialsProvider;
