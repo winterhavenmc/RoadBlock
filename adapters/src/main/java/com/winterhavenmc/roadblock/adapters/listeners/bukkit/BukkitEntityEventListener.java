@@ -18,6 +18,7 @@
 package com.winterhavenmc.roadblock.adapters.listeners.bukkit;
 
 import com.winterhavenmc.library.messagebuilder.MessageBuilder;
+import com.winterhavenmc.roadblock.core.util.PluginCtx;
 import com.winterhavenmc.roadblock.core.ports.highlights.HighlightManager;
 import com.winterhavenmc.roadblock.core.ports.highlights.HighlightStyle;
 import com.winterhavenmc.roadblock.core.ports.listeners.EntityEventListener;
@@ -71,17 +72,13 @@ public class BukkitEntityEventListener implements EntityEventListener
 	/**
 	 * Class constructor for EntityEventListener
 	 */
-	public BukkitEntityEventListener(final Plugin plugin,
-	                                 final MessageBuilder messageBuilder,
-	                                 final BlockRepository blocks,
-	                                 final MaterialsProvider materials,
-	                                 final HighlightManager highlightManager)
+	public BukkitEntityEventListener(final PluginCtx ctx)
 	{
-		this.plugin = plugin;
-		this.messageBuilder = messageBuilder;
-		this.blocks = blocks;
-		this.materials = materials;
-		this.highlightManager = highlightManager;
+		this.plugin = ctx.plugin();
+		this.messageBuilder = ctx.messageBuilder();
+		this.blocks = ctx.blocks();
+		this.materials = ctx.materials();
+		this.highlightManager = ctx.highlightManager();
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 

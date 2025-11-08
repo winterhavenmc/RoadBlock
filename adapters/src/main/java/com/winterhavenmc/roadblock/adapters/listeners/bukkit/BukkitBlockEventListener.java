@@ -18,6 +18,7 @@
 package com.winterhavenmc.roadblock.adapters.listeners.bukkit;
 
 import com.winterhavenmc.library.messagebuilder.MessageBuilder;
+import com.winterhavenmc.roadblock.core.util.PluginCtx;
 import com.winterhavenmc.roadblock.core.ports.listeners.BlockEventListener;
 import com.winterhavenmc.roadblock.core.ports.datastore.BlockRepository;
 import com.winterhavenmc.roadblock.core.util.Macro;
@@ -56,13 +57,11 @@ public final class BukkitBlockEventListener implements BlockEventListener
 	/**
 	 * Class constructor for BlockEventListener class
 	 */
-	public BukkitBlockEventListener(final Plugin plugin,
-	                                final MessageBuilder messageBuilder,
-	                                final BlockRepository blocks)
+	public BukkitBlockEventListener(final PluginCtx ctx)
 	{
-		this.plugin = plugin;
-		this.messageBuilder = messageBuilder;
-		this.blocks = blocks;
+		this.plugin = ctx.plugin();
+		this.messageBuilder = ctx.messageBuilder();
+		this.blocks = ctx.blocks();
 		// register events in this class
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}

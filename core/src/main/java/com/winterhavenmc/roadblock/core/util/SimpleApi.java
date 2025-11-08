@@ -35,11 +35,11 @@ public final class SimpleApi
 	/**
 	 * Private constructor to prevent instantiation of this utility class
 	 */
-	public SimpleApi(final Plugin plugin, final BlockRepository blocks, final MaterialsProvider materials)
+	public SimpleApi(final PluginCtx ctx)
 	{
-		this.plugin = plugin;
-		this.blocks = blocks;
-		this.materials = materials;
+		this.plugin = ctx.plugin();
+		this.blocks = ctx.blocks();
+		this.materials = ctx.materials();
 	}
 
 

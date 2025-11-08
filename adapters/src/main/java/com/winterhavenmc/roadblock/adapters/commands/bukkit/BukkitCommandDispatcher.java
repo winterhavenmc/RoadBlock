@@ -15,14 +15,14 @@
  *
  */
 
-package com.winterhavenmc.roadblock.core.commands;
+package com.winterhavenmc.roadblock.adapters.commands.bukkit;
 
+import com.winterhavenmc.roadblock.core.ports.commands.CommandDispatcher;
 import com.winterhavenmc.roadblock.core.util.MessageId;
-import com.winterhavenmc.roadblock.core.context.CommandCtx;
+import com.winterhavenmc.roadblock.core.util.PluginCtx;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -32,16 +32,16 @@ import java.util.stream.Collectors;
 /**
  * A class that handles the execution of commands
  */
-public final class CommandDispatcher implements TabExecutor
+public final class BukkitCommandDispatcher implements CommandDispatcher
 {
-	private final CommandCtx ctx;
+	private final PluginCtx ctx;
 	private final SubcommandRegistry subcommandRegistry = new SubcommandRegistry();
 
 
 	/**
 	 * Class constructor
 	 */
-	public CommandDispatcher(final CommandCtx ctx)
+	public BukkitCommandDispatcher(final PluginCtx ctx)
 	{
 		this.ctx = ctx;
 
@@ -134,7 +134,7 @@ public final class CommandDispatcher implements TabExecutor
 	 * @param matchString the string prefix to match against command names
 	 * @return List of String - command names that match prefix and sender has permission
 	 */
-	private List<String> getMatchingSubcommandNames(final CommandSender sender, final String matchString)
+	public List<String> getMatchingSubcommandNames(CommandSender sender, String matchString)
 	{
 		return subcommandRegistry.getKeys().stream()
 				.map(subcommandRegistry::getSubcommand)

@@ -15,9 +15,9 @@
  *
  */
 
-package com.winterhavenmc.roadblock.core.commands;
+package com.winterhavenmc.roadblock.adapters.commands.bukkit;
 
-import com.winterhavenmc.roadblock.core.context.CommandCtx;
+import com.winterhavenmc.roadblock.core.util.PluginCtx;
 import com.winterhavenmc.roadblock.core.util.MessageId;
 
 import org.bukkit.command.Command;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  */
 final class HelpSubcommand extends AbstrtactSubcommand
 {
-	private final CommandCtx ctx;
+	private final PluginCtx ctx;
 	private final SubcommandRegistry subcommandRegistry;
 
 
@@ -44,7 +44,7 @@ final class HelpSubcommand extends AbstrtactSubcommand
 	 *
 	 * @param subcommandRegistry a reference to the subcommand registry
 	 */
-	HelpSubcommand(final CommandCtx ctx, final SubcommandRegistry subcommandRegistry)
+	HelpSubcommand(final PluginCtx ctx, final SubcommandRegistry subcommandRegistry)
 	{
 		this.ctx = ctx;
 		this.subcommandRegistry = Objects.requireNonNull(subcommandRegistry);
