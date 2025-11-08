@@ -69,7 +69,7 @@ final class MaterialsSubcommand extends AbstrtactSubcommand
 			return true;
 		}
 
-		List<Material> materialsSorted = new ArrayList<>(ctx.blockManager().getRoadBlockMaterials());
+		List<Material> materialsSorted = new ArrayList<>(ctx.materials().get().get());
 
 		materialsSorted.sort(Comparator.comparing(Enum::toString));
 
@@ -78,4 +78,5 @@ final class MaterialsSubcommand extends AbstrtactSubcommand
 
 		return true;
 	}
+
 }
