@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.roadblock.core.commands;
+package com.winterhavenmc.roadblock.adapters.commands.bukkit;
 
 import com.winterhavenmc.roadblock.core.util.MessageId;
 import org.bukkit.command.Command;

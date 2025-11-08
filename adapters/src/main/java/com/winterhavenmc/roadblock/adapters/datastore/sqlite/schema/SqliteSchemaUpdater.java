@@ -2,7 +2,7 @@ package com.winterhavenmc.roadblock.adapters.datastore.sqlite.schema;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 
-import com.winterhavenmc.roadblock.adapters.datastore.sqlite.SqliteMessage;
+import com.winterhavenmc.roadblock.adapters.datastore.DatastoreMessage;
 import com.winterhavenmc.roadblock.adapters.datastore.sqlite.SqliteQueries;
 import com.winterhavenmc.roadblock.core.ports.datastore.BlockRepository;
 
@@ -10,6 +10,8 @@ import org.bukkit.plugin.Plugin;
 
 import java.sql.*;
 import java.util.logging.Logger;
+
+import static com.winterhavenmc.roadblock.adapters.datastore.sqlite.SqliteConnectionProvider.DATASTORE_NAME;
 
 
 public sealed interface SqliteSchemaUpdater permits SqliteSchemaUpdaterFromV0, SqliteSchemaUpdaterNoOp
@@ -46,7 +48,7 @@ public sealed interface SqliteSchemaUpdater permits SqliteSchemaUpdaterFromV0, S
 		}
 		catch (SQLException sqlException)
 		{
-			plugin.getLogger().warning(SqliteMessage.SCHEMA_VERSION_ERROR.getLocalizedMessage(configRepository.locale()));
+			plugin.getLogger().warning(DatastoreMessage.SCHEMA_VERSION_ERROR.getLocalizedMessage(configRepository.locale()));
 			plugin.getLogger().warning(sqlException.getLocalizedMessage());
 		}
 
@@ -65,7 +67,7 @@ public sealed interface SqliteSchemaUpdater permits SqliteSchemaUpdaterFromV0, S
 		}
 		catch (SQLException sqlException)
 		{
-			logger.warning(SqliteMessage.SCHEMA_UPDATE_ERROR.getLocalizedMessage(configRepository.locale()));
+			logger.warning(DatastoreMessage.SCHEMA_UPDATE_ERROR.getLocalizedMessage(configRepository.locale(), DATASTORE_NAME));
 			logger.warning(sqlException.getLocalizedMessage());
 		}
 	}

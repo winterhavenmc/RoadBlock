@@ -15,9 +15,9 @@
  *
  */
 
-package com.winterhavenmc.roadblock.core.commands;
+package com.winterhavenmc.roadblock.adapters.commands.bukkit;
 
-import com.winterhavenmc.roadblock.core.context.CommandCtx;
+import com.winterhavenmc.roadblock.core.util.PluginCtx;
 import com.winterhavenmc.roadblock.core.util.MessageId;
 
 import org.bukkit.command.CommandSender;
@@ -30,13 +30,13 @@ import java.util.List;
  */
 final class ReloadSubcommand extends AbstrtactSubcommand
 {
-	private final CommandCtx ctx;
+	private final PluginCtx ctx;
 
 
 	/**
 	 * Class constructor
 	 */
-	ReloadSubcommand(final CommandCtx ctx)
+	ReloadSubcommand(final PluginCtx ctx)
 	{
 		this.ctx = ctx;
 		this.name = "reload";

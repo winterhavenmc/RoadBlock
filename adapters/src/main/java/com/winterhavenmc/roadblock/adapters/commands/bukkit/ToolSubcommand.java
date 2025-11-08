@@ -15,11 +15,11 @@
  *
  */
 
-package com.winterhavenmc.roadblock.core.commands;
+package com.winterhavenmc.roadblock.adapters.commands.bukkit;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
-import com.winterhavenmc.roadblock.core.context.CommandCtx;
+import com.winterhavenmc.roadblock.core.util.PluginCtx;
 import com.winterhavenmc.roadblock.core.util.MessageId;
 
 import org.bukkit.command.CommandSender;
@@ -37,12 +37,12 @@ final class ToolSubcommand extends AbstrtactSubcommand
 {
 
 
-	private final CommandCtx ctx;
+	private final PluginCtx ctx;
 
 	/**
 	 * Class constructor
 	 */
-	ToolSubcommand(final CommandCtx ctx)
+	ToolSubcommand(final PluginCtx ctx)
 	{
 		this.ctx = ctx;
 		this.name = "tool";

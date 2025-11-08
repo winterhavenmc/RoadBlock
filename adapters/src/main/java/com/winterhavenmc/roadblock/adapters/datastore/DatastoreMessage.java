@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.roadblock.adapters.datastore.sqlite;
+package com.winterhavenmc.roadblock.adapters.datastore;
 
 import com.winterhavenmc.roadblock.core.util.LocalizedMessage;
 
@@ -25,7 +25,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 
-public enum SqliteMessage implements LocalizedMessage
+public enum DatastoreMessage implements LocalizedMessage
 {
 	DATASTORE_INITIALIZED_NOTICE("SQLite datastore initialized."),
 	DATASTORE_INITIALIZED_ERROR("The SQLite datastore is already initialized."),
@@ -54,7 +54,7 @@ public enum SqliteMessage implements LocalizedMessage
 	private final String defaultMessage;
 
 
-	SqliteMessage(String defaultMessage)
+	DatastoreMessage(String defaultMessage)
 	{
 		this.defaultMessage = defaultMessage;
 	}

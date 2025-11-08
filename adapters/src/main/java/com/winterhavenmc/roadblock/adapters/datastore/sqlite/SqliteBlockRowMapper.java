@@ -1,6 +1,7 @@
 package com.winterhavenmc.roadblock.adapters.datastore.sqlite;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
+import com.winterhavenmc.roadblock.adapters.datastore.DatastoreMessage;
 import com.winterhavenmc.roadblock.models.blocklocation.BlockLocation;
 import com.winterhavenmc.roadblock.models.blocklocation.BlockLocationMessage;
 import org.bukkit.World;
@@ -96,7 +97,7 @@ public class SqliteBlockRowMapper
 	{
 		if (world == null)
 		{
-			plugin.getLogger().warning(SqliteMessage.CREATE_BLOCK_INVALID_WORLD_ERROR
+			plugin.getLogger().warning(DatastoreMessage.CREATE_BLOCK_INVALID_WORLD_ERROR
 					.getLocalizedMessage(configRepository.locale(), worldName));
 			return new BlockLocation.Invalid(BlockLocationMessage.WORLD_NULL);
 		}
@@ -107,7 +108,7 @@ public class SqliteBlockRowMapper
 
 			if (blockLocation instanceof BlockLocation.Invalid(BlockLocationMessage reason))
 			{
-				plugin.getLogger().warning(SqliteMessage.CREATE_BLOCK_ERROR
+				plugin.getLogger().warning(DatastoreMessage.CREATE_BLOCK_ERROR
 						.getLocalizedMessage(configRepository.locale(), reason.getLocalizedMessage(configRepository.locale())));
 				return new BlockLocation.Invalid(reason);
 			}

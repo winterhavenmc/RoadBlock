@@ -15,9 +15,9 @@
  *
  */
 
-package com.winterhavenmc.roadblock.core.commands;
+package com.winterhavenmc.roadblock.adapters.commands.bukkit;
 
-import com.winterhavenmc.roadblock.core.context.CommandCtx;
+import com.winterhavenmc.roadblock.core.util.PluginCtx;
 import com.winterhavenmc.roadblock.core.ports.highlights.HighlightStyle;
 import com.winterhavenmc.roadblock.core.util.Macro;
 import com.winterhavenmc.roadblock.core.util.MessageId;
@@ -36,13 +36,13 @@ import java.util.List;
  */
 final class ShowSubcommand extends AbstrtactSubcommand
 {
-	private final CommandCtx ctx;
+	private final PluginCtx ctx;
 
 
 	/**
 	 * Class constructor
 	 */
-	ShowSubcommand(final CommandCtx ctx)
+	ShowSubcommand(final PluginCtx ctx)
 	{
 		this.ctx = ctx;
 		this.name = "show";

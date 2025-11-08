@@ -1,7 +1,7 @@
 package com.winterhavenmc.roadblock.adapters.datastore.sqlite.schema;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
-import com.winterhavenmc.roadblock.adapters.datastore.sqlite.SqliteMessage;
+import com.winterhavenmc.roadblock.adapters.datastore.DatastoreMessage;
 import com.winterhavenmc.roadblock.adapters.datastore.sqlite.SqliteQueries;
 import com.winterhavenmc.roadblock.models.blocklocation.BlockLocation;
 import com.winterhavenmc.roadblock.core.ports.datastore.BlockRepository;
@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Set;
+
+import static com.winterhavenmc.roadblock.adapters.datastore.sqlite.SqliteConnectionProvider.DATASTORE_NAME;
 
 
 public final class SqliteSchemaUpdaterFromV0 implements SqliteSchemaUpdater
@@ -65,12 +67,12 @@ public final class SqliteSchemaUpdaterFromV0 implements SqliteSchemaUpdater
 		}
 		catch (SQLException sqlException)
 		{
-			plugin.getLogger().warning(SqliteMessage.SCHEMA_UPDATE_ERROR.getLocalizedMessage(configRepository.locale()));
+			plugin.getLogger().warning(DatastoreMessage.SCHEMA_UPDATE_ERROR.getLocalizedMessage(configRepository.locale(), DATASTORE_NAME));
 			plugin.getLogger().warning(sqlException.getLocalizedMessage());
 		}
 
 		int count = this.blockRepository.save(existingBlockRecords);
-		plugin.getLogger().info(SqliteMessage.SCHEMA_BLOCK_RECORDS_MIGRATED_NOTICE.getLocalizedMessage(configRepository.locale(), count, schemaVersion));
+		plugin.getLogger().info(DatastoreMessage.SCHEMA_BLOCK_RECORDS_MIGRATED_NOTICE.getLocalizedMessage(configRepository.locale(), count, schemaVersion));
 	}
 
 }
