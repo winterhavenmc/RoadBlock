@@ -109,13 +109,22 @@ MESSAGES:
   # Status Command Messages
   #########################
   COMMAND_STATUS_HEADER:
-    MESSAGE_TEXT: "<newline><gradient:blue:aqua><strikethrough>                    =</strikethrough>[</gradient> <dark_aqua>{PLUGIN}</dark_aqua> <gradient:aqua:blue>]<strikethrough>=                    </strikethrough></gradient>"
+    MESSAGE_TEXT: "<newline>               <yellow><bold>◥◣◥◣◥◣◥◣◥◣</bold></yellow> <gray><shadow:black><bold>{PLUGIN}</bold></shadow></gray> <yellow><bold>◢◤◢◤◢◤◢◤◢◤</bold></yellow><newline>"
 
   COMMAND_STATUS_FOOTER:
     MESSAGE_TEXT: "<newline><click:open_url:{PLUGIN.URL}><blue><underlined>{PLUGIN.URL}<underlined></blue></click><newline>"
 
   COMMAND_STATUS_VERSION_SETTING:
     MESSAGE_TEXT: "<green>Version:</green> {PLUGIN.VERSION}"
+
+  COMMAND_STATUS_LANGUAGE_SETTING:
+    MESSAGE_TEXT: "<green>Language:</green> {SETTING}"
+
+  COMMAND_STATUS_LOCALE_SETTING:
+    MESSAGE_TEXT: "<green>Locale:</green> {SETTING}"
+
+  COMMAND_STATUS_TIMEZONE_SETTING:
+    MESSAGE_TEXT: "<green>Timezone:</green> {SETTING}"
 
   COMMAND_STATUS_TOTAL_BLOCKS_PROTECTED:
     MESSAGE_TEXT: "<green>Total Blocks Protected:</green> {SETTING}"
