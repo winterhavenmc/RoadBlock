@@ -65,6 +65,9 @@ final class StatusSubcommand extends AbstrtactSubcommand
 		displayPluginVersion(sender);
 		displayDebugSetting(sender);
 		displayProfileSetting(sender);
+		displayLanguageSetting(sender);
+		displayLocaleSetting(sender);
+		displayTimezoneSetting(sender);
 		displayTotalBlocksProtected(sender);
 		displaySpreadDistanceSetting(sender);
 		displayShowDistanceSetting(sender);
@@ -116,6 +119,30 @@ final class StatusSubcommand extends AbstrtactSubcommand
 		{
 			sender.sendMessage(ChatColor.DARK_RED + "PROFILE: " + Config.PROFILE.getBoolean(ctx.plugin().getConfig()));
 		}
+	}
+
+
+	private void displayLanguageSetting(final CommandSender sender)
+	{
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_LANGUAGE_SETTING)
+				.setMacro(Macro.SETTING, ctx.messageBuilder().config().language())
+				.send();
+	}
+
+
+	private void displayLocaleSetting(final CommandSender sender)
+	{
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_LOCALE_SETTING)
+				.setMacro(Macro.SETTING, ctx.messageBuilder().config().locale().toLanguageTag())
+				.send();
+	}
+
+
+	private void displayTimezoneSetting(final CommandSender sender)
+	{
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_STATUS_TIMEZONE_SETTING)
+				.setMacro(Macro.SETTING, ctx.messageBuilder().config().zoneId().getId())
+				.send();
 	}
 
 
