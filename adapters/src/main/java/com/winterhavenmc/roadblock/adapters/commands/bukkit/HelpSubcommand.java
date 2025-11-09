@@ -22,6 +22,7 @@ import com.winterhavenmc.roadblock.core.util.MessageId;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -62,16 +63,22 @@ final class HelpSubcommand extends AbstrtactSubcommand
 	{
 		if (args.length == 2 && args[0].equalsIgnoreCase(this.name))
 		{
-			return subcommandRegistry.getKeys().stream()
-					.map(subcommandRegistry::getSubcommand)
-					.filter(Optional::isPresent)
-					.filter(subcommand -> sender.hasPermission(subcommand.get().getPermissionNode()))
-					.map(subcommand -> subcommand.get().getName())
-					.filter(subCommandName -> subCommandName.toLowerCase().startsWith(args[1].toLowerCase()))
-					.filter(subCommandName -> !subCommandName.equalsIgnoreCase(this.name))
-					.collect(Collectors.toList());
+			return getCommandNames(sender, args);
 		}
 		return Collections.emptyList();
+	}
+
+
+	private @NotNull List<String> getCommandNames(CommandSender sender, String[] args)
+	{
+		return subcommandRegistry.getKeys().stream()
+				.map(subcommandRegistry::getSubcommand)
+				.filter(Optional::isPresent)
+				.filter(subcommand -> sender.hasPermission(subcommand.get().getPermissionNode()))
+				.map(subcommand -> subcommand.get().getName())
+				.filter(subCommandName -> subCommandName.toLowerCase().startsWith(args[1].toLowerCase()))
+				.filter(subCommandName -> !subCommandName.equalsIgnoreCase(this.name))
+				.collect(Collectors.toList());
 	}
 
 
@@ -122,7 +129,7 @@ final class HelpSubcommand extends AbstrtactSubcommand
 	 */
 	private void sendCommandInvalidMessage(final CommandSender sender)
 	{
-		ctx.messageBuilder().compose(sender, MessageId.COMMAND_FAIL_INVALID_HELP).send();
+		ctx.messageBuilder().compose(sender, MessageId.COMMAND_INVALID_HELP).send();
 		displayUsageAll(sender);
 	}
 
