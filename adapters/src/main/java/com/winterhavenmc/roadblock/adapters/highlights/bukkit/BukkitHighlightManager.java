@@ -19,7 +19,7 @@ package com.winterhavenmc.roadblock.adapters.highlights.bukkit;
 
 import com.winterhavenmc.roadblock.core.ports.highlights.HighlightManager;
 import com.winterhavenmc.roadblock.core.ports.highlights.HighlightStyle;
-import com.winterhavenmc.roadblock.core.tasks.ShowHighlightTask;
+import com.winterhavenmc.roadblock.adapters.tasks.bukkit.BukkitShowHighlightTask;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -84,7 +84,7 @@ public final class BukkitHighlightManager implements HighlightManager
 			}
 
 			// run showHighlight task with small delay
-			new ShowHighlightTask(plugin, this, player, locationSet, highlightStyle)
+			new BukkitShowHighlightTask(plugin, this, player, locationSet, highlightStyle)
 					.runTaskLaterAsynchronously(plugin, 2L);
 		}
 	}
