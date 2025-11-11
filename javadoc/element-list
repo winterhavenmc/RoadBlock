@@ -1,0 +1,17 @@
+com.winterhavenmc.roadblock.adapters.commands.bukkit
+com.winterhavenmc.roadblock.adapters.config.bukkit
+com.winterhavenmc.roadblock.adapters.datastore
+com.winterhavenmc.roadblock.adapters.datastore.sqlite
+com.winterhavenmc.roadblock.adapters.datastore.sqlite.schema
+com.winterhavenmc.roadblock.adapters.highlights.bukkit
+com.winterhavenmc.roadblock.adapters.listeners.bukkit
+com.winterhavenmc.roadblock.adapters.tasks.bukkit
+com.winterhavenmc.roadblock.core.ports.commands
+com.winterhavenmc.roadblock.core.ports.config
+com.winterhavenmc.roadblock.core.ports.datastore
+com.winterhavenmc.roadblock.core.ports.highlights
+com.winterhavenmc.roadblock.core.ports.listeners
+com.winterhavenmc.roadblock.core.tasks
+com.winterhavenmc.roadblock.core.util
+com.winterhavenmc.roadblock.models.blocklocation
+com.winterhavenmc.roadblock.plugin
