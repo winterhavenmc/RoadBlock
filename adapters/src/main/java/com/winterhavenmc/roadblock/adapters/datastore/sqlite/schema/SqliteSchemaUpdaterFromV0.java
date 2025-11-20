@@ -41,7 +41,7 @@ public final class SqliteSchemaUpdaterFromV0 implements SqliteSchemaUpdater
 	{
 		int schemaVersion = SqliteSchemaUpdater.getSchemaVersion(plugin, connection, configRepository);
 
-		if (schemaVersion == 0 && tableExists(connection, "Graveyards"))
+		if (schemaVersion == 0 && tableExists(connection, "blocks"))
 		{
 			updateBlockTableSchema(connection, schemaVersion);
 		}
