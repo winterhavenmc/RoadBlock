@@ -3,19 +3,34 @@
 # localized language support
 language: en-US
 
-# Locale (for time and number formatting)
+# NOTE: UNCOMMENT ONLY ONE OF THE FOLLOWING LOCALE SETTINGS
+# Locale for all context types (number, date, time, log)
 #locale: en-US
 
-# If this list is empty, all worlds will be added to the enabled worlds list
-# note: empty list explicitly declared for testing
-enabled-worlds: []
+# locale settings for individual types; uses system default if unset or invalid
+#locale:
+#  number: en-US    # affects thousands separator and decimal symbol
+#  date: en-US      # affects day-of-week names and month names
+#  time: en-US      # affects duration time units language
+#  log: en-US       # affects log output language
+
+# Time zone (for displaying localized time/date)
+# List of valid values: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
+# If not set or invalid, the system default time zone will be used. (Uncomment to override system default)
+#timezone: America/Chicago
+
+# enabled worlds list
+# if this list is empty, all server worlds will be added to the list of enabled worlds
+# otherwise, only listed worlds will be added to the list of enabled worlds
+#enabled-worlds:
 #  - enabled_world1
 #  - enabled_world2
 
-# These worlds will be removed from the enabled worlds list
-disabled-worlds:
-  - disabled_world1
-  - disabled_world2
+# disabled worlds list
+# these worlds will be removed from the list of enabled worlds created by the previous setting
+#disabled-worlds:
+#  - disabled_world1
+#  - disabled_world2
 
 # Highlight material for protected blocks
 protect-material: EMERALD_BLOCK
