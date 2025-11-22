@@ -1,8 +1,8 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/9cc37fae1da64772b1f2bafef3b5663b)](https://app.codacy.com/gh/winterhavenmc/RoadBlock/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/9cc37fae1da64772b1f2bafef3b5663b)](https://app.codacy.com/gh/winterhavenmc/RoadBlock/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 [![Spigot Version](https://img.shields.io/badge/spigot--api-1.21.10-yellow)](https://www.gnu.org/licenses/gpl-3.0)
-[![License](https://img.shields.io/badge/license-GPLv3-blue)](https://www.gnu.org/licenses/gpl-3.0)
-[![Javadoc](https://img.shields.io/badge/JavaDoc-Online-green)](https://winterhavenmc.github.io/RoadBlock/javadoc/)
+&thinsp;[![License](https://img.shields.io/badge/license-GPLv3-blue)](https://www.gnu.org/licenses/gpl-3.0)
+&thinsp;[![Javadoc](https://img.shields.io/badge/JavaDoc-Online-green)](https://winterhavenmc.github.io/RoadBlock/javadoc/)
 
 
 ### RoadBlock
