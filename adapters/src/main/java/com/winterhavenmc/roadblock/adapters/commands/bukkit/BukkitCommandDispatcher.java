@@ -49,12 +49,11 @@ public final class BukkitCommandDispatcher implements CommandDispatcher
 		Objects.requireNonNull(ctx.plugin().getCommand("roadblock")).setExecutor(this);
 
 		// register subcommands
-		for (SubcommandType subcommandType : SubcommandType.values())
-		{
-			subcommandRegistry.register(subcommandType.create(ctx));
-		}
-
-		// register help command
+		subcommandRegistry.register(new MaterialsSubcommand(ctx));
+		subcommandRegistry.register(new ReloadSubcommand(ctx));
+		subcommandRegistry.register(new ShowSubcommand(ctx));
+		subcommandRegistry.register(new StatusSubcommand(ctx));
+		subcommandRegistry.register(new ToolSubcommand(ctx));
 		subcommandRegistry.register(new HelpSubcommand(ctx, subcommandRegistry));
 	}
 
