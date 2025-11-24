@@ -47,16 +47,6 @@ public class SqliteConnectionProvider implements ConnectionProvider
 		connectionProvider.connect();
 
 		return connectionProvider;
-
-//		try
-//		{
-//			connectionProvider.connect();
-//		}
-//		catch (Exception exception)
-//		{
-//			plugin.getLogger().severe("Could not initialize datastore!");
-//			plugin.getLogger().severe(exception.getLocalizedMessage());
-//		}
 	}
 
 
