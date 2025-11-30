@@ -30,7 +30,7 @@ import java.util.List;
 abstract class AbstrtactSubcommand implements Subcommand
 {
 	protected String name;
-	protected Collection<String> aliases = new LinkedHashSet<>();
+	protected Collection<String> aliases = new LinkedHashSet<>(); // maintains order while insuring uniqueness
 	protected String usageString;
 	protected MessageId description;
 	protected String permissionNode;
