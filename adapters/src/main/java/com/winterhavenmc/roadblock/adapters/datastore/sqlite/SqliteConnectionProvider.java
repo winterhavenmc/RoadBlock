@@ -63,14 +63,11 @@ public class SqliteConnectionProvider implements ConnectionProvider
 			return;
 		}
 
+		// create database url
+		final String dbUrl = "jdbc:sqlite" + ":" + dataFilePath;
+
 		try
 		{
-			// register the driver
-			Class.forName("org.sqlite.JDBC");
-
-			// create database url
-			final String dbUrl = "jdbc:sqlite" + ":" + dataFilePath;
-
 			// create a database connection
 			connection = DriverManager.getConnection(dbUrl);
 
@@ -82,10 +79,6 @@ public class SqliteConnectionProvider implements ConnectionProvider
 
 			// create tables if necessary
 			createBlockTable(connection, configRepository);
-		}
-		catch (ClassNotFoundException classNotFoundException)
-		{
-			throw new RuntimeException("class not found exception");
 		}
 		catch (SQLException sqlException)
 		{
